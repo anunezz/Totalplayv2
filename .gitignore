@@ -1,0 +1,13 @@
+/node_modules/
+/public/js/app.js
+# /storage/oauth-private.key
+# #/storage/oauth-public.key
+/vendor/
+# /.idea
+# /.vscode
+# /public/mix-manifest.json
+# storage/app/recommendations/
+
+# storage/app/Recomendaciones.xlsm
+
+# public/mix-manifest.json

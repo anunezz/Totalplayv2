@@ -1,0 +1,34 @@
+<template>
+    <div>
+        <admin-menu v-if="$store.state.user.profile === 1"/>
+
+    </div>
+</template>
+
+<script>
+    import AdminMenu from './partials/AdminMenu';
+    import NotAssignedMenu from './partials/NotAssignedMenu';
+
+    export default {
+        components: {
+            AdminMenu,
+            NotAssignedMenu
+        },
+
+        created() {
+            let data = {cat_transaction_type_id : 1, action: 'Entra a inicio'};
+
+            axios.post('/api/transaction', data).then(response => {
+            }).catch(error => {
+                this.$message({
+                    type: "warning",
+                    message: "No fue posible completar la acción, intente nuevamente."
+                });
+            });
+        },
+    }
+</script>
+
+<style scoped>
+
+</style>

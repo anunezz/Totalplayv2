@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "Montserrat";
+    src: url("../fonts/Montserrat/Montserrat-Light.otf");
+}
+html {
+    font-family: Montserrat, serif;
+}
+
+body {
+    font-family: Montserrat, serif;
+    /*min-width: 1024px !important;*/
+    padding-top: 0 !important;
+    font-weight: 300;
+}
