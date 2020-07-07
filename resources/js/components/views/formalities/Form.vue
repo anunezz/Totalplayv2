@@ -15,6 +15,35 @@
             <el-col :span="21" :offset="1" class="border-form">
                 <el-tabs type="card">
                     <el-tab-pane label="Datos Generales">
+                        <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
+                            <el-row :gutter="20">
+                                <el-col :span="12">
+                                    <el-form-item label="Sección:" prop="name">
+                                        <el-select v-model="formFormalities.name" clearable filterable placeholder="Seleccionar" style="width: 100%">
+                                            <el-option
+                                                v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="Sección:" prop="name">
+                                        <el-select v-model="formFormalities.name" filterable placeholder="Seleccionar" style="width: 100%">
+                                            <el-option
+                                                v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
+                                            </el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                        </el-form>
                     </el-tab-pane>
                     <el-tab-pane label=" Información adicional">
                     </el-tab-pane>
@@ -53,6 +82,29 @@
         components: {
             HeaderSection,
         },
+        data(){
+            return{
+                formFormalities:{
+                    name:''
+                },
+                options: [{
+                    value: 'Option1',
+                    label: 'Option1'
+                }, {
+                    value: 'Option2',
+                    label: 'Option2'
+                }, {
+                    value: 'Option3',
+                    label: 'Option3'
+                }, {
+                    value: 'Option4',
+                    label: 'Option4'
+                }, {
+                    value: 'Option5',
+                    label: 'Option5'
+                }],
+            }
+        }
     }
 </script>
 
