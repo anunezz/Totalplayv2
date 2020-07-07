@@ -5,7 +5,7 @@
                 <el-badge :value="registers" class="item">
                     <a class="links"
                        @click="goTo('RecommendationsIndex', {cat_transaction_type_id : 1, action: 'Ingresa al index de recomendaciones'})">
-                      Control de armas
+                      Archivo de Trámite
                     </a>
                 </el-badge>
                 <br><br>

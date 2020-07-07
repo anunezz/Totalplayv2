@@ -24,14 +24,14 @@
                             style="margin-top: 10px; margin-left: 5px;">
 
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="10">
                         <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
-                            Control de Armas <small>v {{$vertion}}</small>
+                            <span style="font-size: 15px">SISTEMA DE CLASIFICACIÓN DE ARCHIVOS</span> <small>v {{$vertion}}</small>
                         </div>
                     </el-col>
 
 
-                    <el-col :span="14">
+                    <el-col :span="12">
                         <el-menu
                             :router="true"
                             mode="horizontal"
