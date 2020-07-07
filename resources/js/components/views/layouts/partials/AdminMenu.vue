@@ -4,7 +4,7 @@
             <el-col :span="8">
                 <el-badge :value="registers" class="item">
                     <a class="links"
-                       @click="goTo('RecommendationsIndex', {cat_transaction_type_id : 1, action: 'Ingresa al index de recomendaciones'})">
+                       @click="goTo('ListFormalities', {cat_transaction_type_id : 1, action: 'Ingresa al index de tramites'})">
                       Archivo de Trámite
                     </a>
                 </el-badge>
