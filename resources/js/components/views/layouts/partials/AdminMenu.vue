@@ -31,6 +31,14 @@
                 <br><br>
                 <span>Configuraciones</span>
             </el-col>
+            <el-col :span="6">
+                <a class="links"
+                   @click="goTo('AdminIndex', {cat_transaction_type_id : 1, action: 'Ingresa a Reportes'})">
+                    Reporte
+                </a>
+                <br><br>
+                <span>Reportes</span>
+            </el-col>
 <!--            <el-col :span="5">
                 <a class="links"
                    @click="goTo('ReportsIndex', {cat_transaction_type_id : 1, action: 'Ingresa a Reportes'})">
