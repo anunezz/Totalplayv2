@@ -33,7 +33,7 @@ const actions = {
     getUserInfo({dispatch, commit}){
         return new Promise((resolve, reject) => {
             // Action to fix sesion user information if window browser is refreshed.
-            if ( window.sessionStorage.getItem("SERIDH_token") ) {
+            if ( window.sessionStorage.getItem("SICAR_token") ) {
                 dispatch('getUserIP')
                     .then(()  => { resolve() })
                     .catch(() => { reject() });
@@ -47,7 +47,7 @@ const actions = {
     sessionInfo({dispatch, commit}, ip){
 
         return new Promise( (resolve, reject) => {
-            axios.get("/api/user/" + window.sessionStorage.getItem("SERIDH_hash"), { params: { ip: ip } })
+            axios.get("/api/user/" + window.sessionStorage.getItem("SICAR_hash"), { params: { ip: ip } })
                 .then(response => {
                     commit("setUser", response.data.user);
                     resolve();
@@ -61,9 +61,9 @@ const actions = {
 
     },
     logout(){
-        sessionStorage.removeItem("SERIDH_token");
-        sessionStorage.removeItem("SERIDH_token_expiration");
-        sessionStorage.removeItem("SERIDH_hash");
+        sessionStorage.removeItem("SICAR_token");
+        sessionStorage.removeItem("SICAR_token_expiration");
+        sessionStorage.removeItem("SICAR_hash");
 
         axios.defaults.headers.common = {
             'Authorization': 'Bearer'

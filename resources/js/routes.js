@@ -15,7 +15,7 @@ export const routes = [
         component: AccessDenied,
         beforeEnter: (to, from, next) => {
 
-            if (sessionStorage.getItem('SERIDH_token')) {
+            if (sessionStorage.getItem('SICAR_token')) {
                 next('/');
             } else {
                 next();
@@ -34,7 +34,7 @@ export const routes = [
              { ...Strategy },
         ],
         beforeEnter: (to, from, next) => {
-            if (sessionStorage.getItem("SERIDH_token")) {
+            if (sessionStorage.getItem("SICAR_token")) {
                 next();
             } else {
                 next("/ingresar");

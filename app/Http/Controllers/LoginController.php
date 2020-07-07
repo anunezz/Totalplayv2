@@ -71,7 +71,7 @@ class LoginController extends Controller
                     auth()->loginUsingId( User::where( 'username', $request->user )->first()->id );
 
                     $user = auth()->user();
-                    $token = $user->createToken( 'SERIDH_session' )->accessToken;
+                    $token = $user->createToken( 'SICAR_session' )->accessToken;
 
                     if ( $token ) {
                         //GeneralController::saveTransactionLog(1,
@@ -79,10 +79,10 @@ class LoginController extends Controller
 
                         return response()->json( [
                             'authenticated'             => true,
-                            'SERIDH_session'            => $token,
-                            'SERIDH_hash'               => $user->hash,
+                            'SICAR_session'            => $token,
+                            'SICAR_hash'               => $user->hash,
                             'user'                      => static::getSessionInfo( $user->id ),
-                            'SERIDH_session_expiration' => date( 'D M d Y H:i:s', strtotime( "+8 hours" ) ),
+                            'SICAR_session_expiration' => date( 'D M d Y H:i:s', strtotime( "+8 hours" ) ),
                         ], 200 );
                     }
                     else {

@@ -200,7 +200,7 @@
                 unpublicDialog: false,
                 removeHash: null,
                 hashId: null,
-                apiToken: 'Bearer ' + sessionStorage.getItem('SERIDH_token'),
+                apiToken: 'Bearer ' + sessionStorage.getItem('SICAR_token'),
                 errorCarga: false,
                 errorRecommendations: [],
                 totalErrors: 0,

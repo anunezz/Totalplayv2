@@ -26,7 +26,7 @@
                     </el-col>
                     <el-col :span="10">
                         <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
-                            <span style="font-size: 15px">SISTEMA DE CLASIFICACIÓN DE ARCHIVOS</span> <small>v {{$vertion}}</small>
+                            <span style="font-size: 15px">SISTEMA DE CLASIFICACIÓN DE ARCHIVOS v {{$vertion}}</span>
                         </div>
                     </el-col>
 
@@ -130,9 +130,9 @@
 
                 axios.post("/api/logout").then(response => {
                     if (response.data.authenticated === false) {
-                        sessionStorage.removeItem("SERIDH_token");
-                        sessionStorage.removeItem("SERIDH_token_expiration");
-                        sessionStorage.removeItem("SERIDH_hash");
+                        sessionStorage.removeItem("SICAR_token");
+                        sessionStorage.removeItem("SICAR_token_expiration");
+                        sessionStorage.removeItem("SICAR_hash");
 
                         axios.defaults.headers.common = {
                             Authorization: "Bearer"
