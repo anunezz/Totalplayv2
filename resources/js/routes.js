@@ -4,7 +4,8 @@ import Home from "./components/views/layouts/Home";
 import AccessDenied from "./components/views/layouts/AccessDenied";
 import Menu from "./components/views/layouts/Menu";
 import Admin from "./routes/Admin";
-import Recommendations from "./routes/Recommendations";
+// import Recommendations from "./routes/Recommendations";
+import Formalities from "./routes/Formalities";
 
 import Strategy from "./routes/Strategy";
 
@@ -15,7 +16,7 @@ export const routes = [
         component: AccessDenied,
         beforeEnter: (to, from, next) => {
 
-            if (sessionStorage.getItem('SERIDH_token')) {
+            if (sessionStorage.getItem('SICAR_token')) {
                 next('/');
             } else {
                 next();
@@ -30,11 +31,12 @@ export const routes = [
             { path: '', component: Menu },
 
             { ...Admin },
-            { ...Recommendations },
+            // { ...Recommendations },
              { ...Strategy },
+             { ...Formalities },
         ],
         beforeEnter: (to, from, next) => {
-            if (sessionStorage.getItem("SERIDH_token")) {
+            if (sessionStorage.getItem("SICAR_token")) {
                 next();
             } else {
                 next("/ingresar");

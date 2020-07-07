@@ -30,7 +30,7 @@ function setNotice() {
             }
         },
         onIdle() {
-            if (window.sessionStorage.getItem("SERIDH_token") && this.idleActive === false) {
+            if (window.sessionStorage.getItem("SICAR_token") && this.idleActive === false) {
                 this.idleActive = true;
                 this.removeSession();
             }

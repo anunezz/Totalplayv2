@@ -59,6 +59,6 @@ window.axios.defaults.headers.common = {
     'no-cache': 'Set-Cookie, Set-Directiva Cookie2',
 };
 
-if (window.sessionStorage.getItem('SERIDH_token')) {
-    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.sessionStorage.getItem('SERIDH_token');
+if (window.sessionStorage.getItem('SICAR_token')) {
+    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.sessionStorage.getItem('SICAR_token');
 }

@@ -471,7 +471,7 @@
                 },
 
                 recommendationId: this.$route.params.id,
-                apiToken: 'Bearer ' + sessionStorage.getItem('SERIDH_token'),
+                apiToken: 'Bearer ' + sessionStorage.getItem('SICAR_token'),
 
                 recommendationForm: {},
                 reportedAction:{
