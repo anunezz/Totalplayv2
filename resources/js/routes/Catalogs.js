@@ -1,8 +1,5 @@
 import {RouterView} from './RouterView.js';
-
-import EntiIndex from '../components/views/catalogs/entity/index';
-
-
+import Secction from '../components/views/catalogs/Secction';
 
 import store from '../store/index';
 import {Message} from 'element-ui'
@@ -12,9 +9,9 @@ export default {
     component: RouterView,
     children: [
         {
-            path: '/entidad',
-            component: EntiIndex,
-            name: 'EntiIndex',
+            path: '/administracion/catalogos/seccion',
+            component: Secction,
+            name: 'Secction',
         },
     ],
 }

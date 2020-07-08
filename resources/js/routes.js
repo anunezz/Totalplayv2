@@ -5,6 +5,7 @@ import Admin from "./routes/Admin";
 import Formalities from "./routes/Formalities";
 import Strategy from "./routes/Strategy";
 import Reports from "./routes/Reports";
+import Catalogs from "./routes/Catalogs";
 
 export const routes = [
     {
@@ -28,7 +29,8 @@ export const routes = [
             { ...Admin },
             { ...Strategy },
             { ...Formalities },
-            { ...Reports }
+            { ...Reports },
+            { ...Catalogs }
         ],
         beforeEnter: (to, from, next) => {
             if (sessionStorage.getItem("SICAR_token")) {
