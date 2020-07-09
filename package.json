@@ -33,6 +33,8 @@
         "chartjs-plugin-datalabels": "^0.7.0",
         "element-ui": "^2.11.1",
         "idle-vue": "^2.0.5",
+        "jquery": "^3.5.1",
+        "jsoneditor": "^9.0.3",
         "moment": "latest",
         "moment-timezone": "^0.5.25",
         "normalize.css": "^8.0.1",

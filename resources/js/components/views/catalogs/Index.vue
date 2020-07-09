@@ -15,8 +15,9 @@
     <el-row :gutter="10">
         <el-col :span="24">
             <el-select v-model="selectedCat"
-                       placeholder="Seleccione un catálogo"
-                       style="width: 100%">
+                @change="changeCat(selectedCat)"
+                placeholder="Seleccione un catálogo"
+                style="width: 100%">
                 <el-option
                     v-for="(cat, index) in cats"
                     :key="index"
@@ -48,13 +49,43 @@
             return{
                 selectedCat: null,
                 cats: [
-                    {id:6,  name: 'Acción Solicitada'},
+                    {id:1,  name: 'Acción Solicitada'},
+                    {id:2,  name: 'Sección'},
+                    {id:3,  name: 'Subserie'}
                 ],
             }
         },
 
         methods: {
+            changeCat(cat){
+                let url = '';
+
+                switch (cat) {
+                    case 1:
+                    {
+
+                    break;
+                    }
+                    case 2:
+                    {
+                        url = '/administracion/catalogos/seccion';
+                        this.$router.push( { path: url });
+                    break;
+                    }
+                    case 3:
+                    {
+
+                    break;
+                    }
+                    default:
+                    {
+
+                    break;
+                    }
+                }
+            },
             goTo(link, data) {
+                return;
                 axios.post('/api/transaction', data).then(response => {
                     this.$router.push({
                         name: link

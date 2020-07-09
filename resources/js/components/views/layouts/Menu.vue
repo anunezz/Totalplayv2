@@ -6,16 +6,19 @@
 </template>
 
 <script>
+    //import HeaderSection from "../layouts/partials/HeaderSection";
     import AdminMenu from './partials/AdminMenu';
     import NotAssignedMenu from './partials/NotAssignedMenu';
 
     export default {
         components: {
             AdminMenu,
-            NotAssignedMenu
+            NotAssignedMenu,
+         //   HeaderSection
         },
 
         created() {
+            console.log("aqui... menu");
             let data = {cat_transaction_type_id : 1, action: 'Entra a inicio'};
 
             axios.post('/api/transaction', data).then(response => {

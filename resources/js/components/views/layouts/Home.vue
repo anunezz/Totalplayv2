@@ -89,8 +89,12 @@
 
 <script>
     import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
+    import HeaderSection from "../layouts/partials/HeaderSection";
 
     export default {
+        components: {
+            HeaderSection
+        },
         data() {
             return {
                 date: new Date(),

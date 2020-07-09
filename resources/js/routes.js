@@ -1,14 +1,11 @@
 import Home from "./components/views/layouts/Home";
-
-
 import AccessDenied from "./components/views/layouts/AccessDenied";
 import Menu from "./components/views/layouts/Menu";
 import Admin from "./routes/Admin";
-// import Recommendations from "./routes/Recommendations";
 import Formalities from "./routes/Formalities";
-
 import Strategy from "./routes/Strategy";
-
+import Reports from "./routes/Reports";
+import Catalogs from "./routes/Catalogs";
 
 export const routes = [
     {
@@ -29,11 +26,11 @@ export const routes = [
         component: Home,
         children: [
             { path: '', component: Menu },
-
             { ...Admin },
-            // { ...Recommendations },
-             { ...Strategy },
-             { ...Formalities },
+            { ...Strategy },
+            { ...Formalities },
+            { ...Reports },
+            { ...Catalogs }
         ],
         beforeEnter: (to, from, next) => {
             if (sessionStorage.getItem("SICAR_token")) {
