@@ -5,7 +5,7 @@
                 <svg height="400" width="400" xmlns="http://www.w3.org/2000/svg">
                     <circle class="circle" cx="200" cy="200" r="195"></circle>
                 </svg>
-                <img id="ruby" src="img/sre_vert.svg" alt="" width="65%"/>
+                <img id="ruby" src="img/relacion_vert.svg" alt="" width="65%"/>
             </div>
         </div>
 
