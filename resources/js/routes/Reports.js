@@ -1,6 +1,8 @@
 import {RouterView} from './RouterView.js';
 import ReportIndex from '../components/views/reports/Index';
 import Record from '../components/views/reports/Record/Record';
+import Transfer from '../components/views/reports/Transfer/Transfer';
+import Inventory from '../components/views/reports/Transfer/Inventory';
 
 export default {
     path: '/reportes',
@@ -15,6 +17,16 @@ export default {
             path: 'expedientes',
             component: Record,
             name: 'Record',
+        },
+        {
+            path: 'transferencia',
+            component: Transfer,
+            name: 'Transfer',
+        },
+        {
+            path: 'transferencia/inventario',
+            component: Inventory,
+            name: 'Inventory',
         },
     ],
 }
