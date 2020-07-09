@@ -123,7 +123,7 @@
                                   :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
-                        <el-input width="100%;" size="mini" v-model="ruleForm.keySub = 5" disabled="true"></el-input>
+                        <el-input width="100%;" size="mini" v-model="ruleForm.keySub = 5" disabled></el-input>
                     </el-form-item>
                 </el-form>
             </el-col>

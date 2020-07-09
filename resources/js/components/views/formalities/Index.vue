@@ -113,7 +113,37 @@
             ref="drawer">
             <el-row style="margin-bottom: 20px">
                 <el-col :span="21" :offset="1" class="border-form">
-                    <h4>Agregar Campos</h4>
+                    <el-form ref="form" :model="filters" label-width="120px" label-position="top" size="mini">
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="Determinante">
+                                    <el-input v-model="filters.name"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="Clasificación">
+                                    <el-input v-model="filters.classification"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="Año">
+                                    <el-date-picker
+                                        v-model="filters.year"
+                                        type="year"
+                                        placeholder="Pick a year"
+                                        style="width: 100%">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="Creador">
+                                    <el-input v-model="filters.creator"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
                 </el-col>
             </el-row>
             <el-row :gutter="20" type="flex" justify="center">
@@ -149,7 +179,9 @@
         data(){
             return{
                 showFilters: false,
+                filters:{
 
+                },
                 tableData: [{
                     number: '1',
                     determinant: 'SSRE',
