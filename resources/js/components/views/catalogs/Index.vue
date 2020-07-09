@@ -74,7 +74,8 @@
                     }
                     case 3:
                     {
-
+                        url = '/administracion/catalogos/subseries';
+                        this.$router.push( { path: url });
                     break;
                     }
                     default:
