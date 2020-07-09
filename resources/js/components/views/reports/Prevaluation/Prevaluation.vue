@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="el-icon-s-management" title="Formatos de inventario">
+        <header-section icon="el-icon-s-management" title="Declaratoria de prevaloración">
             <template slot="buttons">
                 <el-button
                     align="right"
@@ -15,15 +15,6 @@
 
         <el-row :gutter='20' class='animated fadeIn fast'>
             <el-form :model="ruleForm" :rules="rules" ref="ruleForm">
-                <el-col :span='24'>
-                    <h3>Inventario de baja</h3>
-                </el-col>
-
-                <!-- <el-col :span='24'>
-                    <h4>Ingresa la información obligatoria marcada (*).</h4>
-                    <hr>
-                </el-col> -->
-
                 <el-col :span='24'>
                     <el-row :gutter='20'>
                         <el-col :span='6'>
@@ -177,6 +168,14 @@
                                         :value="item.value">
                                         </el-option>
                                     </el-select>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span='6'>
+                            <el-form-item label="Metros lineales" prop="meters" :rules="[
+                            { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                            { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
+                                <el-input size="mini" placeholder="Ej. 2.2" v-model="ruleForm.meters"></el-input>
                             </el-form-item>
                         </el-col>
 
