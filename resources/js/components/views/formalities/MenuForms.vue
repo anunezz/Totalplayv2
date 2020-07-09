@@ -1,6 +1,6 @@
 <template>
     <div>
-        <pre>{{formFormalities}}</pre>
+<!--        <pre>{{formFormalities}}</pre>-->
         <header-section icon="fas fa-file-signature" title="Archivo de trámite">
             <template slot="buttons">
                 <el-button
