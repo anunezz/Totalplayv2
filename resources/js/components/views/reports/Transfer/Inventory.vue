@@ -252,7 +252,7 @@
                 <el-col :span='24' class='animated fadeIn fast'>
                     <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-end;'>
                         <div>
-                            <el-button type="success" size="mini" @click="saveForm">Generar</el-button>
+                            <el-button type="success" size="mini" >Generar</el-button>
                         </div>
                     </div>
                 </el-col>
