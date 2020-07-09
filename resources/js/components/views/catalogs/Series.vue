@@ -1,6 +1,6 @@
 <template>
 <div>
-    <header-section icon="el-icon-document-add" title="Sección">
+    <header-section icon="el-icon-document-add" title="Series">
         <template slot="buttons">
             <el-button
                 size="small"
@@ -16,7 +16,7 @@
         <el-col :span='24' class='animated fadeIn fast'>
             <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-end;'>
                 <div>
-                    <el-button type="primary" icon="el-icon-plus" size="mini" @click="Modal('new',[])"> Nueva sección</el-button>
+                    <el-button type="primary" icon="el-icon-plus" size="mini" @click="Modal('new',[])"> Nueva serie</el-button>
                 </div>
             </div>
         </el-col>
@@ -27,8 +27,12 @@
                 :data="secction"
                 style="width: 100%">
                 <el-table-column
-                    prop="key"
-                    label="Clave">
+                    prop="keySection"
+                    label="Clave de sección">
+                </el-table-column>
+                <el-table-column
+                    prop="keySerie"
+                    label="Clave de serie">
                 </el-table-column>
                 <el-table-column
                     prop="name"
@@ -72,14 +76,21 @@
     </el-row>
 
     <el-dialog :title="titleModal" width="50%;" :visible.sync="showDialog">
+        <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
-                    <el-form-item label="Clave" prop="secction"
+                    <el-form-item label="Sección:" prop="section"
                                   :rules="[
-                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
-                        <el-input width="100%;" size="mini" v-model="ruleForm.key = 4" disabled="true"></el-input>
+                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },]">
+                        <el-select v-model="ruleForm.section" filterable placeholder="Selecinar" size="mini" style="width: 100%">
+                            <el-option
+                                v-for="item in listSecction"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -87,15 +98,27 @@
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
                 <el-form ref="ruleForm" :model="ruleForm" :rules="rules">
-                    <el-form-item label="Nombre de la sección" prop="secction"
+                    <el-form-item label="Clave de serie:" prop="keySerie"
+                                  :rules="[
+                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
+                        <el-input width="100%;" size="mini" v-model="ruleForm.keySerie"></el-input>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </el-row>
+        <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                    <el-form-item label="Nombre de la serie:" prop="name"
                     :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
                         <el-input width="100%;" size="mini" v-model="ruleForm.name"></el-input>
                     </el-form-item>
-                </el-form>
+
             </el-col>
         </el-row>
+        </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button-group>
                 <el-button @click="showDialog = false" size="mini" >Cancelar</el-button>
@@ -135,20 +158,53 @@ export default {
             msj2: '',
             ruleForm:{},
             rules:{},
+            listSecction:[
+                {
+                id:1,
+                name:'ASUNTOS GENERALES'
+                },
+                {
+                id:2,
+                name:'ASUNTOS ADMINISTRATIVOS'
+                },
+                {
+                id:3,
+                name:'ASUNTOS DE ESTADO INTERNACIONALES'
+                },
+            ],
+            listSerie:[
+                {
+                id:1,
+                name:'JURISPRUDENCIA'
+                },
+                {
+                id:2,
+                name:'DERECHO'
+                },
+                {
+                id:3,
+                name:'ACUERDOS'
+                },
+            ],
             secction:[{
-                key: '0',
+                keySection: '1',
+                keySerie: '10',
                 name: 'Juárez Caballero, Raúl Alberto',
                 date: '2016-05-03',
             }, {
-                key: '1',
+                keySection: '1',
+                keySerie: '10',
                 name: 'Sánchez Buendia Aurora',
                 date: '2016-05-02',
             }, {
-                key: '2',
+                keySection: '1',
+                keySerie: '10',
                 name: 'Sánchez Buendia Aurora',
                 date: '2016-05-04',
             }, {
-                key: '3',
+                keySection: '1',
+                keySerie: '10',
+                keySub: '4',
                 name: 'Sánchez Buendia Aurora',
                 date: '2016-05-01',
             }],
