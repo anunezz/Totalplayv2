@@ -32,14 +32,14 @@
         </el-row>
         <br><br>
         <el-row :gutter="10">
-            <el-col :span="8">
-                <a class="links"
-                   @click="$router.push('/')">
-                    Inicio
-                </a>
-                <br><br>
-                <span>Inicio</span>
-            </el-col>
+<!--            <el-col :span="8">-->
+<!--                <a class="links"-->
+<!--                   @click="$router.push('/')">-->
+<!--                    Inicio-->
+<!--                </a>-->
+<!--                <br><br>-->
+<!--                <span>Inicio</span>-->
+<!--            </el-col>-->
       <!--       <el-col :span="8">
                 <a class="links"
                    @click="goTo('PanelIndex', {cat_transaction_type_id : 1, action: 'Ingresa al Panel'})">

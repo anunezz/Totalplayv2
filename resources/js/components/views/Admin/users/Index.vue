@@ -41,20 +41,28 @@
                     :row-class-name="notAssignedUser"
                     style="width: 100%">
                     <el-table-column
-                        prop="username"
-                        label="Usuario">
-                    </el-table-column>
-                    <el-table-column
                         prop="full_name"
                         label="Nombre">
                     </el-table-column>
                     <el-table-column
-                        prop="consulate.name"
-                        label="Consulado">
-                        <template slot-scope="scope">
-                            {{scope.row.consulate ? scope.row.consulate.name : 'Sin asignar'}}
-                        </template>
+                        prop="username"
+                        label="Usuario">
                     </el-table-column>
+                    <el-table-column
+                        prop="mail"
+                        label="Email">
+                    </el-table-column>
+                    <el-table-column
+                        prop="job"
+                        label="Puesto">
+                    </el-table-column>
+<!--                    <el-table-column-->
+<!--                        prop="consulate.name"-->
+<!--                        label="Consulado">-->
+<!--                        <template slot-scope="scope">-->
+<!--                            {{scope.row.consulate ? scope.row.consulate.name : 'Sin asignar'}}-->
+<!--                        </template>-->
+<!--                    </el-table-column>-->
                     <el-table-column
                         prop="profile.name"
                         label="Perfil">
