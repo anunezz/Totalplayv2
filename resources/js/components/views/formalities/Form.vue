@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="fa-edit" title="Archivo de trámite">
+        <header-section icon="fas fa-file-signature" title="Archivo de trámite">
             <template slot="buttons">
                 <el-button
                     size="small"

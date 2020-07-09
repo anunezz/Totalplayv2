@@ -111,6 +111,9 @@
             direction="ltr"
             size="50%"
             ref="drawer">
+            <el-row style="background: rgb(157, 36, 56);margin-bottom: 20px">
+                <h3 style="color: white;margin-left: 30px">Filtros</h3>
+            </el-row>
             <el-row style="margin-bottom: 20px">
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="filters" label-width="120px" label-position="top" size="mini">
