@@ -3,6 +3,7 @@ import ReportIndex from '../components/views/reports/Index';
 import Record from '../components/views/reports/Record/Record';
 import Transfer from '../components/views/reports/Transfer/Transfer';
 import Inventory from '../components/views/reports/Transfer/Inventory';
+import LabelIndex from '../components/views/reports/label/index';
 
 export default {
     path: '/reportes',
@@ -27,6 +28,11 @@ export default {
             path: 'transferencia/inventario',
             component: Inventory,
             name: 'Inventory',
+        },
+        {
+            path: 'etiqueta',
+            component: LabelIndex,
+            name: 'LabelIndex',
         },
     ],
 }

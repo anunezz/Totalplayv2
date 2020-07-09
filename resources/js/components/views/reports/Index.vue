@@ -26,7 +26,7 @@
 
             <el-col :span="8">
                 <el-badge class="item">
-                    <a class="links" @click="goTo('ListFormalities', { cat_transaction_type_id: 1, action: 'Ingresa al index de tramites'})">
+                    <a class="links" @click="goTo('LabelIndex', { cat_transaction_type_id: 1, action: 'Ingresa a reportes de etiqueta'})">
                         Etiqueta
                     </a>
                 </el-badge>
@@ -54,6 +54,20 @@
         components: {
             HeaderSection
         },
+        methods: {
+            goTo(link, data) {
+
+                axios.post("/api/transaction", data).then(response => {
+                    this.$router.push({ name: link });
+                }).catch(error => {
+                    this.$message({
+                        type: "warning",
+                        message:
+                            "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            }
+        }
     }
 </script>
 
