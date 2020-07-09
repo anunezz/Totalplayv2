@@ -7,7 +7,7 @@ import NewFormalities from '../components/views/formalities/Form';
 
 
 export default {
-    path: '/formalities',
+    path: '/tramites',
     component: RouterView,
     children: [
         {
@@ -16,7 +16,7 @@ export default {
             name: 'ListFormalities',
         },
         {
-            path:'/nuevo',
+            path:'nuevo',
             component: NewFormalities,
             name: 'NewFormalities',
             props:true

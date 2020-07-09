@@ -49,8 +49,8 @@
             return{
                 selectedCat: null,
                 cats: [
-                    {id:1,  name: 'Acción Solicitada'},
-                    {id:2,  name: 'Sección'},
+                    {id:1,  name: 'Sección'},
+                    {id:2,  name: 'Serie'},
                     {id:3,  name: 'Subserie'}
                 ],
             }
@@ -63,12 +63,13 @@
                 switch (cat) {
                     case 1:
                     {
-
+                        url = '/administracion/catalogos/seccion';
+                        this.$router.push( { path: url });
                     break;
                     }
                     case 2:
                     {
-                        url = '/administracion/catalogos/seccion';
+                        url = '/administracion/catalogos/series';
                         this.$router.push( { path: url });
                     break;
                     }
