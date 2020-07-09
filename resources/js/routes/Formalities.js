@@ -2,7 +2,7 @@ import {RouterView} from './RouterView.js';
 
 
 import ListFormalities from '../components/views/formalities/Index';
-import NewFormalities from '../components/views/formalities/Form';
+import NewFormalities from '../components/views/formalities/MenuForms';
 
 
 

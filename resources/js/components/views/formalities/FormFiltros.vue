@@ -1,0 +1,95 @@
+<template>
+    <div>
+        <el-drawer
+            :visible.sync="items.show"
+            direction="ltr"
+            size="50%"
+            ref="drawer">
+            <el-row style="background: rgb(157, 36, 56);margin-bottom: 20px">
+                <h3 style="color: white;margin-left: 30px">Filtros</h3>
+            </el-row>
+            <el-row style="margin-bottom: 20px">
+                <el-col :span="21" :offset="1" class="border-form">
+                    <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="Determinante">
+                                    <el-input v-model="items.determinant"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="Clasificación">
+                                    <el-input v-model="items.classification"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="Año">
+                                    <el-date-picker
+                                        v-model="items.year"
+                                        type="year"
+                                        placeholder="Pick a year"
+                                        style="width: 100%">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="Creador">
+                                    <el-input v-model="items.user"></el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                </el-col>
+            </el-row>
+            <el-row :gutter="20" type="flex" justify="center">
+                <el-col :span="5">
+                    <el-button
+                        size="small"
+                        icon="fas fa-eraser"
+                        @click="cleanitems()"
+                        style="width: 100%">
+                        Limpiar
+                    </el-button>
+                </el-col>
+                <el-col :span="5">
+                    <el-button
+                        size="small"
+                        icon="fas fa-filter"
+                        type="primary"
+                        @click="searchitems()"
+                        style="width: 100%">
+                        Buscar
+                    </el-button>
+                </el-col>
+            </el-row>
+        </el-drawer>
+    </div>
+</template>
+
+<script>
+    export default {
+        props:['items'],
+        methods:{
+            cleanitems(){
+                this.items.show = true;
+                this.items.determinant = '';
+                this.items.classification = '';
+                this.items.year = null;
+                this.items.user = '';
+            },
+            searchitems(){
+                this.$emit('search')
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .border-form{
+        padding: 20px;
+        border: 1px solid #DCDFE6;
+        border-radius: 5px;
+    }
+</style>

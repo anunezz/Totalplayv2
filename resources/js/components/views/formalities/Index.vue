@@ -27,7 +27,7 @@
                     size="small"
                     icon="fas fa-search"
                     style="width: 100%"
-                    @click="showFilters = true">
+                    @click="filters.show = true">
                     Filtros
                 </el-button>
             </el-col>
@@ -106,84 +106,29 @@
                 <br>
             </el-col>
         </el-row>
-        <el-drawer
-            :visible.sync="showFilters"
-            direction="ltr"
-            size="50%"
-            ref="drawer">
-            <el-row style="background: rgb(157, 36, 56);margin-bottom: 20px">
-                <h3 style="color: white;margin-left: 30px">Filtros</h3>
-            </el-row>
-            <el-row style="margin-bottom: 20px">
-                <el-col :span="21" :offset="1" class="border-form">
-                    <el-form ref="form" :model="filters" label-width="120px" label-position="top" size="mini">
-                        <el-row :gutter="20">
-                            <el-col :span="12">
-                                <el-form-item label="Determinante">
-                                    <el-input v-model="filters.name"></el-input>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="Clasificación">
-                                    <el-input v-model="filters.classification"></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="20">
-                            <el-col :span="12">
-                                <el-form-item label="Año">
-                                    <el-date-picker
-                                        v-model="filters.year"
-                                        type="year"
-                                        placeholder="Pick a year"
-                                        style="width: 100%">
-                                    </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="Creador">
-                                    <el-input v-model="filters.creator"></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </el-col>
-            </el-row>
-            <el-row :gutter="20" type="flex" justify="center">
-                <el-col :span="5">
-                    <el-button
-                        size="small"
-                        icon="fas fa-eraser"
-                        style="width: 100%">
-                        Limpiar
-                    </el-button>
-                </el-col>
-                <el-col :span="5">
-                    <el-button
-                        size="small"
-                        icon="fas fa-filter"
-                        type="primary"
-                        style="width: 100%">
-                        Buscar
-                    </el-button>
-                </el-col>
-            </el-row>
-        </el-drawer>
+
+<!--        Mostrar filtros-->
+        <show-filters :items="filters" @search="SearchData"/>
     </div>
 </template>
 
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
+    import ShowFilters from "./FormFiltros";
 
     export default {
         components: {
             HeaderSection,
+            ShowFilters
         },
         data(){
             return{
-                showFilters: false,
                 filters:{
-
+                    show: false,
+                    determinant:'',
+                    classification:'',
+                    year:null,
+                    user:''
                 },
                 tableData: [{
                     number: '1',
@@ -229,15 +174,21 @@
                     date: '2017-02-28 01:06:57',
                 }]
             }
+        },
+        methods:{
+            SearchData(){
+                this.startLoading();
+                let _this = this;
+                setTimeout(function(){
+                    _this.filters.show = false;
+                    _this.stopLoading();
+                    }, 3000);
+            }
         }
 
     }
 </script>
 
 <style scoped>
-    .border-form{
-        padding: 20px;
-        border: 1px solid #DCDFE6;
-        border-radius: 5px;
-    }
+
 </style>
