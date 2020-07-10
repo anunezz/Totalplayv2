@@ -3,7 +3,7 @@ import AccessDenied from "./components/views/layouts/AccessDenied";
 import Menu from "./components/views/layouts/Menu";
 import Admin from "./routes/Admin";
 import Formalities from "./routes/Formalities";
-import Strategy from "./routes/Strategy";
+import Strategy from "./routes/Historical";
 import Reports from "./routes/Reports";
 import Catalogs from "./routes/Catalogs";
 

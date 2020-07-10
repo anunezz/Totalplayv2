@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="20">
-            <el-col :span="9">
+            <el-col :span="7">
                 <el-badge value="6" class="item">
                     <a class="links" @click="goTo('ListFormalities', { cat_transaction_type_id: 1, action: 'Ingresa al index de tramites'})">
                         Archivo de Trámite
@@ -11,17 +11,7 @@
                 <span>Bandeja de entrada</span>
             </el-col>
 
-<!--            <el-col :span="6">-->
-<!--                <el-badge :value="registers" class="item">-->
-<!--                    <a class="links" @click="goTo('StrategiesIndex', {cat_transaction_type_id: 1, action: 'Ingresa al index de informe de estrategia'})">-->
-<!--                    Informe de estrategia-->
-<!--                    </a>-->
-<!--                </el-badge>-->
-<!--                <br /><br />-->
-<!--                <span>Bandeja de entrada</span>-->
-<!--            </el-col>-->
-
-            <el-col :span="8">
+            <el-col :span="6">
                 <a class="links" @click=" goTo('AdminIndex', { cat_transaction_type_id: 1, action: 'Ingresa a Administración'})">
                     Administración
                 </a>
@@ -29,13 +19,22 @@
                 <span>Configuraciones</span>
             </el-col>
 
-
             <el-col :span="6">
                 <a class="links" @click="goTo('ReportIndex', {cat_transaction_type_id: 1, action: 'Ingresa a Reportes'})">
                     Reportes
                 </a>
                 <br /><br />
                 <span>Reportes</span>
+            </el-col>
+
+            <el-col :span="5">
+                <el-badge class="item">
+                    <a class="links" @click="goTo('HistoricalIndex', {cat_transaction_type_id: 1, action: 'Ingresa a la consulta de expediente'})">
+                        Histórico
+                    </a>
+                </el-badge>
+                <br /><br />
+                <span>Consulta de expediente</span>
             </el-col>
         </el-row>
         <br /><br />

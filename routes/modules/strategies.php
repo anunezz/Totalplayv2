@@ -6,7 +6,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 
 Route::group(['middleware' => ['auth:api']], function () {
 
-    Route::resource('strategies', 'StrategiesController');
+    Route::resource('historical', 'StrategiesController');
 
 });
 

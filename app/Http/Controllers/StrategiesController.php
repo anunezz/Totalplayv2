@@ -29,7 +29,7 @@ class StrategiesController extends Controller
                     ->paginate($data['perPage']);
 
                 return response()->json([
-                    'strategies' => $strategies,
+                    'historical' => $strategies,
                     'success' => true
                 ]);
             } else {
