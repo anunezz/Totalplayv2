@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        <pre>{{formFormalities}}</pre>-->
+
         <header-section icon="fas fa-file-signature" title="Archivo de trámite">
             <template slot="buttons">
                 <el-button
@@ -13,16 +13,14 @@
             </template>
         </header-section>
         <el-row>
+            <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
+                <h3 style="color:#67C23A; border-bottom: 1px solid #b3b9c8; padding: 10px">SECRETARÍA DE RELACIONES EXTERIORES</h3>
                 <el-tabs type="card">
-
                     <el-tab-pane label="Datos Generales" style="padding: 10px">
-                        <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
                             <form-general :formFormalities="formFormalities"/>
-                        </el-form>
                     </el-tab-pane>
-
-                    <el-tab-pane label=" Información adicional">
+                    <el-tab-pane label=" Información adicional" style="padding: 10px">
                         <form-additional :formFormalities="formFormalities"/>
                     </el-tab-pane>
 
@@ -71,6 +69,7 @@
                     </el-col>
                 </el-row>
             </el-col>
+            </el-form>
         </el-row>
     </div>
 </template>
@@ -91,16 +90,14 @@
                     section_id: null,
                     serie_id: null,
                     subserie_id: null,
-                    anio: null,
-                    classification_tin: '',
-                    file_number: '',
                     title: '',
                     opening_date: null,
-                    documentary_value: null,
-                    nature_information: null,
-                    documentary_tradition: null,
-                    description:'',
-                    furniture:'',
+                    close_date: null,
+                    consecutive: 0,
+                    legajo: 0,
+                    sort_code: '',
+                    scope_and_content: '',
+                    furniture: '',
 
                 },
 
