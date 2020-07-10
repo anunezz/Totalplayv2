@@ -13,7 +13,7 @@ class CreateStrategiesTable extends Migration
      */
     public function up()
     {
-        Schema::create('strategies', function (Blueprint $table) {
+        Schema::create('historical', function (Blueprint $table) {
 
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->nullable();
@@ -45,6 +45,6 @@ class CreateStrategiesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('strategies');
+        Schema::dropIfExists('historical');
     }
 }
