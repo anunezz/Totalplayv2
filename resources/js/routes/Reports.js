@@ -3,6 +3,7 @@ import ReportIndex from '../components/views/reports/Index';
 import Record from '../components/views/reports/Record/Record';
 import Transfer from '../components/views/reports/Transfer/Transfer';
 import Inventory from '../components/views/reports/Transfer/Inventory';
+import Datasheet from '../components/views/reports/Transfer/Datasheet';
 import Prevaluation from '../components/views/reports/Prevaluation/Prevaluation';
 import LabelIndex from '../components/views/reports/label/index';
 
@@ -34,6 +35,11 @@ export default {
             path: 'transferencia/prevaloración',
             component: Prevaluation,
             name: 'Prevaluation',
+        },
+        {
+            path: 'transferencia/ficha',
+            component: Datasheet,
+            name: 'Datasheet',
         },
         {
             path: 'etiqueta',
