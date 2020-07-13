@@ -1,4 +1,4 @@
-<template xmlns:el-col="http://www.w3.org/1999/html">
+<template xmlns:el-col="http://www.w3.org/1999/html" xmlns:el-colc="http://www.w3.org/1999/html">
     <div>
         <el-row>
             <el-form :model="formFormalities" label-position="top" label-width="120px" size="small">
@@ -109,36 +109,129 @@
                     <el-row style="padding: 15px">
                         <el-row :gutter="20">
                             <el-col :span="12">
-                                <el-form-item label="Fundamento legal:" prop="name">
+                                <el-form-item label="Resolución del comité de transparencia:" prop="section_id"
+                                              :rules="[
+                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                                    <el-select v-model="formFormalities.section_id" clearable filterable
+                                               placeholder="Seleccionar" style="width: 100%">
+                                        <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="Carácter de la información:" prop="serie_id"
+                                              :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                                    <el-select v-model="formFormalities.serie_id" filterable placeholder="Seleccionar"
+                                               style="width: 100%">
+                                        <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="Razón de clasificación:" prop="subserie_id"
+                                              :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                                    <el-select v-model="formFormalities.subserie_id" clearable filterable
+                                               placeholder="Seleccionar" style="width: 100%">
+                                        <el-option
+                                            v-for="item in options"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
+                                <el-form-item label="Fecha de clasificación: " prop="opening_date" :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                                    <el-date-picker
+                                        v-model="formFormalities.opening_date"
+                                        type="date"
+                                        style="width: 100%">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-form-item label="Nombre y firma del titular de la unidad administrativa:" prop="title"
+                                          :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                                <el-input
+                                    v-model="formFormalities.title">
+                                </el-input>
+                            </el-form-item>
+                        </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-form-item label="Acta del comité de transparencia:" prop="title"
+                                              :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                     <el-input
-                                        v-model="input">
+                                        v-model="formFormalities.title">
                                     </el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item label="Periodo de reserva:" prop="name">
-                                    <el-input-number v-model="num" controls-position="right" style="width: 100%"></el-input-number>
+                                <el-form-item label="Partes restringidas (folios):" prop="title"
+                                              :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                                    <el-input
+                                        v-model="formFormalities.title">
+                                    </el-input>
                                 </el-form-item>
                             </el-col>
+
+                        </el-row>
+                        <el-row>
+                            <el-form-item label="Fundamento legal:" prop="title"
+                                          :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                                <el-input
+                                    v-model="formFormalities.title">
+                                </el-input>
+                            </el-form-item>
                         </el-row>
                         <el-row :gutter="20">
-                            <el-col :span="8">
-                                <el-form-item label="Fecha de clasificación:" prop="name">
-                                    <el-input
-                                        v-model="input">
-                                    </el-input>
+                            <el-col :span="6">
+                                <el-form-item label="Periodo de reserva (años):" prop="title">
+                                    <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                                                     style="width: 100%"></el-input-number>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="Fecha de desclasificación:" prop="name">
-                                    <el-input
-                                        v-model="input">
-                                    </el-input>
-                                </el-form-item>
+                            <el-col :span="6">
+                                    <el-form-item label="Ampliación del plazo (años):" prop="title">
+                                        <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                                                         style="width: 100%"></el-input-number>
+                                    </el-form-item>
+
                             </el-col>
-                            <el-col :span="8">
-                                <el-form-item label="Ampliación de periodo de reserva:" prop="name">
-                                    <el-input-number v-model="num" controls-position="right" style="width: 100%"></el-input-number>
+                            <el-col :span="12">
+                                <el-form-item label="Número de acta/oficio:" prop="title"
+                                              :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                                    <el-input
+                                        v-model="formFormalities.title">
+                                    </el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
