@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="el-icon-s-management" title="Declaratoria de prevaloración">
+        <header-section icon="el-icon-s-management" title="Generar Ficha Técnica">
             <template slot="buttons">
                 <el-button
                     align="right"
@@ -61,50 +61,6 @@
                             </el-form-item>
                         </el-col>
 
-                        <!-- <el-col :span='6'>
-                            <el-form-item label="Sección" prop="secction"
-                            :rules="[{ required: true, message: 'Este campo es requerido', trigger: ['blur','change']}]">
-                                    <el-select
-                                    size="mini"
-                                    style="width: 100%;"
-                                    v-model="ruleForm.secction"
-                                    placeholder="Seleccione una opción">
-                                        <el-option
-                                        label="Seleccione una opción"
-                                        value="">
-                                        </el-option>
-                                        <el-option
-                                        v-for="item in secction"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                            </el-form-item>
-                        </el-col> -->
-
-                        <!-- <el-col :span='6'>
-                            <el-form-item label="Serie" prop="secction"
-                            :rules="[{ required: true, message: 'Este campo es requerido', trigger: ['blur','change']}]">
-                                    <el-select
-                                    size="mini"
-                                    style="width: 100%;"
-                                    v-model="ruleForm.serie"
-                                    placeholder="Seleccione una opción">
-                                        <el-option
-                                        label="Seleccione una opción"
-                                        value="">
-                                        </el-option>
-                                        <el-option
-                                        v-for="item in serie"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                        </el-option>
-                                    </el-select>
-                            </el-form-item>
-                        </el-col> -->
-
                         <el-col :span='6'>
                             <el-form-item label="Año inicio del reporte" prop="yearStart"
                             :rules="[{ required: true, message: 'Este campo es requerido', trigger: ['blur','change']}]">
@@ -158,14 +114,37 @@
                         </el-col>
 
                         <el-col :span='6'>
-                            <el-form-item label="Cantidad de folios" prop="meters" :rules="[
+                            <el-form-item label="Funciones o atribuciones" prop="meters" :rules="[
                             { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                             { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
-                                <el-input size="mini" placeholder="Cantidad de folios" v-model="ruleForm.folios"></el-input>
+                                <el-input size="mini" placeholder="Funciones o atribuciones" v-model="ruleForm.attributions"></el-input>
                             </el-form-item>
                         </el-col>
 
                         <el-col :span='6'>
+                            <el-form-item label="Carácter de la función o atribución" prop="yearEnd"
+                            :rules="[{ required: true, message: 'Este campo es requerido', trigger: ['blur','change']}]">
+                                    <el-select
+                                    size="mini"
+                                    style="width: 100%;"
+                                    v-model="ruleForm.attributions2"
+                                    placeholder="Seleccione una opción">
+                                        <el-option
+                                        label="Seleccione una opción"
+                                        value="">
+                                        </el-option>
+                                        <el-option
+                                        v-for="item in attributions2"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                            </el-form-item>
+                        </el-col>
+
+
+                        <!-- <el-col :span='6'>
                             <el-form-item label="Vigencia" prop="validity" :rules="[
                             { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                             { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
@@ -175,9 +154,9 @@
                                 size="mini" placeholder="Vigencia"
                                 v-model="ruleForm.validity"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
 
-                        <el-col :span='6'>
+                        <!-- <el-col :span='6'>
                             <el-form-item label="Archivo de concentración (AC)" prop="validity" :rules="[
                             { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                             { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
@@ -187,7 +166,7 @@
                                 size="mini" placeholder="Archivo de concentración (AC)"
                                 v-model="ruleForm.concentration"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
 
                         <el-col :span='6'>
                             <el-form-item label="Valor Documental" prop="yearEnd"
@@ -236,6 +215,25 @@
                             { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                             { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
                                 <el-input size="mini" placeholder="Ej. 2.2" v-model="ruleForm.meters"></el-input>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span='6'>
+                            <el-form-item label="Estado físico" prop="fisico" :rules="[
+                            { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                            { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
+                                <el-input size="mini" placeholder="Estado físico" v-model="ruleForm.meters"></el-input>
+                            </el-form-item>
+                        </el-col>
+
+                        <el-col :span='24'>
+                            <el-form-item label="Metodología de Valoración" prop="fisico" :rules="[
+                            { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                            { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'} ]">
+                                <el-input
+                                maxlength="200"
+                                show-word-limit
+                                type="textarea" size="mini" placeholder="Metodología de Valoración" v-model="ruleForm.Methodology"></el-input>
                             </el-form-item>
                         </el-col>
 
@@ -370,6 +368,7 @@ export default {
             yearStart:[],
             yearEnd:[],
             documentary:[],
+            attributions2:[],
             //Formularios
             ruleForm:{},
             rules:{}
