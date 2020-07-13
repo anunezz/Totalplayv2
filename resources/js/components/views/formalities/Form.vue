@@ -43,7 +43,13 @@
             return{
                 formFormalities:{
                     name:'',
-                    anio:''
+                    anio:'',
+                    format_id:'',
+                    documentary_tradition:'',
+                    initial_folio: 0,
+                    end_folio: 0,
+                    fojas: 2,
+                    classification_date:'',
                 },
                 num:0,
                 input:'',

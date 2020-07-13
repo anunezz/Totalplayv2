@@ -61,6 +61,7 @@
                             <el-date-picker
                                 v-model="formFormalities.opening_date"
                                 type="date"
+                                format="dd/MM/yyyy"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -74,6 +75,7 @@
                             <el-date-picker
                                 v-model="formFormalities.close_date"
                                 type="date"
+                                format="dd/MM/yyyy"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -121,7 +123,6 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="Alcance y contenido:" prop="description" :rules="[
-                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
                                 type="textarea"

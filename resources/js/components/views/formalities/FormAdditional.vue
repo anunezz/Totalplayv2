@@ -12,7 +12,7 @@
                                 <el-form-item label="Formato:" prop="section_id"
                                               :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                                    <el-select v-model="formFormalities.section_id" clearable filterable
+                                    <el-select v-model="formFormalities.format_id" clearable filterable
                                                placeholder="Seleccionar" style="width: 100%">
                                         <el-option
                                             v-for="item in options"
@@ -27,7 +27,7 @@
                                 <el-form-item label="Tradición documental:" prop="serie_id"
                                               :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                                    <el-select v-model="formFormalities.serie_id" filterable placeholder="Seleccionar"
+                                    <el-select v-model="formFormalities.documentary_tradition" filterable placeholder="Seleccionar"
                                                style="width: 100%">
                                         <el-option
                                             v-for="item in options"
@@ -48,7 +48,7 @@
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item label="Folio inicial:" prop="title">
-                                    <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                                    <el-input-number v-model="formFormalities.initial_folio" controls-position="right"
                                                      style="width: 100%"></el-input-number>
                                 </el-form-item>
                             </el-col>
@@ -56,13 +56,13 @@
                         <el-row :gutter="20">
                             <el-col :span="12">
                                 <el-form-item label="Folio final:" prop="title">
-                                    <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                                    <el-input-number v-model="formFormalities.end_folio" controls-position="right"
                                                      style="width: 100%"></el-input-number>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item label="Total de fojas:" prop="title">
-                                    <el-input v-model="formFormalities.sort_code" disabled style="width: 100%"></el-input>
+                                    <el-input v-model="formFormalities.fojas" disabled style="width: 100%"></el-input>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -74,8 +74,102 @@
                     </el-row>
                     <el-row style="padding: 15px">
                         <h4>Valores primarios</h4>
+                        <el-row>
+                            <el-col :span="13" :offset="3">
+                                <el-table
+                                    :data="tableData"
+                                    style="width: 100%"
+                                    border>
+                                    <el-table-column
+                                        prop="date"
+                                        align="center"
+                                        label="Administrativo">
+                                        <template slot-scope="scope">
+                                            <i class="el-icon-close"></i>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Legal">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Fiscal">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Contable">
+                                    </el-table-column>
+                                </el-table>
+                            </el-col>
+                        </el-row>
                         <h4>Vigencias documentales</h4>
+                        <el-row>
+                            <el-col :span="18" :offset="3">
+                                <el-table
+                                    :data="tableData2"
+                                    style="width: 100%"
+                                    border>
+                                    <el-table-column
+                                        prop="date"
+                                        align="center"
+                                        label="Archivo de trámite">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Archivo de concentración">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="address"
+                                        align="center"
+                                        label="Solicitud de acceso a la información"
+                                        width="270">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="total"
+                                        align="center"
+                                        label="Total">
+                                    </el-table-column>
+                                </el-table>
+                            </el-col>
+                        </el-row>
                         <h4>Técnicas de selección</h4>
+                        <el-row>
+                            <el-col :span="15" :offset="3">
+                                <el-table
+                                    :data="tableData"
+                                    style="width: 100%"
+                                    border>
+                                    <el-table-column
+                                        prop="date"
+                                        align="center"
+                                        label="Eliminación">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Conservació">
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Muestreo">
+                                        <template slot-scope="scope">
+                                            <i class="el-icon-close"></i>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column
+                                        prop="name"
+                                        align="center"
+                                        label="Cualidad de la muestra">
+                                    </el-table-column>
+                                </el-table>
+                            </el-col>
+                        </el-row>
                     </el-row>
                 </el-row>
                 <el-row class="header" style="padding: 15px">
@@ -95,7 +189,7 @@
                             <span style="font-weight: bold;">¿El expediente fue clasificado como confidencial o reservado?</span>
                         </el-col>
                         <el-col :span="5">
-                            <el-radio-group v-model="formFormalities.resource" size="medium">
+                            <el-radio-group v-model="formFormalities.confRese" size="medium">
                                 <el-radio border label="Sí"></el-radio>
                                 <el-radio border label="No"></el-radio>
                             </el-radio-group>
@@ -160,8 +254,9 @@
                                 <el-form-item label="Fecha de clasificación: " prop="opening_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                                     <el-date-picker
-                                        v-model="formFormalities.opening_date"
+                                        v-model="formFormalities.classification_date"
                                         type="date"
+                                        format="dd/MM/yyyy"
                                         style="width: 100%">
                                     </el-date-picker>
                                 </el-form-item>
@@ -173,7 +268,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                 <el-input
-                                    v-model="formFormalities.title">
+                                    v-model="formFormalities.name_titular">
                                 </el-input>
                             </el-form-item>
                         </el-row>
@@ -184,7 +279,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                     <el-input
-                                        v-model="formFormalities.title">
+                                        v-model="formFormalities.acta_res">
                                     </el-input>
                                 </el-form-item>
                             </el-col>
@@ -194,7 +289,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                     <el-input
-                                        v-model="formFormalities.title">
+                                        v-model="formFormalities.parts_restr">
                                     </el-input>
                                 </el-form-item>
                             </el-col>
@@ -206,14 +301,14 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                 <el-input
-                                    v-model="formFormalities.title">
+                                    v-model="formFormalities.fundLeg">
                                 </el-input>
                             </el-form-item>
                         </el-row>
                         <el-row :gutter="20">
                             <el-col :span="6">
                                 <el-form-item label="Periodo de reserva (años):" prop="title">
-                                    <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                                    <el-input-number v-model="formFormalities.period" controls-position="right"
                                                      style="width: 100%"></el-input-number>
                                 </el-form-item>
                             </el-col>
@@ -235,6 +330,33 @@
                                 </el-form-item>
                             </el-col>
                         </el-row>
+                        <el-row :gutter="20">
+                            <el-col :span="5">
+                                <el-form-item label="Fecha de desclasificación: " prop="opening_date" :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                                    <el-date-picker
+                                        v-model="formFormalities.date_clas"
+                                        type="date"
+                                        format="dd/MM/yyyy"
+                                        style="width: 100%">
+                                    </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <el-form-item label="Nombre, cargo y firma del servidor público que desclasifica:" prop="title"
+                                              :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                                    <el-input
+                                        type="textarea"
+                                        :rows="3"
+                                        v-model="formFormalities.name_person_public">
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
                     </el-row>
                 </el-row>
             </el-form>
@@ -251,6 +373,17 @@
                 input:'',
                 value1:'',
                 textarea:'',
+                tableData: [{
+                    date: '-',
+                    name: '-',
+                    address: '1'
+                }],
+                tableData2: [{
+                    date: 3,
+                    name: 2,
+                    address: '-',
+                    total: 5
+                }]
             }
         }
     }
