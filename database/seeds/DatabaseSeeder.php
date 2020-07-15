@@ -14,11 +14,18 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CatProfileSeeder::class,
             CatTransactionTypeSeeder::class,
-
             UsersTableSeeder::class,
-
-
             CatConsulateSeeder::class,
+            CatAdministrativeUnitSeeder::Class,
+            CatSectionTypeSeeder::class,
+            CatSectionSeeder::class,
+            CatPrimaryValuesSeeder::class,
+            CatDocumentaryValiditieSeeder::class,
+            CatSelectionTechniquesSeeder::class,
+            CatSeriesSeeder::class,
+            CatSubseriesSeeder::class,
+
+            AdminUnitSectionSeeder::class
         ]);
     }
 }
