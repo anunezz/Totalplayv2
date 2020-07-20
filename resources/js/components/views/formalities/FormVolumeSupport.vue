@@ -1,0 +1,91 @@
+<template>
+    <div>
+        <el-row class="body-form">
+            <el-row style="padding: 15px">
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="Formato:" prop="format_id"
+                                      :rules="[
+                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                            <el-select v-model="formFormalities.format_id" clearable filterable
+                                       placeholder="Seleccionar" style="width: 100%">
+                                <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Tradición documental:" prop="documentary_tradition_id"
+                                      :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
+                            <el-select v-model="formFormalities.documentary_tradition_id" filterable placeholder="Seleccionar"
+                                       style="width: 100%">
+                                <el-option
+                                    v-for="item in options"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="Legajo:" prop="legajos">
+                            <el-input-number v-model="formFormalities.legajos" controls-position="right"
+                                             style="width: 100%"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Folio inicial:" prop="initial_folio">
+                            <el-input-number v-model="formFormalities.initial_folio" controls-position="right"
+                                             style="width: 100%"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="12">
+                        <el-form-item label="Folio final:" prop="end_folio">
+                            <el-input-number v-model="formFormalities.end_folio" controls-position="right"
+                                             style="width: 100%"></el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Total de fojas:" prop="fojas">
+                            <el-input v-model="formFormalities.total_fojas" disabled style="width: 100%"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-row>
+        </el-row>
+    </div>
+</template>
+
+<script>
+    export default {
+        props:['formFormalities'],
+        data(){
+            return{
+                options:[{
+                    value:1,
+                    label:'opcion1'
+                }]
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .body-form {
+        border-left: 1px solid #b3b9c8;
+        border-bottom: 1px solid #b3b9c8;
+        border-right: 1px solid #b3b9c8;
+        border-radius: 5px;
+        padding: 20px;
+    }
+</style>
