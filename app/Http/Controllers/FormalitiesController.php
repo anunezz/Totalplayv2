@@ -38,7 +38,7 @@ class FormalitiesController extends Controller
     {
 
         try {
-            dd($request->all());
+
             DB::beginTransaction();
 
             $formality = new Formalities();
@@ -46,7 +46,7 @@ class FormalitiesController extends Controller
             $formality->save();
 
             GeneralController::saveTransactionLog(2,
-                'Crea una nueva recomendación con id: ');
+                'El usuario con id: '.auth()->user()->id.' Crea un nuevo trámite con id: '. $formality->id);
 
             DB::commit();
             return response()->json([
