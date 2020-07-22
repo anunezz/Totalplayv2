@@ -11,6 +11,7 @@
                 </el-button>
             </template>
         </header-section>
+        <pre>{{formFormalities}}</pre>
         <el-row>
             <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
@@ -158,18 +159,32 @@
         },
         methods:{
             submitForm(){
+                console.log(this.formFormalities.question_one)
+
                 this.$refs['formFormalities'].validate((valid) => {
                     if (valid) {
                         this.startLoading();
                         let _this = this;
-                        setTimeout(function(){
+                        _this.formFormalities.question_one = this.formFormalities.question_one === 'Sí' ? true : this.formFormalities.question_one === 'No' ? false : null;
+                        _this.formFormalities.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
+                        /*setTimeout(function(){
                             _this.stopLoading();
                             _this.$router.push('/tramites');
                             _this.$message({
                                 message:"El trámite se registro exitosamente.",
                                 type: "success"
                             });
-                        }, 1000);
+                        }, 1000);*/
+                        axios.post('/api/formalities',_this.formFormalities).then(response =>{
+                            console.log('enviando datos')
+                            _this.stopLoading();
+                        }).catch(error => {
+                            _this.stopLoading();
+                            this.$message({
+                                type: "warning",
+                                message: "No fue posible completar la acción, intente nuevamente."
+                            });
+                        });
                     } else {
                         this.$message({
                             type: "warning",

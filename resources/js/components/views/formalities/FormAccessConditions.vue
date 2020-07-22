@@ -58,6 +58,7 @@
                                 v-model="formFormalities.classification_date"
                                 type="date"
                                 format="dd/MM/yyyy"
+                                value-format="dd/MM/yyyy"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -138,6 +139,7 @@
                                 v-model="formFormalities.declassification_date"
                                 type="date"
                                 format="dd/MM/yyyy"
+                                value-format="dd/MM/yyyy"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>

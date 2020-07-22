@@ -58,6 +58,7 @@
                                 v-model="formFormalities.opening_date"
                                 type="date"
                                 format="dd/MM/yyyy"
+                                value-format="dd/MM/yyyy"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -72,6 +73,7 @@
                                 v-model="formFormalities.close_date"
                                 type="date"
                                 format="dd/MM/yyyy"
+                                value-format="dd/MM/yyyy"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
