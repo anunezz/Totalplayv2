@@ -168,7 +168,7 @@ class SeriesPrimaryValuesSeeder extends Seeder
             ['cat_serie_id' => 111, 'cat_primary_value_id' => 1],
             ['cat_serie_id' => 112, 'cat_primary_value_id' => 1],
             ['cat_serie_id' => 113, 'cat_primary_value_id' => 1],
-            
+
         ]);
     }
 }
