@@ -32,36 +32,43 @@
                 </el-button>
             </el-col>
         </el-row> <br>
+        <el-pagination
+            @size-change="handleSizeChange"
+            :current-page.sync="pagination.currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="parseInt(pagination.perPage)"
+            layout="sizes">
+        </el-pagination>
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-table
                     size="mini"
-                    :data="tableData"
+                    :data="formalitiesTable"
                     style="width: 100%">
-                    <el-table-column
+                   <!-- <el-table-column
                         prop="number"
                         label="#">
-                    </el-table-column>
-                    <el-table-column
+                    </el-table-column>-->
+                    <!--<el-table-column
                         prop="determinant"
                         label="Determinante">
-                    </el-table-column>
+                    </el-table-column>-->
                     <el-table-column
-                        prop="classification"
+                        prop="sort_code"
                         label="Clasificación">
                     </el-table-column>
-                    <el-table-column
+                    <!--<el-table-column
                         prop="year"
                         label="Año">
-                    </el-table-column>
-                    <el-table-column
+                    </el-table-column>-->
+                    <!--<el-table-column
                         prop="user"
                         label="Creado por:">
                     </el-table-column>
                     <el-table-column
                         prop="date"
                         label="Fecha y Hora de  Creación">
-                    </el-table-column>
+                    </el-table-column>-->
                     <el-table-column
                         label="Acciones" header-align="left" align="center">
                         <template slot-scope="scope">
@@ -106,9 +113,20 @@
                 <br>
             </el-col>
         </el-row>
+        <el-row>
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="pagination.currentPage"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="parseInt(pagination.perPage)"
+                layout="total, ->, prev, pager, next"
+                :total="pagination.total">
+            </el-pagination>
+        </el-row>
 
 <!--        Mostrar filtros-->
-        <show-filters :items="filters" @search="SearchData"/>
+        <show-filters :items="filters" @search="getFormalities"/>
     </div>
 </template>
 
@@ -130,50 +148,16 @@
                     year:null,
                     user:''
                 },
-                tableData: [{
-                    number: '1',
-                    determinant: 'SSRE',
-                    classification: 'SRE.08C24-2020-2021/1 ',
-                    year: '2004',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '2',
-                    determinant: 'TIN',
-                    classification: 'SRE.08C24-2020-2021/2 ',
-                    year: '2016',
-                    user: 'Juárez Caballero, Raúl Alberto',
-                    date: '2020-06-26 12:46:57',
-                }, {
-                    number: '3',
-                    determinant: 'SSRE',
-                    classification: 'SRE.08C24-2020-2021/3',
-                    year: '2008',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '4',
-                    determinant: 'SSRE',
-                    classification: 'SRE.08C24-2020-2020/4',
-                    year: '2013',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '5',
-                    determinant: 'DDH',
-                    classification: 'SRE.08C24-2020-2020/5',
-                    year: '2001',
-                    user: 'Cruces Monroy, Joel',
-                    date: '2017-02-28 01:06:57',
-                }, {
-                    number: '6',
-                    determinant: 'DDH',
-                    classification: 'SRE.08C24-2020-2020/6',
-                    year: '2007',
-                    user: 'Cruces Monroy, Joel',
-                    date: '2017-02-28 01:06:57',
-                }]
+                pagination: {
+                    currentPage: 1,
+                    total: 0,
+                    perPage: 10
+                },
+                formalitiesTable:[],
             }
+        },
+        created() {
+            this.getFormalities();
         },
         methods:{
             SearchData(){
@@ -183,7 +167,36 @@
                     _this.filters.show = false;
                     _this.stopLoading();
                     }, 3000);
-            }
+            },
+            getFormalities(currentPage =  1) {
+                this.filters.show = false;
+                this.startLoading();
+                let data = { params: {
+                        page: currentPage,
+                        perPage: this.pagination.perPage,
+                        filters: this.filters}
+                };
+                axios.get('/api/formalities',data).then(response => {
+                    console.log(response)
+                    this.formalitiesTable = response.data.formalities.data;
+                    this.pagination.total = response.data.formalities.total;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.stopLoading();
+                    console.log(error)
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            },
+            handleSizeChange(sizePerPage) {
+                this.pagination.perPage = sizePerPage;
+                this.getFormalities();
+            },
+            handleCurrentChange(currentPage) {
+                this.getFormalities(currentPage);
+            },
         }
 
     }

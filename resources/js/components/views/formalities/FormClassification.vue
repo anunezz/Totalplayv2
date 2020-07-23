@@ -7,13 +7,13 @@
                         <el-form-item label="Sección:" prop="section_id"
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                            <el-select v-model="formFormalities.section_id" clearable filterable
+                            <el-select v-model="formFormalities.section_id" clearable filterable @change="getSeries"
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="section in sections"
+                                    :key="section.id"
+                                    :label="section.name"
+                                    :value="section.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -23,12 +23,14 @@
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.serie_id" filterable placeholder="Seleccionar"
+                                       @change="getSubSeries"
+                                       :disabled="series.length === 0"
                                        style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="serie in series"
+                                    :key="serie.id"
+                                    :label="serie.name"
+                                    :value="serie.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -37,16 +39,16 @@
 
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="Subserie:" prop="subserie_id"
+                        <el-form-item label="Subserie:" prop="subserie_id" v-if="subSeries.length > 0"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                            <el-select v-model="formFormalities.subserie_id" clearable filterable
+                            <el-select v-model="formFormalities.subserie_id" clearable filterable @change="calSortCodeSubSerie"
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="subSerie in subSeries"
+                                    :key="subSerie.id"
+                                    :label="subSerie.name"
+                                    :value="subSerie.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -58,7 +60,8 @@
                                 v-model="formFormalities.opening_date"
                                 type="date"
                                 format="dd/MM/yyyy"
-                                value-format="dd/MM/yyyy"
+                                value-format="yyyy-MM-dd"
+                                @change="calSortCodeOpenDate"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -73,7 +76,9 @@
                                 v-model="formFormalities.close_date"
                                 type="date"
                                 format="dd/MM/yyyy"
-                                value-format="dd/MM/yyyy"
+                                value-format="yyyy-MM-dd"
+                                @change="calSortCodeCloseDate"
+                                :picker-options="pickerOptionsEnd"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -111,8 +116,131 @@
                 options:[{
                     value:1,
                     label:'opcion1'
-                }]
+                }],
+                sections:[],
+                series:[],
+                subSeries:[],
+                pickerOptionsEnd: {
+                    disabledDate: this.delimtDays
+                },
             }
+        },
+        mounted() {
+            this.getSections();
+        },
+        methods:{
+            getSections(){
+                this.startLoading();
+                axios.get('/api/all/section').then(response => {
+                    this.sections = response.data.sections;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            },
+            getSeries(){
+                this.formFormalities.serie_id = null;
+                this.formFormalities.subserie_id = null;
+                this.formFormalities.sort_code = '';
+                let params = {
+                    id:this.formFormalities.section_id
+                }
+                if (this.formFormalities.section_id){
+                    this.startLoading();
+                    axios.get('/api/all/series',{params}).then(response => {
+                        this.series = response.data.series;
+                        this.stopLoading();
+                    }).catch(error => {
+                        this.stopLoading();
+                        this.$message({
+                            type: "warning",
+                            message: "No fue posible completar la acción, intente nuevamente."
+                        });
+                    });
+                }else {
+                    this.series = [];
+                    this.subSeries = [];
+                }
+            },
+            getSubSeries(){
+                this.formFormalities.sort_code = '';
+                let params = {
+                    id:this.formFormalities.serie_id
+                }
+                if (this.formFormalities.serie_id){
+                    this.startLoading();
+                    axios.get('/api/all/subSeries',{params}).then(response => {
+                        this.subSeries = response.data.subSeries;
+                        this.stopLoading();
+                        if (this.subSeries.length === 0) this.calSortCodeSerie();
+                        this.formFormalities.subserie_id = null;
+                    }).catch(error => {
+                        this.stopLoading();
+                        console.log(error)
+                        this.$message({
+                            type: "warning",
+                            message: "No fue posible completar la acción, intente nuevamente."
+                        });
+                    });
+                }
+            },
+            calSortCodeSerie(){
+                 const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
+                this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
+                this.calSortCodeGeneral();
+            },
+            calSortCodeSubSerie(){
+                 const result = this.subSeries.filter(subSerie => subSerie.id === this.formFormalities.subserie_id);
+                this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
+                this.calSortCodeGeneral();
+            },
+            calSortCodeOpenDate(){
+                this.formFormalities.auxOpening_date = '';
+                this.formFormalities.close_date = null;
+                this.formFormalities.auxClose_date = '';
+
+                if (this.formFormalities.opening_date){
+                    let aux = this.formFormalities.opening_date.split('-');
+                    this.formFormalities.auxOpening_date = aux[0] + '-';
+
+                }
+                this.calSortCodeGeneral();
+            },
+            calSortCodeCloseDate(){
+                this.formFormalities.auxClose_date = '';
+                if (this.formFormalities.close_date){
+                    let aux = this.formFormalities.close_date.split('-');
+                    this.formFormalities.auxClose_date = aux[0] + '/';
+                }
+                this.calSortCodeGeneral();
+            },
+            calSortCodeGeneral(){
+                let aux = this.formFormalities.auxSort_code + this.formFormalities.auxOpening_date + this.formFormalities.auxClose_date;
+
+                let params = {
+                    code: aux
+                }
+                this.formFormalities.sort_code = aux;
+                axios.post('/api/sort-code', params).then(response => {
+                    this.formFormalities.sort_code = aux + (response.data.total + 1);
+                    this.stopLoading();
+
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+
+            },
+            delimtDays(date) {
+                return date < new Date(this.formFormalities.opening_date);
+            },
         }
     }
 </script>

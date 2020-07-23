@@ -78,6 +78,7 @@
                 this.items.classification = '';
                 this.items.year = null;
                 this.items.user = '';
+                this.$emit('search');
             },
             searchitems(){
                 this.$emit('search')

@@ -10,10 +10,10 @@
                             <el-select v-model="formFormalities.format_id" clearable filterable
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="doc in typeDocs"
+                                    :key="doc.id"
+                                    :label="doc.name"
+                                    :value="doc.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -25,10 +25,10 @@
                             <el-select v-model="formFormalities.documentary_tradition_id" filterable placeholder="Seleccionar"
                                        style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="traditional in traditionDocs"
+                                    :key="traditional.id"
+                                    :label="traditional.name"
+                                    :value="traditional.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -71,10 +71,31 @@
         props:['formFormalities'],
         data(){
             return{
-                options:[{
-                    value:1,
-                    label:'opcion1'
-                }]
+                typeDocs:[
+                    {
+                        id:1,
+                        name:'Electrónico'
+                    },
+                    {
+                        id:2,
+                        name:'Físico'
+                    }
+                ],
+                traditionDocs:[
+                    {
+                        id:1,
+                        name:'Copia'
+                    },
+                    {
+                        id:2,
+                        name:'Original'
+                    },
+                    {
+                        id:3,
+                        name:'Original y copia'
+                    },
+
+                ],
             }
         }
     }
