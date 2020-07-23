@@ -24,14 +24,14 @@
                             style="margin-top: 10px; margin-left: 5px;">
 
                     </el-col>
-                    <el-col :span="10">
+                    <el-col :span="11">
                         <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
-                            <span style="font-size: 15px">SISTEMA DE CLASIFICACIÓN DE ARCHIVOS v {{$vertion}}</span>
+                            <span style="font-size: 15px">SISTEMA PARA EL REGISTRO Y GESTIÓN DE EXPEDIENTES v {{$version}}</span>
                         </div>
                     </el-col>
 
 
-                    <el-col :span="12">
+                    <el-col :span="11">
                         <el-menu
                             :router="true"
                             mode="horizontal"

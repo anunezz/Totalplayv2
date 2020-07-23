@@ -13,7 +13,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="?tab=">SERIDH <small>v {{$vertion}}</small> </a>
+                    <a class="navbar-brand" href="?tab=">SERIDH <small>v {{$version}}</small> </a>
                 </div>
                 <div class="collapse navbar-collapse" id="subenlaces">
                     <ul class="nav subnav navbar-nav navbar-right">
