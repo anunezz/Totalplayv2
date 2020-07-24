@@ -15,7 +15,6 @@
             <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
                 <h3 class="form-title">SECRETARÍA DE RELACIONES EXTERIORES</h3>
-                <pre>{{tapOne}}</pre>
                 <el-tabs type="card" ref="menuTaps" @tab-click="chageTapClick">
                     <el-tab-pane label="Clasificación" style="padding: 10px">
                         <form-classification :formFormalities="formFormalities" v-if="tapOne"></form-classification>
@@ -111,6 +110,7 @@
         },
         data(){
             return{
+                auxEdit: false,
                 editFormalitiy_id: null,
                 currentTap: 0,
                 tapOne: false,
@@ -153,6 +153,7 @@
                     auxOpening_date: '',
                     auxClose_date: '',
                     auxSort_code: '',
+                    primariValues:[]
                 },
             }
         },
@@ -160,10 +161,20 @@
             if (this.$route.params.id !== undefined) this.editRegister(this.$route.params.id);
             else this.tapOne = true;
         },
+        mounted() {
+            let _this = this;
+            setTimeout(function(){
+                _this.auxEdit = true;
+                }, 2000);
+
+        },
         watch:{
-          'formFormalities.question_one'(value){
-              this.cleanControlAcces();
-          },
+            'formFormalities.question_one'(value) {
+                this.cleanControlAcces(1);
+            },
+            'formFormalities.question_two'(value) {
+                this.cleanControlAcces();
+            },
         },
         methods:{
             submitForm(){
@@ -195,21 +206,24 @@
                 }
 
             },
-            cleanControlAcces(){
-                this.formFormalities.question_two = null;
-                this.formFormalities.transparency_resolution_id = null;
-                this.formFormalities.nature_information_id = null;
-                this.formFormalities.classification_reason_id = null;
-                this.formFormalities.classification_date = null;
-                this.formFormalities.name_titular = '';
-                this.formFormalities.transparency_proceedings = '';
-                this.formFormalities.restricted_parts = '';
-                this.formFormalities.legal_basis = '';
-                this.formFormalities.reservation_period = 0;
-                this.formFormalities.deadline_extension = 0;
-                this.formFormalities.Record_official_number = '';
-                this.formFormalities.declassification_date = null;
-                this.formFormalities.public_server = '';
+            cleanControlAcces(val = 0){
+                if (this.auxEdit){
+                    if (val === 1) this.formFormalities.question_two = null;
+                    this.formFormalities.transparency_resolution_id = null;
+                    this.formFormalities.nature_information_id = null;
+                    this.formFormalities.classification_reason_id = null;
+                    this.formFormalities.classification_date = null;
+                    this.formFormalities.name_titular = '';
+                    this.formFormalities.transparency_proceedings = '';
+                    this.formFormalities.restricted_parts = '';
+                    this.formFormalities.legal_basis = '';
+                    this.formFormalities.reservation_period = 0;
+                    this.formFormalities.deadline_extension = 0;
+                    this.formFormalities.Record_official_number = '';
+                    this.formFormalities.declassification_date = null;
+                    this.formFormalities.public_server = '';
+                }
+
             },
             validForm(){
                 let aux = false

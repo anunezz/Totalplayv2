@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use App\Http\Models\Cats\CatSeries;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -32,5 +33,10 @@ class Formalities extends Model
     public function getHashAttribute()
     {
         return encrypt( $this->id );
+    }
+
+    public function serie()
+    {
+        return $this->belongsTo(CatSeries::class);
     }
 }

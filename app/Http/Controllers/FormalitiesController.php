@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\CatSection;
-use App\CatSeries;
-use App\CatSubseries;
+use App\Http\Models\Cats\CatSection;
+use App\Http\Models\Cats\CatSeries;
+use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -97,9 +97,11 @@ class FormalitiesController extends Controller
     public function edit($id)
     {
         try {
+            $formality = Formalities::find(decrypt($id));
+            $formality->primariValues = $formality->serie->primarivalues;
             return response()->json([
                 'success' => true,
-                'formality' =>Formalities::find(decrypt($id))
+                'formality' =>$formality
             ]);
         }
         catch ( \Exception $e ) {
@@ -155,7 +157,7 @@ class FormalitiesController extends Controller
             $serie = $request->all();
             return response()->json([
                 'success' => true,
-                'series' =>CatSeries::orderBy('name')->whereCatSectionId($serie['id'])->get()
+                'series' =>CatSeries::with('primarivalues')->whereCatSectionId($serie['id'])->get()
             ]);
         }
         catch ( \Exception $e ) {
