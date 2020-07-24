@@ -92,7 +92,8 @@
                                     <el-button
                                         type="primary"
                                         size="mini"
-                                        icon="fas fa-edit">
+                                        icon="fas fa-edit"
+                                        @click="editRegister(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip
@@ -177,7 +178,6 @@
                         filters: this.filters}
                 };
                 axios.get('/api/formalities',data).then(response => {
-                    console.log(response)
                     this.formalitiesTable = response.data.formalities.data;
                     this.pagination.total = response.data.formalities.total;
                     this.stopLoading();
@@ -197,6 +197,12 @@
             handleCurrentChange(currentPage) {
                 this.getFormalities(currentPage);
             },
+            editRegister(id){
+                this.$router.push({
+                    name: 'EditFormalities',
+                    params: {id: id}
+                });
+            }
         }
 
     }

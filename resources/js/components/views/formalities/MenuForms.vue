@@ -15,9 +15,10 @@
             <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
                 <h3 class="form-title">SECRETARÍA DE RELACIONES EXTERIORES</h3>
+                <pre>{{tapOne}}</pre>
                 <el-tabs type="card" ref="menuTaps" @tab-click="chageTapClick">
                     <el-tab-pane label="Clasificación" style="padding: 10px">
-                        <form-classification :formFormalities="formFormalities"></form-classification>
+                        <form-classification :formFormalities="formFormalities" v-if="tapOne"></form-classification>
                     </el-tab-pane>
                     <el-tab-pane label="Descripción" style="padding: 10px" :disabled="tapTwo">
                         <form-description :formFormalities="formFormalities" v-if="tapTwo === false"></form-description>
@@ -110,11 +111,13 @@
         },
         data(){
             return{
-                currentTap:0,
-                tapTwo:true,
-                tapThree:true,
-                tapFour:true,
-                formFormalities:{
+                editFormalitiy_id: null,
+                currentTap: 0,
+                tapOne: false,
+                tapTwo: true,
+                tapThree: true,
+                tapFour: true,
+                formFormalities: {
                     section_id: null,
                     serie_id: null,
                     subserie_id: null,
@@ -127,7 +130,7 @@
                     scope_and_content: '',
                     format_id: null,
                     documentary_tradition_id: null,
-                    legajos:0,
+                    legajos: 0,
                     initial_folio: null,
                     end_folio: null,
                     total_fojas: null,
@@ -150,10 +153,12 @@
                     auxOpening_date: '',
                     auxClose_date: '',
                     auxSort_code: '',
-
                 },
-
             }
+        },
+        created() {
+            if (this.$route.params.id !== undefined) this.editRegister(this.$route.params.id);
+            else this.tapOne = true;
         },
         watch:{
           'formFormalities.question_one'(value){
@@ -253,6 +258,27 @@
             },
             chageTapClick(){
                 this.currentTap = parseInt(this.$refs['menuTaps'].currentName);
+            },
+            editRegister(id){
+
+
+                this.editFormalitiy_id = id;
+
+                axios.get('/api/formalities/' + this.editFormalitiy_id + '/edit').then(response => {
+                    console.log('registro optenido',response)
+                    this.formFormalities = response.data.formality;
+                    this.tapOne = true;
+                    this.tapTwo = false;
+                    this.tapThree = false;
+                    this.tapFour = false;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
             }
         }
     }

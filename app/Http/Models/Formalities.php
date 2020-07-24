@@ -15,6 +15,8 @@ class Formalities extends Model
         'declassification_date', 'public_server',
     ];
 
+    protected $appends = ['hash'];
+
     public function scopeSearch($query, $filters)
     {
         return $query->where(function ($q) use ($filters) {
@@ -25,5 +27,10 @@ class Formalities extends Model
             }
         });
 
+    }
+
+    public function getHashAttribute()
+    {
+        return encrypt( $this->id );
     }
 }

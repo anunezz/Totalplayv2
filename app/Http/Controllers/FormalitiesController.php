@@ -92,11 +92,22 @@ class FormalitiesController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit($id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'formality' =>Formalities::find(decrypt($id))
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
