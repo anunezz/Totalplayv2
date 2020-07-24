@@ -8,7 +8,7 @@
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.section_id" clearable filterable @change="getSeries"
-                                       placeholder="Seleccionar" style="width: 100%">
+                                       placeholder="Seleccionar" style="width: 100%" :disabled="formFormalities.hash !== undefined">
                                 <el-option
                                     v-for="section in sections"
                                     :key="section.id"
@@ -24,7 +24,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.serie_id" filterable placeholder="Seleccionar"
                                        @change="getSubSeries"
-                                       :disabled="series.length === 0"
+                                       :disabled="series.length === 0 || formFormalities.hash !== undefined"
                                        style="width: 100%">
                                 <el-option
                                     v-for="serie in series"
@@ -43,7 +43,7 @@
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.subserie_id" clearable filterable @change="calSortCodeSubSerie"
-                                       placeholder="Seleccionar" style="width: 100%">
+                                       placeholder="Seleccionar" :disabled="formFormalities.hash !== undefined" style="width: 100%">
                                 <el-option
                                     v-for="subSerie in subSeries"
                                     :key="subSerie.id"
@@ -61,6 +61,7 @@
                                 type="date"
                                 format="dd/MM/yyyy"
                                 value-format="yyyy-MM-dd"
+                                :disabled="formFormalities.hash !== undefined"
                                 @change="calSortCodeOpenDate"
                                 style="width: 100%">
                             </el-date-picker>
@@ -78,6 +79,7 @@
                                 format="dd/MM/yyyy"
                                 value-format="yyyy-MM-dd"
                                 @change="calSortCodeCloseDate"
+                                :disabled="formFormalities.hash !== undefined"
                                 :picker-options="pickerOptionsEnd"
                                 style="width: 100%">
                             </el-date-picker>
@@ -127,6 +129,7 @@
         },
         mounted() {
             this.getSections();
+            if (this.formFormalities.hash !== undefined) this.editRegisterTap();
         },
         methods:{
             getSections(){
@@ -143,9 +146,12 @@
                 });
             },
             getSeries(){
-                this.formFormalities.serie_id = null;
-                this.formFormalities.subserie_id = null;
-                this.formFormalities.sort_code = '';
+                if (this.formFormalities.hash === undefined){
+                    this.formFormalities.serie_id = null;
+                    this.formFormalities.subserie_id = null;
+                    this.formFormalities.sort_code = '';
+                }
+
                 let params = {
                     id:this.formFormalities.section_id
                 }
@@ -167,7 +173,11 @@
                 }
             },
             getSubSeries(){
-                this.formFormalities.sort_code = '';
+
+                if (this.formFormalities.hash === undefined) {
+                    this.formFormalities.sort_code = '';
+                    this.formFormalities.primariValues = [];
+                }
                 let params = {
                     id:this.formFormalities.serie_id
                 }
@@ -176,8 +186,9 @@
                     axios.get('/api/all/subSeries',{params}).then(response => {
                         this.subSeries = response.data.subSeries;
                         this.stopLoading();
-                        if (this.subSeries.length === 0) this.calSortCodeSerie();
-                        this.formFormalities.subserie_id = null;
+                        if (this.subSeries.length === 0 && this.formFormalities.hash === undefined) this.calSortCodeSerie();
+                        if (this.formFormalities.hash === undefined) this.formFormalities.subserie_id = null;
+
                     }).catch(error => {
                         this.stopLoading();
                         console.log(error)
@@ -190,6 +201,8 @@
             },
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
+                console.log('imprimiedo la serie',result[0].primarivalues)
+                this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();
             },
@@ -241,6 +254,11 @@
             delimtDays(date) {
                 return date < new Date(this.formFormalities.opening_date);
             },
+            editRegisterTap(){
+                console.log('tap numero 2')
+                this.getSeries();
+                this.getSubSeries();
+            }
         }
     }
 </script>

@@ -169,7 +169,7 @@
         },
         data(){
             return {
-                //Catalogos
+                //Catalogs
                 section:[],
                 serie:[],
                 subserie:[],

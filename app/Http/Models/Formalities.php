@@ -2,6 +2,8 @@
 
 namespace App\Http\Models;
 
+use App\Http\Models\Cats\CatSeries;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,6 +17,8 @@ class Formalities extends Model
         'declassification_date', 'public_server',
     ];
 
+    protected $appends = ['hash'];
+
     public function scopeSearch($query, $filters)
     {
         return $query->where(function ($q) use ($filters) {
@@ -25,5 +29,23 @@ class Formalities extends Model
             }
         });
 
+    }
+
+    public function getHashAttribute()
+    {
+        return encrypt( $this->id );
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(
+            User::class,
+            'user_id'
+        );
+    }
+
+    public function serie()
+    {
+        return $this->belongsTo(CatSeries::class);
     }
 }

@@ -207,7 +207,7 @@
                         name:'Datos personales'
                     },
                     {
-                        id:1,
+                        id:2,
                         name:'Datos sensibles'
                     }
                 ]

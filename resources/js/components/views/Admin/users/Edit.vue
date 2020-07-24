@@ -13,101 +13,6 @@
         </header-section>
         <el-form ref="userForm" :model="userForm" label-width="120px" label-position="top">
             <el-row :gutter="10">
-      <!--          <el-col v-if="userForm.cat_profile_id !== 1"
-                        :span="userForm.cat_profile_id !== 3 ? 8 : 12">
-                    <el-form-item v-if="userForm.cat_profile_id === 2 || userForm.cat_profile_id === 4"
-                                  label="Misión"
-                                  prop="cat_mission_id"
-                                  :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                  ]">
-                        <el-select v-model="userForm.cat_mission_id"
-                                   filterable placeholder="Seleccionar"
-                                   @change="getOrganisms(userForm.cat_mission_id)"
-                                   style="width: 100%">
-                            <el-option
-                                v-for="(mission , index) in missions"
-                                :key="index"
-                                :label="mission.name"
-                                :value="mission.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item v-if="userForm.cat_profile_id === 3"
-                                  label="Consulado"
-                                  prop="cat_consulate_id"
-                                  :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                  ]">
-                        <el-select v-model="userForm.cat_consulate_id"
-                                   filterable placeholder="Seleccionar"
-                                   style="width: 100%">
-                            <el-option
-                                v-for="(consulate , index) in consulates"
-                                :key="index"
-                                :label="consulate.name"
-                                :value="consulate.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>   -->
-         <!--       <el-col v-if="userForm.cat_profile_id !== 3 && userForm.cat_profile_id !== 1 && userForm.cat_profile_id !== 5" :span="8">
-                    <el-form-item label="Organismo"
-                                  prop="cat_organism_id"
-                                  :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                  ]">
-                        <el-select v-model="userForm.cat_organism_id"
-                                   filterable placeholder="Seleccionar"
-                                   style="width: 100%">
-                            <el-option
-                                v-for="(organism , index) in organisms"
-                                :key="index"
-                                :label="organism.name"
-                                :value="organism.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>  -->
-                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 24 : userForm.cat_profile_id !== 1 ? 12 : 12">
-                    <el-form-item label="Perfl"
-                                  prop="cat_profile_id"
-                                  :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                  ]">
-                        <el-select v-model="userForm.cat_profile_id"
-                                   filterable placeholder="Seleccionar"
-                                   style="width: 100%">
-                            <el-option
-                                v-for="(profile , index) in profiles"
-                                :key="index"
-                                :label="profile.name"
-                                :value="profile.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col v-if="userForm.cat_profile_id !== 1" :span="12">
-                    <el-form-item label="Consulado"
-                                  prop="cat_consulate_id"
-                                  :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                  ]">
-                        <el-select v-model="userForm.cat_consulate_id"
-                                   filterable placeholder="Seleccionar"
-                                   multiple
-                                   style="width: 100%">
-                            <el-option
-                                v-for="(consulate , index) in consulates"
-                                :key="index"
-                                :label="consulate.name"
-                                :value="consulate.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row :gutter="10">
                 <el-col :span="8">
                     <el-form-item label="Nombre"
                                   prop="name"
@@ -132,30 +37,46 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-   <!--         <el-row :gutter="10" v-if="userForm.cat_profile_id !== 1 && userForm.cat_profile_id !== 5">
-                <el-col :span="24">
-                    <el-form-item label="Temas"
-                                  prop="topics"
+            <el-row :gutter="10">
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 24 : userForm.cat_profile_id !== 1 ? 12 : 12">
+                    <el-form-item label="Perfl"
+                                  prop="cat_profile_id"
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
-                        <el-select v-model="userForm.topics"
-                                   multiple filterable placeholder="Seleccionar"
+                        <el-select v-model="userForm.cat_profile_id"
+                                   filterable placeholder="Seleccionar"
                                    style="width: 100%">
                             <el-option
-                                v-for="(topic , index) in topics"
+                                v-for="(profile , index) in profiles"
                                 :key="index"
-                                :label="topic.name"
-                                :value="topic.id">
+                                :label="profile.name"
+                                :value="profile.id">
                             </el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
-            </el-row> -->
+                <el-col v-if="userForm.cat_profile_id !== 1" :span="12">
+                    <el-form-item label="Unidad administrativa"
+                                  prop="cat_administrative_unit_id"
+                                  :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                        <el-select v-model="userForm.cat_administrative_unit_id"
+                                   filterable placeholder="Seleccionar"
+                                   multiple
+                                   style="width: 100%">
+                            <el-option
+                                v-for="(unit , index) in units"
+                                :key="index"
+                                :label="unit.name"
+                                :value="unit.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-row :gutter="10">
-                <!--<el-col :span="5" :offset="14">
-                    <el-button type="primary" style="width: 100%" @click="cleanAll()">Limpiar</el-button>
-                </el-col>-->
                 <el-col :span="5" :offset="19">
                     <el-button type="success" style="width: 100%" @click="submitForm">
                         Actualizar
@@ -192,13 +113,10 @@
                 consulates: [],
                 missions: [],
                 organisms: [],
-                topics: [],
+                units: [],
                 userForm: {
                     cat_profile_id: null,
-                    cat_consulate_id: null,
-                    cat_mission_id: null,
-                    cat_organism_id: null,
-                    topics: [],
+                    cat_administrative_unit_id: null,
                     name: '',
                     firstName: '',
                     secondName: ''
@@ -211,10 +129,7 @@
 
             axios.get('/api/users/' + this.$route.params.id + '/edit').then(response => {
                 this.profiles = response.data.profiles;
-                this.consulates = response.data.consulates;
-                this.missions = response.data.missions;
-                this.organisms = response.data.organisms;
-                this.topics = response.data.topics;
+                this.units = response.data.units;
                 this.userForm = response.data.userForm;
 
                 this.stopLoading();

@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\CatSection;
-use App\CatSeries;
-use App\CatSubseries;
+use App\Http\Models\Cats\CatSection;
+use App\Http\Models\Cats\CatSeries;
+use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,8 +20,10 @@ class FormalitiesController extends Controller
     {
         if ($request->wantsJson()){
             $data = $request->all();
-            $formalities = Formalities::search($data['filters'])
-                                        ->paginate($data['perPage']);
+            $formalities = Formalities::with('user')
+                ->search($data['filters'])
+                ->orderBy('created_at', 'DESC')
+                ->paginate($data['perPage']);
 
             return response()->json([
                'formalities' => $formalities,
@@ -92,11 +94,24 @@ class FormalitiesController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function edit($id)
     {
-        //
+        try {
+            $formality = Formalities::find(decrypt($id));
+            $formality->primariValues = $formality->serie->primarivalues;
+            return response()->json([
+                'success' => true,
+                'formality' =>$formality
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -104,11 +119,36 @@ class FormalitiesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+
+            $data = $request->all();
+            $formality = Formalities::find(decrypt($id));
+            $formality->fill($data);
+            $formality->save();
+
+            GeneralController::saveTransactionLog(2,
+                'Edita un trámite con id: ' . $formality->id);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+        catch ( \Exception $e ) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -144,7 +184,7 @@ class FormalitiesController extends Controller
             $serie = $request->all();
             return response()->json([
                 'success' => true,
-                'series' =>CatSeries::orderBy('name')->whereCatSectionId($serie['id'])->get()
+                'series' =>CatSeries::with('primarivalues')->whereCatSectionId($serie['id'])->get()
             ]);
         }
         catch ( \Exception $e ) {

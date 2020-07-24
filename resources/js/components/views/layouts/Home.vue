@@ -1,5 +1,111 @@
 <template>
     <div>
+        <div id="filtersArea">
+            <transition appear name="filters">
+                <el-container class="form-filters" v-if="show">
+                    <el-header style="background-color: rgb(157, 36, 56);">
+                        <el-row :gutter="20">
+                            <el-col :span="12">
+                                <el-button
+                                    class="close-button"
+                                    type="text"
+                                    @click="show = false">
+                                    <i class="el-icon-arrow-right"></i>
+                                    Minimizar
+                                </el-button>
+                            </el-col>
+                        </el-row>
+                    </el-header>
+                    <el-main style="border-left: 16px solid #E9EEF3 ">
+                        <el-card shadow="never">
+                            <div slot="header">
+                                <span class="title"> <i class="fas fa-user"></i> Perfil</span>
+                            </div> <br>
+                            <el-row>
+                                <el-col :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
+                                        <el-card shadow="always">
+                                            <strong><b>Nombre: </b></strong> {{$store.state.user.fullname}}
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col v-if="user.profile_id !== 1" :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
+                                        <el-card shadow="always">
+                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>
+                                            <span v-for="(item, index) in user.unit" :key="index"> {{ item.name }}<br>  </span>
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col v-if="user.profile_id === 1" :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
+                                        <el-card shadow="always">
+                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>
+                                            <span>Todas <br>  </span>
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
+                                        <el-card shadow="always">
+                                            <strong><b>Rol o perfil: </b></strong> {{user.profile}}
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
+                                        <el-card shadow="always">
+                                            <strong><b>Puesto: </b></strong> {{user.office}}
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
+                                        <el-card shadow="always">
+                                            <strong><b>Email: </b></strong> {{user.email}}@sre.gob.mx
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col v-if="user.profile_id !== 1" :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
+                                        <el-card shadow="always">
+                                            <strong><b>Privilegio de modulos: </b></strong><br><p></p>
+                                            <span>Registro <br> </span>
+                                            <span>Búsqueda <br> </span>
+                                            <span>Formatos <br> </span>
+                                            <span>Histórico <br> </span>
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col v-if="user.profile_id === 1" :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
+                                        <el-card shadow="always">
+                                            <strong><b>Privilegio de modulos: </b></strong><br><p></p>
+                                            <span>Perfiles <br> </span>
+                                            <span>Registro <br> </span>
+                                            <span>Búsqueda <br> </span>
+                                            <span>Formatos <br> </span>
+                                            <span>Histórico <br> </span>
+                                            <span>CGCA X SERIE <br> </span>
+                                            <span>CGCA X AREA <br> </span>
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                            </el-row>
+                            <br> <p></p>
+                            <el-row>
+                                <div align="right">
+                                    <el-button type="danger" size="medium" plain @click="show = false">
+                                        Salir
+                                    </el-button>
+                                </div>
+                            </el-row>
+                        </el-card>
+                    </el-main>
+                </el-container>
+            </transition>
+        </div>
+
         <div class="custom-splash" v-show="animate === true">
             <div id="splash_cont" class="animate">
                 <svg height="400" width="400" xmlns="http://www.w3.org/2000/svg">
@@ -61,6 +167,7 @@
                                     index="#"
                                     slot="reference"
                                     class="border-menu-item"
+                                    @click="show=!show"
                                     style="cursor:pointer;float: right">
                                     <i class="fas fa-user" style="color: whitesmoke;"></i>
                                 </el-menu-item>
@@ -85,6 +192,7 @@
             </el-main>
         </el-container>
     </div>
+
 </template>
 
 <script>
@@ -100,6 +208,11 @@
                 date: new Date(),
                 notifications: [],
                 animate: false,
+                ElDialogAdministrativeUnit:false,
+                show: false,
+                user:{},
+                lResults:{},
+           //     units:[],
             };
         },
 
@@ -108,6 +221,7 @@
         },
 
         created() {
+            this.details();
             this.init();
             this.startLoading();
             let _this = this;
@@ -162,7 +276,22 @@
                         this.animate = false;
                     }, 2100);
                 }
-            }
+            },
+            details(){
+                axios.get('/api/cats/getDetailsUser').then(response => {
+                    if(response.data.success){
+                        this.user.full_name = response.data.lResults.user.full_name;
+                        this.user.profile = response.data.lResults.user.profile.name;
+                        this.user.profile_id = response.data.lResults.user.cat_profile_id;
+                        this.user.office = response.data.lResults.user.office;
+                        this.user.email = response.data.lResults.user.username;
+                        this.user.unit = response.data.lResults.user.unit;
+
+                    }
+                }).catch(error => {
+
+                });
+            },
         }
     }
 </script>
@@ -513,6 +642,17 @@
             -webkit-transform: scale(0.01) translateY(-280%);
             transform: scale(0.01) translateY(-280%);
         }
+    }
+
+    .form-filters {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 35%;
+        min-width: 650px;
+        height: 100%;
+        background: #fff !important;
+        z-index: 1000;
     }
 
     @keyframes move-ruby {
