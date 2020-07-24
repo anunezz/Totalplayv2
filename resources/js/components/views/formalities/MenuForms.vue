@@ -42,20 +42,22 @@
                         <i class="fas fa-arrow-left"></i>
                         Anterior
                     </el-button>
-                    <el-button
-                        v-if="(formFormalities.question_two !== 'Sí' && currentTap === 3) || (formFormalities.question_two === 'Sí' && currentTap === 4)"
-                        size="small"
-                        type="success"
-                        @click="submitForm()">
+                    <span v-if="(formFormalities.question_two !== 'Sí' && currentTap === 3) || (formFormalities.question_two === 'Sí' && currentTap === 4)" style="margin-left: 10px">
+                        <el-button
+                            v-if="editFormalitiy_id !== null"
+                            size="small"
+                            type="success"
+                            @click="updateForm()">
+                             Actualizar
+                        </el-button>
+                        <el-button
+                            v-else
+                            size="small"
+                            type="success"
+                            @click="submitForm()">
                         Guardar
                     </el-button>
-                    <!--<el-button
-                        v-else-if=" "
-                        size="small"
-                        type="success"
-                        @click="submitForm()">
-                        Guardar
-                    </el-button>-->
+                    </span>
                     <el-button
                         v-else
                         size="small"
@@ -194,6 +196,33 @@
                         _this.$router.push('/tramites');
                         _this.$message({
                             message: "El trámite se registro exitosamente.",
+                            type: "success"
+                        });
+                    }).catch(error => {
+                        _this.stopLoading();
+                        this.$message({
+                            type: "warning",
+                            message: "No fue posible completar la acción, intente nuevamente."
+                        });
+                    });
+                }
+
+            },
+            updateForm(){
+
+                if (this.validForm()) {
+                    this.startLoading();
+                    let _this = this;
+                    let data = Object.assign({}, _this.formFormalities);
+                    data.question_one = this.formFormalities.question_one === 'Sí' ? true : this.formFormalities.question_one === 'No' ? false : null;
+                    data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
+
+                    axios.put(`/api/formalities/${data.hash}`,data).then(response => {
+                        console.log('enviando datos')
+                        _this.stopLoading();
+                        _this.$router.push('/tramites');
+                        _this.$message({
+                            message: "El trámite se actualizo exitosamente.",
                             type: "success"
                         });
                     }).catch(error => {

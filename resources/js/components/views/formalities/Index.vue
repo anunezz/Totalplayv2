@@ -57,18 +57,24 @@
                         prop="sort_code"
                         label="Clasificación">
                     </el-table-column>
-                    <!--<el-table-column
-                        prop="year"
-                        label="Año">
-                    </el-table-column>-->
-                    <!--<el-table-column
-                        prop="user"
-                        label="Creado por:">
+                    <el-table-column
+                        label="Fecha de cierre">
+                        <template slot-scope="scope">
+                            {{ formatDate(scope.row.close_date) | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY') }}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="date"
+                        label="Creado por:">
+                        <template slot-scope="scope">
+                            {{scope.row.user.full_name}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                         label="Fecha y Hora de  Creación">
-                    </el-table-column>-->
+                        <template slot-scope="scope">
+                            {{ scope.row.user.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center">
                         <template slot-scope="scope">
@@ -202,6 +208,9 @@
                     name: 'EditFormalities',
                     params: {id: id}
                 });
+            },
+            formatDate(date){
+                 return new Date(date)
             }
         }
 

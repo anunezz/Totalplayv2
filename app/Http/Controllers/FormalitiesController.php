@@ -20,8 +20,9 @@ class FormalitiesController extends Controller
     {
         if ($request->wantsJson()){
             $data = $request->all();
-            $formalities = Formalities::search($data['filters'])
-                                        ->paginate($data['perPage']);
+            $formalities = Formalities::with('user')
+                ->search($data['filters'])
+                ->paginate($data['perPage']);
 
             return response()->json([
                'formalities' => $formalities,
@@ -117,11 +118,36 @@ class FormalitiesController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+
+            $data = $request->all();
+            $formality = Formalities::find(decrypt($id));
+            $formality->fill($data);
+            $formality->save();
+
+            GeneralController::saveTransactionLog(2,
+                'Edita un trámite con id: ' . $formality->id);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+        catch ( \Exception $e ) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
