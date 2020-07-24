@@ -17,7 +17,7 @@
                 <h3 class="form-title">SECRETARÍA DE RELACIONES EXTERIORES</h3>
                 <el-tabs type="card" ref="menuTaps" @tab-click="chageTapClick">
                     <el-tab-pane label="Clasificación" style="padding: 10px">
-                        <form-classification :formFormalities="formFormalities"></form-classification>
+                        <form-classification :formFormalities="formFormalities" v-if="tapOne"></form-classification>
                     </el-tab-pane>
                     <el-tab-pane label="Descripción" style="padding: 10px" :disabled="tapTwo">
                         <form-description :formFormalities="formFormalities" v-if="tapTwo === false"></form-description>
@@ -42,20 +42,22 @@
                         <i class="fas fa-arrow-left"></i>
                         Anterior
                     </el-button>
-                    <el-button
-                        v-if="(formFormalities.question_two !== 'Sí' && currentTap === 3) || (formFormalities.question_two === 'Sí' && currentTap === 4)"
-                        size="small"
-                        type="success"
-                        @click="submitForm()">
+                    <span v-if="(formFormalities.question_two !== 'Sí' && currentTap === 3) || (formFormalities.question_two === 'Sí' && currentTap === 4)" style="margin-left: 10px">
+                        <el-button
+                            v-if="editFormalitiy_id !== null"
+                            size="small"
+                            type="success"
+                            @click="updateForm()">
+                             Actualizar
+                        </el-button>
+                        <el-button
+                            v-else
+                            size="small"
+                            type="success"
+                            @click="submitForm()">
                         Guardar
                     </el-button>
-                    <!--<el-button
-                        v-else-if=" "
-                        size="small"
-                        type="success"
-                        @click="submitForm()">
-                        Guardar
-                    </el-button>-->
+                    </span>
                     <el-button
                         v-else
                         size="small"
@@ -110,11 +112,14 @@
         },
         data(){
             return{
-                currentTap:0,
-                tapTwo:true,
-                tapThree:true,
-                tapFour:true,
-                formFormalities:{
+                auxEdit: false,
+                editFormalitiy_id: null,
+                currentTap: 0,
+                tapOne: false,
+                tapTwo: true,
+                tapThree: true,
+                tapFour: true,
+                formFormalities: {
                     section_id: null,
                     serie_id: null,
                     subserie_id: null,
@@ -127,7 +132,7 @@
                     scope_and_content: '',
                     format_id: null,
                     documentary_tradition_id: null,
-                    legajos:0,
+                    legajos: 0,
                     initial_folio: null,
                     end_folio: null,
                     total_fojas: null,
@@ -150,15 +155,28 @@
                     auxOpening_date: '',
                     auxClose_date: '',
                     auxSort_code: '',
-
+                    primariValues:[]
                 },
-
             }
         },
+        created() {
+            if (this.$route.params.id !== undefined) this.editRegister(this.$route.params.id);
+            else this.tapOne = true;
+        },
+        mounted() {
+            let _this = this;
+            setTimeout(function(){
+                _this.auxEdit = true;
+                }, 2000);
+
+        },
         watch:{
-          'formFormalities.question_one'(value){
-              this.cleanControlAcces();
-          },
+            'formFormalities.question_one'(value) {
+                this.cleanControlAcces(1);
+            },
+            'formFormalities.question_two'(value) {
+                this.cleanControlAcces();
+            },
         },
         methods:{
             submitForm(){
@@ -190,21 +208,51 @@
                 }
 
             },
-            cleanControlAcces(){
-                this.formFormalities.question_two = null;
-                this.formFormalities.transparency_resolution_id = null;
-                this.formFormalities.nature_information_id = null;
-                this.formFormalities.classification_reason_id = null;
-                this.formFormalities.classification_date = null;
-                this.formFormalities.name_titular = '';
-                this.formFormalities.transparency_proceedings = '';
-                this.formFormalities.restricted_parts = '';
-                this.formFormalities.legal_basis = '';
-                this.formFormalities.reservation_period = 0;
-                this.formFormalities.deadline_extension = 0;
-                this.formFormalities.Record_official_number = '';
-                this.formFormalities.declassification_date = null;
-                this.formFormalities.public_server = '';
+            updateForm(){
+
+                if (this.validForm()) {
+                    this.startLoading();
+                    let _this = this;
+                    let data = Object.assign({}, _this.formFormalities);
+                    data.question_one = this.formFormalities.question_one === 'Sí' ? true : this.formFormalities.question_one === 'No' ? false : null;
+                    data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
+
+                    axios.put(`/api/formalities/${data.hash}`,data).then(response => {
+                        console.log('enviando datos')
+                        _this.stopLoading();
+                        _this.$router.push('/tramites');
+                        _this.$message({
+                            message: "El trámite se actualizo exitosamente.",
+                            type: "success"
+                        });
+                    }).catch(error => {
+                        _this.stopLoading();
+                        this.$message({
+                            type: "warning",
+                            message: "No fue posible completar la acción, intente nuevamente."
+                        });
+                    });
+                }
+
+            },
+            cleanControlAcces(val = 0){
+                if (this.auxEdit){
+                    if (val === 1) this.formFormalities.question_two = null;
+                    this.formFormalities.transparency_resolution_id = null;
+                    this.formFormalities.nature_information_id = null;
+                    this.formFormalities.classification_reason_id = null;
+                    this.formFormalities.classification_date = null;
+                    this.formFormalities.name_titular = '';
+                    this.formFormalities.transparency_proceedings = '';
+                    this.formFormalities.restricted_parts = '';
+                    this.formFormalities.legal_basis = '';
+                    this.formFormalities.reservation_period = 0;
+                    this.formFormalities.deadline_extension = 0;
+                    this.formFormalities.Record_official_number = '';
+                    this.formFormalities.declassification_date = null;
+                    this.formFormalities.public_server = '';
+                }
+
             },
             validForm(){
                 let aux = false
@@ -253,6 +301,27 @@
             },
             chageTapClick(){
                 this.currentTap = parseInt(this.$refs['menuTaps'].currentName);
+            },
+            editRegister(id){
+
+
+                this.editFormalitiy_id = id;
+
+                axios.get('/api/formalities/' + this.editFormalitiy_id + '/edit').then(response => {
+                    console.log('registro optenido',response)
+                    this.formFormalities = response.data.formality;
+                    this.tapOne = true;
+                    this.tapTwo = false;
+                    this.tapThree = false;
+                    this.tapFour = false;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
             }
         }
     }
