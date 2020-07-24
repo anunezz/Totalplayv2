@@ -22,6 +22,7 @@ class FormalitiesController extends Controller
             $data = $request->all();
             $formalities = Formalities::with('user')
                 ->search($data['filters'])
+                ->orderBy('created_at', 'DESC')
                 ->paginate($data['perPage']);
 
             return response()->json([
