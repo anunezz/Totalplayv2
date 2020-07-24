@@ -362,7 +362,7 @@ export default {
     },
     data(){
         return {
-            //Catalogos
+            //Catalogs
             general:[],
             unidad:[],
             secction:[],

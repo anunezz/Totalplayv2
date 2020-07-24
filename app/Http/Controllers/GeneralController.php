@@ -7,6 +7,7 @@ use App\Http\Models\Cats\CatTopic;
 use App\Http\Models\Notice;
 use App\Http\Models\Recommendation;
 use App\Http\Models\Transaction;
+use App\User;
 use Carbon\Carbon;
 use DB;
 use Exception;
@@ -56,4 +57,5 @@ class GeneralController extends Controller
             ], 400);
         }
     }
+
 }
