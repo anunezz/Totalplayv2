@@ -18,8 +18,9 @@ class CreateCatSeriesTable extends Migration
             $table->unsignedBigInteger('cat_section_id');
             $table->string('name');
             $table->string('code');
-//            $table->unsignedBigInteger('cat_value_id');
-//            $table->unsignedBigInteger('cat_documentary_id');
+            $table->string('AT');
+            $table->string('AC');
+            $table->string('total');
             $table->unsignedBigInteger('cat_selection_id');
             $table->boolean('isActive')->default(1);
             $table->timestamps();
@@ -27,14 +28,6 @@ class CreateCatSeriesTable extends Migration
             $table->foreign('cat_section_id')
                 ->references('id')
                 ->on('cat_sections');
-
-//            $table->foreign('cat_value_id')
-//                ->references('id')
-//                ->on('cat_primary_values');
-//
-//            $table->foreign('cat_documentary_id')
-//                ->references('id')
-//                ->on('cat_documentary_validities');
 
             $table->foreign('cat_selection_id')
                 ->references('id')

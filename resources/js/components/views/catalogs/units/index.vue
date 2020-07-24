@@ -48,6 +48,14 @@
                         label="Nombre">
                     </el-table-column>
                     <el-table-column
+                        prop="type"
+                        label="Secciones"
+                        width="600">
+                        <template slot-scope="scope">
+                            {{nameSections(scope.row.section_all)}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                         label="Acciones" header-align="left" align="center">
                         <template slot-scope="scope">
                             <el-button-group size="mini">
@@ -174,6 +182,24 @@
                                 clearable>
                             </el-input>
                         </el-form-item>
+                        <el-form-item label="Secciones"
+                                      prop="section_all"
+                                      :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur', 'change']},
+                                      ]">
+                            <el-select v-model="catalogEditForm.section_all"
+                                       filterable placeholder="Seleccionar"
+                                       remove-tag="remove-tag"
+                                       multiple
+                                       style="width: 100%">
+                                <el-option
+                                    v-for="(section , index) in sections"
+                                    :key="index"
+                                    :label="section.name"
+                                    :value="section.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
@@ -226,8 +252,10 @@
                     newRegisterName: '',
                 },
                 catalogEditForm:{
-                    name: ''
+                    name: '',
+                    section_all: [],
                 },
+                sections:[],
                 hashRegister: null,
                 nameRegister: null,
 
@@ -246,6 +274,11 @@
 
         created() {
             this.getTitles();
+            this.getSections();
+            axios.get('/api/cats/create').then(response => {
+                this.sections = response.data.sections;
+                this.stopLoading();
+            })
         },
 
         watch:{
@@ -308,7 +341,7 @@
             newRegister() {
                 this.startLoading();
 
-                let data = {cat: 4, name: this.catalogForm.newRegisterName};
+                let data = {cat: 1, name: this.catalogForm.newRegisterName};
 
                 this.$refs['catalogForm'].validate((valid) => {
                     if (valid) {
@@ -352,9 +385,12 @@
             },
 
             editForm(row){
+                let section_all = [];
+                row.section_all.forEach(element => section_all.push(element.id));
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
+                    section_all:section_all,
                 };
                 this.editRegisterDialog = true;
             },
@@ -362,7 +398,7 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 4, name: this.catalogEditForm.name};
+                let data = {id: this.catalogEditForm.id, cat: 1, name: this.catalogEditForm.name, cat_section_id: this.catalogEditForm.section_all};
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
@@ -428,7 +464,7 @@
             disableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 1};
 
                 axios.post('/api/cats/disable-register', data).then(response => {
                     this.$notify({
@@ -452,7 +488,7 @@
             enableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 1};
 
                 axios.post('/api/cats/enable-register', data).then(response => {
                     this.$notify({
@@ -478,6 +514,23 @@
             resetEditForm(){
                 this.editRegisterDialog = false;
                 this.$refs['catalogEditForm'].resetFields();
+            },
+            getSections() {
+                let data = { params: {
+                        allSections:true,
+                        cat: 2}
+                };
+                axios.get('/api/cats/get-cat', data).then(response => {
+                    this.cats.section_all = response.data;
+                }).catch(error => {
+
+                });
+            },
+            nameSections(data){
+                let section_all = [];
+                data.forEach(element => section_all.push(' '+element.name));
+                let aux = section_all.toString();
+                return aux;
             },
         },
     }

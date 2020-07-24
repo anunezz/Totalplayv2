@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 
     Route::get('guncontrol/getGunControl', 'GunControlController@getGunControl');
     Route::post('guncontrol/registerGunControl', 'GunControlController@registerGunControl');
-    Route::get('cats/get-cat', 'CatalogsController@getCatalogByType');
+ //   Route::get('cats/get-cat', 'CatalogsController@getCatalogByType');
     Route::get('cats/getDetailsUser', 'CatalogsController@getDetailsUser');
 
  });

@@ -24,14 +24,19 @@ class CatalogsController extends Controller
                 $elements = null;
 
                 if ($data['cat'] == 1) {
-                    $elements = CatAdministrativeUnit::select(['id', 'name', 'isActive'])
+                    $elements = CatAdministrativeUnit::with('sectionAll')
+                        ->select(['id', 'name', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 2) {
-                    $elements = CatSection::select(['id', 'name', 'isActive'])
-                        ->orderBy('name')
-                        ->paginate($data['perPage']);
+                    if (isset($data['allSections'])){
+                        return CatSection::orderBy('name')->get(['id','name']);
+                    }else{
+                        $elements = CatSection::select(['id', 'name', 'isActive'])
+                            ->orderBy('name')
+                            ->paginate($data['perPage']);
+                    }
                 }
                 if ($data['cat'] == 3) {
                     $elements = CatSeries::select(['id', 'name', 'isActive'])
@@ -68,18 +73,13 @@ class CatalogsController extends Controller
             //    return 'hola';
             if ($request->wantsJson()){
 
-                $countries = CatCountry::where('isActive', 1)
-                    ->orderBy('name')
-                    ->get(['id', 'name']);
-
-                $states = CatState::where('isActive', 1)
+                $sections = CatSection::where('isActive', 1)
                     ->orderBy('name')
                     ->get(['id', 'name']);
 
                 return response()->json([
 
-                    'countries' => $countries,
-                    'states'    => $states,
+                    'sections'    => $sections,
                     'success'     => true
                 ]);
 
@@ -168,8 +168,8 @@ class CatalogsController extends Controller
             $duplicityCheck = false;
 
             if ($request->cat === 1) {
-                $cat = CatConsulate::find(decrypt($request->id));
-                $duplicityCheck = self::duplicityCheck(CatConsulate::class, $cat->id, $request->name, $request->frontier_id, $request->isMirror, $request->latitude, $request->longitude);
+                $cat = CatAdministrativeUnit::find(decrypt($request->id));
+                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name);
             }
 
             elseif ($request->cat === 2) {
@@ -193,15 +193,11 @@ class CatalogsController extends Controller
 //                    $cat->acronym = $request->acronym;
 //                }
 
-//                $cat->isActive = true;
+                 $cat->isActive = true;
 //
-//                if ($request->cat === 1){
-//                    $cat->frontier_id = $request->frontier_id;
-//                    $cat->isMirror= $request->isMirror;
-//                    $cat->latitude= $request->latitude;
-//                    $cat->longitude= $request->longitude;
-//                    $cat->stateAll()->sync($request->cat_states_id);
-//                }
+                if ($request->cat === 1){
+                    $cat->sectionAll()->sync($request->cat_section_id);
+                }
 
                 $cat->save();
 
