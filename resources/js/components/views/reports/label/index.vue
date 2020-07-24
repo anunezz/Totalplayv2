@@ -150,6 +150,7 @@
                 <el-button
                     size="mini"
                     type="danger"
+                    @click="labelBox"
                     style="width: 100%">
                     Cancelar
                 </el-button>
@@ -205,6 +206,30 @@
                         });
                     });
 
+            },
+            labelBox(){
+                axios({ responseType: 'blob',
+                        method: 'POST',
+                        url: '/api/report/labelBox',
+                        data: 'hola' }).then(response => {
+                            this.loading = true;
+                        setTimeout(()=>{
+                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = linkUrl;
+                            link.setAttribute('download', 'Etiquetas_de_caja.xlsx');
+                            document.body.appendChild(link);
+                            link.click();
+                            this.loading = false;
+                        },500)
+
+                    }).catch(error => {
+                        this.$notify({
+                            title: 'Mensaje',
+                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                            type: 'warning'
+                        });
+                    });
             }
         }
 
