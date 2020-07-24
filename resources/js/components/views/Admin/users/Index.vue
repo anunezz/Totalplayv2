@@ -49,11 +49,7 @@
                         label="Usuario">
                     </el-table-column>
                     <el-table-column
-                        prop="mail"
-                        label="Email">
-                    </el-table-column>
-                    <el-table-column
-                        prop="job"
+                        prop="office"
                         label="Puesto">
                     </el-table-column>
 <!--                    <el-table-column-->

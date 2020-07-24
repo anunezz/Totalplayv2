@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UsersTableSeeder extends Seeder
 {
@@ -16,8 +17,7 @@ class UsersTableSeeder extends Seeder
             [
                 'id'                => 1,
                 'username'          =>'hpiedras',
-                'mail'              =>'hpiedras@sre.gob.mx',
-                'job'               =>'TIN',
+                'office'               =>'TIN',
                 'cat_profile_id'    => 1,
                 'name'              => 'Homero',
                 'firstName'         => 'Piedras',
@@ -28,8 +28,7 @@ class UsersTableSeeder extends Seeder
             [
                 'id'                => 2,
                 'username'          =>'pdominguez',
-                'mail'              =>'pdominguez@sre.gob.mx',
-                'job'               =>'TIN',
+                'office'               =>'TIN',
                 'cat_profile_id'    => 1,
                 'name'              => 'Pedro',
                 'firstName'         => 'Domínguez',
@@ -40,8 +39,7 @@ class UsersTableSeeder extends Seeder
             [
                 'id'                => 3,
                 'username'          =>'adriann',
-                'mail'              =>'adriann@sre.gob.mx',
-                'job'               =>'TIN',
+                'office'               =>'TIN',
                 'cat_profile_id'    => 1,
                 'name'              => 'Adrian',
                 'firstName'         => 'Nuñez',
@@ -52,8 +50,7 @@ class UsersTableSeeder extends Seeder
             [
                 'id'                => 4,
                 'username'          =>'iperdomo',
-                'mail'              =>'iperdomo@sre.gob.mx',
-                'job'               =>'TIN',
+                'office'               =>'TIN',
                 'cat_profile_id'    => 1,
                 'name'              => 'Ivan',
                 'firstName'         => 'Perdomo',
@@ -64,8 +61,7 @@ class UsersTableSeeder extends Seeder
             [
                 'id'                => 5,
                 'username'          => 'rjuarez',
-                'mail'              =>'rjuarez@sre.gob.mx',
-                'job'               =>'SSRE',
+                'office'               =>'SSRE',
                 'cat_profile_id'    => 1,
                 'name'              => 'Raúl Alberto',
                 'firstName'         => 'Juárez',

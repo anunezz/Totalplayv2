@@ -144,6 +144,7 @@
                             <el-button
                             icon="el-icon-search"
                             size="mini"
+                            @click="excelExpediente"
                             type="success">
                             Buscar</el-button>
                         </div>
@@ -165,7 +166,7 @@
         },
         data(){
             return {
-                //Catalogos
+                //Catalogs
                 section:[],
                 serie:[],
                 subserie:[],
@@ -175,6 +176,38 @@
                     //section:[]
                 },
                 rules:{}
+            }
+        },
+        methods:{
+            excelExpediente(){
+                console.log("hhhhh");
+
+            axios({ responseType: 'blob',
+                method: 'POST',
+                url: '/api/report/proceedings',
+                data: 'hola' }).then(response => {
+                    this.loading = true;
+                setTimeout(()=>{
+                    const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = linkUrl;
+                    link.setAttribute('download', 'Expediente.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                    this.loading = false;
+                },500)
+
+            }).catch(error => {
+                this.$notify({
+                    title: 'Mensaje',
+                    text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                    type: 'warning'
+                });
+            });
+
+
+
+
             }
         }
 

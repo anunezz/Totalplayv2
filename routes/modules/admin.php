@@ -7,5 +7,4 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     Route::resource('users', 'Administrador\UsersController');
 
-
 });

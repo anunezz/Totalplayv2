@@ -3,6 +3,7 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
+use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatConsulate;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\Transaction;
@@ -20,7 +21,7 @@ class UsersController extends Controller
             if ($request->wantsJson()) {
                 $data = $request->all();
 
-                $users = User::with('profile', 'consulate')
+                $users = User::with('profile', 'unit')
                     ->search($data['search'])
                     ->where('isActive', true)
                     ->where('id', '!=', 1)
@@ -52,14 +53,14 @@ class UsersController extends Controller
 
                 $user = User::find(decrypt($id));
                 $profiles = CatProfile::where('isActive', 1)->get(['id', 'name']);
-                $consulates = CatConsulate::where('isActive', 1)->get(['id', 'name']);
-                $userConsulates = DB::table('user_consulates')
+                $units = CatAdministrativeUnit::where('isActive', 1)->get(['id', 'name']);
+                $userConsulates = DB::table('user_units')
                     ->where('user_id', $user->id)
-                    ->pluck('cat_consulates_id');
+                    ->pluck('cat_administrative_unit_id');
 
                 $userform = [
                     'cat_profile_id' => $user->cat_profile_id,
-                    'cat_consulate_id' => $userConsulates,
+                    'cat_administrative_unit_id' => $userConsulates,
                     'name' => $user->name,
                     'firstName' => $user->firstName,
                     'secondName' => $user->secondName
@@ -67,7 +68,7 @@ class UsersController extends Controller
 
                 return response()->json([
                     'profiles' => $profiles,
-                    'consulates' => $consulates,
+                    'units' => $units,
                     'userForm' => $userform,
                     'success' => true
                 ]);
@@ -95,13 +96,13 @@ class UsersController extends Controller
                 $data = $request->all();
                 $user->fill($data);
                 $user->save();
-                $consulates =  $data['cat_consulate_id'];
-                if(count($consulates) > 0){
-                    DB::table('user_consulates')->where('user_id',$user->id)->delete();
-                    foreach ($consulates as $consulate){
-                        DB::table('user_consulates')->insert([
+                $units =  $data['cat_administrative_unit_id'];
+                if(count($units) > 0){
+                    DB::table('user_units')->where('user_id',$user->id)->delete();
+                    foreach ($units as $unit){
+                        DB::table('user_units')->insert([
                            'user_id' => $user->id,
-                           'cat_consulates_id'  => $consulate
+                           'cat_administrative_unit_id'  => $unit
                         ]);
                     }
                 }

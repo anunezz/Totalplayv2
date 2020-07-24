@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\Cats\CatConsulate;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -78,16 +79,15 @@ class User extends Authenticatable
         )->where( 'isActive', 1 );
     }
 
-    public function consulate()
+    public function unit()
     {
         return $this->belongsToMany(
-            CatConsulate::class,
-            'user_consulates',
+            CatAdministrativeUnit::class,
+            'user_units',
             'user_id',
-            'cat_consulates_id'
+            'cat_administrative_unit_id'
          );
     }
-
 
 //    public function topics()
 //    {

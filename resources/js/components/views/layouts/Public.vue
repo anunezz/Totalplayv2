@@ -89,7 +89,7 @@
                         me.addCats([]);
                         me.addVisits([]);
 
-                      //  console.log("Catalogos: ",me.cats);
+                      //  console.log("Catalogs: ",me.cats);
 
                          me.addVisits( data );
                         if( me.cats.lenght > 0 ){

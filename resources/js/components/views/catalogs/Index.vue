@@ -1,93 +1,71 @@
 <template>
-<div>
-    <header-section icon="el-icon-document-add" title="Catálogos">
-        <template slot="buttons">
-            <el-button
-                size="small"
-                type="danger"
-                icon="el-icon-arrow-left"
-                @click="$router.push('/administracion/')">
-                Regresar
-            </el-button>
-        </template>
-    </header-section>
+    <div>
+        <header-section icon="el-icon-document-add" title="Catálogos">
+            <template slot="buttons">
+                <el-button
+                    size="small"
+                    type="danger"
+                    icon="el-icon-arrow-left"
+                    @click="$router.push('/administracion/')">
+                    Regresar
+                </el-button>
+            </template>
+        </header-section>
 
-    <el-row :gutter="10">
-        <el-col :span="24">
-            <el-select v-model="selectedCat"
-                @change="changeCat(selectedCat)"
-                placeholder="Seleccione un catálogo"
-                style="width: 100%">
-                <el-option
-                    v-for="(cat, index) in cats"
-                    :key="index"
-                    :label="cat.name"
-                    :value="cat.id">
-                </el-option>
-            </el-select>
-        </el-col>
-    </el-row>
-    <br>
-<!--    <entities v-if="selectedCat === 1"/>-->
+        <el-row :gutter="10">
+            <el-col :span="24">
+                <el-select v-model="selectedCat"
+                           placeholder="Seleccione un catálogo"
+                           style="width: 100%">
+                    <el-option
+                        v-for="(cat, index) in cats"
+                        :key="index"
+                        :label="cat.name"
+                        :value="cat.id">
+                    </el-option>
+                </el-select>
+            </el-col>
+        </el-row>
+        <br>
+        <units v-if="selectedCat === 1"/>
+        <sections v-if="selectedCat === 2"/>
+        <series v-if="selectedCat === 3"/>
+        <subserie v-if="selectedCat === 4"/>
 
-
-
-</div>
+    </div>
 </template>
 
 <script>
 
     import HeaderSection from "../layouts/partials/HeaderSection";
-    // import Entities from "../catalogs/entity/index";
+    import Units from "./units/index";
+    import Sections from "./sections/index";
+    import Series from "./series/index";
+    import Subserie from "./subseries/index";
 
     export default {
         components: {
             HeaderSection,
+            Units,
+            Sections,
+            Series,
+            Subserie
         },
 
         data(){
             return{
                 selectedCat: null,
                 cats: [
-                    {id:1,  name: 'Sección'},
-                    {id:2,  name: 'Serie'},
-                    {id:3,  name: 'Subserie'}
+                    {id:1,  name: 'Unidades Administrativas'},
+                    {id:2,  name: 'Secciones'},
+                    {id:3,  name: 'Series'},
+                    {id:4,  name: 'Subseries'},
                 ],
             }
         },
 
         methods: {
-            changeCat(cat){
-                let url = '';
-
-                switch (cat) {
-                    case 1:
-                    {
-                        url = '/administracion/catalogos/seccion';
-                        this.$router.push( { path: url });
-                    break;
-                    }
-                    case 2:
-                    {
-                        url = '/administracion/catalogos/series';
-                        this.$router.push( { path: url });
-                    break;
-                    }
-                    case 3:
-                    {
-                        url = '/administracion/catalogos/subseries';
-                        this.$router.push( { path: url });
-                    break;
-                    }
-                    default:
-                    {
-
-                    break;
-                    }
-                }
-            },
             goTo(link, data) {
-                return;
                 axios.post('/api/transaction', data).then(response => {
                     this.$router.push({
                         name: link
