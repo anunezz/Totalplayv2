@@ -4,16 +4,16 @@
             <el-row style="padding: 15px">
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="Resolución del comité de transparencia:" prop="transparency_esolution_id"
+                        <el-form-item label="Resolución del comité de transparencia:" prop="transparency_resolution_id"
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                            <el-select v-model="formFormalities.transparency_esolution_id" clearable filterable
+                            <el-select v-model="formFormalities.transparency_resolution_id" clearable filterable
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="reso in transparencyResolutions"
+                                    :key="reso.id"
+                                    :label="reso.name"
+                                    :value="reso.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -25,10 +25,10 @@
                             <el-select v-model="formFormalities.nature_information_id" filterable placeholder="Seleccionar"
                                        style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="info in characterInformation"
+                                    :key="info.id"
+                                    :label="info.name"
+                                    :value="info.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -43,10 +43,10 @@
                             <el-select v-model="formFormalities.classification_reason_id" clearable filterable
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
-                                    v-for="item in options"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                    v-for="person in personalInformation"
+                                    :key="person.id"
+                                    :label="person.name"
+                                    :value="person.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -172,7 +172,45 @@
                 options:[{
                     value:1,
                     label:'opcion1'
-                }]
+                }],
+                transparencyResolutions:[
+                    {
+                        id:1,
+                        name:'Confidencial'
+                    },
+                    {
+                        id:2,
+                        name:'Reserva'
+                    },
+                    {
+                        id:3,
+                        name:'Versión pública'
+                    },
+                ],
+                characterInformation:[
+                    {
+                        id:1,
+                        name:'Confidencial'
+                    },
+                    {
+                        id:2,
+                        name:'Pública'
+                    },
+                    {
+                        id:3,
+                        name:'Reservada'
+                    }
+                ],
+                personalInformation:[
+                    {
+                        id:1,
+                        name:'Datos personales'
+                    },
+                    {
+                        id:1,
+                        name:'Datos sensibles'
+                    }
+                ]
             }
         }
     }

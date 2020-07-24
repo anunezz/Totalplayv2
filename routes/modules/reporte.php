@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 
 Route::group(['middleware' => ['auth:api']], function () {
-    Route::post('guncontrol/registerGunControl', 'GunControlController@registerGunControl');
+    Route::post('report/proceedings', 'ReportController@Proceedings');
+    Route::post('report/label', 'ReportController@Label');
 });
 

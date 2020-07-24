@@ -33,7 +33,7 @@ Vue.component('tinymce', tinymce);
 Vue.mixin(Loading);
 Vue.use(VJsoneditor);
 
-Vue.prototype.$vertion= '1.0';
+Vue.prototype.$version= '1.0';
 
 Vue.use(IdleVue, {
     eventEmitter: eventsHub,

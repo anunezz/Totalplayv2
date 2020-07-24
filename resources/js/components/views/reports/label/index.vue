@@ -141,6 +141,7 @@
                 <el-button
                     size="mini"
                     type="success"
+                    @click="ExcelLabel"
                     style="width: 100%">
                     Generar
                 </el-button>
@@ -177,6 +178,33 @@
                     //section:[]
                 },
                 rules:{}
+            }
+        },
+        methods:{
+            ExcelLabel(){
+                axios({ responseType: 'blob',
+                        method: 'POST',
+                        url: '/api/report/label',
+                        data: 'hola' }).then(response => {
+                            this.loading = true;
+                        setTimeout(()=>{
+                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = linkUrl;
+                            link.setAttribute('download', 'Etiquetas.xlsx');
+                            document.body.appendChild(link);
+                            link.click();
+                            this.loading = false;
+                        },500)
+
+                    }).catch(error => {
+                        this.$notify({
+                            title: 'Mensaje',
+                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                            type: 'warning'
+                        });
+                    });
+
             }
         }
 

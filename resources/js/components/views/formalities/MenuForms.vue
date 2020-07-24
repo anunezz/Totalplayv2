@@ -133,7 +133,7 @@
                     total_fojas: null,
                     question_one: null,
                     question_two: null,
-                    transparency_esolution_id: null,
+                    transparency_resolution_id: null,
                     nature_information_id: null,
                     classification_reason_id: null,
                     classification_date: null,
@@ -146,6 +146,10 @@
                     Record_official_number: '',
                     declassification_date: null,
                     public_server: '',
+
+                    auxOpening_date: '',
+                    auxClose_date: '',
+                    auxSort_code: '',
 
                 },
 
@@ -183,18 +187,12 @@
                             message: "No fue posible completar la acción, intente nuevamente."
                         });
                     });
-                } else {
-                    this.$message({
-                        type: "warning",
-                        title: 'Error',
-                        message: "Complete los campos para continuar"
-                    });
                 }
 
             },
             cleanControlAcces(){
                 this.formFormalities.question_two = null;
-                this.formFormalities.transparency_esolution_id = null;
+                this.formFormalities.transparency_resolution_id = null;
                 this.formFormalities.nature_information_id = null;
                 this.formFormalities.classification_reason_id = null;
                 this.formFormalities.classification_date = null;
@@ -215,6 +213,13 @@
                         aux = true;
                     }else {
                         aux = false;
+
+                        this.$message({
+                            type: "warning",
+                            title: 'Error',
+                            message: "Complete los campos para continuar"
+                        });
+
                     }
                 });
 

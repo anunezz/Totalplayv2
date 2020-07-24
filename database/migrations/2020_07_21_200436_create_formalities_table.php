@@ -15,9 +15,10 @@ class CreateFormalitiesTable extends Migration
     {
         Schema::create('formalities', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('serie_id');
-            $table->unsignedBigInteger('subserie_id');
+            $table->unsignedBigInteger('subserie_id')->nullable();
             $table->string('opening_date');
             $table->string('close_date');
             $table->unsignedBigInteger('consecutive');
@@ -33,7 +34,7 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('total_fojas')->nullable();
             $table->boolean('question_one');
             $table->boolean('question_two')->nullable();
-            $table->unsignedBigInteger('transparency_esolution_id')->nullable();
+            $table->unsignedBigInteger('transparency_resolution_id')->nullable();
             $table->unsignedBigInteger('nature_information_id')->nullable();
             $table->unsignedBigInteger('classification_reason_id')->nullable();
             $table->string('classification_date')->nullable();

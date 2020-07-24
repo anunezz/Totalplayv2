@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\CatSection;
+use App\CatSeries;
+use App\CatSubseries;
 use App\Http\Models\Formalities;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,11 +14,20 @@ class FormalitiesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->wantsJson()){
+            $data = $request->all();
+            $formalities = Formalities::search($data['filters'])
+                                        ->paginate($data['perPage']);
+
+            return response()->json([
+               'formalities' => $formalities,
+                'success' => true
+            ]);
+        }
     }
 
     /**
@@ -40,9 +52,11 @@ class FormalitiesController extends Controller
         try {
 
             DB::beginTransaction();
+            $data = $request->all();
+            $data['user_id'] = auth()->user()->id;
 
             $formality = new Formalities();
-            $formality->fill($request->all());
+            $formality->fill($data);
             $formality->save();
 
             GeneralController::saveTransactionLog(2,
@@ -106,5 +120,75 @@ class FormalitiesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function allSection()
+    {
+        try {
+            return response()->json([
+                'success' => true,
+                'sections' =>CatSection::orderBy('name')->get()
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function allSeries(Request $request)
+    {
+        try {
+            $serie = $request->all();
+            return response()->json([
+                'success' => true,
+                'series' =>CatSeries::orderBy('name')->whereCatSectionId($serie['id'])->get()
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function allSubSeries(Request $request)
+    {
+        try {
+
+            $subSerie = $request->all();
+
+            return response()->json([
+                'success' => true,
+                'subSeries' =>CatSubseries::orderBy('name')->whereCatSeriesId($subSerie['id'])->get()
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function SortCode(Request $request)
+    {
+        try {
+            $data = $request->all();
+
+            return response()->json([
+                'success' => true,
+                'total' =>Formalities::where('sort_code', 'like', $data['code'].'%')->count()
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }
