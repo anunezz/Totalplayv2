@@ -2,12 +2,13 @@
 namespace App\Http\Controllers;
 
 use App\Http\Models\Cats\CatAdministrativeUnit;
-use App\CatSection;
-use App\CatSeries;
-use App\CatSubseries;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
 
+use App\Http\Models\Cats\CatDescription;
+use App\Http\Models\Cats\CatSection;
+use App\Http\Models\Cats\CatSeries;
+use App\Http\Models\Cats\CatSubseries;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -33,19 +34,27 @@ class CatalogsController extends Controller
                     if (isset($data['allSections'])){
                         return CatSection::orderBy('name')->get(['id','name']);
                     }else{
-                        $elements = CatSection::select(['id', 'name', 'isActive'])
+                        $elements = CatSection::select(['id', 'name', 'code', 'cat_type_id', 'isActive'])
                             ->orderBy('name')
                             ->paginate($data['perPage']);
                     }
                 }
                 if ($data['cat'] == 3) {
-                    $elements = CatSeries::select(['id', 'name', 'isActive'])
+                    $elements = CatSeries::with('section')
+                        ->select(['id', 'name', 'code', 'cat_section_id', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 4) {
-                    $elements = CatSubseries::select(['id', 'name', 'isActive'])
+                    $elements = CatSubseries::with('serie')
+                        ->select(['id', 'name', 'code', 'cat_series_id', 'isActive'])
                         ->orderBy('name')
+                        ->paginate($data['perPage']);
+                }
+                if ($data['cat'] == 5) {
+                    $elements = CatDescription::with('serie')
+                        ->select(['id', 'description', 'cat_series_id', 'isActive'])
+                        ->orderBy('id')
                         ->paginate($data['perPage']);
                 }
 
@@ -337,7 +346,7 @@ class CatalogsController extends Controller
 
     public function getDetailsUser(){
 
-        $fields = ['unit','profile', 'admin'];
+        $fields = ['unit','profile', 'admin', 'determinant'];
 
         $user = User::with($fields)
             ->where('isActive',1)

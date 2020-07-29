@@ -48,7 +48,15 @@
                         label="Nombre">
                     </el-table-column>
                     <el-table-column
-                        label="Acciones" header-align="left" align="center">
+                        prop="code"
+                        label="Código">
+                    </el-table-column>
+                    <el-table-column
+                        prop="serie.name"
+                        label="Serie">
+                    </el-table-column>
+                    <el-table-column
+                        label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
                             <el-button-group size="mini">
                                 <el-tooltip

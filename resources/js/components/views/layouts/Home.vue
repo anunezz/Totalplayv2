@@ -80,7 +80,7 @@
                                 <el-col :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
                                         <el-card shadow="always">
-                                            <strong><b>Puesto: </b></strong> {{user.office}}
+                                            <strong><b>Puesto: </b></strong> {{user.determinant}}
                                         </el-card>
                                     </div>
                                 </el-col>
@@ -315,6 +315,8 @@
                         this.user.full_name = response.data.lResults.user.full_name;
                         this.user.profile = response.data.lResults.user.profile.name;
                         this.user.profile_id = response.data.lResults.user.cat_profile_id;
+                        this.user.determinant = response.data.lResults.user.determinant.name;
+                        this.user.determinant_id = response.data.lResults.user.cat_determinant_id;
                         this.user.office = response.data.lResults.user.office;
                         this.user.email = response.data.lResults.user.username;
                         this.user.admin = response.data.lResults.user.admin.name;

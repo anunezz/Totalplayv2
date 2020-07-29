@@ -48,7 +48,18 @@
                         label="Nombre">
                     </el-table-column>
                     <el-table-column
-                        label="Acciones" header-align="left" align="center">
+                        prop="code"
+                        label="Código">
+                    </el-table-column>
+                    <el-table-column
+                        prop="cat_type_id"
+                        label="Tipo">
+                        <template slot-scope="scope">
+                            {{ scope.row.cat_type_id === 1 ? 'Comunes' : 'Sustantivas' }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
                             <el-button-group size="mini">
                                 <el-tooltip

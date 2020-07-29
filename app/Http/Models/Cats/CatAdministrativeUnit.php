@@ -2,7 +2,6 @@
 
 namespace App\Http\Models\Cats;
 
-use App\CatSection;
 use Illuminate\Database\Eloquent\Model;
 
 class CatAdministrativeUnit extends Model

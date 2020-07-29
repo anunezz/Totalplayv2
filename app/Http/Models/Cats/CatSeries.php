@@ -13,4 +13,11 @@ class CatSeries extends Model
         'cat_serie_id',
         'cat_primary_value_id');
     }
+
+    public function section()
+    {
+        return $this->belongsTo(CatSection::class, 'cat_section_id');
+    }
+
+
 }

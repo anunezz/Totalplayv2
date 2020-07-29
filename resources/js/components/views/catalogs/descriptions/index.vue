@@ -4,7 +4,7 @@
             <template slot="buttons">
                 <el-col :span="5" :offset="7">
                     <el-button type="success" @click="newCatalog" style="width: 100%">
-                        Nueva serie
+                        Nueva descripción
                     </el-button>
                 </el-col>
                 <el-col :span="10" :offset="1">
@@ -44,11 +44,16 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="name"
-                        label="Nombre">
+                        prop="description"
+                        label="Descripción">
                     </el-table-column>
                     <el-table-column
-                        label="Acciones" header-align="left" align="center">
+                        prop="serie.name"
+                        label="Serie"
+                        width="600">
+                    </el-table-column>
+                    <el-table-column
+                        label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
                             <el-button-group size="mini">
                                 <el-tooltip
@@ -160,7 +165,7 @@
             <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
-                        <el-form-item label="Nombre"
+                        <el-form-item label="Descripción"
                                       prop="name"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -273,7 +278,7 @@
                 let data = { params: {
                         page: currentPage,
                         perPage: this.pagination.perPage,
-                        cat: 3}
+                        cat: 5}
                 };
 
                 axios.get('/api/cats/get-cat', data).then(response => {
@@ -308,7 +313,7 @@
             newRegister() {
                 this.startLoading();
 
-                let data = {cat: 4, name: this.catalogForm.newRegisterName};
+                let data = {cat: 5, name: this.catalogForm.newRegisterName};
 
                 this.$refs['catalogForm'].validate((valid) => {
                     if (valid) {
@@ -362,7 +367,7 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 4, name: this.catalogEditForm.name};
+                let data = {id: this.catalogEditForm.id, cat: 5, name: this.catalogEditForm.name};
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
@@ -428,7 +433,7 @@
             disableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 5};
 
                 axios.post('/api/cats/disable-register', data).then(response => {
                     this.$notify({
@@ -452,7 +457,7 @@
             enableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 5};
 
                 axios.post('/api/cats/enable-register', data).then(response => {
                     this.$notify({
