@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateCatDescriptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,25 +13,21 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('cat_descriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('username');
-            $table->string('office');
-            $table->unsignedBigInteger('cat_profile_id');
             $table->unsignedBigInteger('cat_unit_id')->nullable();
-            $table->string('name');
-            $table->string('firstName');
-            $table->string('secondName')->nullable();
+            $table->unsignedBigInteger('cat_series_id')->nullable();
+            $table->longText('description');
             $table->boolean('isActive')->default(1);
             $table->timestamps();
-
-            $table->foreign('cat_profile_id')
-                ->references('id')
-                ->on('cat_profiles');
 
             $table->foreign('cat_unit_id')
                 ->references('id')
                 ->on('cat_administrative_units');
+
+            $table->foreign('cat_series_id')
+                ->references('id')
+                ->on('cat_series');
         });
     }
 
@@ -42,6 +38,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('cat_descriptions');
     }
 }

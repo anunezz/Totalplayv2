@@ -21,6 +21,7 @@
                             <div slot="header">
                                 <span class="title"> <i class="fas fa-user"></i> Perfil</span>
                             </div> <br>
+<!--                            <pre>{{user}}</pre>-->
                             <el-row>
                                 <el-col :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
@@ -29,12 +30,36 @@
                                         </el-card>
                                     </div>
                                 </el-col>
+<!--                                <el-col v-if="user.profile_id !== 1" :span="24">-->
+<!--                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >-->
+<!--                                        <el-card shadow="always">-->
+<!--                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>-->
+<!--                                            <span v-for="(item, index) in user.unit" :key="index"> {{ item.name }}<br>  </span>-->
+<!--                                        </el-card>-->
+<!--                                    </div>-->
+<!--                                </el-col>-->
                                 <el-col v-if="user.profile_id !== 1" :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-card shadow="always">
-                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>
-                                            <span v-for="(item, index) in user.unit" :key="index"> {{ item.name }}<br>  </span>
-                                        </el-card>
+                                        <el-form :model="strategyForm" ref="strategyForm" label-width="120px" label-position="top">
+                                            <el-card shadow="always">
+                                                <strong><b>Unidad Administrativa: </b></strong><br><p></p>
+                                                <el-form-item prop="cat_unit_id"
+                                                              :rules="[{ required: false, message: 'Este campo es requerido', trigger:['blur','change'] }]">
+<!--                                                    v-if="units.length >= 1"
+                                                                disabled-->
+                                                    <el-select style="width: 100%;" size="medium"
+                                                               v-model="strategyForm.cat_unit_id"
+                                                               placeholder="Seleccionar">
+                                                        <el-option
+                                                            v-for="(unit , index) in units"
+                                                            :key="index"
+                                                            :label="unit.name"
+                                                            :value="unit.id">
+                                                        </el-option>
+                                                    </el-select>
+                                                </el-form-item>
+                                            </el-card>
+                                        </el-form>
                                     </div>
                                 </el-col>
                                 <el-col v-if="user.profile_id === 1" :span="24">
@@ -212,7 +237,10 @@
                 show: false,
                 user:{},
                 lResults:{},
-           //     units:[],
+                units:[],
+                strategyForm:{
+                    cat_unit_id: null,
+                }
             };
         },
 
@@ -285,7 +313,10 @@
                         this.user.profile_id = response.data.lResults.user.cat_profile_id;
                         this.user.office = response.data.lResults.user.office;
                         this.user.email = response.data.lResults.user.username;
-                        this.user.unit = response.data.lResults.user.unit;
+                        this.user.admin = response.data.lResults.user.admin.name;
+                        this.strategyForm.cat_unit_id = response.data.lResults.user.cat_unit_id;
+                        this.units = response.data.lResults.user.unit;
+                 //       this.units = response.data.lResults.units;
 
                     }
                 }).catch(error => {
