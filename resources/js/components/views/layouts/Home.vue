@@ -160,7 +160,7 @@
                     </el-col>
                     <el-col :span="11">
                         <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
-                            <span style="font-size: 15px">SISTEMA PARA EL REGISTRO Y GESTIÓN DE EXPEDIENTES v {{$version}}</span>
+                            <span style="font-size: 15px">SIRGE v {{$version}}</span>
                         </div>
                     </el-col>
 
