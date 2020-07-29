@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CatProfileSeeder::class,
+            CatDeterminantSeeder::class,
             CatTransactionTypeSeeder::class,
             UsersTableSeeder::class,
             CatConsulateSeeder::class,
