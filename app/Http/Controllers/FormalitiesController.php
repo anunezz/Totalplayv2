@@ -184,7 +184,7 @@ class FormalitiesController extends Controller
             $serie = $request->all();
             return response()->json([
                 'success' => true,
-                'series' =>CatSeries::with('primarivalues')->whereCatSectionId($serie['id'])->get()
+                'series' =>CatSeries::with('primarivalues','descriptions')->whereCatSectionId($serie['id'])->get()
             ]);
         }
         catch ( \Exception $e ) {

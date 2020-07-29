@@ -48,7 +48,7 @@
                     <el-table-column
                         label="Determinante">
                         <template slot-scope="scope">
-                            {{scope.row.user.office}}
+                            TIN
                         </template>
                     </el-table-column>
                     <el-table-column
