@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Http\Models\Cats\CatAdministrativeUnit;
+use App\Http\Models\Cats\CatDeterminant;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\Cats\CatConsulate;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -58,7 +59,7 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    protected $fillable = ['username','cat_profile_id', 'name', 'firstName', 'secondName'];
+    protected $fillable = ['username','cat_profile_id', 'cat_determinant_id', 'name', 'firstName', 'secondName'];
     protected $appends = ['full_name', 'hash'];
 
     public function getFullNameAttribute()
@@ -76,6 +77,14 @@ class User extends Authenticatable
         return $this->belongsTo(
             CatProfile::class,
             'cat_profile_id'
+        )->where( 'isActive', 1 );
+    }
+
+    public function determinant()
+    {
+        return $this->belongsTo(
+            CatDeterminant::class,
+            'cat_determinant_id'
         )->where( 'isActive', 1 );
     }
 

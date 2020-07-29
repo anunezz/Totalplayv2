@@ -87,7 +87,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="Consecutivo: " prop="consecutive">
-                            <el-input-number v-model="formFormalities.consecutive" controls-position="right" :min="0"
+                            <el-input-number v-model="formFormalities.consecutive" controls-position="right" :min="0" disabled
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
@@ -240,6 +240,7 @@
                 this.formFormalities.sort_code = aux;
                 axios.post('/api/sort-code', params).then(response => {
                     this.formFormalities.sort_code = aux + (response.data.total + 1);
+                    this.formFormalities.consecutive = (response.data.total + 1);
                     this.stopLoading();
 
                 }).catch(error => {

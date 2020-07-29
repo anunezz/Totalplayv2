@@ -16,8 +16,8 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('username');
-            $table->string('office');
             $table->unsignedBigInteger('cat_profile_id');
+            $table->unsignedBigInteger('cat_determinant_id')->nullable();
             $table->unsignedBigInteger('cat_unit_id')->nullable();
             $table->string('name');
             $table->string('firstName');
@@ -29,9 +29,14 @@ class CreateUsersTable extends Migration
                 ->references('id')
                 ->on('cat_profiles');
 
+            $table->foreign('cat_determinant_id')
+                ->references('id')
+                ->on('cat_determinants');
+
             $table->foreign('cat_unit_id')
                 ->references('id')
                 ->on('cat_administrative_units');
+
         });
     }
 

@@ -38,7 +38,7 @@
                 </el-col>
             </el-row>
             <el-row :gutter="10">
-                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 24 : userForm.cat_profile_id !== 1 ? 12 : 12">
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 8 : 8">
                     <el-form-item label="Perfl"
                                   prop="cat_profile_id"
                                   :rules="[
@@ -56,7 +56,25 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col v-if="userForm.cat_profile_id !== 1" :span="12">
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 8 : 8">
+                    <el-form-item label="Determinante"
+                                  prop="cat_determinant_id"
+                                  :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                        <el-select v-model="userForm.cat_determinant_id"
+                                   filterable placeholder="Seleccionar"
+                                   style="width: 100%">
+                            <el-option
+                                v-for="(determinant , index) in determinants"
+                                :key="index"
+                                :label="determinant.name"
+                                :value="determinant.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col v-if="userForm.cat_profile_id !== 1" :span="8">
                     <el-form-item label="Unidad administrativa"
                                   prop="cat_administrative_unit_id"
                                   :rules="[
@@ -75,7 +93,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row> <br>
             <el-row :gutter="10">
                 <el-col :span="5" :offset="19">
                     <el-button type="success" style="width: 100%" @click="submitForm">
@@ -110,12 +128,14 @@
         data() {
             return {
                 profiles: [],
+                determinants: [],
                 consulates: [],
                 missions: [],
                 organisms: [],
                 units: [],
                 userForm: {
                     cat_profile_id: null,
+                    cat_determinant_id: null,
                     cat_administrative_unit_id: null,
                     name: '',
                     firstName: '',
@@ -129,6 +149,7 @@
 
             axios.get('/api/users/' + this.$route.params.id + '/edit').then(response => {
                 this.profiles = response.data.profiles;
+                this.determinants = response.data.determinants;
                 this.units = response.data.units;
                 this.userForm = response.data.userForm;
 

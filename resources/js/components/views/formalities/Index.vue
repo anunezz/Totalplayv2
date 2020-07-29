@@ -45,14 +45,12 @@
                     size="mini"
                     :data="formalitiesTable"
                     style="width: 100%">
-                   <!-- <el-table-column
-                        prop="number"
-                        label="#">
-                    </el-table-column>-->
-                    <!--<el-table-column
-                        prop="determinant"
+                    <el-table-column
                         label="Determinante">
-                    </el-table-column>-->
+                        <template slot-scope="scope">
+                            {{scope.row.user.office}}
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         prop="sort_code"
                         label="Clasificación">

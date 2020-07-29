@@ -21,7 +21,7 @@
                             <div slot="header">
                                 <span class="title"> <i class="fas fa-user"></i> Perfil</span>
                             </div> <br>
-<!--                            <pre>{{user}}</pre>-->
+<!--                            <pre>{{units}}</pre>-->
                             <el-row>
                                 <el-col :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
@@ -120,6 +120,9 @@
                             <br> <p></p>
                             <el-row>
                                 <div align="right">
+                                    <el-button v-if="user.profile_id !==1" type="success" size="medium" plain @click="show = false">
+                                        Actualizar
+                                    </el-button>
                                     <el-button type="danger" size="medium" plain @click="show = false">
                                         Salir
                                     </el-button>
@@ -308,6 +311,7 @@
             details(){
                 axios.get('/api/cats/getDetailsUser').then(response => {
                     if(response.data.success){
+                        this.units = response.data.lResults.user.unit;
                         this.user.full_name = response.data.lResults.user.full_name;
                         this.user.profile = response.data.lResults.user.profile.name;
                         this.user.profile_id = response.data.lResults.user.cat_profile_id;
@@ -315,7 +319,7 @@
                         this.user.email = response.data.lResults.user.username;
                         this.user.admin = response.data.lResults.user.admin.name;
                         this.strategyForm.cat_unit_id = response.data.lResults.user.cat_unit_id;
-                        this.units = response.data.lResults.user.unit;
+
                  //       this.units = response.data.lResults.units;
 
                     }
