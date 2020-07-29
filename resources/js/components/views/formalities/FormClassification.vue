@@ -211,6 +211,7 @@
             },
             calSortCodeSubSerie(){
                  const result = this.subSeries.filter(subSerie => subSerie.id === this.formFormalities.subserie_id);
+                this.formFormalities.scope_and_content = result[0].descrip[0].description;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();
             },
