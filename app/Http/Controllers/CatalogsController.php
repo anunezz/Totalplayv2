@@ -337,22 +337,29 @@ class CatalogsController extends Controller
 
     public function getDetailsUser(){
 
-        $fields = ['unit','profile'];
+        $fields = ['unit','profile', 'admin'];
 
         $user = User::with($fields)
             ->where('isActive',1)
             ->findOrfail( auth()->user()->getAuthIdentifier() );
 
-        $units = [];
-        $unit = $user->unit()->get();
-        foreach ($unit as $uni) {
-            array_push($units,$uni->id);
-        }
+//        $units = User::with('unit')
+//            ->where('isActive', 1)
+//            ->where('id', $user)
+//            ->first(['id', 'name']);
+
+   //     return $user;
+
+//        $units = [];
+//        $unit = $user->unit()->get();
+//        foreach ($unit as $uni) {
+//            array_push($units,$uni->id);
+//        }
 
         return response()->json([
             'success' => true,
             'lResults' => ["user"=> $user,
-                'units' => $units
+           //     'units' => $units
 
             ]
         ]);

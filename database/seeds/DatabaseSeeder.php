@@ -24,9 +24,12 @@ class DatabaseSeeder extends Seeder
             CatSelectionTechniquesSeeder::class,
             CatSeriesSeeder::class,
             CatSubseriesSeeder::class,
+            CatDescriptionSeeder::class,
 
             AdminUnitSectionSeeder::class,
-            SeriesPrimaryValuesSeeder::class
+            SeriesPrimaryValuesSeeder::class,
+            DescriptionSubseriesSeeder::class,
+            DescriptionUnitsSeeder::class
         ]);
     }
 }

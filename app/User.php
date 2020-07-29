@@ -79,6 +79,14 @@ class User extends Authenticatable
         )->where( 'isActive', 1 );
     }
 
+    public function admin()
+    {
+        return $this->belongsTo(
+            CatAdministrativeUnit::class,
+            'cat_unit_id'
+        )->where( 'isActive', 1 );
+    }
+
     public function unit()
     {
         return $this->belongsToMany(
