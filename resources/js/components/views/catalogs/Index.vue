@@ -31,6 +31,7 @@
         <sections v-if="selectedCat === 2"/>
         <series v-if="selectedCat === 3"/>
         <subserie v-if="selectedCat === 4"/>
+        <descriptions v-if="selectedCat ===5"/>
 
     </div>
 </template>
@@ -42,6 +43,7 @@
     import Sections from "./sections/index";
     import Series from "./series/index";
     import Subserie from "./subseries/index";
+    import Descriptions from "./descriptions/index";
 
     export default {
         components: {
@@ -49,7 +51,8 @@
             Units,
             Sections,
             Series,
-            Subserie
+            Subserie,
+            Descriptions,
         },
 
         data(){
@@ -60,6 +63,7 @@
                     {id:2,  name: 'Secciones'},
                     {id:3,  name: 'Series'},
                     {id:4,  name: 'Subseries'},
+                    {id:5,  name: 'Descripciones'}
                 ],
             }
         },

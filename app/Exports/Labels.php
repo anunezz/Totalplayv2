@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Exports;
 
 use App\DataForm;
@@ -15,7 +14,7 @@ use function foo\func;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
-
+use App\Http\Traits\Macros;
 
 ini_set('memory_limit', '-1');
 set_time_limit(0);
@@ -56,12 +55,37 @@ class Labels implements
         return 'Etiqueta de expediente';
     }
 
+    public function style($sheet,$array){
+        $style = [];
+        if( isset( $array['border'] ) ){
+            $sheet->styleCells(
+                $array['cell'],
+                [
+                    'font' => [
+                        'bold' => true,
+                        'name' => 'Calibri',
+                        'size' => 11
+                    ],
+                    'alignment' => [
+                        'horizontal' => static::$ALIGNMENT::HORIZONTAL_CENTER,
+                        'vertical' => static::$ALIGNMENT::VERTICAL_CENTER,
+                    ],
+                    'borders' => [
+                        $array['border'] => [
+                            'borderStyle' => static::$BORDER::BORDER_THICK,
+                            'color' => ['argb' => 'FF000000'],
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
 
-                //$event->sheet->getColumnDimension('A')->setWidth(6.00);
                 $event->sheet->getColumnDimension('A')->setWidth(2.00);
                 $event->sheet->getColumnDimension('B')->setWidth(2.00);
 
@@ -91,184 +115,80 @@ class Labels implements
                 $event->sheet->getColumnDimension('X')->setWidth(4.00);
                 $event->sheet->getColumnDimension('Y')->setWidth(2.00);
 
+                $data = collect([
+                    ['08C.16.01','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.03','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.04','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.05','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.06','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente']
+                ])->chunk(2);
 
-                $data = [
-                    [ 'cell'=>'C3:M3', 'border'=> 'top'],
-                    [ 'cell'=>'C5:M5', 'border'=> 'bottom'],
-                    [ 'cell'=>'C3:C5', 'border'=> 'left'],
-                    [ 'cell'=>'M3:M5', 'border'=> 'right'],
+                $row = 3;
+                foreach ($data as $item) {
+                    $i = 0;
+                    foreach ($item as $data) {
+                        $x = ($i === 0)? 'C':'O';
+                        $y = ($i === 0)? 'M':'Y';
+                        $sum = $row + 2;
 
-                    [ 'cell'=>'O3:Y3', 'border'=> 'top'],
-                    [ 'cell'=>'O5:Y5', 'border'=> 'bottom'],
-                    [ 'cell'=>'O3:O5', 'border'=> 'left'],
-                    [ 'cell'=>'Y3:Y5', 'border'=> 'right'],
+                        $Cella = ($i === 0)? 'D': 'P';
+                        $Cellb = ($i === 0)? 'E': 'Q';
+                        $Cellc = ($i === 0)? 'F': 'R';
+                        $Celld = ($i === 0)? 'G': 'S';
+                        $Celle = ($i === 0)? 'H': 'T';
+                        $Cellf = ($i === 0)? 'I': 'U';
+                        $Cellg = ($i === 0)? 'J': 'V';
+                        $Cellh = ($i === 0)? 'K': 'W';
+                        $Celli = ($i === 0)? 'L': 'X';
+                        $row1 = $row + 1;
+                        $row2 = $row + 2;
 
-                    [ 'cell'=>'C7:M7', 'border'=> 'top'],
-                    [ 'cell'=>'C9:M9', 'border'=> 'bottom'],
-                    [ 'cell'=>'C7:C9', 'border'=> 'left'],
-                    [ 'cell'=>'M7:M9', 'border'=> 'right'],
+                        $event->sheet->setCellValue( $Cella.$row, 'SRE');
+                        $event->sheet->wrapText( $Cella.$row );
+                        $event->sheet->setCellValue( $Cellb.$row, '.');
+                        $event->sheet->wrapText( $Cellb.$row );
+                        $event->sheet->setCellValue( $Cellc.$row, $data[0]);
+                        $event->sheet->wrapText( $Cellc.$row );
+                        $event->sheet->setCellValue( $Celld.$row, '/');
+                        $event->sheet->wrapText( $Celld.$row );
+                        $event->sheet->setCellValue( $Celle.$row, $data[1]);
+                        $event->sheet->wrapText( $Celle.$row );
+                        $event->sheet->setCellValue( $Cellf.$row, $data[2]);
+                        $event->sheet->wrapText( $Cellf.$row );
+                        $event->sheet->setCellValue( $Cellg.$row, $data[3]);
+                        $event->sheet->wrapText( $Cellg.$row );
+                        $event->sheet->setCellValue( $Cellh.$row, $data[4]);
+                        $event->sheet->wrapText( $Cellh.$row );
+                        $event->sheet->setCellValue( $Celli.$row, $data[5]);
+                        $event->sheet->wrapText( $Celli.$row );
 
-                    [ 'cell'=>'O7:Y7', 'border'=> 'top'],
-                    [ 'cell'=>'O9:Y9', 'border'=> 'bottom'],
-                    [ 'cell'=>'O7:O9', 'border'=> 'left'],
-                    [ 'cell'=>'Y7:Y9', 'border'=> 'right'],
+                        $event->sheet->mergeCells( $Cella.$row1.':'.$Celli.$row2 );
+                        $event->sheet->setCellValue( $Cella.$row1, $data[6]);
+                        //$event->sheet->wrapText( $Cella.$row1 );
 
-                    [ 'cell'=>'C11:M11', 'border'=> 'top'],
-                    [ 'cell'=>'C13:M13', 'border'=> 'bottom'],
-                    [ 'cell'=>'C11:C13', 'border'=> 'left'],
-                    [ 'cell'=>'M11:M13', 'border'=> 'right'],
+                        $rowsBorder = [
+                        [ 'cell'=> $x.$row.':'.$y.$row, 'border'=> 'top'],
+                        [ 'cell'=> $x.$sum.':'.$y.$sum, 'border'=> 'bottom'],
+                        [ 'cell'=> $x.$row.':'.$x.$sum, 'border'=> 'left'],
+                        [ 'cell'=> $y.$row.':'.$y.$sum, 'border'=> 'right']
+                        ];
 
-                    [ 'cell'=>'O11:Y11', 'border'=> 'top'],
-                    [ 'cell'=>'O13:Y13', 'border'=> 'bottom'],
-                    [ 'cell'=>'O11:O13', 'border'=> 'left'],
-                    [ 'cell'=>'Y11:Y13', 'border'=> 'right'],
+                        foreach ($rowsBorder as $e){
+                            $this->style($event->sheet ,$e);
+                        }
 
-                    [ 'cell'=>'C15:M15', 'border'=> 'top'],
-                    [ 'cell'=>'C17:M17', 'border'=> 'bottom'],
-                    [ 'cell'=>'C15:C17', 'border'=> 'left'],
-                    [ 'cell'=>'M15:M17', 'border'=> 'right'],
-
-                    [ 'cell'=>'O15:Y15', 'border'=> 'top'],
-                    [ 'cell'=>'O17:Y17', 'border'=> 'bottom'],
-                    [ 'cell'=>'O15:O17', 'border'=> 'left'],
-                    [ 'cell'=>'Y15:Y17', 'border'=> 'right'],
-                ];
-
-                foreach ($data as $i) {
-                    $event->sheet->styleCells(
-                        $i['cell'],
-                        [
-                            'alignment' => [
-                                'horizontal' => static::$ALIGNMENT::HORIZONTAL_CENTER,
-                                'vertical' => static::$ALIGNMENT::VERTICAL_CENTER,
-                            ],
-                            'borders' => [
-                                $i['border'] => [
-                                    'borderStyle' => static::$BORDER::BORDER_THIN,
-                                    'color' => ['argb' => 'FF000000'],
-                                ]
-                            ]
-                        ]
-                    );
-                }
-
-
-                $data = [
-                    [ 'cell'=>'D3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'E3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'F3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '08C.16.01'],
-                    [ 'cell'=>'G3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'H3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '2018-'],
-                    [ 'cell'=>'I3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/001'],
-                    [ 'cell'=>'J3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/DAN'],
-                    [ 'cell'=>'K3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/ET001-01'],
-                    [ 'cell'=>'L3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '1/2'],
-                    [ 'cell'=>'D4:L5',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'P3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'Q3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'R3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '08C.16.01'],
-                    [ 'cell'=>'S3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'T3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '2018-'],
-                    [ 'cell'=>'U3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/001'],
-                    [ 'cell'=>'V3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/DAN'],
-                    [ 'cell'=>'W3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/ET001-01'],
-                    [ 'cell'=>'X3' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '1/2'],
-                    [ 'cell'=>'O4:X5',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'D7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'E7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'F7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'G7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'H7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'I7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'J7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'K7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'L7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'D8:L9',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'P7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'Q7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'R7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'S7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'T7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'U7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'V7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'W7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'X7' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'O8:X9',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'D11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'E11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'F11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'G11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'H11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'I11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'J11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'K11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'L11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'D12:L13',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'P11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'Q11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'R11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'S11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'T11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'U11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'V11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'W11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'X11' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'O12:X13',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'D15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'E15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'F15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'G15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'H15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'I15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'J15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'K15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'L15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'D16:L17',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                    [ 'cell'=>'P15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => 'SRE'],
-                    [ 'cell'=>'Q15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '.'],
-                    [ 'cell'=>'R15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'S15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => '/'],
-                    [ 'cell'=>'T15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'U15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'V15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'W15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'X15' ,    'select' => false, 'bold'=> true, 'fontSize'=> 11,  'field' => ''],
-                    [ 'cell'=>'O16:X17',  'select' => false, 'bold'=> true, 'fontSize'=> 10.5,  'field' => 'Título del expediente'],
-
-                ];
-                foreach ($data as $i) {
-                    $cel = preg_split("/[:]+/", $i['cell']);
-                    $event->sheet->setCellValue($cel[0],$i['field']);
-                    $event->sheet->wrapText('B3:B51');
-                    if( count($cel) === 2 ){
-                        $event->sheet->mergeCells( $i['cell'] );
+                        $i = $i +1;
                     }
-                    $event->sheet->styleCells(
-                        $i['cell'],
-                        [
-                            'font' => [
-                                'bold' => $i['bold'],
-                                'name' => 'Calibri',
-                                'size' => $i['fontSize']
-                            ],
-                            'alignment' => [
-                                'horizontal' => static::$ALIGNMENT::HORIZONTAL_CENTER,
-                                'vertical' => static::$ALIGNMENT::VERTICAL_CENTER,
-                            ]
-                        ]
-                    );
-
+                    $row = $row + 4;
                 }
 
+                //$hola =  Macros::border('ejemplo');
 
-            },
+
+
+
+            }
         ];
     }
 

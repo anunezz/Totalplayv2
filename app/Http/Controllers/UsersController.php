@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatConsulate;
+use App\Http\Models\Cats\CatDeterminant;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\Transaction;
 use App\User;
@@ -21,7 +22,7 @@ class UsersController extends Controller
             if ($request->wantsJson()) {
                 $data = $request->all();
 
-                $users = User::with('profile', 'unit')
+                $users = User::with('profile', 'unit', 'determinant')
                     ->search($data['search'])
                     ->where('isActive', true)
                     ->where('id', '!=', 1)
@@ -53,6 +54,7 @@ class UsersController extends Controller
 
                 $user = User::find(decrypt($id));
                 $profiles = CatProfile::where('isActive', 1)->get(['id', 'name']);
+                $determinants = CatDeterminant::where('isActive', 1)->get(['id', 'name']);
                 $units = CatAdministrativeUnit::where('isActive', 1)->get(['id', 'name']);
                 $userConsulates = DB::table('user_units')
                     ->where('user_id', $user->id)
@@ -60,6 +62,7 @@ class UsersController extends Controller
 
                 $userform = [
                     'cat_profile_id' => $user->cat_profile_id,
+                    'cat_determinant_id' => $user->cat_determinant_id,
                     'cat_administrative_unit_id' => $userConsulates,
                     'name' => $user->name,
                     'firstName' => $user->firstName,
@@ -68,6 +71,7 @@ class UsersController extends Controller
 
                 return response()->json([
                     'profiles' => $profiles,
+                    'determinants' => $determinants,
                     'units' => $units,
                     'userForm' => $userform,
                     'success' => true

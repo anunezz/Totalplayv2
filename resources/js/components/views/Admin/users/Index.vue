@@ -49,8 +49,8 @@
                         label="Usuario">
                     </el-table-column>
                     <el-table-column
-                        prop="office"
-                        label="Puesto">
+                        prop="determinant.name"
+                        label="Determiante">
                     </el-table-column>
 <!--                    <el-table-column-->
 <!--                        prop="consulate.name"-->
