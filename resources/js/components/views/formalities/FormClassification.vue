@@ -150,6 +150,7 @@
                     this.formFormalities.serie_id = null;
                     this.formFormalities.subserie_id = null;
                     this.formFormalities.sort_code = '';
+                    this.formFormalities.scope_and_content = '';
                 }
 
                 let params = {
@@ -201,13 +202,16 @@
             },
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
-                console.log('imprimiedo la serie',result[0].primarivalues)
+
+                console.log('imprimiedo la serie',result[0].descriptions[0].description)
+                this.formFormalities.scope_and_content = result[0].descriptions[0].description;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();
             },
             calSortCodeSubSerie(){
                  const result = this.subSeries.filter(subSerie => subSerie.id === this.formFormalities.subserie_id);
+                this.formFormalities.scope_and_content = result[0].descrip[0].description;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();
             },

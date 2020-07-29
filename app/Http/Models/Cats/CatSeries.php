@@ -18,6 +18,11 @@ class CatSeries extends Model
     {
         return $this->belongsTo(CatSection::class, 'cat_section_id');
     }
-
+    
+    public function descriptions()
+    {
+        return $this->hasMany(CatDescription::class,
+        'cat_series_id');
+    }
 
 }

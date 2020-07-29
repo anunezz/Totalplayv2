@@ -20,7 +20,7 @@ class FormalitiesController extends Controller
     {
         if ($request->wantsJson()){
             $data = $request->all();
-            $formalities = Formalities::with('user')
+            $formalities = Formalities::with('user.determinant')
                 ->search($data['filters'])
                 ->orderBy('created_at', 'DESC')
                 ->paginate($data['perPage']);
@@ -184,7 +184,7 @@ class FormalitiesController extends Controller
             $serie = $request->all();
             return response()->json([
                 'success' => true,
-                'series' =>CatSeries::with('primarivalues')->whereCatSectionId($serie['id'])->get()
+                'series' =>CatSeries::with('primarivalues','descriptions')->whereCatSectionId($serie['id'])->get()
             ]);
         }
         catch ( \Exception $e ) {
@@ -203,7 +203,7 @@ class FormalitiesController extends Controller
 
             return response()->json([
                 'success' => true,
-                'subSeries' =>CatSubseries::orderBy('name')->whereCatSeriesId($subSerie['id'])->get()
+                'subSeries' =>CatSubseries::with('descrip')->orderBy('name')->whereCatSeriesId($subSerie['id'])->get()
             ]);
         }
         catch ( \Exception $e ) {

@@ -48,7 +48,7 @@
                     <el-table-column
                         label="Determinante">
                         <template slot-scope="scope">
-                            {{scope.row.user.office}}
+                            {{scope.row.user.determinant.name}}
                         </template>
                     </el-table-column>
                     <el-table-column
