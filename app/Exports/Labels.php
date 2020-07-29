@@ -116,13 +116,29 @@ class Labels implements
                 $event->sheet->getColumnDimension('Y')->setWidth(2.00);
 
                 $data = collect([
-                    ['08C.16.01','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.01','20166-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
                     ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
                     ['08C.16.03','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
                     ['08C.16.04','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
                     ['08C.16.05','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
-                    ['08C.16.06','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente']
+                    ['08C.16.06','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.07','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.08','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.09','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.10','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.11','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.12','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.13','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.14','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.15','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.16','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.17','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.18','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.19','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                    ['08C.16.20','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
                 ])->chunk(2);
+
+                //dd($data);
 
                 $row = 3;
                 foreach ($data as $item) {
@@ -195,7 +211,6 @@ class Labels implements
     public function collection()
     {
         try {
-
             $collection = collect();
             //$row = 2;
 
