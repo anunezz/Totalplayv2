@@ -9,9 +9,13 @@
                     @click="$router.push('/')">
                     Regresar
                 </el-button>
+                <el-button
+                    size="small"
+                    type="primary">
+                    Descargar Excel
+                </el-button>
                 <el-button-group>
                     <el-button
-                        v-if="$store.state.user.profile === 1"
                         size="small"
                         type="success"
                         icon="fas fa-edit"
