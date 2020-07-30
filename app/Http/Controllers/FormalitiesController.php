@@ -6,16 +6,19 @@ use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
+use App\Repositories\Formality\FormalityRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FormalitiesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    protected $formalityRepo;
+
+    public function __construct(FormalityRepository $formalityRepository)
+    {
+        $this->formalityRepo = $formalityRepository;
+    }
+
     public function index(Request $request)
     {
         if ($request->wantsJson()){
@@ -87,7 +90,7 @@ class FormalitiesController extends Controller
      */
     public function show($id)
     {
-        //
+        $formality = $this->formalityRepo->find($id);
     }
 
     /**

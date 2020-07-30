@@ -168,6 +168,17 @@
         created() {
             this.getFormalities();
         },
+        mounted() {
+            axios.get('/api/formalities/'+ 1).then(response => {
+
+            }).catch(error => {
+                console.log(error)
+                this.$message({
+                    type: "warning",
+                    message: "No fue posible completar la acción, intente nuevamente."
+                });
+            });
+        },
         methods:{
             SearchData(){
                 this.startLoading();
