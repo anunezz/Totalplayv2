@@ -4,6 +4,7 @@ use App\Http\Models\Cats\CatConsulate;
 use App\Http\Models\Cats\CatOrganism;
 use App\Http\Models\Cats\CatSubtopic;
 use App\Http\Models\Cats\CatTopic;
+use App\Http\Models\Formalities;
 use App\Http\Models\Notice;
 use App\Http\Models\Recommendation;
 use App\Http\Models\Transaction;
@@ -28,10 +29,10 @@ class GeneralController extends Controller
     public function getCountRegisters(Request $request)
     {
         try {
-//            $registers = Recommendation::where('isActive', true)->get()->count();
+            $registers = Formalities::all()->count();
 
             return response()->json([
-                'registers' =>0,
+                'registers' =>$registers,
                 'success'    => true,
             ], 200);
         }
