@@ -8,6 +8,10 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
+                                type="textarea"
+                                :rows="3"
+                                :maxlength="250"
+                                show-word-limit
                                 v-model="formFormalities.title">
                             </el-input>
                         </el-form-item>
@@ -21,6 +25,19 @@
                                 :rows="10"
                                 v-model="formFormalities.scope_and_content"
                                 :disabled="true">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="Información adicional:" prop="additional_information">
+                            <el-input
+                                type="textarea"
+                                :rows="3"
+                                :maxlength="250"
+                                show-word-limit
+                                v-model="formFormalities.additional_information">
                             </el-input>
                         </el-form-item>
                     </el-col>

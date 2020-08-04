@@ -95,7 +95,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Legajo:" prop="legajo">
-                            <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                            <el-input-number v-model="formFormalities.legajo" controls-position="right" :min="0" :max="100"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
