@@ -130,6 +130,7 @@
                     sort_code: '',
                     title: '',
                     scope_and_content: '',
+                    additional_information: '',
                     format_id: null,
                     documentary_tradition_id: null,
                     legajos: 0,
@@ -150,7 +151,8 @@
                     deadline_extension: 0,
                     Record_official_number: '',
                     declassification_date: null,
-                    public_server: '',
+                    name_public_server: '',
+                    position_public_server: '',
 
                     auxOpening_date: '',
                     auxClose_date: '',

@@ -97,6 +97,11 @@
 
                 ],
             }
+        },
+        watch:{
+            'formFormalities.end_folio' (){
+                this.formFormalities.total_fojas = this.formFormalities.end_folio;
+            }
         }
     }
 </script>

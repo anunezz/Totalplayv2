@@ -26,6 +26,7 @@ class CreateFormalitiesTable extends Migration
             $table->string('sort_code')->nullable();
             $table->string('title');
             $table->text('scope_and_content')->nullable();
+            $table->text('additional_information')->nullable();
             $table->unsignedBigInteger('format_id');
             $table->unsignedBigInteger('documentary_tradition_id');
             $table->unsignedBigInteger('legajos');
@@ -46,7 +47,8 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('deadline_extension')->nullable();
             $table->string('Record_official_number')->nullable();
             $table->string('declassification_date')->nullable();
-            $table->text('public_server')->nullable();
+            $table->text('name_public_server')->nullable();
+            $table->text('position_public_server')->nullable();
             $table->timestamps();
         });
     }
