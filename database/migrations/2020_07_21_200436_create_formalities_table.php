@@ -50,6 +50,7 @@ class CreateFormalitiesTable extends Migration
             $table->text('name_public_server')->nullable();
             $table->text('position_public_server')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

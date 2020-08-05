@@ -6,9 +6,12 @@ use App\Http\Models\Cats\CatSeries;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Formalities extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['user_id','section_id', 'serie_id', 'subserie_id', 'opening_date', 'close_date', 'consecutive',
         'legajo', 'sort_code', 'title', 'scope_and_content','additional_information', 'format_id', 'documentary_tradition_id',
         'legajos', 'initial_folio', 'end_folio', 'total_fojas', 'question_one', 'question_two', 'transparency_resolution_id',

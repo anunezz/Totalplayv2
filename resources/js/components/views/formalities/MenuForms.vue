@@ -66,28 +66,7 @@
                         Siguiente
                         <i class="fas fa-arrow-right"></i>
                     </el-button>
-
                 </el-row>
-                <!--<el-row type="flex" class="row-bg" justify="end" :gutter="20">
-                    <el-col :span="3">
-                        <el-button
-                            size="small"
-                            type="danger"
-                            style="width: 100%"
-                            @click="$router.push({name: 'ListFormalities' })">
-                            Cancelar
-                        </el-button>
-                    </el-col>
-                    <el-col :span="3">
-                        <el-button
-                            size="small"
-                            type="success"
-                            style="width: 100%"
-                            @click="submitForm()">
-                            Guardar
-                        </el-button>
-                    </el-col>
-                </el-row>-->
             </el-col>
             </el-form>
         </el-row>
