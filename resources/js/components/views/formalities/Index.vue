@@ -11,8 +11,7 @@
                 </el-button>
                 <el-button
                     size="small"
-                    type="primary"
-                    icon="far fa-file-excel">
+                    type="primary">
                     Descargar Excel
                 </el-button>
                 <el-button-group>
@@ -38,12 +37,11 @@
             </el-col>
         </el-row> <br>
         <el-pagination
-            :page-size="parseInt(pagination.perPage)"
             @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-            layout="total"
-            :total="pagination.total"
-            :current-page.sync="pagination.currentPage">
+            :current-page.sync="pagination.currentPage"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="parseInt(pagination.perPage)"
+            layout="sizes">
         </el-pagination>
         <el-row :gutter="20">
             <el-col :span="24">
@@ -76,7 +74,7 @@
                     <el-table-column
                         label="Fecha y Hora de  Creación">
                         <template slot-scope="scope">
-                            {{ scope.row.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
+                            {{ scope.row.user.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -91,8 +89,7 @@
                                     <el-button
                                         type="warning"
                                         size="mini"
-                                        icon="fas fa-eye"
-                                        @click="showRegister(scope.row.hash)">
+                                        icon="fas fa-eye">
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip
@@ -115,8 +112,7 @@
                                     <el-button
                                         type="danger"
                                         size="mini"
-                                        icon="el-icon-delete"
-                                        @click="deleteRegister(scope.row.hash)">
+                                        icon="el-icon-delete">
                                     </el-button>
                                 </el-tooltip>
                             </el-button-group>
@@ -131,9 +127,9 @@
                 @size-change="handleSizeChange"
                 @current-change="handleCurrentChange"
                 :current-page.sync="pagination.currentPage"
-                :page-sizes="[10, 20, 50, 100]"
+                :page-sizes="[10, 20, 30, 40]"
                 :page-size="parseInt(pagination.perPage)"
-                layout="sizes, ->, prev, pager, next"
+                layout="total, ->, prev, pager, next"
                 :total="pagination.total">
             </el-pagination>
         </el-row>
@@ -172,6 +168,17 @@
         created() {
             this.getFormalities();
         },
+        mounted() {
+            axios.get('/api/formalities/'+ 1).then(response => {
+
+            }).catch(error => {
+                console.log(error)
+                this.$message({
+                    type: "warning",
+                    message: "No fue posible completar la acción, intente nuevamente."
+                });
+            });
+        },
         methods:{
             SearchData(){
                 this.startLoading();
@@ -209,42 +216,10 @@
             handleCurrentChange(currentPage) {
                 this.getFormalities(currentPage);
             },
-            showRegister(id){
-                this.$router.push({
-                    name: 'ShowFormalities',
-                    params: {id: id}
-                });
-            },
             editRegister(id){
                 this.$router.push({
                     name: 'EditFormalities',
                     params: {id: id}
-                });
-            },
-            deleteRegister(id){
-                this.$confirm('¿Está seguro que quiere eliminar este expediente?',{
-                    confirmButtonText: 'Aceptar',
-                    cancelButtonText: 'Cancelar',
-                    type: 'warning'
-                }).then(() => {
-                    axios.delete(`/api/formalities/${id}`).then(response => {
-                        this.getFormalities();
-                        this.$message({
-                            type: "success",
-                            title: 'Éxito',
-                            message: "Se elimino el expediente"
-                        });
-                    }).catch(error => {
-                        this.$message({
-                            type: "warning",
-                            message: "No fue posible completar la acción, intente nuevamente."
-                        });
-                    });
-                }).catch(() => {
-                    this.$message({
-                        type: 'info',
-                        message: 'Eliminación cancelada'
-                    });
                 });
             },
             formatDate(date){

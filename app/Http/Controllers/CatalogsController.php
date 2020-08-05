@@ -375,4 +375,31 @@ class CatalogsController extends Controller
 
     }
 
+    public function saveRegister(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $data   = $request->all();
+
+            $reports = User::find($request->id);
+           // return $reports;
+            $reports->update($data);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true
+            ], 200);
+
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
+        }
+    }
+
 }

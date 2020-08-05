@@ -153,6 +153,7 @@ class LoginController extends Controller
             'firstName'  => $user->firstName,
             'secondName' => $user->secondName,
             'profile'    => $user->cat_profile_id,
+            'cat_unit_id' => $user->cat_unit_id,
         ];
     }
 }

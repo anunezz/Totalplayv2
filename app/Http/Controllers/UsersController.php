@@ -9,10 +9,10 @@ use App\Http\Models\Cats\CatDeterminant;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\Transaction;
 use App\User;
-use DB;
 
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -63,6 +63,7 @@ class UsersController extends Controller
                 $userform = [
                     'cat_profile_id' => $user->cat_profile_id,
                     'cat_determinant_id' => $user->cat_determinant_id,
+                    'cat_unit_id'  => $user->cat_unit_id,
                     'cat_administrative_unit_id' => $userConsulates,
                     'name' => $user->name,
                     'firstName' => $user->firstName,
@@ -130,5 +131,6 @@ class UsersController extends Controller
             ], 400);
         }
     }
+
 
 }

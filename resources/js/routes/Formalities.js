@@ -4,7 +4,6 @@ import {RouterView} from './RouterView.js';
 import ListFormalities from '../components/views/formalities/Index';
 import NewFormalities from '../components/views/formalities/MenuForms';
 import EditFormalities from '../components/views/formalities/MenuForms';
-import ShowFormalities from '../components/views/formalities/Show';
 
 
 
@@ -27,12 +26,6 @@ export default {
             path:'editar/:id',
             component: EditFormalities,
             name: 'EditFormalities',
-            props: true
-        },
-        {
-            path:'ver/:id',
-            component: ShowFormalities,
-            name: 'ShowFormalities',
             props: true
         }
     ],

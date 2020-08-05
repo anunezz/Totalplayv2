@@ -70,8 +70,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                         <el-input
-                            v-model="formFormalities.name_titular"
-                            :maxlength="250">
+                            v-model="formFormalities.name_titular">
                         </el-input>
                     </el-form-item>
                 </el-row>
@@ -82,8 +81,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
-                                v-model="formFormalities.transparency_proceedings"
-                                :maxlength="250">
+                                v-model="formFormalities.transparency_proceedings">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -93,8 +91,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
-                                v-model="formFormalities.restricted_parts"
-                                :maxlength="250">
+                                v-model="formFormalities.restricted_parts">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -106,21 +103,20 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                         <el-input
-                            v-model="formFormalities.legal_basis"
-                            :maxlength="250">
+                            v-model="formFormalities.legal_basis">
                         </el-input>
                     </el-form-item>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Periodo de reserva (años):" prop="reservation_period">
-                            <el-input-number v-model="formFormalities.reservation_period" controls-position="right" :min="0" :max="100"
+                            <el-input-number v-model="formFormalities.reservation_period" controls-position="right"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="Ampliación del plazo (años):" prop="deadline_extension">
-                            <el-input-number v-model="formFormalities.deadline_extension" controls-position="right" :min="0" :max="100"
+                            <el-input-number v-model="formFormalities.deadline_extension" controls-position="right"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
@@ -132,8 +128,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
-                                v-model="formFormalities.Record_official_number"
-                                :maxlength="250">
+                                v-model="formFormalities.Record_official_number">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -150,38 +145,19 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <h4 style="border-bottom: 1px solid #b3b9c8">Información del servidor público que desclasifica</h4>
-                <el-row style="padding: 10px">
-                    <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="Nombre completo:" prop="name_public_server"
-                                          :rules="[
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="Nombre, cargo y firma del servidor público que desclasifica:" prop="public_server"
+                                      :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
-                                <el-input
-                                    type="textarea"
-                                    :rows="3"
-                                    :maxlength="250"
-                                    v-model="formFormalities.name_public_server">
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="Cargo:" prop="position_public_server"
-                                          :rules="[
-                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
-                                <el-input
-                                    type="textarea"
-                                    :rows="3"
-                                    :maxlength="250"
-                                    v-model="formFormalities.position_public_server">
-                                </el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                            <el-input
+                                type="textarea"
+                                :rows="3"
+                                v-model="formFormalities.public_server">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-row>
         </el-row>

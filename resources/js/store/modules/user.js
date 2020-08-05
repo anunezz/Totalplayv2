@@ -9,6 +9,7 @@ const state = {
     firstName			: null,
     secondName			: null,
     profile				: null,
+    cat_unit_id         : null,
     cat_user_type_id	: null,
     cat_unity_id		: null,
     cat_area_id			: null,
@@ -96,6 +97,7 @@ const mutations = {
         state.firstName			= user.firstName;
         state.secondName		= user.secondName;
         state.profile			= user.profile;
+        state.cat_unit_id       = user.cat_unit_id;
         state.cat_user_type_id	= user.cat_user_type_id;
         state.cat_unity_id		= Number(user.cat_unity_id);
         state.cat_area_id		= Number(user.cat_area_id);

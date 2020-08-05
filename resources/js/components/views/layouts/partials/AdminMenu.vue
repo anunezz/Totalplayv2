@@ -2,7 +2,7 @@
     <div>
         <el-row :gutter="20">
             <el-col :span="7">
-                <el-badge :value="registers" class="item">
+                <el-badge value="6" class="item">
                     <a class="links" @click="goTo('ListFormalities', { cat_transaction_type_id: 1, action: 'Ingresa al index de tramites'})">
                         Archivo de Trámite
                     </a>
@@ -45,7 +45,7 @@
 export default {
     data() {
         return {
-            registers: 0
+            registers: 6
         };
     },
 

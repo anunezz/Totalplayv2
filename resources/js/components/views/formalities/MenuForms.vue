@@ -66,7 +66,28 @@
                         Siguiente
                         <i class="fas fa-arrow-right"></i>
                     </el-button>
+
                 </el-row>
+                <!--<el-row type="flex" class="row-bg" justify="end" :gutter="20">
+                    <el-col :span="3">
+                        <el-button
+                            size="small"
+                            type="danger"
+                            style="width: 100%"
+                            @click="$router.push({name: 'ListFormalities' })">
+                            Cancelar
+                        </el-button>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-button
+                            size="small"
+                            type="success"
+                            style="width: 100%"
+                            @click="submitForm()">
+                            Guardar
+                        </el-button>
+                    </el-col>
+                </el-row>-->
             </el-col>
             </el-form>
         </el-row>
@@ -109,7 +130,6 @@
                     sort_code: '',
                     title: '',
                     scope_and_content: '',
-                    additional_information: '',
                     format_id: null,
                     documentary_tradition_id: null,
                     legajos: 0,
@@ -130,8 +150,7 @@
                     deadline_extension: 0,
                     Record_official_number: '',
                     declassification_date: null,
-                    name_public_server: '',
-                    position_public_server: '',
+                    public_server: '',
 
                     auxOpening_date: '',
                     auxClose_date: '',
