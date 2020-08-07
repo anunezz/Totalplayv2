@@ -19,7 +19,7 @@
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
-                        <el-input v-model="userForm.name" maxlength="100"></el-input>
+                        <el-input disabled v-model="userForm.name" maxlength="100"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -28,12 +28,12 @@
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
-                        <el-input v-model="userForm.firstName" maxlength="100"></el-input>
+                        <el-input disabled v-model="userForm.firstName" maxlength="100"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="Apellido Materno">
-                        <el-input v-model="userForm.secondName" maxlength="100"></el-input>
+                        <el-input disabled v-model="userForm.secondName" maxlength="100"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -46,6 +46,7 @@
                                   ]">
                         <el-select v-model="userForm.cat_profile_id"
                                    filterable placeholder="Seleccionar"
+                                   @change="changeUnit"
                                    style="width: 100%">
                             <el-option
                                 v-for="(profile , index) in profiles"
@@ -74,13 +75,35 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col v-if="userForm.cat_profile_id !== 1" :span="8">
-                    <el-form-item label="Unidad administrativa"
+                <el-col :span="8">
+                    <el-form-item v-if="userForm.cat_profile_id === 2"
+                                  label="Unidad administrativa11111111111"
+                                  prop="cat_unit_id"
+                                  :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                        <el-select v-model="userForm.cat_unit_id"
+                                   clearable
+                                   filterable placeholder="Seleccionar"
+                                   style="width: 100%">
+                            <el-option
+                                v-for="(unit , index) in units"
+                                :key="index"
+                                :label="unit.name"
+                                :value="unit.id">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col  :span="8">
+                    <el-form-item v-if="userForm.cat_profile_id === 3"
+                                  label="Unidad administrativa"
                                   prop="cat_administrative_unit_id"
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
                         <el-select v-model="userForm.cat_administrative_unit_id"
+                                   clearable
                                    filterable placeholder="Seleccionar"
                                    multiple
                                    style="width: 100%">
@@ -136,7 +159,8 @@
                 userForm: {
                     cat_profile_id: null,
                     cat_determinant_id: null,
-                    cat_administrative_unit_id: null,
+                    cat_unit_id: null,
+                    cat_administrative_unit_id: [],
                     name: '',
                     firstName: '',
                     secondName: ''
@@ -176,6 +200,29 @@
                 this.userForm.name = '';
                 this.userForm.firstName = '';
                 this.userForm.secondName = '';
+            },
+
+            changeUnit()
+            {
+                console.log('perfilll', this.userForm.cat_profile_id);
+                console.log('muchoss',  this.userForm.cat_administrative_unit_id);
+                this.userForm.cat_administrative_unit_id = [];
+                this.userForm.cat_unit_id = null;
+                // this.startLoading();
+                // axios.get('/api/users/' + this.$route.params.id + '/edit').then(response => {
+                //     this.stopLoading();
+                //     this.units = response.data.units;
+                //     this.userForm.cat_administrative_unit_id = null;
+                //     this.userForm.cat_unit_id = null;
+                //
+                // }).catch(error => {
+                //     this.stopLoading();
+                //
+                //     this.$message({
+                //         type: "warning",
+                //         message: "No fue posible completar la acción, intente nuevamente."
+                //     });
+                // })
             },
 
             getOrganisms(id) {

@@ -21,7 +21,7 @@
                             <div slot="header">
                                 <span class="title"> <i class="fas fa-user"></i> Perfil</span>
                             </div> <br>
-<!--                            <pre>{{units}}</pre>-->
+                            <pre>{{user}}</pre>
                             <el-row>
                                 <el-col :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
@@ -38,17 +38,17 @@
 <!--                                        </el-card>-->
 <!--                                    </div>-->
 <!--                                </el-col>-->
-                                <el-col v-if="user.profile_id !== 1" :span="24">
+                                <el-col v-if="user.profile_id === 3" :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-form :model="strategyForm" ref="strategyForm" label-width="120px" label-position="top">
+                                        <el-form :model="userForm" ref="userForm" label-width="120px" label-position="top">
                                             <el-card shadow="always">
                                                 <strong><b>Unidad Administrativa: </b></strong><br><p></p>
                                                 <el-form-item prop="cat_unit_id"
-                                                              :rules="[{ required: false, message: 'Este campo es requerido', trigger:['blur','change'] }]">
+                                                              :rules="[{ required: true, message: 'Este campo es requerido', trigger:['blur','change'] }]">
 <!--                                                    v-if="units.length >= 1"
                                                                 disabled-->
                                                     <el-select style="width: 100%;" size="medium"
-                                                               v-model="strategyForm.cat_unit_id"
+                                                               v-model="userForm.cat_unit_id"
                                                                placeholder="Seleccionar">
                                                         <el-option
                                                             v-for="(unit , index) in units"
@@ -67,6 +67,14 @@
                                         <el-card shadow="always">
                                             <strong><b>Unidad Administrativa: </b></strong><br><p></p>
                                             <span>Todas <br>  </span>
+                                        </el-card>
+                                    </div>
+                                </el-col>
+                                <el-col v-if="user.profile_id === 2" :span="24">
+                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
+                                        <el-card shadow="always">
+                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>
+                                            <span>{{user.admin}} <br>  </span>
                                         </el-card>
                                     </div>
                                 </el-col>
@@ -120,7 +128,7 @@
                             <br> <p></p>
                             <el-row>
                                 <div align="right">
-                                    <el-button v-if="user.profile_id !==1" type="success" size="medium" plain @click="show = false">
+                                    <el-button v-if="user.profile_id === 3" type="success" size="medium" plain @click="submitForm">
                                         Actualizar
                                     </el-button>
                                     <el-button type="danger" size="medium" plain @click="show = false">
@@ -224,6 +232,13 @@
 </template>
 
 <script>
+
+    let timer = null;
+    function auto_reload()
+    {
+        top.location.href = 'Enter your URL destination here';
+    }
+
     import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
     import HeaderSection from "../layouts/partials/HeaderSection";
 
@@ -241,7 +256,7 @@
                 user:{},
                 lResults:{},
                 units:[],
-                strategyForm:{
+                userForm:{
                     cat_unit_id: null,
                 }
             };
@@ -312,6 +327,7 @@
                 axios.get('/api/cats/getDetailsUser').then(response => {
                     if(response.data.success){
                         this.units = response.data.lResults.user.unit;
+                        this.user.id = response.data.lResults.user.id;
                         this.user.full_name = response.data.lResults.user.full_name;
                         this.user.profile = response.data.lResults.user.profile.name;
                         this.user.profile_id = response.data.lResults.user.cat_profile_id;
@@ -320,7 +336,7 @@
                         this.user.office = response.data.lResults.user.office;
                         this.user.email = response.data.lResults.user.username;
                         this.user.admin = response.data.lResults.user.admin.name;
-                        this.strategyForm.cat_unit_id = response.data.lResults.user.cat_unit_id;
+                        this.userForm.cat_unit_id = response.data.lResults.user.cat_unit_id;
 
                  //       this.units = response.data.lResults.units;
 
@@ -329,6 +345,42 @@
 
                 });
             },
+
+            submitForm() {
+                this.startLoading();
+
+                let data ={id: this.user.id, cat_unit_id: this.userForm.cat_unit_id };
+
+                this.$refs['userForm'].validate((valid) => {
+                    if (valid) {
+
+                        axios.post(`/api/users/unit`, data).then(response => {
+                            this.stopLoading();
+
+                            this.$message({
+                                type: "success",
+                                title: 'Éxito',
+                                message: "Se actualizo la información correctamente"
+                            });
+
+
+                            this.show = false;
+                            timer = setTimeout('auto_reload()',5000);
+
+                        }).catch(error => {
+                            this.stopLoading();
+
+                            this.$message({
+                                type: "warning",
+                                message: "No fue posible completar la acción, intente nuevamente."
+                            });
+                        })
+                    }
+                    else {
+                        this.stopLoading();
+                    }
+                });
+            }
         }
     }
 </script>

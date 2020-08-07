@@ -20,7 +20,6 @@
         },
 
         created() {
-            console.log("aqui... menu");
             let data = {cat_transaction_type_id : 1, action: 'Entra a inicio'};
 
             axios.post('/api/transaction', data).then(response => {
