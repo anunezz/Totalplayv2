@@ -175,6 +175,7 @@
             },
             getSubSeries(){
 
+
                 if (this.formFormalities.hash === undefined) {
                     this.formFormalities.sort_code = '';
                     this.formFormalities.primariValues = [];
@@ -184,6 +185,7 @@
                 }
                 if (this.formFormalities.serie_id){
                     this.startLoading();
+                    this.calcuVSE();
                     axios.get('/api/all/subSeries',{params}).then(response => {
                         this.subSeries = response.data.subSeries;
                         this.stopLoading();
@@ -203,7 +205,6 @@
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
 
-                console.log('imprimiedo la serie',result[0].descriptions[0].description)
                 this.formFormalities.scope_and_content = result[0].descriptions[0].description;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
@@ -260,9 +261,19 @@
                 return date < new Date(this.formFormalities.opening_date);
             },
             editRegisterTap(){
-                console.log('tap numero 2')
                 this.getSeries();
                 this.getSubSeries();
+                // let _this = this;
+                // setTimeout(function () {
+                //     _this.calcuVSE();
+                // }, 2000);
+            },
+            calcuVSE(){
+                if (this.series.length>0){
+                    const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
+                    this.formFormalities.serie = result;
+                    console.log('imprimiendddddddddddddoo',this.series)
+                }
             }
         }
     }
