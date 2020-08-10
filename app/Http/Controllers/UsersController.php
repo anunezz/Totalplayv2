@@ -54,7 +54,7 @@ class UsersController extends Controller
 
                 $user = User::find(decrypt($id));
                 $profiles = CatProfile::where('isActive', 1)->get(['id', 'name']);
-                $determinants = CatDeterminant::where('isActive', 1)->get(['id', 'name']);
+                $determinants = CatAdministrativeUnit::where('isActive', 1)->whereDeterminant(false)->get(['id', 'determinant']);
                 $units = CatAdministrativeUnit::where('isActive', 1)->get(['id', 'name']);
                 $userConsulates = DB::table('user_units')
                     ->where('user_id', $user->id)

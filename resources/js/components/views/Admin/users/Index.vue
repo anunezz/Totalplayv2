@@ -49,7 +49,7 @@
                         label="Usuario">
                     </el-table-column>
                     <el-table-column
-                        prop="determinant.name"
+                        prop="determinant.determinant"
                         label="Determiante">
                     </el-table-column>
 <!--                    <el-table-column-->

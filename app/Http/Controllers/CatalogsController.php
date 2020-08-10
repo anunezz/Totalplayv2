@@ -7,6 +7,7 @@ use App\Http\Controllers\GeneralController;
 
 use App\Http\Models\Cats\CatDescription;
 use App\Http\Models\Cats\CatSection;
+use App\Http\Models\Cats\CatSelectionTechniques;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\User;
@@ -84,11 +85,16 @@ class CatalogsController extends Controller
 
                 $sections = CatSection::where('isActive', 1)
                     ->orderBy('name')
+                    ->get(['id', 'name', 'code']);
+
+                $selections = CatSelectionTechniques::where('isActive', 1)
+                    ->orderBy('name')
                     ->get(['id', 'name']);
 
                 return response()->json([
 
                     'sections'    => $sections,
+                    'selections'  => $selections,
                     'success'     => true
                 ]);
 
@@ -400,6 +406,33 @@ class CatalogsController extends Controller
                 'message' => $e->getMessage()
             ], 400);
         }
+    }
+
+    public function allunits(Request $request)
+    {
+        try {
+            if ($request->wantsJson()) {
+                $allunits = CatAdministrativeUnit::where('isActive', 1)
+                    ->orderBy('name')
+                    ->get(['id', 'name']);
+
+                return response()->json([
+                    'allunits'    => $allunits,
+                    'success'       => true
+                ]);
+
+            } else {
+                return response()->view('errors.404', [], 404);
+            }
+
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+
     }
 
 }
