@@ -188,8 +188,8 @@
                     accountant:false,
                 }],
                 tableData2: [{
-                    AT: 3,
-                    AC: 2,
+                    AT: 0,
+                    AC: 0,
                     requestAccess: 0,
                     total: 0
                 }],
@@ -205,6 +205,8 @@
         mounted() {
             if (this.formFormalities.hash !== undefined) this.editRegisterVSE();
             else this.calcuPrimariValues();
+
+            this.calcuVigenciasDoc();
         },
         watch:{
             'formFormalities.question_one'(){
@@ -219,6 +221,9 @@
                     accountant:false,
                 }];
                 this.calcuPrimariValues();
+            },
+            'formFormalities.serie'(){
+                this.calcuVigenciasDoc();
             }
         },
         methods:{
@@ -237,6 +242,10 @@
                     if(value.id === 3 ) this.tableData[0].fiscal = true;
                     if(value.id === 4 ) this.tableData[0].accountant = true;
                 }, this);
+            },
+            calcuVigenciasDoc(){
+                let aux = this.formFormalities.serie[0] !== undefined ? this.formFormalities.serie[0] : this.formFormalities.serie;
+                console.log('calculando valores',aux)
             }
         }
     }

@@ -66,28 +66,7 @@
                         Siguiente
                         <i class="fas fa-arrow-right"></i>
                     </el-button>
-
                 </el-row>
-                <!--<el-row type="flex" class="row-bg" justify="end" :gutter="20">
-                    <el-col :span="3">
-                        <el-button
-                            size="small"
-                            type="danger"
-                            style="width: 100%"
-                            @click="$router.push({name: 'ListFormalities' })">
-                            Cancelar
-                        </el-button>
-                    </el-col>
-                    <el-col :span="3">
-                        <el-button
-                            size="small"
-                            type="success"
-                            style="width: 100%"
-                            @click="submitForm()">
-                            Guardar
-                        </el-button>
-                    </el-col>
-                </el-row>-->
             </el-col>
             </el-form>
         </el-row>
@@ -130,6 +109,7 @@
                     sort_code: '',
                     title: '',
                     scope_and_content: '',
+                    additional_information: '',
                     format_id: null,
                     documentary_tradition_id: null,
                     legajos: 0,
@@ -150,12 +130,14 @@
                     deadline_extension: 0,
                     Record_official_number: '',
                     declassification_date: null,
-                    public_server: '',
+                    name_public_server: '',
+                    position_public_server: '',
 
                     auxOpening_date: '',
                     auxClose_date: '',
                     auxSort_code: '',
-                    primariValues:[]
+                    primariValues:[],
+                    serie:[]
                 },
             }
         },
@@ -250,7 +232,8 @@
                     this.formFormalities.deadline_extension = 0;
                     this.formFormalities.Record_official_number = '';
                     this.formFormalities.declassification_date = null;
-                    this.formFormalities.public_server = '';
+                    this.formFormalities.name_public_server = '';
+                    this.formFormalities.position_public_server = '';
                 }
 
             },
@@ -275,7 +258,6 @@
             },
             positionTap(tap){
                 let aux;
-                console.log('hola cambio',this.currentTap,tap)
                 this.currentTap += tap;
                 aux = this.currentTap.toString();
 

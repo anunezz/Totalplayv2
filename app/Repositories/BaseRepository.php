@@ -14,6 +14,23 @@ abstract class BaseRepository
 
     public function find($id)
     {
-        return $this->model->find($id);
+        return $this->model->find(decrypt($id));
+    }
+
+    public function create($data)
+    {
+        return $this->model->create($data);
+    }
+
+    public function update($id, $data)
+    {
+        $register = $this->model->find(decrypt($id));
+        $register->update($data);
+        return $register;
+    }
+
+    public function delete($id)
+    {
+        $this->model->destroy(decrypt($id));
     }
 }

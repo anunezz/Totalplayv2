@@ -60,9 +60,7 @@ class FormalitiesController extends Controller
             $data = $request->all();
             $data['user_id'] = auth()->user()->id;
 
-            $formality = new Formalities();
-            $formality->fill($data);
-            $formality->save();
+            $formality = $this->formalityRepo->create($data);
 
             GeneralController::saveTransactionLog(2,
                 'El usuario con id: '.auth()->user()->id.' Crea un nuevo trámite con id: '. $formality->id);
@@ -86,11 +84,22 @@ class FormalitiesController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        $formality = $this->formalityRepo->find($id);
+        try {
+            return response()->json([
+                'success' => true,
+                'formality' => $this->formalityRepo->find($id)
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -102,7 +111,8 @@ class FormalitiesController extends Controller
     public function edit($id)
     {
         try {
-            $formality = Formalities::find(decrypt($id));
+
+            $formality = $this->formalityRepo->find($id);
             $formality->primariValues = $formality->serie->primarivalues;
             return response()->json([
                 'success' => true,
@@ -130,10 +140,7 @@ class FormalitiesController extends Controller
         try {
             DB::beginTransaction();
 
-            $data = $request->all();
-            $formality = Formalities::find(decrypt($id));
-            $formality->fill($data);
-            $formality->save();
+            $formality = $this->formalityRepo->update($id,$request->all());
 
             GeneralController::saveTransactionLog(2,
                 'Edita un trámite con id: ' . $formality->id);
@@ -158,11 +165,28 @@ class FormalitiesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
+
+        try {
+            DB::beginTransaction();
+
+            $this->formalityRepo->delete($id);
+
+            DB::commit();
+            return response()->json([
+                'success' => true,
+            ]);
+        }
+        catch ( \Exception $e ) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     public function allSection()
