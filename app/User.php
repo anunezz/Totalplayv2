@@ -87,8 +87,8 @@ class User extends Authenticatable
     public function determinant()
     {
         return $this->belongsTo(
-            CatDeterminant::class,
-            'cat_determinant_id'
+            CatAdministrativeUnit::class,
+            'cat_unit_id'
         )->where( 'isActive', 1 );
     }
 

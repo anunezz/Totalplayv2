@@ -16,6 +16,7 @@ class CreateCatAdministrativeUnitsTable extends Migration
         Schema::create('cat_administrative_units', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->string('determinant')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
         });
