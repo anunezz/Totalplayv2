@@ -198,7 +198,6 @@
                     conservation: false,
                     sampling: false,
                     quality: false,
-
                 }]
             }
         },
@@ -244,8 +243,20 @@
                 }, this);
             },
             calcuVigenciasDoc(){
+                this.tableData3[0].elimination = false;
+                this.tableData3[0].conservation = false;
+                this.tableData3[0].sampling = false;
+                this.tableData3[0].quality =false;
+
                 let aux = this.formFormalities.serie[0] !== undefined ? this.formFormalities.serie[0] : this.formFormalities.serie;
                 console.log('calculando valores',aux)
+                this.tableData2[0].AT = parseInt(aux.AT);
+                this.tableData2[0].AC = parseInt(aux.AC);
+
+                if (aux.cat_selection_id === 1) this.tableData3[0].elimination = true;
+                if (aux.cat_selection_id === 2) this.tableData3[0].conservation = true;
+                if (aux.cat_selection_id === 3) this.tableData3[0].sampling = true;
+                if (aux.cat_selection_id === 4) this.tableData3[0].quality =true;
             }
         }
     }

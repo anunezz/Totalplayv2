@@ -37,7 +37,7 @@
     export default {
         data() {
             return {
-                registers: 6
+                registers: 0
             };
         },
 
