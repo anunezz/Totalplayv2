@@ -16,6 +16,7 @@ class CreateFormalitiesTable extends Migration
         Schema::create('formalities', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('serie_id');
             $table->unsignedBigInteger('subserie_id')->nullable();

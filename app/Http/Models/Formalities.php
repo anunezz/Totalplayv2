@@ -2,6 +2,7 @@
 
 namespace App\Http\Models;
 
+use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSeries;
 use App\User;
 use Carbon\Carbon;
@@ -17,8 +18,10 @@ class Formalities extends Model
         'legajos', 'initial_folio', 'end_folio', 'total_fojas', 'question_one', 'question_two', 'transparency_resolution_id',
         'nature_information_id', 'classification_reason_id', 'classification_date', 'name_titular', 'transparency_proceedings',
         'restricted_parts', 'legal_basis', 'reservation_period', 'deadline_extension', 'Record_official_number',
-        'declassification_date', 'name_public_server', 'position_public_server',
+        'declassification_date', 'name_public_server', 'position_public_server','unit_id'
     ];
+
+    protected $with = ['unit'];
 
     protected $appends = ['hash'];
 
@@ -45,6 +48,11 @@ class Formalities extends Model
             User::class,
             'user_id'
         );
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(CatAdministrativeUnit::class);
     }
 
     public function serie()

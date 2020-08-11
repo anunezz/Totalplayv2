@@ -54,7 +54,7 @@
                     <el-table-column
                         label="Determinante">
                         <template slot-scope="scope">
-                            {{scope.row.user.determinant.name}}
+                            {{scope.row.unit.determinant}}
                         </template>
                     </el-table-column>
                     <el-table-column
