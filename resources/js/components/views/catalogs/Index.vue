@@ -63,7 +63,7 @@
                     {id:2,  name: 'Secciones'},
                     {id:3,  name: 'Series'},
                     {id:4,  name: 'Subseries'},
-                    {id:5,  name: 'Descripciones'}
+                    {id:5,  name: 'CGCA'}
                 ],
             }
         },

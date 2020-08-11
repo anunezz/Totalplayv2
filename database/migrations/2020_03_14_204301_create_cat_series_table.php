@@ -18,6 +18,7 @@ class CreateCatSeriesTable extends Migration
             $table->unsignedBigInteger('cat_section_id');
             $table->string('name');
             $table->string('code');
+            $table->string('codeSeries');
             $table->string('AT');
             $table->string('AC');
             $table->string('total');

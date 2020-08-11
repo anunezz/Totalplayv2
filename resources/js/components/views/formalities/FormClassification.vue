@@ -135,7 +135,7 @@
             getSections(){
                 this.startLoading();
                 let params = {
-                    unit_id : this.$store.state.user.cat_unit_id
+                    unit_id : this.formFormalities.hash !== undefined ? this.formFormalities.unit.id : this.$store.state.user.cat_unit_id
                 };
                 console.log(params)
                 axios.get('/api/all/section',{params}).then(response => {

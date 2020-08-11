@@ -124,8 +124,8 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
-            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
+            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
 
 
 

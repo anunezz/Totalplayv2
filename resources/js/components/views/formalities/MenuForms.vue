@@ -15,7 +15,10 @@
             <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
                 <h3 class="form-title">SECRETARÍA DE RELACIONES EXTERIORES</h3>
-                <el-row style="margin-bottom: 15px">
+                <el-row style="margin-bottom: 15px" v-if="$route.params.id !== undefined">
+                    <span style="font-weight: bold;">Unidad:&nbsp;</span> {{formFormalities.unit.name}}
+                </el-row>
+                <el-row style="margin-bottom: 15px" v-else>
                     <span style="font-weight: bold;">Unidad:&nbsp;</span> {{$store.state.user.name_unit}}
                 </el-row>
                 <el-tabs type="card" ref="menuTaps" @tab-click="chageTapClick">
@@ -102,6 +105,7 @@
                 tapThree: true,
                 tapFour: true,
                 formFormalities: {
+                    unit_id: null,
                     section_id: null,
                     serie_id: null,
                     subserie_id: null,
@@ -175,6 +179,7 @@
                     let data = Object.assign({}, _this.formFormalities);
                     data.question_one = this.formFormalities.question_one === 'Sí' ? true : this.formFormalities.question_one === 'No' ? false : null;
                     data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
+                    data.unit_id = this.$store.state.user.cat_unit_id;
 
                     axios.post('/api/formalities', data).then(response => {
                         console.log('enviando datos')
