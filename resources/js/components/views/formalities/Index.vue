@@ -83,7 +83,7 @@
                         label="Acciones" header-align="left" align="center">
                         <template slot-scope="scope">
                             <el-button-group>
-                                <el-tooltip
+                                <!--<el-tooltip
                                     class="item"
                                     effect="dark"
                                     content="Consultar"
@@ -94,7 +94,7 @@
                                         icon="fas fa-eye"
                                         @click="showRegister(scope.row.hash)">
                                     </el-button>
-                                </el-tooltip>
+                                </el-tooltip>-->
                                 <el-tooltip
                                     class="item"
                                     effect="dark"
@@ -117,6 +117,42 @@
                                         size="mini"
                                         icon="el-icon-delete"
                                         @click="deleteRegister(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Carátula"
+                                    placement="top-start">
+                                    <el-button
+                                        type="info"
+                                        size="mini"
+                                        icon="fas fa-book"
+                                        @click="cover(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Ceja"
+                                    placement="top-start">
+                                    <el-button
+                                        type="warning"
+                                        size="mini"
+                                        icon="far fa-bookmark"
+                                        @click="eyebrow(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Caja"
+                                    placement="top-start">
+                                    <el-button
+                                        type="success"
+                                        size="mini"
+                                        icon="fas fa-box-open"
+                                        @click="box(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
                             </el-button-group>
@@ -249,7 +285,16 @@
             },
             formatDate(date){
                  return new Date(date)
-            }
+            },
+            cover(id){
+                console.log('carátula',id)
+            },
+            eyebrow(id){
+                console.log('ceja',id)
+            },
+            box(id){
+                console.log('caja',id)
+            },
         }
 
     }
