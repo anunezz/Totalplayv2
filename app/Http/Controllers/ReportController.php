@@ -22,9 +22,7 @@ class ReportController extends Controller
 
             $data = $request->all();
 
-            $data = array_keys($data);
-
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
 
             //dd($Formalities);
 
@@ -90,7 +88,7 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
             //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
 
             $cels = preg_split("/[-]/", $Formalities->sort_code);
@@ -124,8 +122,8 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
 
 
 
