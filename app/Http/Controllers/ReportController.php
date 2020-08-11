@@ -19,7 +19,6 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $data = array_keys($data);
 
             return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
 
