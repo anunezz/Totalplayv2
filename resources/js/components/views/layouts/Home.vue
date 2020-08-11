@@ -385,20 +385,21 @@
                     if (valid) {
 
                         axios.post(`/api/users/unit`, data).then(response => {
-                            this.stopLoading();
 
+                            this.$store.commit('setUser', response.data.user);
+                            location.reload();
+                            this.stopLoading();
                             this.$message({
                                 type: "success",
                                 title: 'Éxito',
                                 message: "Se actualizo la información correctamente"
                             });
 
-
                             this.show = false;
 
                         }).catch(error => {
                             this.stopLoading();
-
+                            location.reload();
                             this.$message({
                                 type: "warning",
                                 message: "No fue posible completar la acción, intente nuevamente."
@@ -407,6 +408,7 @@
                     }
                     else {
                         this.stopLoading();
+                        location.reload();
                     }
                 });
             }

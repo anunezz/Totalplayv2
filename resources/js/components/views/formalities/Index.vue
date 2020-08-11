@@ -54,7 +54,7 @@
                     <el-table-column
                         label="Determinante">
                         <template slot-scope="scope">
-                            {{scope.row.user.determinant.name}}
+                            {{scope.row.unit.determinant}}
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -83,7 +83,7 @@
                         label="Acciones" header-align="left" align="center">
                         <template slot-scope="scope">
                             <el-button-group>
-                                <el-tooltip
+                                <!--<el-tooltip
                                     class="item"
                                     effect="dark"
                                     content="Consultar"
@@ -94,7 +94,7 @@
                                         icon="fas fa-eye"
                                         @click="showRegister(scope.row.hash)">
                                     </el-button>
-                                </el-tooltip>
+                                </el-tooltip>-->
                                 <el-tooltip
                                     class="item"
                                     effect="dark"
@@ -117,6 +117,42 @@
                                         size="mini"
                                         icon="el-icon-delete"
                                         @click="deleteRegister(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Carátula"
+                                    placement="top-start">
+                                    <el-button
+                                        type="info"
+                                        size="mini"
+                                        icon="fas fa-book"
+                                        @click="cover(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Ceja"
+                                    placement="top-start">
+                                    <el-button
+                                        type="warning"
+                                        size="mini"
+                                        icon="far fa-bookmark"
+                                        @click="eyebrow(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Caja"
+                                    placement="top-start">
+                                    <el-button
+                                        type="success"
+                                        size="mini"
+                                        icon="fas fa-box-open"
+                                        @click="box(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
                             </el-button-group>
@@ -249,7 +285,43 @@
             },
             formatDate(date){
                  return new Date(date)
-            }
+            },
+            cover(id){
+                console.log('carátula',id)
+                this.startLoading();
+                axios({
+                    responseType: 'blob',
+                    method: 'POST',
+                    url: '/api/report/proceedings',
+                    data: id
+                }).then(response => {
+                    this.loading = true;
+                    setTimeout(() => {
+                        const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = linkUrl;
+                        link.setAttribute('download', 'Expediente.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+                        this.loading = false;
+                        this.stopLoading();
+                    }, 500)
+
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$notify({
+                        title: 'Mensaje',
+                        text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                        type: 'warning'
+                    });
+                });
+            },
+            eyebrow(id){
+                console.log('ceja',id)
+            },
+            box(id){
+                console.log('caja',id)
+            },
         }
 
     }
