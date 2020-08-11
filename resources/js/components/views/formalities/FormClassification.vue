@@ -134,7 +134,11 @@
         methods:{
             getSections(){
                 this.startLoading();
-                axios.get('/api/all/section').then(response => {
+                let params = {
+                    unit_id : this.$store.state.user.cat_unit_id
+                };
+                console.log(params)
+                axios.get('/api/all/section',{params}).then(response => {
                     this.sections = response.data.sections;
                     this.stopLoading();
                 }).catch(error => {

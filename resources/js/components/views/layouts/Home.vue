@@ -386,7 +386,7 @@
 
                         axios.post(`/api/users/unit`, data).then(response => {
                             this.stopLoading();
-
+                            this.$store.commit('setUser', response.data.user);
                             this.$message({
                                 type: "success",
                                 title: 'Éxito',

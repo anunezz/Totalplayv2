@@ -392,10 +392,17 @@ class CatalogsController extends Controller
            // return $reports;
             $reports->update($data);
 
+            $nameUnit = null;
+            if (!is_null($reports->admin)) {
+                $nameUnit = $reports->admin->name;
+            }
+            $reports->name_unit = $nameUnit;
+
             DB::commit();
 
             return response()->json([
-                'success' => true
+                'success' => true,
+                'user' => $reports
             ], 200);
 
         } catch (Exception $e) {

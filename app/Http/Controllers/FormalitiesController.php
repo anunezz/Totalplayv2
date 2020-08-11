@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
@@ -189,13 +190,19 @@ class FormalitiesController extends Controller
         }
     }
 
-    public function allSection()
+    public function allSection(Request $request)
     {
+        $data = $request->all();
+        $id = isset($data['unit_id']) ? (int)$data['unit_id'] : null;
+
         try {
-            return response()->json([
-                'success' => true,
-                'sections' =>CatSection::orderBy('name')->get()
-            ]);
+            $sections = CatAdministrativeUnit::find($id);
+            if (!is_null($sections->sectionAll)) {
+                return response()->json([
+                    'success' => true,
+                    'sections' =>$sections->sectionAll
+                ]);
+            }
         }
         catch ( \Exception $e ) {
             return response()->json([

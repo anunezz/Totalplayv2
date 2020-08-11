@@ -15,6 +15,9 @@
             <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
                 <h3 class="form-title">SECRETARÍA DE RELACIONES EXTERIORES</h3>
+                <el-row style="margin-bottom: 15px">
+                    <span style="font-weight: bold;">Unidad:&nbsp;</span> {{$store.state.user.name_unit}}
+                </el-row>
                 <el-tabs type="card" ref="menuTaps" @tab-click="chageTapClick">
                     <el-tab-pane label="Clasificación" style="padding: 10px">
                         <form-classification :formFormalities="formFormalities" v-if="tapOne"></form-classification>
@@ -150,6 +153,7 @@
             setTimeout(function(){
                 _this.auxEdit = true;
                 }, 2000);
+            console.log('cambiando de unidad',_this.$store.state.user.cat_unit_id)
 
         },
         watch:{
