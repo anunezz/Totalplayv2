@@ -86,6 +86,10 @@ class ReportController extends Controller
 
             $data = $request->all();
 
+            $data = $request->all();
+
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find($data->id)->first();
+
             return Excel::download(new Labels([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
 
 

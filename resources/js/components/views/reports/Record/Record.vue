@@ -185,7 +185,7 @@
             axios({ responseType: 'blob',
                 method: 'POST',
                 url: '/api/report/proceedings',
-                data: 'hola' }).then(response => {
+                data: {id: 1} }).then(response => {
                     this.loading = true;
                 setTimeout(()=>{
                     const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
