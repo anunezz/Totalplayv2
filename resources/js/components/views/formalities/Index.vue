@@ -183,6 +183,8 @@
                 };
                 axios.get('/api/formalities',data).then(response => {
                     this.formalitiesTable = response.data.formalities.data;
+                    console.log("this.formalitiesTable", this.formalitiesTable)
+
                     this.pagination.total = response.data.formalities.total;
                     this.stopLoading();
                 }).catch(error => {

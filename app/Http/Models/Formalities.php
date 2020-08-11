@@ -3,6 +3,8 @@
 namespace App\Http\Models;
 
 use App\Http\Models\Cats\CatSeries;
+use App\Http\Models\Cats\CatSubseries;
+use App\Http\Models\Cats\CatSection;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -44,8 +46,19 @@ class Formalities extends Model
         );
     }
 
+    public function section()
+    {
+        return $this->belongsTo(CatSection::class);
+    }
+
     public function serie()
     {
         return $this->belongsTo(CatSeries::class);
     }
+
+    public function SubSerie()
+    {
+        return $this->belongsTo(CatSubseries::class);
+    }
+
 }
