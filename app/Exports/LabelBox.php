@@ -71,6 +71,8 @@ class LabelBox implements
                 $event->sheet->getColumnDimension('F')->setWidth(15.00);
                 $event->sheet->getColumnDimension('G')->setWidth(2.00);
 
+                $event->sheet->rowHeight('6', 60);
+
                 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
                 $drawing->setName('Logo');
                 $drawing->setDescription('Logo');

@@ -22,7 +22,9 @@ class ReportController extends Controller
 
             $data = $request->all();
 
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find($data->id)->first();
+            $data = array_keys($data);
+
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
 
             //dd($Formalities);
 
@@ -73,6 +75,9 @@ class ReportController extends Controller
             return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
 
 
+            //return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
+
+
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -85,12 +90,26 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
+            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
 
-            $data = $request->all();
+            $cels = preg_split("/[-]/", $Formalities->sort_code);
+            $code = str_replace('SRE.',"", $cels[0]);
+            $cels[1] = $cels[1].'-';
 
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find($data->id)->first();
+            $legajo = "1/".$Formalities->legajo;
+            $data = collect([
+                [$code,$cels[1],$cels[2],'/DAN','/ET001-01',$legajo, $Formalities->title],
+            ])->chunk(2);
 
-            return Excel::download(new Labels([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
+           //dd($data);
+
+            // $data = collect([
+            //     ['08C.16.01','20166-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+            //     ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+            // ])->chunk(2);
+
+            return Excel::download(new Labels([],$data), 'Etiqueta.xlsx');
 
 
         } catch (Exception $e) {

@@ -115,10 +115,13 @@ class Labels implements
                 $event->sheet->getColumnDimension('X')->setWidth(4.00);
                 $event->sheet->getColumnDimension('Y')->setWidth(2.00);
 
-                $data = collect([
-                    ['08C.16.01','20166-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
-                    ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
-                ])->chunk(2);
+
+                $data = $this->fields;
+
+                // $data = collect([
+                //     ['08C.16.01','20166-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                //     ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+                // ])->chunk(2);
 
                 //dd($data);
 
