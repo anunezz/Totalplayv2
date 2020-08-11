@@ -124,6 +124,10 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data[0]) )->first();
+            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
+
+
 
             return Excel::download(new LabelBox([],['holasdjdjdjsdjdsjdsj']), 'etiqueta_de_caja.xlsx');
 
