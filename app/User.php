@@ -11,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
+use phpDocumentor\Reflection\Types\Static_;
 
 /**
  * App\User
@@ -18,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $username
  * @property int $cat_profile_id
+ * @property int $cat_unit_id
  * @property string $name
  * @property string $firstName
  * @property string|null $secondName
@@ -36,6 +38,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCatProfileId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCatUnitId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereFirstName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereId($value)
@@ -47,7 +50,7 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
 
 
-
+ * @property-read \App\Http\Models\Cats\CatAdministrativeUnit $admin
  * @property-read \App\Http\Models\Cats\CatProfile $profile
  * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
 
@@ -59,8 +62,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    protected $fillable = ['username','cat_profile_id', 'cat_determinant_id', 'name', 'firstName', 'secondName'];
+    protected $fillable = ['username','cat_profile_id', 'cat_determinant_id', 'cat_unit_id', 'name', 'firstName', 'secondName'];
     protected $appends = ['full_name', 'hash'];
+
 
     public function getFullNameAttribute()
     {
@@ -83,8 +87,8 @@ class User extends Authenticatable
     public function determinant()
     {
         return $this->belongsTo(
-            CatDeterminant::class,
-            'cat_determinant_id'
+            CatAdministrativeUnit::class,
+            'cat_unit_id'
         )->where( 'isActive', 1 );
     }
 

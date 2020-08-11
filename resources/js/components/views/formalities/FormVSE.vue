@@ -188,8 +188,8 @@
                     accountant:false,
                 }],
                 tableData2: [{
-                    AT: 3,
-                    AC: 2,
+                    AT: 0,
+                    AC: 0,
                     requestAccess: 0,
                     total: 0
                 }],
@@ -198,13 +198,14 @@
                     conservation: false,
                     sampling: false,
                     quality: false,
-
                 }]
             }
         },
         mounted() {
             if (this.formFormalities.hash !== undefined) this.editRegisterVSE();
             else this.calcuPrimariValues();
+
+            this.calcuVigenciasDoc();
         },
         watch:{
             'formFormalities.question_one'(){
@@ -219,6 +220,9 @@
                     accountant:false,
                 }];
                 this.calcuPrimariValues();
+            },
+            'formFormalities.serie'(){
+                this.calcuVigenciasDoc();
             }
         },
         methods:{
@@ -237,6 +241,22 @@
                     if(value.id === 3 ) this.tableData[0].fiscal = true;
                     if(value.id === 4 ) this.tableData[0].accountant = true;
                 }, this);
+            },
+            calcuVigenciasDoc(){
+                this.tableData3[0].elimination = false;
+                this.tableData3[0].conservation = false;
+                this.tableData3[0].sampling = false;
+                this.tableData3[0].quality =false;
+
+                let aux = this.formFormalities.serie[0] !== undefined ? this.formFormalities.serie[0] : this.formFormalities.serie;
+                console.log('calculando valores',aux)
+                this.tableData2[0].AT = parseInt(aux.AT);
+                this.tableData2[0].AC = parseInt(aux.AC);
+
+                if (aux.cat_selection_id === 1) this.tableData3[0].elimination = true;
+                if (aux.cat_selection_id === 2) this.tableData3[0].conservation = true;
+                if (aux.cat_selection_id === 3) this.tableData3[0].sampling = true;
+                if (aux.cat_selection_id === 4) this.tableData3[0].quality =true;
             }
         }
     }

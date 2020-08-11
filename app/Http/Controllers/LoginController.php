@@ -145,7 +145,10 @@ class LoginController extends Controller
     public static function getSessionInfo($id)
     {
         $user = User::find( $id );
-
+        $nameUnit = null;
+        if (!is_null($user->admin)) {
+            $nameUnit = $user->admin->name;
+        }
         return (object)[
             'hash_id'    => $user->hash,
             'fullname'   => $user->full_name,
@@ -153,6 +156,8 @@ class LoginController extends Controller
             'firstName'  => $user->firstName,
             'secondName' => $user->secondName,
             'profile'    => $user->cat_profile_id,
+            'cat_unit_id' => $user->cat_unit_id,
+            'name_unit' => $nameUnit
         ];
     }
 }

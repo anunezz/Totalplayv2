@@ -8,15 +8,18 @@ use App\Http\Models\Cats\CatSection;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Formalities extends Model
 {
+    use SoftDeletes;
+
     protected $fillable = ['user_id','section_id', 'serie_id', 'subserie_id', 'opening_date', 'close_date', 'consecutive',
-        'legajo', 'sort_code', 'title', 'scope_and_content', 'format_id', 'documentary_tradition_id', 'legajos',
-        'initial_folio', 'end_folio', 'total_fojas', 'question_one', 'question_two', 'transparency_resolution_id',
+        'legajo', 'sort_code', 'title', 'scope_and_content','additional_information', 'format_id', 'documentary_tradition_id',
+        'legajos', 'initial_folio', 'end_folio', 'total_fojas', 'question_one', 'question_two', 'transparency_resolution_id',
         'nature_information_id', 'classification_reason_id', 'classification_date', 'name_titular', 'transparency_proceedings',
         'restricted_parts', 'legal_basis', 'reservation_period', 'deadline_extension', 'Record_official_number',
-        'declassification_date', 'public_server',
+        'declassification_date', 'name_public_server', 'position_public_server',
     ];
 
     protected $appends = ['hash'];

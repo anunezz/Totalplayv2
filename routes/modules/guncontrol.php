@@ -11,4 +11,5 @@ use Maatwebsite\Excel\Concerns\FromView;
  //   Route::get('cats/get-cat', 'CatalogsController@getCatalogByType');
     Route::get('cats/getDetailsUser', 'CatalogsController@getDetailsUser');
 
+
  });

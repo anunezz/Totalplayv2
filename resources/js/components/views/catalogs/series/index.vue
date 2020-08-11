@@ -128,12 +128,17 @@
             </el-col>
         </el-row>
 
-        <el-dialog title="Nuevo Registro"
-                   :visible.sync="newRegisterDialog"
+        <el-dialog :visible.sync="newRegisterDialog"
                    :before-close="handleClose"
                    @close="resetForm"
                    width="50%">
-            <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Nuevo registro</span>
+                    </div>
+<!--            <pre>{{catalogForm.newCode}}</pre>-->
+            <el-form  ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
                         <el-form-item label="Nombre"
@@ -151,14 +156,113 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Sección"
+                                      prop="cat_section_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select @change="determinante(catalogForm.cat_section_id)"
+                                       style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogForm.cat_section_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(section , index) in sections"
+                                    :key="index"
+                                    :label="section.name"
+                                    :value="section.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Codigo"
+                                      prop="newCode"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9.\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="newRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="newCode"
+                                maxlength="3"
+                                show-word-limit
+                                clearable>
+                                <template slot="prepend">{{codeSection}}</template>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Archivo de trámite"
+                                      prop="AT"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'number', required: false, pattern: /^[0-9.\s]+$/, message: 'El campo no puede llevar letras ni caracteres especiales', trigger: 'change'}
+                                    ]">
+                            <el-input-number
+                                v-model="catalogForm.AT"
+                                style="width: 100%"
+                                controls-position="right"
+                                @change="handleChange"
+                                :min="1"
+                                :max="10">
+                            </el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Archivo de concentración"
+                                      prop="AC"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'number', required: false, pattern: /^[0-9.\s]+$/, message: 'El campo no puede llevar letras ni caracteres especiales', trigger: 'change'}
+                                    ]">
+                            <el-input-number
+                                v-model="catalogForm.AC"
+                                style="width: 100%"
+                                controls-position="right"
+                                @change="handleChange"
+                                :min="1"
+                                :max="10">
+                            </el-input-number>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Sección"
+                                      prop="cat_selection_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogForm.cat_selection_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(selection , index) in selections"
+                                    :key="index"
+                                    :label="selection.name"
+                                    :value="selection.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="resetForm">Cancelar</el-button>
-            <el-button v-if="newRegisterDialog"
-                       type="primary"
-                       @click="newRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="resetForm">Cancelar</el-button>
+                            <el-button
+                                v-if="newRegisterDialog"
+                                type="primary"
+                                @click="newRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog title="Editar Registro"
@@ -219,7 +323,10 @@
 
         data() {
             return {
-
+                newCode: '',
+                codeSection: '',
+                sections: [],
+                selections: [],
                 elements: [],
 
                 search: '',
@@ -232,6 +339,11 @@
 
                 catalogForm: {
                     newRegisterName: '',
+                    cat_section_id: [],
+                    newCode: '',
+                    AT: '',
+                    AC: '',
+                    cat_selection_id: []
                 },
                 catalogEditForm:{
                     name: ''
@@ -254,6 +366,11 @@
 
         created() {
             this.getTitles();
+            axios.get('/api/cats/create').then(response => {
+                this.sections = response.data.sections;
+                this.selections = response.data.selections;
+                this.stopLoading();
+            })
         },
 
         watch:{
@@ -264,6 +381,28 @@
 
 
         methods: {
+
+            handleChange(value) {
+
+            },
+
+            // codes(data){
+            //     console.log('data', data);
+            //     this.catalogForm.newCode = this.codeSection + data;
+            //     console.log('resultadooooooooooo', this.catalogForm.newCode);
+            // },
+
+            determinante(data){
+
+                console.log('wwwwwwwwww', data);
+                let sections = [];
+                console.log('secciones', this.sections);
+                this.catalogForm.newCode = '';
+                const result = this.sections.filter(section => section.id === data);
+                console.log('result', result);
+                this.codeSection = result[0].code + '.';
+
+            },
 
             Search(search){
                 let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,.%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
@@ -315,6 +454,9 @@
 
             newRegister() {
                 this.startLoading();
+
+                this.catalogForm.newCode = this.codeSection + this.newCode;
+                console.log('resultadooooooooooo', this.catalogForm.newCode);
 
                 let data = {cat: 4, name: this.catalogForm.newRegisterName};
 

@@ -95,7 +95,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Legajo:" prop="legajo">
-                            <el-input-number v-model="formFormalities.legajo" controls-position="right"
+                            <el-input-number v-model="formFormalities.legajo" controls-position="right" :min="0" :max="100"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
@@ -134,7 +134,11 @@
         methods:{
             getSections(){
                 this.startLoading();
-                axios.get('/api/all/section').then(response => {
+                let params = {
+                    unit_id : this.$store.state.user.cat_unit_id
+                };
+                console.log(params)
+                axios.get('/api/all/section',{params}).then(response => {
                     this.sections = response.data.sections;
                     this.stopLoading();
                 }).catch(error => {
@@ -175,6 +179,7 @@
             },
             getSubSeries(){
 
+
                 if (this.formFormalities.hash === undefined) {
                     this.formFormalities.sort_code = '';
                     this.formFormalities.primariValues = [];
@@ -184,6 +189,7 @@
                 }
                 if (this.formFormalities.serie_id){
                     this.startLoading();
+                    this.calcuVSE();
                     axios.get('/api/all/subSeries',{params}).then(response => {
                         this.subSeries = response.data.subSeries;
                         this.stopLoading();
@@ -203,7 +209,6 @@
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
 
-                console.log('imprimiedo la serie',result[0].descriptions[0].description)
                 this.formFormalities.scope_and_content = result[0].descriptions[0].description;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
@@ -260,9 +265,19 @@
                 return date < new Date(this.formFormalities.opening_date);
             },
             editRegisterTap(){
-                console.log('tap numero 2')
                 this.getSeries();
                 this.getSubSeries();
+                // let _this = this;
+                // setTimeout(function () {
+                //     _this.calcuVSE();
+                // }, 2000);
+            },
+            calcuVSE(){
+                if (this.series.length>0){
+                    const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
+                    this.formFormalities.serie = result;
+                    console.log('imprimiendddddddddddddoo',this.series)
+                }
             }
         }
     }

@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
+use App\Repositories\Formality\FormalityRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class FormalitiesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    protected $formalityRepo;
+
+    public function __construct(FormalityRepository $formalityRepository)
+    {
+        $this->formalityRepo = $formalityRepository;
+    }
+
     public function index(Request $request)
     {
         if ($request->wantsJson()){
@@ -57,9 +61,7 @@ class FormalitiesController extends Controller
             $data = $request->all();
             $data['user_id'] = auth()->user()->id;
 
-            $formality = new Formalities();
-            $formality->fill($data);
-            $formality->save();
+            $formality = $this->formalityRepo->create($data);
 
             GeneralController::saveTransactionLog(2,
                 'El usuario con id: '.auth()->user()->id.' Crea un nuevo trámite con id: '. $formality->id);
@@ -83,11 +85,22 @@ class FormalitiesController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'formality' => $this->formalityRepo->find($id)
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -99,7 +112,8 @@ class FormalitiesController extends Controller
     public function edit($id)
     {
         try {
-            $formality = Formalities::find(decrypt($id));
+
+            $formality = $this->formalityRepo->find($id);
             $formality->primariValues = $formality->serie->primarivalues;
             return response()->json([
                 'success' => true,
@@ -127,10 +141,7 @@ class FormalitiesController extends Controller
         try {
             DB::beginTransaction();
 
-            $data = $request->all();
-            $formality = Formalities::find(decrypt($id));
-            $formality->fill($data);
-            $formality->save();
+            $formality = $this->formalityRepo->update($id,$request->all());
 
             GeneralController::saveTransactionLog(2,
                 'Edita un trámite con id: ' . $formality->id);
@@ -155,20 +166,43 @@ class FormalitiesController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy($id)
     {
-        //
-    }
 
-    public function allSection()
-    {
         try {
+            DB::beginTransaction();
+
+            $this->formalityRepo->delete($id);
+
+            DB::commit();
             return response()->json([
                 'success' => true,
-                'sections' =>CatSection::orderBy('name')->get()
             ]);
+        }
+        catch ( \Exception $e ) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function allSection(Request $request)
+    {
+        $data = $request->all();
+        $id = isset($data['unit_id']) ? (int)$data['unit_id'] : null;
+
+        try {
+            $sections = CatAdministrativeUnit::find($id);
+            if (!is_null($sections->sectionAll)) {
+                return response()->json([
+                    'success' => true,
+                    'sections' =>$sections->sectionAll
+                ]);
+            }
         }
         catch ( \Exception $e ) {
             return response()->json([
