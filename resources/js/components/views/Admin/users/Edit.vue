@@ -79,7 +79,7 @@
                 </el-col>
                 <el-col  :span="8">
                     <el-form-item v-if="userForm.cat_profile_id === 3"
-                                  label="Unidad administrativa"
+                                  label="Adscripción"
                                   prop="cat_administrative_unit_id"
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},

@@ -48,6 +48,10 @@
                         label="Nombre">
                     </el-table-column>
                     <el-table-column
+                        prop="determinant"
+                        label="Determinante">
+                    </el-table-column>
+                    <el-table-column
                         prop="type"
                         label="Secciones"
                         width="600">
@@ -161,13 +165,19 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="Editar Registro"
-                   :visible.sync="editRegisterDialog"
-                   width="50%" :before-close="handleClose">
+        <el-dialog :visible.sync="editRegisterDialog"
+                   :before-close="handleClose"
+                   @close="resetEditForm"
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Editar registro</span>
+                    </div>
 
             <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
-                    <el-col :span="24">
+                    <el-col :span="12">
                         <el-form-item label="Nombre"
                                       prop="name"
                                       :rules="[
@@ -182,6 +192,24 @@
                                 clearable>
                             </el-input>
                         </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Determinante"
+                                      prop="determinant"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Determinante"
+                                v-model="catalogEditForm.determinant"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
                         <el-form-item label="Secciones"
                                       prop="section_all"
                                       :rules="[
@@ -203,12 +231,20 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
-            <el-button v-if="editRegisterDialog"
-                       type="primary"
-                       @click="editRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
+                            <el-button
+                                v-if="editRegisterDialog"
+                                type="primary"
+                                @click="editRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog
@@ -253,6 +289,7 @@
                 },
                 catalogEditForm:{
                     name: '',
+                    determinant: '',
                     section_all: [],
                 },
                 sections:[],
@@ -390,6 +427,7 @@
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
+                    determinant: row.determinant,
                     section_all:section_all,
                 };
                 this.editRegisterDialog = true;
@@ -398,7 +436,13 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 1, name: this.catalogEditForm.name, cat_section_id: this.catalogEditForm.section_all};
+                let data = {
+                    id: this.catalogEditForm.id,
+                    cat: 1,
+                    name: this.catalogEditForm.name,
+                    determinant: this.catalogEditForm.determinant,
+                    cat_section_id: this.catalogEditForm.section_all
+                };
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
