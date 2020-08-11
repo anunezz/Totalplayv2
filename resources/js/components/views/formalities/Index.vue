@@ -227,6 +227,8 @@
                 };
                 axios.get('/api/formalities',data).then(response => {
                     this.formalitiesTable = response.data.formalities.data;
+                    console.log("this.formalitiesTable", this.formalitiesTable)
+
                     this.pagination.total = response.data.formalities.total;
                     this.stopLoading();
                 }).catch(error => {
@@ -293,7 +295,7 @@
                     responseType: 'blob',
                     method: 'POST',
                     url: '/api/report/proceedings',
-                    data: id
+                    data: {id: id}
                 }).then(response => {
                     this.loading = true;
                     setTimeout(() => {
@@ -318,9 +320,61 @@
             },
             eyebrow(id){
                 console.log('ceja',id)
+                this.startLoading();
+                axios({ responseType: 'blob',
+                    method: 'POST',
+                    url: '/api/report/label',
+                    data: {id: id} }).then(response => {
+                    this.loading = true;
+                    setTimeout(()=>{
+                        const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = linkUrl;
+                        link.setAttribute('download', 'Etiquetas.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+                        this.loading = false;
+                        this.stopLoading();
+                    },500)
+
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$notify({
+                        title: 'Mensaje',
+                        text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                        type: 'warning'
+                    });
+                });
             },
             box(id){
                 console.log('caja',id)
+                this.startLoading();
+                axios({
+                    responseType: 'blob',
+                    method: 'POST',
+                    url: '/api/report/labelBox',
+                    data: {id:id}
+                }).then(response => {
+                    this.loading = true;
+                    setTimeout(() => {
+                        const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                        const link = document.createElement('a');
+                        link.href = linkUrl;
+                        link.setAttribute('download', 'Etiquetas_de_caja.xlsx');
+                        document.body.appendChild(link);
+                        link.click();
+                        this.loading = false;
+                        this.stopLoading();
+                    }, 500)
+
+                }).catch(error => {
+                    this.stopLoading();
+                    this.$notify({
+                        title: 'Mensaje',
+                        text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                        type: 'warning'
+                    });
+                });
             },
         }
 

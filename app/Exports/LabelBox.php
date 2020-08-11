@@ -71,6 +71,8 @@ class LabelBox implements
                 $event->sheet->getColumnDimension('F')->setWidth(15.00);
                 $event->sheet->getColumnDimension('G')->setWidth(2.00);
 
+                $event->sheet->rowHeight('6', 60);
+
                 $drawing = new \PhpOffice\PhpSpreadsheet\Worksheet\Drawing();
                 $drawing->setName('Logo');
                 $drawing->setDescription('Logo');
@@ -107,6 +109,9 @@ class LabelBox implements
 
                     [ 'cell'=>'D14:D14', 'border'=> 'bottom','typeBorder'=> static::$BORDER::BORDER_THIN],
                     [ 'cell'=>'F14:F14', 'border'=> 'bottom','typeBorder'=> static::$BORDER::BORDER_THIN],
+
+                    [ 'cell'=>'D16:F16', 'border'=> 'bottom','typeBorder'=> static::$BORDER::BORDER_THIN],
+                    [ 'cell'=>'C22:F22', 'border'=> 'bottom','typeBorder'=> static::$BORDER::BORDER_THIN],
                 ];
 
                 foreach ($data as $i) {
@@ -143,6 +148,10 @@ class LabelBox implements
                     [ 'cell'=>'B12:G12', 'bold'=> true, 'fontSize'=> 20,  'field' => 'Expedientes'],
                     [ 'cell'=>'C14',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Del:'],
                     [ 'cell'=>'E14',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Al:'],
+                    [ 'cell'=>'C16',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Perido'],
+                    [ 'cell'=>'C18:F18', 'bold'=> true, 'fontSize'=> 18,  'field' => 'Caja'],
+                    [ 'cell'=>'C19:F19', 'bold'=> true, 'fontSize'=> 60,  'field' => '0'],
+                    [ 'cell'=>'C21:F21', 'bold'=> true, 'fontSize'=> 16,  'field' => 'No. de transferencia'],
                 ];
                 foreach ($data as $i) {
                     $cel = preg_split("/[:]+/", $i['cell']);

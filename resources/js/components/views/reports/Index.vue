@@ -17,7 +17,7 @@
             <el-col :span="8">
                 <el-badge class="item">
                     <a class="links" @click="$router.push( {name:'Record'})">
-                        Reportes de Expedientes
+                        Reportes de Expedientes ffff
                     </a>
                 </el-badge>
                 <br /><br />
@@ -45,6 +45,49 @@
             </el-col>
         </el-row>
 
+        <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
+                    <el-button-group>
+                        <el-button type="primary" icon="el-icon-edit"></el-button>
+                        <el-button type="primary" icon="el-icon-share"></el-button>
+                        <el-button type="primary" icon="el-icon-delete"></el-button>
+                    </el-button-group>
+                </div>
+            </el-col>
+        </el-row>
+
+        <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <el-table
+                :data="dataTable"
+                style="width: 100%">
+                <el-table-column
+                    prop="date"
+                    label="Palabra"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="name"
+                    label="Clasificación"
+                    width="180">
+                </el-table-column>
+                <el-table-column
+                    prop="address"
+                    label="Titulo">
+                </el-table-column>
+                <el-table-column
+                    prop="address"
+                    label="Año">
+                </el-table-column>
+                <el-table-column
+                    prop="address"
+                    label="Solicitud de acceso a la información">
+                </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
+
     </div>
 </template>
 
@@ -53,6 +96,11 @@
     export default {
         components: {
             HeaderSection
+        },
+        data(){
+            return{
+                dataTable: []
+            }
         },
         methods: {
             goTo(link, data) {

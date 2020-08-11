@@ -15,6 +15,8 @@ use function foo\func;
 use Maatwebsite\Excel\Concerns\WithStrictNullComparison;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use Maatwebsite\Excel\Concerns\WithDrawings;
+use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
 
 
 ini_set('memory_limit', '-1');
@@ -56,10 +58,119 @@ class Proceedings implements
         return 'Expediente';
     }
 
+    public function TraditionDocumentary($val){
+        switch ($val) {
+            case 1:
+            {
+                $val = "Copia";
+            break;
+            }
+            case 2:
+            {
+                $val = "Original";
+            break;
+            }
+            case 3:
+            {
+                $val = "Original y copia";
+            break;
+            }
+            default:
+            {
+                $val = "";
+            break;
+            }
+
+        }
+        return $val;
+    }
+
+    public function Format($val){
+        switch ($val) {
+            case 1:
+            {
+                $val = "Electrónico";
+            break;
+            }
+            case 2:
+            {
+                $val = "Físico";
+            break;
+            }
+            default:
+            {
+                $val = "";
+            break;
+            }
+
+        }
+        return $val;
+    }
+
+    public function dateMonth($date){
+        $date = preg_split("/[-]+/", $date);
+        $date = $date[1];
+        $months = [ ['id'=> '01','name' => 'Enero'],
+                    ['id'=> '02','name' => 'Febrero'],
+                    ['id'=> '03','name' => 'Marzo'],
+                    ['id'=> '04','name' => 'Abril'],
+                    ['id'=> '05','name' => 'Mayo'],
+                    ['id'=> '06','name' => 'Junio'],
+                    ['id'=> '07','name' => 'Julio'],
+                    ['id'=> '08','name' => 'Agosto'],
+                    ['id'=> '09','name' => 'Septiembre'],
+                    ['id'=> '10','name' => 'Octubre'],
+                    ['id'=> '11','name' => 'Noviembre'],
+                    ['id'=> '12','name' => 'Diciembre']
+                ];
+
+            foreach ($months as $i) {
+                if($i['id'] === $date){
+                    $date = $i['name'];
+                }
+            }
+
+        return $date;
+    }
+
+    public function question_one($action,$value){
+        if($action === true ){
+            $value = ( $value === 1 )? 'X': '';
+        }else{
+            $value = ( $value === 0 )? 'X': '';
+        }
+        return $value;
+    }
+
+    public function imgValidatr($event,$cell,$action){
+        $drawing = new Drawing();
+        $drawing->setName('Logo');
+        $drawing->setDescription('Logo');
+        $drawing->setResizeProportional(false);
+        $drawing->setWidth(16);
+        $drawing->setHeight(17);
+        $drawing->setOffsetX(3);
+        $drawing->setOffsetY(6);
+        $pathImg = ($action === true)?'/img/correcto.png':'/img/tache.png';
+        $drawing->setPath(public_path($pathImg));
+        $drawing->setCoordinates($cell);
+        $drawing->setWorksheet($event->getDelegate());
+    }
+
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
+
+                //imagenes
+                $this->imgValidatr($event->sheet,'Z10',true);
+
+                $Administrativo = array_search('Administrativo', array_column($this->fields['primarivalues'], 'name') ) === false ? '-':'X';
+                $Legal          = array_search('Legal', array_column($this->fields['primarivalues'], 'name') ) === false ? '-':'X';
+                $Fiscal         = array_search('Fiscal', array_column($this->fields['primarivalues'], 'name') ) === false ? '-':'X';
+                $Contable       = array_search('Contable', array_column($this->fields['primarivalues'], 'name') ) === false ? '-':'X';
+
+
 
                 $word = ['F','G','H','I','J','K','M','N','L','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
                 foreach ($word as $item) {
@@ -69,8 +180,8 @@ class Proceedings implements
                 //Categorias
                 $event->sheet->getColumnDimension('C')->setWidth(18.00);
                 $topic = [
-                    [ 'cell' => 'C3:C4' , 'field' => 'Productor/a'],
-                    [ 'cell' => 'C6:C10' , 'field' => 'Nivel de descripción documental'],
+                    [ 'cell' => 'C3:C4',    'field' => 'Productor/a'],
+                    [ 'cell' => 'C6:C10',   'field' => 'Nivel de descripción documental'],
                     [ 'cell' => 'C12:C13' , 'field' => 'Código de referencia'],
                     [ 'cell' => 'C15:C15' , 'field' => 'Título'],
                     [ 'cell' => 'C17:C17' , 'field' => 'Alcance y contenido (asunto)'],
@@ -131,30 +242,30 @@ class Proceedings implements
                     [ 'cell'=> 'Z6' ,   'select' => false, 'bold'=> false, 'fontSize'=> 9,'field' => '-'],
 
                     ['cell'=>'D7',    'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' => 'Sección'],
-                    ['cell'=>'E7',    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => '08C'],
-                    ['cell'=>'F7:Y7', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => 'TECNOLOGÍAS Y SERVICIOS DE LA INFORMACIÓN'],
+                    ['cell'=>'E7',    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['sectionCode']],
+                    ['cell'=>'F7:Y7', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['sectionName']],
                     ['cell'=>'Z7',    'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' => '-'],
 
                     ['cell'=>'D8',    'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' =>'Serie'],
-                    ['cell'=>'E8',    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' =>'08C.24'],
-                    ['cell'=>'F8:Y8', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' =>'PRODUCTOS PARA LA DIVULGACIÓN DE SERVICIOS'],
+                    ['cell'=>'E8',    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['serieCode']],
+                    ['cell'=>'F8:Y8', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['serieName']],
                     ['cell'=>'Z8',    'select' => false, 'bold'=> false, 'fontSize'=> 9, 'field' =>'-'],
 
                     ['cell'=>'D9',    'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' => 'Subserie'],
-                    ['cell'=>'E9',    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => 'N/A'],
-                    ['cell'=>'F9:Y9', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => ''],
+                    ['cell'=>'E9',    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['subserieCode']],
+                    ['cell'=>'F9:Y9', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['subserieName']],
                     ['cell'=>'Z9',    'select' => false, 'bold'=> false, 'fontSize'=> 9, 'field' => '-'],
 
                     [ 'cell'=>'D10',     'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' => 'Expediente'],
                     [ 'cell'=>'E10' ,    'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => '1'],
                     [ 'cell'=>'F10:Y10', 'select' => false, 'bold'=> true,  'fontSize'=> 9, 'field' => 'COMISIÓN EDITORIAL'],
-                    [ 'cell'=>'Z10' ,    'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' => '&#10004;'],
+                    [ 'cell'=>'Z10' ,    'select' => false, 'bold'=> false, 'fontSize'=> 7, 'field' => ''], //imagen
                     //Código de referencia
                     ['cell'=>'D12:D13','select' => false,  'bold'=> false, 'fontSize'=> 7, 'field' => 'Clasificación Archivística'],
                     //['cell'=>'E12',     'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'SRE'],
                     //['cell'=>'F12',     'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => '.'],
-                    ['cell'=>'G12:V12', 'select' => false, 'bold'=> true,  'fontSize'=> 16, 'field' => '08C.24-2019-2019/1'],
-                    ['cell'=>'X12:Z12', 'select' => false, 'bold'=> true,  'fontSize'=> 16, 'field' => '1/15'],
+                    ['cell'=>'G12:V12', 'select' => false, 'bold'=> true,  'fontSize'=> 16, 'field' => $this->fields['codeOfReference']],
+                    ['cell'=>'X12:Z12', 'select' => false, 'bold'=> true,  'fontSize'=> 16, 'field' => $this->fields['legajo']],
                     ['cell'=>'E13:F13', 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Fondo (.)'],
                     ['cell'=>'G13:I13', 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Sección (.)'],
                     ['cell'=>'J13:K13', 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Serie (.)'],
@@ -162,34 +273,36 @@ class Proceedings implements
                     ['cell'=>'O13:S13', 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Año inicio (-) y cierre/'],
                     ['cell'=>'T13:V13', 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Consecutivo'],
                     ['cell'=>'X13:Z13', 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Legajo'],
+
                     //Titulo
-                    ['cell'=>'D15:Z15', 'select' => false, 'bold'=> true,'fontSize'=> 15.5, 'field' => 'REUNIONES DE LA COMISIÓN EDITORIAL 2019'],
-                    ['cell'=>'D17:Z17', 'select' => false, 'bold'=> false,'fontSize'=> 10.5,'field' => 'Dictámenes, minutas de la Comisión Editorial.'],
+                    ['cell'=>'D15:Z15', 'select' => false, 'bold'=> true,'fontSize'=> 15.5, 'field' => $this->fields['title'] ],
+                    ['cell'=>'D17:Z17', 'select' => false, 'bold'=> false,'fontSize'=> 10.5,'field' => $this->fields['alcance_y_contenido']],
+
                     //Fechas
                     //['cell'=>'D19:D19', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Día (00)'],
-                    ['cell'=>'D20:D20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => '05'],
+                    ['cell'=>'D20:D20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' =>   preg_split("/[-]+/", $this->fields['opening_date'])[2] ],
                     //['cell'=>'E19:H19', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Mes (letra)'],
-                    ['cell'=>'E20:H20', 'select' => true  ,'bold'=> true  , 'fontSize'=> 7, 'field' => 'Enero'],
+                    ['cell'=>'E20:H20', 'select' => true  ,'bold'=> true  , 'fontSize'=> 7, 'field' =>    $this->dateMonth($this->fields['opening_date']) ],
                     //['cell'=>'I19:L19', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Año (0000)'],
-                    ['cell'=>'I20:L20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => '2019'],
+                    ['cell'=>'I20:L20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => preg_split("/[-]+/", $this->fields['opening_date'])[0]],
                     //['cell'=>'M19:N19', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Día (00)'],
-                    ['cell'=>'M20:N20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => '09'],
+                    ['cell'=>'M20:N20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => preg_split("/[-]+/", $this->fields['close_date'])[2]],
                     //['cell'=>'O19:U19', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Mes (letra)'],
-                    ['cell'=>'O20:U20', 'select' => true  ,'bold'=> true  , 'fontSize'=> 7, 'field' => 'Septiembre'],
+                    ['cell'=>'O20:U20', 'select' => true  ,'bold'=> true  , 'fontSize'=> 7, 'field' => $this->dateMonth($this->fields['close_date'])],
                     //['cell'=>'V19:Z19', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Año (0000)'],
-                    ['cell'=>'V20:Z20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => '2019'],
+                    ['cell'=>'V20:Z20', 'select' => false ,'bold'=> true  , 'fontSize'=> 7, 'field' => preg_split("/[-]+/", $this->fields['close_date'])[2]],
                     ['cell'=>'D21:L21', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Inicio del trámite o asunto'],
                     ['cell'=>'M21:Z21', 'select' => false ,'bold'=> false , 'fontSize'=> 7, 'field' => 'Cierre del trámite o asunto'],
                     //Volumen y Soporte
                     ['cell'=>'D23:H23', 'select' => false ,'bold'=> true , 'fontSize'=> 9, 'field' => 'Papel'],
                     ['cell'=>'D24:H24', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Soporte'],
-                    ['cell'=>'D25:H25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => '01'],
+                    ['cell'=>'D25:H25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['initial_folio']],
                     ['cell'=>'D26:H26', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Folio inicial'],
-                    ['cell'=>'I23:R23', 'select' => false ,'bold'=> true , 'fontSize'=> 9, 'field' => 'Tamaño carta'],
+                    ['cell'=>'I23:R23', 'select' => false ,'bold'=> true , 'fontSize'=> 9, 'field' => $this->Format($this->fields['Format'])],
                     ['cell'=>'I24:R24', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Formato'],
-                    ['cell'=>'I25:R25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => '180'],
+                    ['cell'=>'I25:R25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['end_folio']],
                     ['cell'=>'I26:R26', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Folio final'],
-                    ['cell'=>'S23:Z23', 'select' => false ,'bold'=> true , 'fontSize'=> 9, 'field' => 'Original'],
+                    ['cell'=>'S23:Z23', 'select' => false ,'bold'=> true , 'fontSize'=> 9, 'field' => $this->TraditionDocumentary($this->fields['Tradition_or_documentary_form'])],
                     ['cell'=>'S24:Z24', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Tradición o forma documental'],
                     ['cell'=>'S25:Z25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => '180'],
                     ['cell'=>'S26:Z26', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Total Fojas útiles al cierre del expediente '],
@@ -205,13 +318,13 @@ class Proceedings implements
                     ['cell'=>'J31:Z31', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => ''],
                     //Valoración, selección y eliminación
                     ['cell'=>'D33:E33', 'select' => false ,'bold'=> false, 'fontSize'=> 8,   'field' => 'Administrativo'],
-                    ['cell'=>'F33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => 'X'],
+                    ['cell'=>'F33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => $Administrativo],
                     ['cell'=>'G33:I33', 'select' => false ,'bold'=> false, 'fontSize'=> 8,   'field' => 'Legal'],
-                    ['cell'=>'J33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'J33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => $Legal],
                     ['cell'=>'K33:M33', 'select' => false ,'bold'=> false, 'fontSize'=> 8,   'field' => 'Contable'],
-                    ['cell'=>'N33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'N33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => $Contable],
                     ['cell'=>'O33:R33', 'select' => false ,'bold'=> false, 'fontSize'=> 8,   'field' => 'Fiscal'],
-                    ['cell'=>'S33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'S33',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => $Fiscal],
                     ['cell'=>'T33:Z33', 'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => ''],
                     ['cell'=>'D34:Z34', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => 'Valor documental primario'],
                     ['cell'=>'D35',     'select' => false ,'bold'=> true,  'fontSize'=> 10,  'field' => '1'],
@@ -238,23 +351,23 @@ class Proceedings implements
                     ['cell'=>'Z38',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => ''],
 
                     ['cell'=>'D39:F39', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => 'Fecha de clasificación'],
-                    ['cell'=>'G39:P39', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => ''],
+                    ['cell'=>'G39:P39', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => $this->fields['Classification_date']],
                     ['cell'=>'Q39:Y39', 'select' => false ,'bold'=> false, 'fontSize'=> 8,   'field' => 'Versión pública'],
                     ['cell'=>'Z39',     'select' => false ,'bold'=> false, 'fontSize'=> 9,   'field' => ''],
 
                     ['cell'=>'D40:F40', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => 'Nombre y firma del Titular de la Unidad Administrativa'],
                     ['cell'=>'G40:P40', 'select' => false ,'bold'=> false, 'fontSize'=> 7,   'field' => 'Resolución del Comité de Transparencia'],
-                    ['cell'=>'Q40:Z40', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => ''],
+                    ['cell'=>'Q40:Z40', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => $this->fields['name_titular']],
                     ['cell'=>'D41:F41', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Acta del Comité de Transp.'],
-                    ['cell'=>'G41:Z41', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'G41:Z41', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->fields['transparency_proceedings']],
 
                     ['cell'=>'D42:F42', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Partes restringidas '],
-                    ['cell'=>'G42:T42', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'G42:T42', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->fields['restricted_parts']],
                     ['cell'=>'U42:V42', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Foja(s)'],
                     ['cell'=>'W42:Z42', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
 
                     ['cell'=>'D43:F43', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Fundamento Legal'],
-                    ['cell'=>'G43:Z43', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'G43:Z43', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->fields['legal_basis']],
 
                     ['cell'=>'D44:F44', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Periodo de reserva'],
                     ['cell'=>'K44',     'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
@@ -266,16 +379,16 @@ class Proceedings implements
                     ['cell'=>'V44:Z44', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
 
                     ['cell'=>'D45:F45', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Fecha de desclasificación'],
-                    ['cell'=>'G45:K45', 'select' => false ,'bold'=> false,  'fontSize'=> 10,  'field' => ''],
+                    ['cell'=>'G45:K45', 'select' => false ,'bold'=> false,  'fontSize'=> 10,  'field' => $this->fields['declassification_date']],
                     ['cell'=>'L45:P45', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Nombre, cargo y firma del servidor público que desclasifica'],
-                    ['cell'=>'Q45:Z45', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => ''],
+                    ['cell'=>'Q45:Z45', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => $this->fields['public_server']],
 
                     ['cell'=>'D46:L46', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Fue objeto de solicitud de acceso a información'],
                     ['cell'=>'M46:O46', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => 'Sí'],
-                    ['cell'=>'P46',     'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'P46',     'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' =>  $this->question_one(true , $this->fields['question_one'])  ],
                     ['cell'=>'Q46:S46', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
                     ['cell'=>'T46:W46', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => 'No'],
-                    ['cell'=>'X46',     'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'X46',     'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->question_one(false , $this->fields['question_one'])],
                     ['cell'=>'Y46:Z46', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
                     //Notas
                     ['cell'=>'D48:Z48', 'select' => false ,'bold'=> false,  'fontSize'=> 8,   'field' => ''],
@@ -292,7 +405,8 @@ class Proceedings implements
                 foreach ($data as $i) {
                     $cel = preg_split("/[:]+/", $i['cell']);
                     $event->sheet->setCellValue($cel[0],$i['field']);
-                    $event->sheet->wrapText('B3:B51');
+                    //$event->sheet->wrapText('B3:B51');
+                    $event->sheet->wrapText($i['cell']);
                     if( count($cel) === 2 ){
                         $event->sheet->mergeCells( $i['cell'] );
                     }
@@ -396,7 +510,7 @@ class Proceedings implements
                 $event->sheet->rowHeight('18', 6);
                 $event->sheet->rowHeight('22', 6);
                 $event->sheet->rowHeight('24', 11);
-                $event->sheet->rowHeight('26', 11);
+                $event->sheet->rowHeight('26', 23);
                 $event->sheet->rowHeight('27', 6);
 
                 $event->sheet->rowHeight('32', 6);
@@ -405,6 +519,7 @@ class Proceedings implements
                 $event->sheet->rowHeight('45', 30);
                 $event->sheet->rowHeight('48', 30);
                 $event->sheet->rowHeight('43', 25);
+                $event->sheet->rowHeight('44', 20);
                 $event->sheet->rowHeight('47', 6);
                 $event->sheet->rowHeight('51', 6);
 

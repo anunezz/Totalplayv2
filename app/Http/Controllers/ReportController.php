@@ -12,6 +12,8 @@ use App\Exports\Proceedings;
 use App\Exports\Labels;
 use App\Exports\LabelBox;
 
+use App\Http\Models\Formalities;
+
 class ReportController extends Controller
 {
 
@@ -19,9 +21,59 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $data = array_keys($data);
 
-            return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+
+            //dd($Formalities);
+
+            $results = [
+                        //Nivel de descripción documental
+                        'serieCode' => $Formalities->serie()->first()->code,
+                        'serieName' => $Formalities->serie()->first()->name,
+                        'subserieName' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->name : '',
+                        'subserieCode' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->code : 'N/A',
+                        'sectionCode' => $Formalities->section()->first()->code,
+                        'sectionName'=> $Formalities->section()->first()->name,
+
+                        //Código de referencia
+                        'codeOfReference' => substr($Formalities->sort_code, 4),
+                        'legajo' => "1/".$Formalities->legajo,
+
+                        //Titulo
+                        'title' => $Formalities->title,
+
+                        //Alcance y contenido (asunto)
+                        'alcance_y_contenido' => $Formalities->scope_and_content,
+
+                        //Fechas
+                        'opening_date' => $Formalities->opening_date,
+                        'close_date' => $Formalities->close_date,
+
+                        //Volumen y soporte
+                        'Tradition_or_documentary_form' => $Formalities->documentary_tradition_id,
+                        'Format' => $Formalities->format_id,
+                        'initial_folio' => $Formalities->initial_folio,
+                        'end_folio' => $Formalities->end_folio,
+
+                        //Características físicas y requisitos técnicos
+
+                        //Condiciones de acceso (Leyenda de clasificación de la información y/o de versión pública)
+                        'Classification_date'=> $Formalities->classification_date,
+                        'declassification_date' => $Formalities->declassification_date,
+                        'public_server' => $Formalities->public_server,
+                        'name_titular'=> $Formalities->name_titular,
+                        'transparency_proceedings' => $Formalities->transparency_proceedings,
+                        'restricted_parts' => $Formalities->restricted_parts,
+                        'legal_basis' => $Formalities->legal_basis,
+                        'primarivalues' => collect( $Formalities->serie->primarivalues )->toArray(),
+                        'fojas' => $Formalities->total_fojas,
+                        'question_one' => $Formalities->question_one
+                    ];
+
+            return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
+
+
+            //return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
 
 
         } catch (Exception $e) {
@@ -36,8 +88,26 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
 
-            return Excel::download(new Labels([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
+            $cels = preg_split("/[-]/", $Formalities->sort_code);
+            $code = str_replace('SRE.',"", $cels[0]);
+            $cels[1] = $cels[1].'-';
+
+            $legajo = "1/".$Formalities->legajo;
+            $data = collect([
+                [$code,$cels[1],$cels[2],'/DAN','/ET001-01',$legajo, $Formalities->title],
+            ])->chunk(2);
+
+           //dd($data);
+
+            // $data = collect([
+            //     ['08C.16.01','20166-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+            //     ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
+            // ])->chunk(2);
+
+            return Excel::download(new Labels([],$data), 'Etiqueta.xlsx');
 
 
         } catch (Exception $e) {
@@ -52,6 +122,10 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
+
+
 
             return Excel::download(new LabelBox([],['holasdjdjdjsdjdsjdsj']), 'etiqueta_de_caja.xlsx');
 
