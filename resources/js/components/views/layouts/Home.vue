@@ -387,7 +387,10 @@
                         axios.post(`/api/users/unit`, data).then(response => {
 
                             this.$store.commit('setUser', response.data.user);
-                            location.reload();
+                            setTimeout(()=>{
+                                location.reload();
+                            },100)
+
                             this.stopLoading();
                             this.$message({
                                 type: "success",
