@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class CatDescription extends Model
+class CatSampling extends Model
 {
     protected $appends = ['hash'];
 

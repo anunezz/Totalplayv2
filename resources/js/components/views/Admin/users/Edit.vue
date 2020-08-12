@@ -287,7 +287,7 @@
 
                             this.$router.push('/administracion/usuarios');
                             location.reload();
-                            
+
                         }).catch(error => {
                             this.stopLoading();
 

@@ -165,9 +165,15 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="Editar Registro"
-                   :visible.sync="editRegisterDialog"
-                   width="50%" :before-close="handleClose">
+        <el-dialog :visible.sync="editRegisterDialog"
+                   :before-close="handleClose"
+                   @close="resetEditForm"
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Editar registro</span>
+                    </div>
 
             <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
@@ -187,14 +193,52 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Codigo"
+                                      prop="code"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Codigo"
+                                v-model="catalogEditForm.code"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item prop="cat_type_id" label="Tipo de sección" :rules="[
+                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                              ]">
+                            <el-row>
+                                <el-col :span="6" style="margin-right: 200px">
+                                    <el-checkbox v-model="catalogEditForm.checkedL" @change="legislatorLevel(2)">Sustantivas </el-checkbox>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-checkbox v-model="catalogEditForm.checkedC" @change="legislatorLevel(1)">Comunes</el-checkbox>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
-            <el-button v-if="editRegisterDialog"
-                       type="primary"
-                       @click="editRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
+                            <el-button
+                                v-if="editRegisterDialog"
+                                type="primary"
+                                @click="editRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog
@@ -238,7 +282,11 @@
                     newRegisterName: '',
                 },
                 catalogEditForm:{
-                    name: ''
+                    name: '',
+                    code: '',
+                    cat_type_id: null,
+                    checkedC: false,
+                    checkedL: false,
                 },
                 hashRegister: null,
                 nameRegister: null,
@@ -367,14 +415,26 @@
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
+                    code:row.code,
+                    cat_type_id:row.cat_type_id,
+                    checkedC: row.checkedC,
+                    checkedL: row.checkedL
                 };
+                this.catalogEditForm.cat_type_id == 1 ? this.catalogEditForm.checkedC = true : this.catalogEditForm.checkedC = false;
+                this.catalogEditForm.cat_type_id == 2 ? this.catalogEditForm.checkedL = true : this.catalogEditForm.checkedL = false;
                 this.editRegisterDialog = true;
             },
 
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 4, name: this.catalogEditForm.name};
+                let data = {
+                    id: this.catalogEditForm.id,
+                    cat: 2,
+                    name: this.catalogEditForm.name,
+                    code: this.catalogEditForm.code,
+                    cat_type_id: this.catalogEditForm.cat_type_id
+                };
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
@@ -490,6 +550,20 @@
             resetEditForm(){
                 this.editRegisterDialog = false;
                 this.$refs['catalogEditForm'].resetFields();
+            },
+
+            legislatorLevel(type) {
+                if (!this.catalogEditForm.checkedC && !this.catalogEditForm.checkedL){
+                    this.catalogEditForm.cat_type_id = null;
+                }
+                if (type === 2 && this.catalogEditForm.checkedL === true) {
+                    this.catalogEditForm.checkedC = false;
+                    this.catalogEditForm.cat_type_id = type;
+                }
+                if (type === 1 && this.catalogEditForm.checkedC === true) {
+                    this.catalogEditForm.checkedL = false;
+                    this.catalogEditForm.cat_type_id = type;
+                }
             },
         },
     }

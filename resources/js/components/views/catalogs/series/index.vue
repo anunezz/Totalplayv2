@@ -137,7 +137,7 @@
                     <div slot="header">
                         <span  class="title">Nuevo registro</span>
                     </div>
-            <pre>{{catalogForm.newCode}}</pre>
+<!--            <pre>{{catalogForm.newCode}}</pre>-->
             <el-form  ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
@@ -554,9 +554,9 @@
 
             determinante(data){
 
-                console.log('wwwwwwwwww', data);
+    //            console.log('wwwwwwwwww', data);
                 let sections = [];
-                console.log('secciones', this.sections);
+     //           console.log('secciones', this.sections);
      //           this.catalogForm.newCode = '';
                 const result = this.sections.filter(section => section.id === data);
                 console.log('result', result);

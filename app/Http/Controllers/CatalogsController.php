@@ -7,6 +7,7 @@ use App\Http\Controllers\GeneralController;
 
 use App\Http\Models\Cats\CatDescription;
 use App\Http\Models\Cats\CatPrimaryValues;
+use App\Http\Models\Cats\CatSampling;
 use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSelectionTechniques;
 use App\Http\Models\Cats\CatSeries;
@@ -59,6 +60,12 @@ class CatalogsController extends Controller
                         ->orderBy('id')
                         ->paginate($data['perPage']);
                 }
+                if ($data['cat'] == 6) {
+                    $elements = CatSampling::with('serie')
+                        ->select(['id', 'quality', 'cat_series_id', 'isActive'])
+                        ->orderBy('id')
+                        ->paginate($data['perPage']);
+                }
 
                 return response()->json([
                     'success' => true,
@@ -95,12 +102,26 @@ class CatalogsController extends Controller
                     ->orderBy('name')
                     ->get(['id', 'name']);
 
+                $series = CatSeries::where('isActive', 1)
+                    ->orderBy('name')
+                    ->get(['id', 'name', 'code']);
+
+                $units = CatAdministrativeUnit::where('isActive', 1)
+                    ->orderBy('name')
+                    ->get(['id', 'name']);
+
+                $subseries = CatSubseries::where('isActive', 1)
+                    ->orderBy('name')
+                    ->get(['id', 'name']);
 
                 return response()->json([
 
                     'sections'    => $sections,
                     'selections'  => $selections,
                     'values'      => $values,
+                    'series'      => $series,
+                    'units'       => $units,
+                    'subseries'   => $subseries,
                     'success'     => true
                 ]);
 
@@ -135,6 +156,10 @@ class CatalogsController extends Controller
                 $cat = new CatSeries();
                 $duplicityCheck = self::duplicityCheck(CatSeries::class, null, $request->name, $request->code, $request->codeSeries, $request->cat_section_id, $request->AT, $request->AC, $request->total, $request->cat_selection_id);
             }
+            elseif ($request->cat === 4) {
+                $cat = new CatSubseries();
+                $duplicityCheck = self::duplicityCheck(CatSubseries::class, null, $request->name, $request->code, $request->codeSubseries, $request->cat_series_id);
+            }
 
 
             if (! $duplicityCheck) {
@@ -148,6 +173,13 @@ class CatalogsController extends Controller
                     $cat->AC = $request->AC;
                     $cat->total = $request->total;
                     $cat->cat_selection_id = $request->cat_selection_id;
+                    $cat->primarivalues()->sync($request->cat_primary_value_id);
+                }
+
+                if ($request->cat === 4){
+                    $cat->code = $request->code;
+                    $cat->codeSubseries = $request->codeSubseries;
+                    $cat->cat_series_id = $request->cat_series_id;
                 }
 //
 //                    $request->cat === 11 ? $cat->rights_recommendations_id = $request->rights_recommendations_id : null;
@@ -160,7 +192,7 @@ class CatalogsController extends Controller
 //                    }
 
                 $cat->save();
-                $cat->primarivalues()->sync($request->cat_primary_value_id);
+
                 GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
                 DB::commit();
 
@@ -199,6 +231,11 @@ class CatalogsController extends Controller
                 $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name, $request->determinant);
             }
 
+            elseif ($request->cat === 2) {
+                $cat = CatSection::find(decrypt($request->id));
+                $duplicityCheck = self::duplicityCheck(CatSection::class, $cat->id, $request->name, $request->code, $request->cat_type_id);
+            }
+
             elseif ($request->cat === 3) {
                 $cat = CatSeries::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatSeries::class, $cat->id, $request->name, $request->code, $request->codeSeries, $request->cat_section_id, $request->AT, $request->AC, $request->total, $request->cat_selection_id);
@@ -209,6 +246,11 @@ class CatalogsController extends Controller
 
                 if ($request->cat === 1){
                     $cat->determinant = $request->determinant;
+                }
+
+                if ($request->cat === 2){
+                    $cat->code = $request->code;
+                    $cat->cat_type_id = $request->cat_type_id;
                 }
 
                 if ($request->cat === 3){

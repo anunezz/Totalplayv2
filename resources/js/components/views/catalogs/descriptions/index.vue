@@ -1,10 +1,10 @@
 <template>
     <div>
-        <header-section icon="el-icon-document" title="Descripciones">
+        <header-section icon="el-icon-document" title="CGCA">
             <template slot="buttons">
                 <el-col :span="5" :offset="7">
                     <el-button type="success" @click="newCatalog" style="width: 100%">
-                        Nueva descripción
+                        Nuevo registro
                     </el-button>
                 </el-col>
                 <el-col :span="10" :offset="1">
@@ -65,7 +65,8 @@
                                         type="info"
                                         size="mini"
                                         icon="fas fa-edit"
-                                        @click="editForm(scope.row)">
+
+                                    >
                                     </el-button>
                                 </el-tooltip>
 <!--                                <el-tooltip v-if="scope.row.operatives.length > 0 || scope.row.id === 14" placement="right-start">-->
@@ -125,15 +126,19 @@
             </el-col>
         </el-row>
 
-        <el-dialog title="Nuevo Registro"
-                   :visible.sync="newRegisterDialog"
+        <el-dialog :visible.sync="newRegisterDialog"
                    :before-close="handleClose"
                    @close="resetForm"
-                   width="50%">
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Nuevo registro</span>
+                    </div>
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
-                        <el-form-item label="Nombre"
+                        <el-form-item label="Descripción"
                                       prop="newRegisterName"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -141,21 +146,89 @@
                                   ]">
                         <el-input
                                 v-if="newRegisterDialog"
-                                placeholder="Nombre"
+                                type="textarea"
+                                placeholder="Descripción"
                                 v-model="catalogForm.newRegisterName"
                                 maxlength="100"
                                 clearable>
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Serie"
+                                      prop="cat_series_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogForm.cat_series_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(serie , index) in series"
+                                    :key="index"
+                                    :label="serie.name"
+                                    :value="serie.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Subseries"
+                                      prop="cat_subserie_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                            <el-select v-model="catalogForm.cat_subserie_id"
+                                       filterable placeholder="Seleccionar"
+                                       remove-tag="remove-tag"
+                                       multiple
+                                       style="width: 100%">
+                                <el-option
+                                    v-for="(unit , index) in units"
+                                    :key="index"
+                                    :label="unit.name"
+                                    :value="unit.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="Unidad Administrativa"
+                                      prop="cat_unit_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                            <el-select v-model="catalogForm.cat_unit_id"
+                                       filterable placeholder="Seleccionar"
+                                       remove-tag="remove-tag"
+                                       multiple
+                                       style="width: 100%">
+                                <el-option
+                                    v-for="(unit , index) in units"
+                                    :key="index"
+                                    :label="unit.name"
+                                    :value="unit.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="resetForm">Cancelar</el-button>
-            <el-button v-if="newRegisterDialog"
-                       type="primary"
-                       @click="newRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="resetForm">Cancelar</el-button>
+                            <el-button
+                                v-if="newRegisterDialog"
+                                type="primary"
+                                @click="newRegisterDialog = false">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog title="Editar Registro"
@@ -217,6 +290,8 @@
         data() {
             return {
 
+                units: [],
+                series: [],
                 elements: [],
 
                 search: '',
@@ -229,6 +304,9 @@
 
                 catalogForm: {
                     newRegisterName: '',
+                    cat_unit_id: [],
+                    cat_series_id: [],
+                    cat_subserie_id: [],
                 },
                 catalogEditForm:{
                     name: ''
@@ -251,6 +329,12 @@
 
         created() {
             this.getTitles();
+            axios.get('/api/cats/create').then(response => {
+                this.series = response.data.series;
+                this.units = response.data.units;
+                this.subseries = response.data.subseries;
+                this.stopLoading();
+            })
         },
 
         watch:{
