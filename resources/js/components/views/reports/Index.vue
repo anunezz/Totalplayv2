@@ -50,21 +50,25 @@
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
                         <el-button
+                            icon="far fa-file-excel"
                             size="mini"
                             type="success">
                             Baja documental
                         </el-button>
                         <el-button
+                            icon="far fa-file-excel"
                             size="mini"
                             type="primary">
                             Baja contable
                         </el-button>
                         <el-button
+                            icon="far fa-file-excel"
                             size="mini"
                             type="default">
                             Transferencia primaria
                         </el-button>
                         <el-button
+                            icon="far fa-file-excel"
                             size="mini"
                             type="warning">
                             Transferencia secundaria

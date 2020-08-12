@@ -59,18 +59,22 @@ class ReportController extends Controller
                         //Características físicas y requisitos técnicos
 
                         //Valoración, selección y eliminación
+                        'AC' => $Formalities->serie()->first()->AC,
 
                         //Condiciones de acceso (Leyenda de clasificación de la información y/o de versión pública)
                         'Classification_date'=> $Formalities->classification_date,
                         'declassification_date' => $Formalities->declassification_date,
-                        'public_server' => $Formalities->public_server,
+                        'public_server' => $Formalities->name_public_server,
                         'name_titular'=> $Formalities->name_titular,
                         'transparency_proceedings' => $Formalities->transparency_proceedings,
                         'restricted_parts' => $Formalities->restricted_parts,
                         'legal_basis' => $Formalities->legal_basis,
                         'primarivalues' => collect( $Formalities->serie->primarivalues )->toArray(),
                         'fojas' => $Formalities->total_fojas,
-                        'question_one' => $Formalities->question_one
+                        'question_one' => $Formalities->question_one,
+                        'Noactaoficio' => $Formalities->Record_official_number,
+                        'reservation_period' => $Formalities->reservation_period,
+                        'deadline_extension' => $Formalities->deadline_extension
                     ];
 
             return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
