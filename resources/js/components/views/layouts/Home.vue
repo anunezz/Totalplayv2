@@ -107,7 +107,7 @@
                                 <el-col :span="24">
                                     <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
                                         <el-card shadow="always">
-                                            <strong><b>Puesto: </b></strong> {{user.determinant}}
+                                            <strong><b>Determinante: </b></strong> {{user.determinant}}
                                         </el-card>
                                     </div>
                                 </el-col>
@@ -365,6 +365,7 @@
                         this.user.office = response.data.lResults.user.office;
                         this.user.email = response.data.lResults.user.username;
                         this.user.admin = response.data.lResults.user.admin.name;
+                        this.user.determinant = response.data.lResults.user.admin.determinant;
 
 
 

@@ -37,10 +37,6 @@
                     :data="tableData"
                     style="width: 100%">
                     <el-table-column
-                        prop="number"
-                        label="#">
-                    </el-table-column>
-                    <el-table-column
                         prop="determinant"
                         label="Determinante">
                     </el-table-column>
