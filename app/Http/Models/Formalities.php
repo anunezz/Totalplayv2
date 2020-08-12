@@ -32,8 +32,21 @@ class Formalities extends Model
         return $query->where(function ($q) use ($filters) {
             $filters = json_decode($filters);
 
+            $q->whereHas('unit', function($q) use ($filters) {
+                if (!empty($filters->determinant)) {
+                    $q->where('determinant',$filters->determinant);
+                }
+            });
+
             if (!empty($filters->classification)){
                 $q->where('sort_code', 'like', '%' .$filters->classification . '%');
+            }
+
+            if (!empty($filters->year)){
+                $q->whereYear('close_date',$filters->year);
+            }
+            if (!empty($filters->userId)){
+                $q->whereUserId($filters->userId);
             }
         });
 

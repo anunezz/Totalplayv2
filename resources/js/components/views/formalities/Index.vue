@@ -109,6 +109,7 @@
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip
+                                    v-if="$store.state.user.profile !== 3"
                                     class="item"
                                     effect="dark"
                                     content="Eliminar"
@@ -196,7 +197,7 @@
                     determinant:'',
                     classification:'',
                     year:null,
-                    user:''
+                    userId:null
                 },
                 pagination: {
                     currentPage: 1,
@@ -208,6 +209,7 @@
         },
         created() {
             this.getFormalities();
+            console.log( this.$store.state.user.profile)
         },
         methods:{
             SearchData(){

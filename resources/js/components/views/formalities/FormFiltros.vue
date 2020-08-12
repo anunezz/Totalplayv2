@@ -25,18 +25,26 @@
                         </el-row>
                         <el-row :gutter="20">
                             <el-col :span="12">
-                                <el-form-item label="Año">
+                                <el-form-item label="Año de cierre">
                                     <el-date-picker
                                         v-model="items.year"
                                         type="year"
-                                        placeholder="Pick a year"
+                                        value-format="yyyy"
+                                        placeholder="Selecciona año"
                                         style="width: 100%">
                                     </el-date-picker>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
                                 <el-form-item label="Creador">
-                                    <el-input v-model="items.user"></el-input>
+                                    <el-select v-model="items.userId" clearable placeholder="Selecciona" style="width: 100%">
+                                        <el-option
+                                            v-for="user in users"
+                                            :key="user.id"
+                                            :label="user.full_name"
+                                            :value="user.id">
+                                        </el-option>
+                                    </el-select>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -71,13 +79,33 @@
 <script>
     export default {
         props:['items'],
+        data(){
+          return{
+              users:[]
+          }
+        },
+        created() {
+            console.log('hola desde filtros')
+            this.getUsers();
+        },
         methods:{
+            getUsers(){
+                axios.get('/api/all/user/unit').then(response => {
+                    this.users = response.data.users;
+                }).catch(error => {
+                    console.log(error)
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            },
             cleanitems(){
                 this.items.show = true;
                 this.items.determinant = '';
                 this.items.classification = '';
                 this.items.year = null;
-                this.items.user = '';
+                this.items.userId = null;
                 this.$emit('search');
             },
             searchitems(){
