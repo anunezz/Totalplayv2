@@ -7,10 +7,10 @@
                     { required: true, message: 'La pregunta es obligatoria', trigger: ['blur','change'] }]">
                     <el-col :span="19">
                         <span style="color: red">*</span>
-                        <span style="font-weight: bold;">¿El expediente fue objeto de una solicitud de acceso a la información?</span style="font-weight: bold;">
+                        <span style="font-weight: bold;">¿El expediente fue objeto de una solicitud de acceso a la información?</span>
                     </el-col>
                     <el-col :span="5">
-                        <el-radio-group v-model="formFormalities.question_one" size="medium">
+                        <el-radio-group v-model="formFormalities.question_one" size="medium" :disabled="formFormalities.disableControl">
                             <el-radio border label="Sí"></el-radio>
                             <el-radio border label="No"></el-radio>
                         </el-radio-group>
@@ -26,7 +26,7 @@
                         <span style="font-weight: bold;">¿El expediente fue clasificado como confidencial o reservado?</span>
                     </el-col>
                     <el-col :span="5">
-                        <el-radio-group v-model="formFormalities.question_two" size="medium">
+                        <el-radio-group v-model="formFormalities.question_two" size="medium" :disabled="formFormalities.disableControl">
                             <el-radio border label="Sí"></el-radio>
                             <el-radio border label="No"></el-radio>
                         </el-radio-group>

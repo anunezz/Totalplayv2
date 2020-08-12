@@ -15,7 +15,7 @@
             <el-form :model="formFormalities" ref="formFormalities" label-position="top" label-width="120px" size="small">
             <el-col :span="21" :offset="1" class="border-form">
                 <h3 class="form-title">SECRETARÍA DE RELACIONES EXTERIORES</h3>
-                <el-row style="margin-bottom: 15px" v-if="$route.params.id !== undefined">
+                <el-row style="margin-bottom: 15px" v-if="formFormalities.hash !== undefined">
                     <span style="font-weight: bold;">Unidad:&nbsp;</span> {{formFormalities.unit.name}}
                 </el-row>
                 <el-row style="margin-bottom: 15px" v-else>
@@ -120,8 +120,8 @@
                     format_id: null,
                     documentary_tradition_id: null,
                     legajos: 0,
-                    initial_folio: null,
-                    end_folio: null,
+                    initial_folio: 0,
+                    end_folio: 0,
                     total_fojas: null,
                     question_one: null,
                     question_two: null,
@@ -144,7 +144,8 @@
                     auxClose_date: '',
                     auxSort_code: '',
                     primariValues:[],
-                    serie:[]
+                    serie:[],
+                    disableControl: false,
                 },
             }
         },
@@ -157,7 +158,6 @@
             setTimeout(function(){
                 _this.auxEdit = true;
                 }, 2000);
-            console.log('cambiando de unidad',_this.$store.state.user.cat_unit_id)
 
         },
         watch:{
@@ -170,8 +170,6 @@
         },
         methods:{
             submitForm(){
-                console.log(this.formFormalities.question_one)
-
 
                 if (this.validForm()) {
                     this.startLoading();
@@ -182,7 +180,6 @@
                     data.unit_id = this.$store.state.user.cat_unit_id;
 
                     axios.post('/api/formalities', data).then(response => {
-                        console.log('enviando datos')
                         _this.stopLoading();
                         _this.$router.push('/tramites');
                         _this.$message({
@@ -209,7 +206,6 @@
                     data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
 
                     axios.put(`/api/formalities/${data.hash}`,data).then(response => {
-                        console.log('enviando datos')
                         _this.stopLoading();
                         _this.$router.push('/tramites');
                         _this.$message({
@@ -299,8 +295,9 @@
                 this.editFormalitiy_id = id;
 
                 axios.get('/api/formalities/' + this.editFormalitiy_id + '/edit').then(response => {
-                    console.log('registro optenido',response)
+                    const aux = {...response.data.formality}
                     this.formFormalities = response.data.formality;
+                    this.formFormalities.disableControl = aux.question_two === 1;
                     this.tapOne = true;
                     this.tapTwo = false;
                     this.tapThree = false;

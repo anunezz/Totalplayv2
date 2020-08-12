@@ -10,6 +10,7 @@
                     Regresar
                 </el-button>
                 <el-button
+                    :disabled="formalitiesTable.length === 0"
                     size="small"
                     type="primary"
                     icon="far fa-file-excel">
