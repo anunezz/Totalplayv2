@@ -1,10 +1,10 @@
 <template>
     <div>
-        <header-section icon="el-icon-document" title="Subseries">
+        <header-section icon="el-icon-document" title="CDD">
             <template slot="buttons">
                 <el-col :span="5" :offset="7">
                     <el-button type="success" @click="newCatalog" style="width: 100%">
-                        Nueva subserie
+                        Nuevo registro
                     </el-button>
                 </el-col>
                 <el-col :span="10" :offset="1">
@@ -44,16 +44,13 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="name"
-                        label="Nombre">
-                    </el-table-column>
-                    <el-table-column
-                        prop="code"
-                        label="Código">
+                        prop="quality"
+                        label="Cualidad">
                     </el-table-column>
                     <el-table-column
                         prop="serie.name"
-                        label="Serie">
+                        label="Serie"
+                        width="600">
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
@@ -141,15 +138,16 @@
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
-                        <el-form-item label="Nombre"
+                        <el-form-item label="Cualidad"
                                       prop="newRegisterName"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
-                        <el-input
+                            <el-input
                                 v-if="newRegisterDialog"
-                                placeholder="Nombre"
+                                type="textarea"
+                                placeholder="Cualidad"
                                 v-model="catalogForm.newRegisterName"
                                 maxlength="100"
                                 clearable>
@@ -162,8 +160,7 @@
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     ]">
-                            <el-select @change="determinante(catalogForm.cat_series_id)"
-                                       style="width: 100%;"
+                            <el-select style="width: 100%;"
                                        size="medium"
                                        v-model="catalogForm.cat_series_id"
                                        placeholder="Seleccionar">
@@ -176,24 +173,6 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="Codigo"
-                                      prop="newCode"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[0-9.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales ni letras', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="newRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogForm.newCode"
-                                maxlength="3"
-                                show-word-limit
-                                clearable>
-                                <template slot="prepend">{{codeSeries}}</template>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
                 </el-row>
             </el-form>
                     <br> <p></p>
@@ -203,7 +182,7 @@
                             <el-button
                                 v-if="newRegisterDialog"
                                 type="primary"
-                                @click="newRegister">
+                                @click="newRegisterDialog = false">
                                 Aceptar
                             </el-button>
                         </div>
@@ -219,7 +198,7 @@
             <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
-                        <el-form-item label="Nombre"
+                        <el-form-item label="Descripción"
                                       prop="name"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -272,7 +251,6 @@
             return {
 
                 series: [],
-                codeSeries: '',
                 elements: [],
 
                 search: '',
@@ -285,8 +263,6 @@
 
                 catalogForm: {
                     newRegisterName: '',
-                    cat_series_id: [],
-                    newCode: '',
                 },
                 catalogEditForm:{
                     name: ''
@@ -324,18 +300,6 @@
 
         methods: {
 
-            determinante(data){
-
-                console.log('wwwwwwwwww', data);
-                let series = [];
-                //           console.log('secciones', this.sections);
-                //           this.catalogForm.newCode = '';
-                const result = this.series.filter(serie => serie.id === data);
-                console.log('result', result);
-                this.codeSeries = result[0].code + '.';
-
-            },
-
             Search(search){
                 let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,.%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
                 if(re.test(search)){
@@ -352,7 +316,7 @@
                 let data = { params: {
                         page: currentPage,
                         perPage: this.pagination.perPage,
-                        cat: 4}
+                        cat: 6}
                 };
 
                 axios.get('/api/cats/get-cat', data).then(response => {
@@ -387,15 +351,7 @@
             newRegister() {
                 this.startLoading();
 
-                this.newCodeComplete = this.codeSeries + this.catalogForm.newCode;
-
-                let data = {
-                    cat: 4,
-                    name: this.catalogForm.newRegisterName,
-                    codeSubseries: this.catalogForm.newCode,
-                    code: this.newCodeComplete,
-                    cat_series_id: this.catalogForm.cat_series_id,
-                };
+                let data = {cat: 5, name: this.catalogForm.newRegisterName};
 
                 this.$refs['catalogForm'].validate((valid) => {
                     if (valid) {
@@ -449,7 +405,7 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 4, name: this.catalogEditForm.name};
+                let data = {id: this.catalogEditForm.id, cat: 5, name: this.catalogEditForm.name};
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
@@ -515,7 +471,7 @@
             disableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 5};
 
                 axios.post('/api/cats/disable-register', data).then(response => {
                     this.$notify({
@@ -539,7 +495,7 @@
             enableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 5};
 
                 axios.post('/api/cats/enable-register', data).then(response => {
                     this.$notify({
