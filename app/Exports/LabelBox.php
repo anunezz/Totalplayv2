@@ -132,18 +132,24 @@ class LabelBox implements
                     );
                 }
 
-
+                $fontUnidad = ( strlen($this->fields['Unidad']) > 15  )? 14:24;
+                $fontSection = ( strlen($this->fields['section']) > 12 )? 10:14;
+                $fontSerie = ( strlen($this->fields['serie']) > 12 )? 10:14;
+                $fontSubserie = ( strlen( $this->fields['subserie'] ) > 12 )? 10:14;
                 $data = [
-                    [ 'cell'=>'B4:G4',   'bold'=> true, 'fontSize'=> 24,  'field' => 'Unidad Administrativa'],
-                    [ 'cell'=>'B5:G5',   'bold'=> true, 'fontSize'=> 26,  'field' => '[DETERMINANTE]'],
+                    [ 'cell'=>'B4:G4',   'bold'=> true, 'fontSize'=> $fontUnidad,  'field' => $this->fields['Unidad']],
+                    [ 'cell'=>'B5:G5',   'bold'=> true, 'fontSize'=> 26,  'field' => $this->fields['Determinante']],
                     [ 'cell'=>'C6',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Fondo:'],
                     [ 'cell'=>'D6:F6',   'bold'=> true, 'fontSize'=> 18,  'field' => 'SRE Secretaría de Relaciones Exteriores.'],
                     [ 'cell'=>'C7',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Sección:'],
-                    [ 'cell'=>'D7:F7',   'bold'=> true, 'fontSize'=> 18,  'field' => '000 Xxxx.'],
+                    //[ 'cell'=>'D7:F7',   'bold'=> true, 'fontSize'=> 18,  'field' => '000 Xxxx.'],
+                    [ 'cell'=>'D7:F7',   'bold'=> true, 'fontSize'=> $fontSection,  'field' => $this->fields['section']],
+
                     [ 'cell'=>'C8',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Serie:'],
-                    [ 'cell'=>'D8:F8',   'bold'=> true, 'fontSize'=> 18,  'field' => '000 Xxxx.'],
+                    [ 'cell'=>'D8:F8',   'bold'=> true, 'fontSize'=> $fontSerie,  'field' => $this->fields['serie']],
+                    //[ 'cell'=>'D8:F8',   'bold'=> true, 'fontSize'=> 18,  'field' => '000 Xxxx.'],
                     [ 'cell'=>'C9',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Subserie:'],
-                    [ 'cell'=>'D9:F9',   'bold'=> true, 'fontSize'=> 18,  'field' => '000 Xxxx.'],
+                    [ 'cell'=>'D9:F9',   'bold'=> true, 'fontSize'=> $fontSubserie,  'field' => $this->fields['subserie']],
                     [ 'cell'=>'B11:G11', 'bold'=> true, 'fontSize'=> 34,  'field' => '[00]'],
                     [ 'cell'=>'B12:G12', 'bold'=> true, 'fontSize'=> 20,  'field' => 'Expedientes'],
                     [ 'cell'=>'C14',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Del:'],

@@ -276,7 +276,6 @@
                 if (this.series.length>0){
                     const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
                     this.formFormalities.serie = result;
-                    console.log('imprimiendddddddddddddoo',this.series)
                 }
             }
         }

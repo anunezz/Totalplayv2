@@ -4,7 +4,7 @@
             <template slot="buttons">
                 <el-button
                     align="right"
-                    size="small"
+                    size="mini"
                     type="danger"
                     icon="el-icon-arrow-left"
                     @click="$router.push('/')">
@@ -13,7 +13,7 @@
             </template>
         </header-section>
 
-        <el-row :gutter='20'>
+        <!-- <el-row :gutter='20'>
             <el-col :span="8">
                 <el-badge class="item">
                     <a class="links" @click="$router.push( {name:'Record'})">
@@ -43,15 +43,32 @@
                 <br /><br />
                 <span>Formatos de Trasferencia</span>
             </el-col>
-        </el-row>
+        </el-row> -->
 
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
-                        <el-button type="primary" icon="el-icon-edit"></el-button>
-                        <el-button type="primary" icon="el-icon-share"></el-button>
-                        <el-button type="primary" icon="el-icon-delete"></el-button>
+                        <el-button
+                            size="mini"
+                            type="success">
+                            Baja documental
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="primary">
+                            Baja contable
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="default">
+                            Transferencia primaria
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="warning">
+                            Transferencia secundaria
+                        </el-button>
                     </el-button-group>
                 </div>
             </el-col>
@@ -59,52 +76,186 @@
 
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
-                <el-table
-                :data="dataTable"
-                style="width: 100%">
-                <el-table-column
-                    prop="date"
-                    label="Palabra"
-                    width="180">
-                </el-table-column>
-                <el-table-column
-                    prop="name"
-                    label="Clasificación"
-                    width="180">
-                </el-table-column>
-                <el-table-column
-                    prop="address"
-                    label="Titulo">
-                </el-table-column>
-                <el-table-column
-                    prop="address"
-                    label="Año">
-                </el-table-column>
-                <el-table-column
-                    prop="address"
-                    label="Solicitud de acceso a la información">
-                </el-table-column>
-                </el-table>
+                <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-end;'>
+                    <div>
+                        <el-button
+                            type="default"
+                            size="mini"
+                            icon="fas fa-search"
+                            @click="filters.show = true">
+                                    Filtros avanzados
+                        </el-button>
+                    </div>
+                </div>
             </el-col>
         </el-row>
+
+        <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <el-pagination
+                    :page-size="parseInt(pagination.perPage)"
+                    @size-change="handleSizeChange"
+                    @current-change="handleCurrentChange"
+                    layout="total"
+                    :total="pagination.total"
+                    :current-page.sync="pagination.currentPage">
+                </el-pagination>
+            </el-col>
+        </el-row>
+
+        <el-row :gutter="20">
+            <el-col :span="24">
+                <el-table
+                    size="mini"
+                    :data="dataTable"
+                    style="width: 100%">
+                    <el-table-column
+                        label="Determinante">
+                        <template slot-scope="scope">
+                            {{scope.row.unit.determinant}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        prop="sort_code"
+                        label="Clasificación">
+                    </el-table-column>
+                    <el-table-column
+                        label="Fecha de cierre">
+                        <template slot-scope="scope">
+                            {{ formatDate(scope.row.close_date) | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY') }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="Creado por:">
+                        <template slot-scope="scope">
+                            {{scope.row.user.full_name}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        label="Fecha y Hora de  Creación">
+                        <template slot-scope="scope">
+                            {{ scope.row.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
+                        </template>
+                    </el-table-column>
+                    <!-- <el-table-column
+                        label="Acciones" header-align="left" align="center">
+                        <template slot-scope="scope">
+                            <el-button-group>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Editar"
+                                    placement="top-start">
+                                    <el-button
+                                        type="primary"
+                                        size="mini"
+                                        icon="fas fa-edit"
+                                        @click="editRegister(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Eliminar"
+                                    placement="top-start">
+                                    <el-button
+                                        type="danger"
+                                        size="mini"
+                                        icon="el-icon-delete"
+                                        @click="deleteRegister(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Carátula"
+                                    placement="top-start">
+                                    <el-button
+                                        type="info"
+                                        size="mini"
+                                        icon="fas fa-book"
+                                        @click="cover(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Ceja"
+                                    placement="top-start">
+                                    <el-button
+                                        type="warning"
+                                        size="mini"
+                                        icon="far fa-bookmark"
+                                        @click="eyebrow(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                                <el-tooltip
+                                    class="item"
+                                    effect="dark"
+                                    content="Caja"
+                                    placement="top-start">
+                                    <el-button
+                                        type="success"
+                                        size="mini"
+                                        icon="fas fa-box-open"
+                                        @click="box(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
+                            </el-button-group>
+                        </template>
+                    </el-table-column> -->
+                </el-table>
+                <br>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="pagination.currentPage"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="parseInt(pagination.perPage)"
+                layout="sizes, ->, prev, pager, next"
+                :total="pagination.total">
+            </el-pagination>
+        </el-row>
+
+        <show-filters :items="filters" @search="getFormalities"/>
 
     </div>
 </template>
 
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
+    import ShowFilters from "../formalities/FormFiltros";
     export default {
         components: {
-            HeaderSection
+            HeaderSection,
+            ShowFilters
         },
         data(){
             return{
-                dataTable: []
+                dataTable: [],
+                filters:{
+                    show: false,
+                    determinant:'',
+                    classification:'',
+                    year:null,
+                    user:''
+                },
+                pagination: {
+                    currentPage: 1,
+                    total: 0,
+                    perPage: 10
+                },
             }
+        },
+        created(){
+            this.getFormalities();
+            console.log("Estas aqui");
         },
         methods: {
             goTo(link, data) {
-
                 axios.post("/api/transaction", data).then(response => {
                     this.$router.push({ name: link });
                 }).catch(error => {
@@ -114,7 +265,40 @@
                             "No fue posible completar la acción, intente nuevamente."
                     });
                 });
-            }
+            },
+            getFormalities(currentPage =  1) {
+                this.filters.show = false;
+                this.startLoading();
+                let data = { params: {
+                        page: currentPage,
+                        perPage: this.pagination.perPage,
+                        filters: this.filters}
+                };
+                axios.get('/api/formalities',data).then(response => {
+                    this.dataTable = response.data.formalities.data;
+                    console.log("this.formalitiesTable", this.dataTable)
+
+                    this.pagination.total = response.data.formalities.total;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.stopLoading();
+                    //console.log(error)
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            },
+            formatDate(date){
+                return new Date(date)
+            },
+            handleSizeChange(sizePerPage) {
+                this.pagination.perPage = sizePerPage;
+                this.getFormalities();
+            },
+            handleCurrentChange(currentPage) {
+                this.getFormalities(currentPage);
+            },
         }
     }
 </script>

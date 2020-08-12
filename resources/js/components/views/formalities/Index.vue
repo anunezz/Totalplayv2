@@ -10,6 +10,7 @@
                     Regresar
                 </el-button>
                 <el-button
+                    :disabled="formalitiesTable.length === 0"
                     size="small"
                     type="primary"
                     icon="far fa-file-excel">
@@ -21,7 +22,7 @@
                         type="success"
                         icon="fas fa-edit"
                         @click="$router.push({name: 'NewFormalities' })">
-                        Nuevo
+                        Nuevo registro
                     </el-button>
                 </el-button-group>
             </template>
@@ -33,7 +34,7 @@
                     icon="fas fa-search"
                     style="width: 100%"
                     @click="filters.show = true">
-                    Filtros
+                    Filtros avanzados
                 </el-button>
             </el-col>
         </el-row> <br>
@@ -108,6 +109,7 @@
                                     </el-button>
                                 </el-tooltip>
                                 <el-tooltip
+                                    v-if="$store.state.user.profile !== 3"
                                     class="item"
                                     effect="dark"
                                     content="Eliminar"
@@ -195,7 +197,7 @@
                     determinant:'',
                     classification:'',
                     year:null,
-                    user:''
+                    userId:null
                 },
                 pagination: {
                     currentPage: 1,
@@ -207,6 +209,7 @@
         },
         created() {
             this.getFormalities();
+            console.log( this.$store.state.user.profile)
         },
         methods:{
             SearchData(){

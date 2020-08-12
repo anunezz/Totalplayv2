@@ -232,7 +232,7 @@ class Proceedings implements
                 $data = [
                     //Productor/a
                     [ 'cell'=>'D3:E3' , 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Unidad Administrativa'],
-                    [ 'cell'=>'F3:Z3' , 'select' => false, 'bold'=> true,  'fontSize'=> 10, 'field' => 'DIRECCIÓN GENERAL DEL ACERVO HISTÓRICO'],
+                    [ 'cell'=>'F3:Z3' , 'select' => false, 'bold'=> true,  'fontSize'=> 10, 'field' => $this->fields['unidad']],
                     [ 'cell'=>'D4:E4' , 'select' => false, 'bold'=> false, 'fontSize'=> 7,  'field' => 'Área generadora'],
                     [ 'cell'=>'F4:Z4' , 'select' => false, 'bold'=> true,  'fontSize'=> 10,  'field' => 'DIRECCIÓN DE HISTORIA DIPLOMÁTICA Y PUBLICACIONES'],
                     //Nivel
@@ -304,7 +304,7 @@ class Proceedings implements
                     ['cell'=>'I26:R26', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Folio final'],
                     ['cell'=>'S23:Z23', 'select' => false ,'bold'=> true , 'fontSize'=> 9, 'field' => $this->TraditionDocumentary($this->fields['Tradition_or_documentary_form'])],
                     ['cell'=>'S24:Z24', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Tradición o forma documental'],
-                    ['cell'=>'S25:Z25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => '180'],
+                    ['cell'=>'S25:Z25', 'select' => false ,'bold'=> true,  'fontSize'=> 9, 'field' => $this->fields['fojas']],
                     ['cell'=>'S26:Z26', 'select' => false ,'bold'=> false, 'fontSize'=> 7, 'field' => 'Total Fojas útiles al cierre del expediente '],
                     //Características físicas y requisitos técnicos
                     ['cell'=>'D28:D31', 'select' => false ,'bold'=> false, 'fontSize'=> 6.5, 'field' => 'Electrónico'],
@@ -364,7 +364,7 @@ class Proceedings implements
                     ['cell'=>'D42:F42', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Partes restringidas '],
                     ['cell'=>'G42:T42', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->fields['restricted_parts']],
                     ['cell'=>'U42:V42', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Foja(s)'],
-                    ['cell'=>'W42:Z42', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => ''],
+                    ['cell'=>'W42:Z42', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->fields['fojas']],
 
                     ['cell'=>'D43:F43', 'select' => false ,'bold'=> false,  'fontSize'=> 7,   'field' => 'Fundamento Legal'],
                     ['cell'=>'G43:Z43', 'select' => false ,'bold'=> false,  'fontSize'=> 9,   'field' => $this->fields['legal_basis']],
@@ -531,7 +531,7 @@ class Proceedings implements
                 $event->sheet->rowHeight('12', 25);
                 $event->sheet->rowHeight('13', 12);
                 $event->sheet->rowHeight('15', 28);
-                $event->sheet->rowHeight('17', 50);
+                $event->sheet->rowHeight('17', 90);
 
 
                 //$event->sheet->setBorder('solid', 'none', 'none', 'solid');

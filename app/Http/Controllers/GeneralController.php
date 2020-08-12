@@ -29,7 +29,11 @@ class GeneralController extends Controller
     public function getCountRegisters(Request $request)
     {
         try {
-            $registers = Formalities::all()->count();
+            if(auth()->user()->cat_profile_id === 1){
+                $registers = Formalities::all()->count();
+            }else{
+                $registers = Formalities::whereUnitId(auth()->user()->cat_unit_id)->get()->count();
+            }
 
             return response()->json([
                 'registers' =>$registers,
