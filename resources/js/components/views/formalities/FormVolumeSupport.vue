@@ -51,7 +51,7 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Folio final:" prop="end_folio">
-                            <el-input-number v-model="formFormalities.end_folio" controls-position="right"
+                            <el-input-number v-model="formFormalities.end_folio" controls-position="right" :min="formFormalities.initial_folio"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
@@ -99,6 +99,9 @@
             }
         },
         watch:{
+            'formFormalities.initial_folio' (){
+                this.formFormalities.end_folio = this.formFormalities.initial_folio;
+            },
             'formFormalities.end_folio' (){
                 this.formFormalities.total_fojas = this.formFormalities.end_folio;
             }

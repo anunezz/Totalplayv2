@@ -8,6 +8,7 @@ use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
 use App\Repositories\Formality\FormalityRepository;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,10 +25,18 @@ class FormalitiesController extends Controller
     {
         if ($request->wantsJson()){
             $data = $request->all();
-            $formalities = Formalities::with('user.determinant')
-                ->search($data['filters'])
-                ->orderBy('created_at', 'DESC')
-                ->paginate($data['perPage']);
+            if(auth()->user()->cat_profile_id === 1){
+                $formalities = Formalities::with('user.determinant')
+                    ->search($data['filters'])
+                    ->orderBy('created_at', 'DESC')
+                    ->paginate($data['perPage']);
+            }else{
+                $formalities = Formalities::with('user.determinant')
+                    ->whereUnitId(auth()->user()->cat_unit_id)
+                    ->search($data['filters'])
+                    ->orderBy('created_at', 'DESC')
+                    ->paginate($data['perPage']);
+            }
 
             return response()->json([
                'formalities' => $formalities,
@@ -256,6 +265,28 @@ class FormalitiesController extends Controller
             return response()->json([
                 'success' => true,
                 'total' =>Formalities::where('sort_code', 'like', $data['code'].'%')->count()
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function allUserUnit(Request $request)
+    {
+        try {
+            if(auth()->user()->cat_profile_id === 1){
+                $usersId = Formalities::all()->pluck('user_id');
+            }else{
+                $usersId = Formalities::whereUnit_id(auth()->user()->cat_unit_id)->get()->pluck('user_id');
+            }
+
+            return response()->json([
+                'success' => true,
+                'users' => User::whereIn('id',$usersId)->get()
             ]);
         }
         catch ( \Exception $e ) {
