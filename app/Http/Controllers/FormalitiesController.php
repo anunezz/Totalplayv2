@@ -7,6 +7,7 @@ use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
+use App\Http\Models\SICAR\FormalitiesSicar;
 use App\Repositories\Formality\FormalityRepository;
 use App\User;
 use Illuminate\Http\Request;

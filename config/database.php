@@ -91,6 +91,18 @@ return [
             'prefix_indexes' => true,
         ],
 
+        'sicar' => [
+            'driver' => 'mysql',
+            'host' => env('DB_HOST_SICAR', '127.0.0.1'),
+            'port' => env('DB_PORT_SICAR', '3306'),
+            'database' => env('DB_DATABASE_SICAR', 'sicar_prod'),
+            'username' => env('DB_USERNAME_SICAR', 'root'),
+            'password' => env('DB_PASSWORD_SICAR', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
+
     ],
 
     /*
