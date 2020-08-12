@@ -21,7 +21,7 @@
                         type="success"
                         icon="fas fa-edit"
                         @click="$router.push({name: 'NewFormalities' })">
-                        Nuevo
+                        Nuevo registro
                     </el-button>
                 </el-button-group>
             </template>
@@ -33,7 +33,7 @@
                     icon="fas fa-search"
                     style="width: 100%"
                     @click="filters.show = true">
-                    Filtros
+                    Filtros avanzados
                 </el-button>
             </el-col>
         </el-row> <br>
