@@ -4,7 +4,7 @@
             <template slot="buttons">
                 <el-button
                     align="right"
-                    size="small"
+                    size="mini"
                     type="danger"
                     icon="el-icon-arrow-left"
                     @click="$router.push('/')">
@@ -49,16 +49,38 @@
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
-                        <el-button type="primary" icon="el-icon-edit"></el-button>
-                        <el-button type="primary" icon="el-icon-share"></el-button>
                         <el-button
                             type="default"
                             size="mini"
                             icon="fas fa-search"
-                            style="width: 100%"
                             @click="filters.show = true">
-                                Filtros
-                        ></el-button>
+                                Filtros avanzados
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="success">
+                            Baja documental
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="success">
+                            Baja contable
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="success">
+                            Baja contable
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="success">
+                            Transferencia primaria
+                        </el-button>
+                        <el-button
+                            size="mini"
+                            type="success">
+                            Transferencia secundaria
+                        </el-button>
                     </el-button-group>
                 </div>
             </el-col>
