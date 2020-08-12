@@ -22,12 +22,13 @@ class ReportController extends Controller
 
             $data = $request->all();
 
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
 
             //dd($Formalities);
 
             $results = [
                         //Nivel de descripción documental
+                        'unidad' => $Formalities->unit()->first()->name,
                         'serieCode' => $Formalities->serie()->first()->code,
                         'serieName' => $Formalities->serie()->first()->name,
                         'subserieName' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->name : '',
@@ -56,6 +57,8 @@ class ReportController extends Controller
                         'end_folio' => $Formalities->end_folio,
 
                         //Características físicas y requisitos técnicos
+
+                        //Valoración, selección y eliminación
 
                         //Condiciones de acceso (Leyenda de clasificación de la información y/o de versión pública)
                         'Classification_date'=> $Formalities->classification_date,
@@ -122,12 +125,21 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
             //$Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find(1)->first();
 
+            //dd( "eSTAS AQUI", $Formalities->SubSerie()->first()  );
 
+            $data = [
+                "Unidad" => $Formalities->unit()->first()->name,
+                "Determinante" => $Formalities->unit()->first()->determinant,
+                "section" => $Formalities->section()->first()->name,
+                "serie" => $Formalities->serie()->first()->name,
+                "subserie" => ($Formalities->SubSerie()->first() === null)? 'N/A' : $Formalities->SubSerie()->first()->name,
+                //"subserie" => 'HHHHHHH',
+            ];
 
-            return Excel::download(new LabelBox([],['holasdjdjdjsdjdsjdsj']), 'etiqueta_de_caja.xlsx');
+            return Excel::download(new LabelBox([],$data), 'etiqueta_de_caja.xlsx');
 
 
         } catch (Exception $e) {
