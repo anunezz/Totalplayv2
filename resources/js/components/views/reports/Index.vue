@@ -50,38 +50,42 @@
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
                         <el-button
-                            type="default"
-                            size="mini"
-                            icon="fas fa-search"
-                            @click="filters.show = true">
-                                Filtros avanzados
-                        </el-button>
-                        <el-button
                             size="mini"
                             type="success">
                             Baja documental
                         </el-button>
                         <el-button
                             size="mini"
-                            type="success">
+                            type="primary">
                             Baja contable
                         </el-button>
                         <el-button
                             size="mini"
-                            type="success">
-                            Baja contable
-                        </el-button>
-                        <el-button
-                            size="mini"
-                            type="success">
+                            type="default">
                             Transferencia primaria
                         </el-button>
                         <el-button
                             size="mini"
-                            type="success">
+                            type="warning">
                             Transferencia secundaria
                         </el-button>
                     </el-button-group>
+                </div>
+            </el-col>
+        </el-row>
+
+        <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-end;'>
+                    <div>
+                        <el-button
+                            type="default"
+                            size="mini"
+                            icon="fas fa-search"
+                            @click="filters.show = true">
+                                    Filtros avanzados
+                        </el-button>
+                    </div>
                 </div>
             </el-col>
         </el-row>
