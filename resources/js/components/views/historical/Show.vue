@@ -6,7 +6,7 @@
                     size="medium"
                     type="danger"
                     icon="el-icon-arrow-left"
-                    @click="$router.push('/notices/multilaterales')">
+                    @click="$router.push({name: 'HistoricalIndex' })">
                     Regresar
                 </el-button>
             </template>

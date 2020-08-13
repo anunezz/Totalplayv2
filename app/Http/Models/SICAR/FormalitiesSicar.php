@@ -8,5 +8,14 @@ class FormalitiesSicar extends Model
 {
     protected $connection ='sicar';
     protected $table = 'formalities';
-    protected $primaryKey ='Id';
+
+    protected $with = ['user'];
+
+    public function user()
+    {
+        return $this->belongsTo(
+            UserSicar::class,
+            'user_id'
+        );
+    }
 }

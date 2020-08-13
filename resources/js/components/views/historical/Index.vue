@@ -13,9 +13,8 @@
                     <el-button
                         size="small"
                         type="primary"
-                        icon="fas fa-file-excel"
-                        :disabled="downloading">
-                        {{ downloadText }}
+                        icon="fas fa-file-excel">
+                        Descargar Excel
                     </el-button>
                 </el-button-group>
             </template>
@@ -30,31 +29,45 @@
                 </el-button>
             </el-col>
         </el-row> <br>
+        <el-pagination
+            :page-size="parseInt(pagination.perPage)"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            layout="total"
+            :total="pagination.total"
+            :current-page.sync="pagination.currentPage">
+        </el-pagination>
         <el-row :gutter="20">
             <el-col :span="24">
                 <el-table
                     size="mini"
-                    :data="tableData"
+                    :data="formalitiesSicarTable"
                     style="width: 100%">
                     <el-table-column
-                        prop="determinant"
                         label="Determinante">
+                        <template slot-scope="scope">
+                            {{scope.row.key_units}}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="classification"
+                        prop="i_topograf"
                         label="Clasificación">
                     </el-table-column>
                     <el-table-column
-                        prop="year"
+                        prop="date"
                         label="Año">
                     </el-table-column>
                     <el-table-column
-                        prop="user"
                         label="Creado por:">
+                        <template slot-scope="scope">
+                            {{scope.row.user.name}}
+                        </template>
                     </el-table-column>
                     <el-table-column
-                        prop="date"
                         label="Fecha y Hora de  Creación">
+                        <template slot-scope="scope">
+                            {{ scope.row.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center">
@@ -79,6 +92,17 @@
                 <br>
             </el-col>
         </el-row>
+        <el-row>
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="pagination.currentPage"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="parseInt(pagination.perPage)"
+                layout="sizes, ->, prev, pager, next"
+                :total="pagination.total">
+            </el-pagination>
+        </el-row>
     </div>
 </template>
 
@@ -95,111 +119,51 @@
 
         data() {
             return {
-                tableData: [{
-                    number: '1',
-                    determinant: 'SSRE',
-                    classification: '10-01-1',
-                    year: '2004',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '2',
-                    determinant: 'TIN',
-                    classification: '590-27-1',
-                    year: '2016',
-                    user: 'Juárez Caballero, Raúl Alberto',
-                    date: '2020-06-26 12:46:57',
-                }, {
-                    number: '3',
-                    determinant: 'SSRE',
-                    classification: '421-02-1',
-                    year: '2008',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '4',
-                    determinant: 'SSRE',
-                    classification: '312-09-9',
-                    year: '2013',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '5',
-                    determinant: 'DDH',
-                    classification: '410-01-207',
-                    year: '2001',
-                    user: 'Cruces Monroy, Joel',
-                    date: '2017-02-28 01:06:57',
-                }, {
-                    number: '6',
-                    determinant: 'TIN',
-                    classification: '590-27-1',
-                    year: '2016',
-                    user: 'Juárez Caballero, Raúl Alberto',
-                    date: '2020-06-26 12:46:57',
-                }, {
-                    number: '7',
-                    determinant: 'SSRE',
-                    classification: '421-02-1',
-                    year: '2007',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '8',
-                    determinant: 'SSRE',
-                    classification: '312-09-9',
-                    year: '2005',
-                    user: 'Sánchez Buendia Aurora',
-                    date: '2017-02-27 06:22:17',
-                }, {
-                    number: '9',
-                    determinant: 'DDH',
-                    classification: '410-01-207',
-                    year: '2003',
-                    user: 'Cruces Monroy, Joel',
-                    date: '2017-02-28 01:06:57',
-                }, {
-                    number: '10',
-                    determinant: 'DDH',
-                    classification: '510-06-1',
-                    year: '2001',
-                    user: 'Cruces Monroy, Joel',
-                    date: '2017-02-28 01:06:57',
-                }],
-                downloading: false,
-                downloadText: 'Descargar Excel',
-                dialogVisible: false,
-
-                filters: {
-                    recommendation: '',
+                filters:{
+                    show: false,
+                    determinant:'',
+                    classification:'',
+                    year:null,
+                    userId:null
                 },
-
-                showFilters: false,
-                search: {
-                    date: null,
-                    recommendation: null,
-                    cat_entity_id: null,
-                    isPublished: []
-                }
-
-
+                pagination: {
+                    currentPage: 1,
+                    total: 0,
+                    perPage: 10
+                },
+                formalitiesSicarTable:[],
             }
         },
 
         created() {
-
+            this.getFormalitiesSicar();
         },
-        computed: {
-            ...mapGetters("bulkLoading", [
-                "errorsBulk"
-            ])
-        },
-
 
         methods: {
-
-            ...mapActions("bulkLoading", ['addRows', 'indexRow']),
-
+            getFormalitiesSicar(currentPage =  1){
+                let data = { params: {
+                        page: currentPage,
+                        perPage: this.pagination.perPage,
+                        filters: this.filters}
+                };
+                axios.get('/api/formalitiesSicar',data).then(response => {
+                    this.formalitiesSicarTable = response.data.formalitiesSicar.data;
+                    this.pagination.total = response.data.formalitiesSicar.total;
+                }).catch(error => {
+                    console.log(error)
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            },
+            handleSizeChange(sizePerPage) {
+                this.pagination.perPage = sizePerPage;
+                this.getFormalitiesSicar();
+            },
+            handleCurrentChange(currentPage) {
+                this.getFormalitiesSicar(currentPage);
+            },
         },
     }
 </script>
