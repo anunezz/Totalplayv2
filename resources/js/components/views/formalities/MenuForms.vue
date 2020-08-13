@@ -50,18 +50,25 @@
                     </el-button>
                     <span v-if="(formFormalities.question_two !== 'Sí' && currentTap === 3) || (formFormalities.question_two === 'Sí' && currentTap === 4)" style="margin-left: 10px">
                         <el-button
-                            v-if="editFormalitiy_id !== null"
+                            v-if="editFormalitiy_id !== null && $store.state.user.profile === 1"
                             size="small"
                             type="success"
-                            @click="updateForm()">
+                            @click="confirmShipment(2)">
                              Actualizar
                         </el-button>
+                        <el-button
+                            v-else-if="editFormalitiy_id === null"
+                            size="small"
+                            type="success"
+                            @click="confirmShipment(1)">
+                        Guardar
+                    </el-button>
                         <el-button
                             v-else
                             size="small"
                             type="success"
-                            @click="submitForm()">
-                        Guardar
+                            @click="$router.push({name: 'ListFormalities' })">
+                        Salir
                     </el-button>
                     </span>
                     <el-button
@@ -122,7 +129,7 @@
                     legajos: 0,
                     initial_folio: 0,
                     end_folio: 0,
-                    total_fojas: null,
+                    total_fojas: 0,
                     question_one: null,
                     question_two: null,
                     transparency_resolution_id: null,
@@ -290,8 +297,6 @@
                 this.currentTap = parseInt(this.$refs['menuTaps'].currentName);
             },
             editRegister(id){
-
-
                 this.editFormalitiy_id = id;
 
                 axios.get('/api/formalities/' + this.editFormalitiy_id + '/edit').then(response => {
@@ -309,6 +314,16 @@
                         type: "warning",
                         message: "No fue posible completar la acción, intente nuevamente."
                     });
+                });
+            },
+            confirmShipment(type){
+                this.$confirm('¿Esta completamente seguro que los datos son los conrrectos?', 'Precaución', {
+                    confirmButtonText: 'Sí',
+                    cancelButtonText: 'No',
+                    type: 'warning'
+                }).then(() => {
+                    if (type === 1) this.submitForm()
+                    else this. updateForm()
                 });
             }
         }

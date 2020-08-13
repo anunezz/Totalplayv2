@@ -12,6 +12,13 @@
                 <el-button
                     :disabled="formalitiesTable.length === 0"
                     size="small"
+                    type="warning"
+                    icon="fas fa-box-open">
+                    Descargar etiqueta de caja
+                </el-button>
+                <el-button
+                    :disabled="formalitiesTable.length === 0"
+                    size="small"
                     type="primary"
                     icon="far fa-file-excel">
                     Descargar Excel
@@ -84,19 +91,21 @@
                         label="Acciones" header-align="left" align="center">
                         <template slot-scope="scope">
                             <el-button-group>
-                                <!--<el-tooltip
+                                <el-tooltip
+                                    v-if="$store.state.user.profile !== 1"
                                     class="item"
                                     effect="dark"
                                     content="Consultar"
                                     placement="top-start">
                                     <el-button
-                                        type="warning"
+                                        type="primary"
                                         size="mini"
                                         icon="fas fa-eye"
-                                        @click="showRegister(scope.row.hash)">
+                                        @click="editRegister(scope.row.hash)">
                                     </el-button>
-                                </el-tooltip>-->
+                                </el-tooltip>
                                 <el-tooltip
+                                    v-else
                                     class="item"
                                     effect="dark"
                                     content="Editar"
@@ -145,7 +154,7 @@
                                         @click="eyebrow(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
-                                <el-tooltip
+                                <!--<el-tooltip
                                     class="item"
                                     effect="dark"
                                     content="Caja"
@@ -156,7 +165,7 @@
                                         icon="fas fa-box-open"
                                         @click="box(scope.row.hash)">
                                     </el-button>
-                                </el-tooltip>
+                                </el-tooltip>-->
                             </el-button-group>
                         </template>
                     </el-table-column>

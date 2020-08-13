@@ -12,6 +12,7 @@
                                 :rows="3"
                                 :maxlength="250"
                                 show-word-limit
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.title">
                             </el-input>
                         </el-form-item>
@@ -37,6 +38,7 @@
                                 :rows="3"
                                 :maxlength="250"
                                 show-word-limit
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.additional_information">
                             </el-input>
                         </el-form-item>

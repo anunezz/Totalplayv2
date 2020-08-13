@@ -8,7 +8,7 @@
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.format_id" clearable filterable
-                                       placeholder="Seleccionar" style="width: 100%">
+                                       placeholder="Seleccionar" style="width: 100%" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined">
                                 <el-option
                                     v-for="doc in typeDocs"
                                     :key="doc.id"
@@ -23,7 +23,7 @@
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.documentary_tradition_id" filterable placeholder="Seleccionar"
-                                       style="width: 100%">
+                                       style="width: 100%" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined">
                                 <el-option
                                     v-for="traditional in traditionDocs"
                                     :key="traditional.id"
@@ -37,13 +37,13 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Legajo:" prop="legajos">
-                            <el-input-number v-model="formFormalities.legajos" controls-position="right"
+                            <el-input-number v-model="formFormalities.legajos" controls-position="right" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="Folio inicial:" prop="initial_folio">
-                            <el-input-number v-model="formFormalities.initial_folio" controls-position="right"
+                            <el-input-number v-model="formFormalities.initial_folio" controls-position="right" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
@@ -51,13 +51,18 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Folio final:" prop="end_folio">
-                            <el-input-number v-model="formFormalities.end_folio" controls-position="right" :min="formFormalities.initial_folio"
+                            <el-input-number v-model="formFormalities.end_folio" controls-position="right" :min="formFormalities.initial_folio" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="Total de fojas:" prop="fojas">
-                            <el-input v-model="formFormalities.total_fojas" disabled style="width: 100%"></el-input>
+                            <el-input v-model="formFormalities.total_fojas" disabled style="width: 100%"
+                                      :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[0-9]+$/, message:'Este campo soloadmite números.'}]">
+
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

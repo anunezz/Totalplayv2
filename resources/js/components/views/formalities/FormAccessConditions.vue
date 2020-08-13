@@ -7,7 +7,7 @@
                         <el-form-item label="Resolución del comité de transparencia:" prop="transparency_resolution_id"
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                            <el-select v-model="formFormalities.transparency_resolution_id" clearable filterable :disabled="formFormalities.disableControl"
+                            <el-select v-model="formFormalities.transparency_resolution_id" clearable filterable :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
                                     v-for="reso in transparencyResolutions"
@@ -22,7 +22,7 @@
                         <el-form-item label="Carácter de la información:" prop="nature_information_id"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                            <el-select v-model="formFormalities.nature_information_id" filterable placeholder="Seleccionar" :disabled="formFormalities.disableControl"
+                            <el-select v-model="formFormalities.nature_information_id" filterable placeholder="Seleccionar" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                        style="width: 100%">
                                 <el-option
                                     v-for="info in characterInformation"
@@ -40,7 +40,7 @@
                         <el-form-item label="Razón de clasificación:" prop="classification_reason_id"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
-                            <el-select v-model="formFormalities.classification_reason_id" clearable filterable :disabled="formFormalities.disableControl"
+                            <el-select v-model="formFormalities.classification_reason_id" clearable filterable :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                        placeholder="Seleccionar" style="width: 100%">
                                 <el-option
                                     v-for="person in personalInformation"
@@ -55,7 +55,7 @@
                         <el-form-item label="Fecha de clasificación: " prop="classification_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-date-picker
-                                :disabled="formFormalities.disableControl"
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.classification_date"
                                 type="date"
                                 format="dd/MM/yyyy"
@@ -71,7 +71,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                         <el-input
-                            :disabled="formFormalities.disableControl"
+                            :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                             v-model="formFormalities.name_titular"
                             :maxlength="250">
                         </el-input>
@@ -85,7 +85,7 @@
                     { pattern: /^[A-Za-z0-9\.,\-\/ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
                                 placeholder="Ejemplo: CT/025/2020"
-                                :disabled="formFormalities.disableControl"
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.transparency_proceedings"
                                 :maxlength="250">
                             </el-input>
@@ -98,7 +98,7 @@
                     { pattern: /^[A-Za-z0-9\.,\-ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
                                 placeholder="Ejemplo: 5, 8-10, 15-19 "
-                                :disabled="formFormalities.disableControl"
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.restricted_parts"
                                 :maxlength="250">
                             </el-input>
@@ -112,7 +112,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                         <el-input
-                            :disabled="formFormalities.disableControl"
+                            :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                             v-model="formFormalities.legal_basis"
                             :maxlength="250">
                         </el-input>
@@ -121,13 +121,13 @@
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Periodo de reserva (años):" prop="reservation_period">
-                            <el-input-number v-model="formFormalities.reservation_period" controls-position="right" :min="0" :max="100"
+                            <el-input-number v-model="formFormalities.reservation_period" controls-position="right" :min="0" :max="100" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="Ampliación del plazo (años):" prop="deadline_extension">
-                            <el-input-number v-model="formFormalities.deadline_extension" controls-position="right" :min="0" :max="100"
+                            <el-input-number v-model="formFormalities.deadline_extension" controls-position="right" :min="0" :max="100" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
@@ -140,7 +140,7 @@
                     { pattern: /^[A-Za-z0-9\.,\-\/ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
                                 placeholder="CTA-04/2020-SIPOT"
-                                :disabled="formFormalities.disableControl"
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.Record_official_number"
                                 :maxlength="250">
                             </el-input>
@@ -150,7 +150,7 @@
                         <el-form-item label="Fecha de desclasificación: " prop="declassification_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-date-picker
-                                :disabled="formFormalities.disableControl"
+                                :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                 v-model="formFormalities.declassification_date"
                                 type="date"
                                 format="dd/MM/yyyy"
@@ -169,7 +169,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                 <el-input
-                                    :disabled="formFormalities.disableControl"
+                                    :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                     type="textarea"
                                     :rows="3"
                                     :maxlength="250"
@@ -185,7 +185,7 @@
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
                     { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                 <el-input
-                                    :disabled="formFormalities.disableControl"
+                                    :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                     type="textarea"
                                     :rows="3"
                                     :maxlength="250"
@@ -216,11 +216,11 @@
                     },
                     {
                         id:2,
-                        name:'Reserva'
+                        name:'Versión pública'
                     },
                     {
                         id:3,
-                        name:'Versión pública'
+                        name:'Reservada'
                     },
                 ],
                 characterInformation:[
@@ -230,7 +230,7 @@
                     },
                     {
                         id:2,
-                        name:'Pública'
+                        name:'Versión pública'
                     },
                     {
                         id:3,
@@ -247,6 +247,14 @@
                         name:'Datos sensibles'
                     }
                 ]
+            }
+        },
+        watch:{
+            'formFormalities.transparency_resolution_id'(){
+                this.formFormalities.nature_information_id = this.formFormalities.transparency_resolution_id;
+            },
+            'formFormalities.nature_information_id'(){
+                this.formFormalities.transparency_resolution_id = this.formFormalities.nature_information_id;
             }
         }
     }

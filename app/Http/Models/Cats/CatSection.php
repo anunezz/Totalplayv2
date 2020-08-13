@@ -8,10 +8,15 @@ class CatSection extends Model
 {
     protected $fillable = ['name', 'cat'];
 
-    protected $appends = ['hash'];
+    protected $appends = ['full_name', 'hash'];
 
     public function getHashAttribute()
     {
         return encrypt($this->id);
+    }
+
+    public function getFullNameAttribute()
+    {
+        return $this->code . '-' . $this->name;
     }
 }

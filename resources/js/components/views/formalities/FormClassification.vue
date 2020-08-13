@@ -12,7 +12,7 @@
                                 <el-option
                                     v-for="section in sections"
                                     :key="section.id"
-                                    :label="section.name"
+                                    :label="section.full_name"
                                     :value="section.id">
                                 </el-option>
                             </el-select>
@@ -29,7 +29,7 @@
                                 <el-option
                                     v-for="serie in series"
                                     :key="serie.id"
-                                    :label="serie.name"
+                                    :label="serie.full_name"
                                     :value="serie.id">
                                 </el-option>
                             </el-select>
@@ -47,7 +47,7 @@
                                 <el-option
                                     v-for="subSerie in subSeries"
                                     :key="subSerie.id"
-                                    :label="subSerie.name"
+                                    :label="subSerie.full_name"
                                     :value="subSerie.id">
                                 </el-option>
                             </el-select>
@@ -88,14 +88,17 @@
                     <el-col :span="12">
                         <el-form-item label="Consecutivo: " prop="consecutive">
                             <el-input-number v-model="formFormalities.consecutive" controls-position="right" :min="0" disabled
-                                             style="width: 100%"></el-input-number>
+                                             style="width: 100%" :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
+                    { pattern: /^[0-9]+$/, message:'Este campo solo admite numeros.'}]">
+                            </el-input-number>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Legajo:" prop="legajo">
-                            <el-input-number v-model="formFormalities.legajo" controls-position="right" :min="0" :max="100"
+                            <el-input-number v-model="formFormalities.legajo" controls-position="right" :min="0" :max="100" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
