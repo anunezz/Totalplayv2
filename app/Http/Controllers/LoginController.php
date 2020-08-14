@@ -71,6 +71,8 @@ class LoginController extends Controller
                     auth()->loginUsingId( User::where( 'username', $request->user )->first()->id );
 
                     $user = auth()->user();
+                    \DB::table('oauth_access_tokens')->where('user_id', $user->id)
+                        ->update(['revoked' => true]);
                     $token = $user->createToken( 'SICAR_session' )->accessToken;
 
                     if ( $token ) {

@@ -59,6 +59,31 @@ window.axios.defaults.headers.common = {
     'no-cache': 'Set-Cookie, Set-Directiva Cookie2',
 };
 
-if (window.sessionStorage.getItem('SICAR_token')) {
-    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.sessionStorage.getItem('SICAR_token');
-}
+// if (window.sessionStorage.getItem('SICAR_token')) {
+//     window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.sessionStorage.getItem('SICAR_token');
+// }
+
+axios.interceptors.request.use(function (config) {
+    let token = window.sessionStorage.getItem('SICAR_token');
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    } else {
+        config.headers.Authorization = "";
+        window.sessionStorage.removeItem('SICAR_token');
+    }
+    return config;
+}, function (error) {
+    return Promise.reject(error);
+});
+
+axios.interceptors.response.use(response => {
+    return response;
+}, function (error) {
+    const originalRequest = error.config;
+    if (error.response.status === 401){
+        setTimeout(function(){
+            location.reload();
+        }, 100);
+    }
+    return Promise.reject(error);
+});

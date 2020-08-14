@@ -141,6 +141,7 @@
 
         methods: {
             getFormalitiesSicar(currentPage =  1){
+                this.startLoading();
                 let data = { params: {
                         page: currentPage,
                         perPage: this.pagination.perPage,
@@ -149,8 +150,10 @@
                 axios.get('/api/formalitiesSicar',data).then(response => {
                     this.formalitiesSicarTable = response.data.formalitiesSicar.data;
                     this.pagination.total = response.data.formalitiesSicar.total;
+                    this.stopLoading();
                 }).catch(error => {
                     console.log(error)
+                    this.stopLoading();
                     this.$message({
                         type: "warning",
                         message: "No fue posible completar la acción, intente nuevamente."
