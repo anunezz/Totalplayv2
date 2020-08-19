@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
             AdminUnitSectionSeeder::class,
             SeriesPrimaryValuesSeeder::class,
             DescriptionSubseriesSeeder::class,
-            DescriptionUnitsSeeder::class
+            DescriptionUnitsSeeder::class,
+            SeriesUnitsSeeder::class
         ]);
     }
 }
