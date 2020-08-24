@@ -51,14 +51,14 @@
                         prop="determinant"
                         label="Determinante">
                     </el-table-column>
-                    <el-table-column
-                        prop="type"
-                        label="Secciones"
-                        width="600">
-                        <template slot-scope="scope">
-                            {{nameSections(scope.row.section_all)}}
-                        </template>
-                    </el-table-column>
+<!--                    <el-table-column-->
+<!--                        prop="type"-->
+<!--                        label="Secciones"-->
+<!--                        width="600">-->
+<!--                        <template slot-scope="scope">-->
+<!--                            {{nameSections(scope.row.section_all)}}-->
+<!--                        </template>-->
+<!--                    </el-table-column>-->
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
@@ -209,26 +209,26 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="Secciones"
-                                      prop="section_all"
-                                      :rules="[
-                                        { required: true, message: 'Este campo es requerido', trigger: ['blur', 'change']},
-                                      ]">
-                            <el-select v-model="catalogEditForm.section_all"
-                                       filterable placeholder="Seleccionar"
-                                       remove-tag="remove-tag"
-                                       multiple
-                                       style="width: 100%">
-                                <el-option
-                                    v-for="(section , index) in sections"
-                                    :key="index"
-                                    :label="section.name"
-                                    :value="section.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
+<!--                    <el-col :span="24">-->
+<!--                        <el-form-item label="Secciones"-->
+<!--                                      prop="section_all"-->
+<!--                                      :rules="[-->
+<!--                                        { required: true, message: 'Este campo es requerido', trigger: ['blur', 'change']},-->
+<!--                                      ]">-->
+<!--                            <el-select v-model="catalogEditForm.section_all"-->
+<!--                                       filterable placeholder="Seleccionar"-->
+<!--                                       remove-tag="remove-tag"-->
+<!--                                       multiple-->
+<!--                                       style="width: 100%">-->
+<!--                                <el-option-->
+<!--                                    v-for="(section , index) in sections"-->
+<!--                                    :key="index"-->
+<!--                                    :label="section.name"-->
+<!--                                    :value="section.id">-->
+<!--                                </el-option>-->
+<!--                            </el-select>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
                 </el-row>
             </el-form>
                     <br> <p></p>

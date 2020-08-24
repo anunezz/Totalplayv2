@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class CatSeries extends Model
 {
 
+    protected $fillable = ['name', 'code', 'codeSeries', 'cat_section_id', 'AT', 'AC', 'total', 'cat_selection_id'];
+
     protected $appends = ['full_name', 'hash'];
 
     public function getHashAttribute()
@@ -25,6 +27,14 @@ class CatSeries extends Model
             'series_primary_values',
         'cat_serie_id',
         'cat_primary_value_id');
+    }
+
+    public function administrative()
+    {
+        return $this->belongsToMany(CatAdministrativeUnit::class,
+            'series_units',
+            'cat_serie_id',
+            'cat_administrative_unit_id');
     }
 
     public function section()

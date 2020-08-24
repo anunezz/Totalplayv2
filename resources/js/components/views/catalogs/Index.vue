@@ -63,9 +63,9 @@
                 selectedCat: null,
                 cats: [
                     {id:1,  name: 'Unidades Administrativas'},
-                    {id:2,  name: 'Secciones'},
-                    {id:3,  name: 'Series'},
-                    {id:4,  name: 'Subseries'},
+                    {id:2,  name: 'Seccion documental'},
+                    {id:3,  name: 'Serie documental'},
+                    {id:4,  name: 'Subserie documental'},
                     {id:5,  name: 'CGCA'},
                     {id:6,  name: 'CDD'}
                 ],
