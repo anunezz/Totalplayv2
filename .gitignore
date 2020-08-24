@@ -3,8 +3,9 @@
 # /storage/oauth-private.key
 /storage/*.key
 /vendor/
- .idea/
- /.vscode
+.idea/
+.history/
+.vscode
 # /public/mix-manifest.json
 # storage/app/recommendations/
 
