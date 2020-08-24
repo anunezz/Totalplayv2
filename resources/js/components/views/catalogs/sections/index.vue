@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="el-icon-document" title="Secciones">
+        <header-section icon="el-icon-document" title="Seccion documental">
             <template slot="buttons">
 <!--                <el-col :span="5" :offset="7">-->
 <!--                    <el-button type="success" @click="newCatalog" style="width: 100%">-->

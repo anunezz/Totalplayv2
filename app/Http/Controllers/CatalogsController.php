@@ -43,7 +43,7 @@ class CatalogsController extends Controller
                     }
                 }
                 if ($data['cat'] == 3) {
-                    $elements = CatSeries::with('section', 'primarivalues', 'selection')
+                    $elements = CatSeries::with('section', 'primarivalues', 'selection', 'administrative')
                         ->select(['id', 'name', 'code', 'codeSeries', 'cat_section_id', 'AT', 'AC', 'total', 'cat_selection_id', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
@@ -163,24 +163,24 @@ class CatalogsController extends Controller
 
 
             if (! $duplicityCheck) {
-                $cat->name = $request->name;
+                if ($request->cat!==3){
+                    $cat->name = $request->name;
 
-                if ($request->cat === 3){
-                    $cat->code = $request->code;
-                    $cat->codeSeries = $request->codeSeries;
-                    $cat->cat_section_id = $request->cat_section_id;
-                    $cat->AT = $request->AT;
-                    $cat->AC = $request->AC;
-                    $cat->total = $request->total;
-                    $cat->cat_selection_id = $request->cat_selection_id;
-                    $cat->primarivalues()->sync($request->cat_primary_value_id);
-                }
+//                    if ($request->cat === 3){
+//                        $cat->code = $request->code;
+//                        $cat->codeSeries = $request->codeSeries;
+//                        $cat->cat_section_id = $request->cat_section_id;
+//                        $cat->AT = $request->AT;
+//                        $cat->AC = $request->AC;
+//                        $cat->total = $request->total;
+//                        $cat->cat_selection_id = $request->cat_selection_id;
+//                    }
 
-                if ($request->cat === 4){
-                    $cat->code = $request->code;
-                    $cat->codeSubseries = $request->codeSubseries;
-                    $cat->cat_series_id = $request->cat_series_id;
-                }
+                    if ($request->cat === 4){
+                        $cat->code = $request->code;
+                        $cat->codeSubseries = $request->codeSubseries;
+                        $cat->cat_series_id = $request->cat_series_id;
+                    }
 //
 //                    $request->cat === 11 ? $cat->rights_recommendations_id = $request->rights_recommendations_id : null;
 //
@@ -190,12 +190,24 @@ class CatalogsController extends Controller
 //                        $cat->ods_id = $request->ods_id;
 //                        $cat->acronym = $request->acronym;
 //                    }
+                }else{
+                    $cat->fill($request->all());
+                    $cat->save();
+                    $cat->primarivalues()->sync($request->cat_primary_value_id);
+                    $cat->administrative()->sync($request->cat_administrative_unit_id);
+
+                    GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
+                    DB::commit();
+
+                    return response()->json([
+                        'success' => true
+                    ], 200);
+                }
 
                 $cat->save();
 
                 GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
                 DB::commit();
-
 
                 return response()->json([
                     'success' => true
@@ -242,6 +254,7 @@ class CatalogsController extends Controller
             }
 
             if (! $duplicityCheck) {
+
                 $cat->name = $request->name;
 
                 if ($request->cat === 1){
@@ -261,13 +274,17 @@ class CatalogsController extends Controller
                     $cat->AC = $request->AC;
                     $cat->total = $request->total;
                     $cat->cat_selection_id = $request->cat_selection_id;
-                    $cat->primarivalues()->sync($request->cat_primary_value_id);
                 }
 
                  $cat->isActive = true;
 //
                 if ($request->cat === 1){
                     $cat->sectionAll()->sync($request->cat_section_id);
+                }
+
+                if ($request->cat === 3){
+                    $cat->primarivalues()->sync($request->cat_primary_value_id);
+                    $cat->administrative()->sync($request->cat_administrative_unit_id);
                 }
 
                 $cat->save();

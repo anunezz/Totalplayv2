@@ -137,23 +137,6 @@
                     </div>
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
-                    <el-col :span="24">
-                        <el-form-item label="Cualidad"
-                                      prop="newRegisterName"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="newRegisterDialog"
-                                type="textarea"
-                                placeholder="Cualidad"
-                                v-model="catalogForm.newRegisterName"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="12">
                         <el-form-item label="Serie"
                                       prop="cat_series_id"
@@ -171,6 +154,23 @@
                                     :value="serie.id">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="Cualidad"
+                                      prop="newRegisterName"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="newRegisterDialog"
+                                type="textarea"
+                                placeholder="Cualidad"
+                                v-model="catalogForm.newRegisterName"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
