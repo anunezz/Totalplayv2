@@ -64,6 +64,8 @@ class LabelBox implements
         return [
             AfterSheet::class => function (AfterSheet $event) {
 
+                $event->sheet->setShowGridlines(false);
+
                 $event->sheet->getColumnDimension('B')->setWidth(2.00);
                 $event->sheet->getColumnDimension('C')->setWidth(15.00);
                 $event->sheet->getColumnDimension('D')->setWidth(15.00);
