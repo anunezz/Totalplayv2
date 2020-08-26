@@ -196,7 +196,9 @@ class ReportController extends Controller
         try{
             if ($request->wantsJson()){
                 $data = $request->all();
-                //dd(date("Y"));
+
+
+
                 if(auth()->user()->cat_profile_id === 1){
                     //dd("Estas aqui..");
                     $formalities = Formalities::with('user.determinant')
@@ -207,11 +209,34 @@ class ReportController extends Controller
 
                     //////dd($formalities);
                 }else{
+                    //dd(  auth()->user()->admin()->first()->id   );
+                    //$unidadid = auth()->user()->admin()->first()->id;
+
+                    // if(auth()->user()->cat_unit_id === 4){
+
+
+
+                    // }else{
+
+                    // }
+
+
+                    // $formalities = Formalities::with('user.determinant')
+                    // ->whereUnitId(auth()->user()->cat_unit_id)
+                    // ->filter($data['filters'])
+                    // ->orderBy('created_at', 'DESC')
+                    // ->paginate($data['perPage']);
+
                     $formalities = Formalities::with('user.determinant')
-                        ->whereUnitId(auth()->user()->cat_unit_id)
-                        ->search($data['filters'])
-                        ->orderBy('created_at', 'DESC')
-                        ->paginate($data['perPage']);
+                    ->filter($data['filters'])
+                    ->whereYear('close_date', '>=', date("Y"))
+                    ->orderBy('created_at', 'DESC')
+                    ->paginate($data['perPage']);
+
+
+
+
+
                 }
 
                 return response()->json([

@@ -45,18 +45,17 @@
             </el-col>
         </el-row> -->
 
-        <el-row :gutter='20'>
-              <el-col :span='24' class='animated fadeIn fast'>
-                  <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
-                      <div>
-                          <pre>
-                              <!-- {{$store.state.user}} -->
-                              {{$store.state.cat_unit_id}}
-                          </pre>
-                      </div>
-                  </div>
-              </el-col>
-        </el-row>
+        <!-- <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
+                    <div>
+                        <pre>
+                            {{$store.state.user}}
+                        </pre>
+                    </div>
+                </div>
+            </el-col>
+        </el-row> -->
 
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
@@ -70,6 +69,7 @@
                             Etiqueta de caja
                         </el-button> -->
                         <el-button
+                            v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 4)? false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowDocumentary"
@@ -77,6 +77,7 @@
                             Baja documental
                         </el-button>
                         <el-button
+                            v-if="$store.state.user.profile === 1 || $store.state.user.cat_unit_id === 4"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowAccounting"
@@ -84,12 +85,14 @@
                             Baja contable
                         </el-button>
                         <el-button
+                        v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 4)? false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             type="default">
                             Transferencia primaria
                         </el-button>
                         <el-button
+                        v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 4)? false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             type="warning">

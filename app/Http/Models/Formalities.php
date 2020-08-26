@@ -99,9 +99,15 @@ class Formalities extends Model
                 $q->where('serie_id', '=', $filters['serie_id'] );
             }
 
-            if ( isset( $filters['year'] ) &&  !empty($filters['year'])){
+            if ( isset( $filters['year'] ) && !empty($filters['year'])){
                 $q->whereYear('close_date',$filters->year);
             }
+
+            // $q->whereHas('unit', function($q) use ($filters) {
+            //     $q->where('determinant',$filters->determinant);
+            // });
+
+
         });
 
     }
