@@ -211,16 +211,9 @@ class ReportController extends Controller
                 }else{
                     //dd(  auth()->user()->admin()->first()->id   );
                     //$unidadid = auth()->user()->admin()->first()->id;
-
                     // if(auth()->user()->cat_unit_id === 4){
-
-
-
                     // }else{
-
                     // }
-
-
                     // $formalities = Formalities::with('user.determinant')
                     // ->whereUnitId(auth()->user()->cat_unit_id)
                     // ->filter($data['filters'])
