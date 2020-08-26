@@ -14,6 +14,7 @@ use App\Exports\LabelBox;
 use App\Exports\lowDocumentary;
 use App\Exports\lowAccounting;
 use App\Http\Models\Cats\CatAdministrativeUnit;
+use App\Http\Models\Cats\CatSeries;
 
 use App\Http\Models\Formalities;
 
@@ -225,6 +226,26 @@ class ReportController extends Controller
             'success' => false,
             'message' => 'Error al mostrar información ' . $e->getMessage()
         ], 300);
+        }
+    }
+
+    public function getCats(){
+        try{
+
+            $series = CatSeries::get();
+
+            return response()->json([
+                'success' => true,
+                'lResults' => [
+                    'series' => $series
+                ],
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
         }
     }
 

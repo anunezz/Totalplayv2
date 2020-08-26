@@ -13,6 +13,17 @@
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
                             <el-col :span="12">
+                                <el-form-item label="Serie">
+                                    <el-select v-model="items.serie_id" filterable clearable placeholder="Selecciona" style="width: 100%">
+                                        <el-option
+                                            v-for="item in series" :key="item.id"
+                                            :label="item.name"
+                                            :value="item.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="12">
                                 <el-form-item label="Año de cierre">
                                     <el-date-picker
                                         v-model="items.year"
@@ -21,18 +32,6 @@
                                         placeholder="Selecciona año"
                                         style="width: 100%">
                                     </el-date-picker>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="12">
-                                <el-form-item label="Creador">
-                                    <el-select v-model="items.userId" clearable placeholder="Selecciona" style="width: 100%">
-                                        <el-option
-                                            v-for="user in users"
-                                            :key="user.id"
-                                            :label="user.full_name"
-                                            :value="user.id">
-                                        </el-option>
-                                    </el-select>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -69,14 +68,25 @@
         props:['items'],
         data(){
             return{
-                users:[]
+                users:[],
+                series:[]
             }
         },
         created() {
-            console.log('hola desde filtros')
+            this.getCats();
             this.getUsers();
         },
         methods:{
+            getCats(){
+                axios.get('/api/report/getCats').then(response => {
+                    if(response.data.success){
+                        this.series = response.data.lResults.series;
+                        console.log('axios.get -> ', this.series);
+                    }
+                }).catch(error => {
+                    console.error(error);
+                });
+            },
             getUsers(){
                 axios.get('/api/all/user/unit').then(response => {
                     this.users = response.data.users;
@@ -91,7 +101,7 @@
             cleanitems(){
                 this.items.show = true;
                 this.items.year = null;
-                this.items.userId = null;
+                this.items.serie_id = null;
                 this.$emit('search');
             },
             searchitems(){
