@@ -69,7 +69,7 @@
                             Etiqueta de caja
                         </el-button> -->
                         <el-button
-                            v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 4)? false: true"
+                            v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 5)? false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowDocumentary"
@@ -77,7 +77,7 @@
                             Baja documental
                         </el-button>
                         <el-button
-                            v-if="$store.state.user.profile === 1 || $store.state.user.cat_unit_id === 4"
+                            v-if="$store.state.user.profile === 1 || $store.state.user.cat_unit_id === 5"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowAccounting"
@@ -85,14 +85,14 @@
                             Baja contable
                         </el-button>
                         <el-button
-                        v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 4)? false: true"
+                        v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 5)? false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             type="default">
                             Transferencia primaria
                         </el-button>
                         <el-button
-                        v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 4)? false: true"
+                        v-if="$store.state.user.profile === 1? true:($store.state.user.cat_unit_id === 5)? false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             type="warning">
