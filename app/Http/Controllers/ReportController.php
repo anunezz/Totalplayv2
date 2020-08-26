@@ -13,6 +13,7 @@ use App\Exports\Labels;
 use App\Exports\LabelBox;
 use App\Exports\lowDocumentary;
 use App\Exports\lowAccounting;
+use App\Http\Models\Cats\CatAdministrativeUnit;
 
 use App\Http\Models\Formalities;
 
@@ -25,8 +26,6 @@ class ReportController extends Controller
             $data = $request->all();
 
             $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
-
-            //dd($Formalities);
 
             $results = [
                         //Nivel de descripción documental
@@ -137,12 +136,14 @@ class ReportController extends Controller
         }
     }
 
-    public function LabelBox(){
+    public function LabelBox(Request $request){
         try{
+            $data = $request->all();
+            $unidad = CatAdministrativeUnit::find($data['cat_unit_id']);
 
-
-
-            return Excel::download(new LabelBox([],[]), 'Etiqueta_de_caja.xlsx');
+            return Excel::download(new LabelBox([],[
+                'unidad_admin' => $unidad->name
+            ]), 'Etiqueta_de_caja.xlsx');
 
         } catch (Exception $e) {
             return response()->json([
@@ -179,6 +180,43 @@ class ReportController extends Controller
 
                 return Excel::download(new lowAccounting([],$data), 'Baja_contable.xlsx');
 
+            }else{
+                return response()->view('errors.404', [], 404);
+            }
+        } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al mostrar información ' . $e->getMessage()
+        ], 300);
+        }
+    }
+
+    public function fileFilter(Request $request){
+        try{
+            if ($request->wantsJson()){
+                $data = $request->all();
+                //dd(date("Y"));
+                if(auth()->user()->cat_profile_id === 1){
+                    //dd("Estas aqui..");
+                    $formalities = Formalities::with('user.determinant')
+                        ->filter($data['filters'])
+                        ->whereYear('close_date', '>=', date("Y"))
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate($data['perPage']);
+
+                    //////dd($formalities);
+                }else{
+                    $formalities = Formalities::with('user.determinant')
+                        ->whereUnitId(auth()->user()->cat_unit_id)
+                        ->search($data['filters'])
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate($data['perPage']);
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'formalities' => $formalities,
+                ], 200);
             }else{
                 return response()->view('errors.404', [], 404);
             }
