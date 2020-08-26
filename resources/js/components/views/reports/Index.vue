@@ -76,6 +76,7 @@
                             Baja documental
                         </el-button>
                         <el-button
+                            v-if="$store.state.user.cat_unit_id === 5"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowAccounting"
