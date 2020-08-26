@@ -44,13 +44,22 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="description"
-                        label="Descripción">
+                        prop="type"
+                        label="Determinantes"
+                        width="400">
+                        <template slot-scope="scope">
+                            {{nameUnits(scope.row.administrative)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="serie.name"
-                        label="Serie"
-                        width="600">
+                        label="Serie documental"
+                        width="400">
+                    </el-table-column>
+                    <el-table-column
+                        prop="description"
+                        label="Descripción"
+                        width="750">
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
@@ -138,7 +147,7 @@
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="12">
-                        <el-form-item label="Serie"
+                        <el-form-item label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -157,7 +166,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="Subseries"
+                        <el-form-item label="Subserie documental"
                                       prop="cat_subserie_id"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -567,6 +576,12 @@
             resetEditForm(){
                 this.editRegisterDialog = false;
                 this.$refs['catalogEditForm'].resetFields();
+            },
+            nameUnits(data){
+                let administrative = [];
+                data.forEach(element => administrative.push(' '+element.name));
+                let aux = administrative.toString();
+                return aux;
             },
         },
     }

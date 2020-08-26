@@ -39,7 +39,7 @@
                 </el-col>
             </el-row>
             <el-row :gutter="10">
-                <el-col :span="userForm.cat_profile_id !== 3 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 8 : 8">
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 24 : userForm.cat_profile_id !== 1 ? 8 : 8">
                     <el-form-item label="Perfl"
                                   prop="cat_profile_id"
                                   :rules="[
@@ -58,8 +58,9 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="userForm.cat_profile_id !== 3 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 8 : 8">
-                    <el-form-item label="Determinante"
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 8 : 8">
+                    <el-form-item v-if="userForm.cat_profile_id !== 1"
+                                  label="Determinante"
                                   prop="cat_unit_id"
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -78,13 +79,13 @@
                     </el-form-item>
                 </el-col>
                 <el-col  :span="8">
-                    <el-form-item v-if="userForm.cat_profile_id === 3"
-                                  label="Adscripción"
+                    <el-form-item v-if="userForm.cat_profile_id !== 1"
+                                  label="Unidad Administrativa"
                                   prop="cat_administrative_unit_id"
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
-                        <el-select :disabled = "userForm.cat_unit_id === null"
+                        <el-select :disabled = "userForm.cat_unit_id === null || userForm.cat_profile_id === 2"
                                    v-model="userForm.cat_administrative_unit_id"
                                    clearable
                                    filterable placeholder="Seleccionar"
@@ -272,6 +273,11 @@
 
             submitForm() {
                 this.startLoading();
+
+                console.log('userForm', this.userForm)
+                if (this.userForm.cat_profile_id === 1){
+                    this.userForm.cat_unit_id = 1;
+                }
 
                 this.$refs['userForm'].validate((valid) => {
                     if (valid) {

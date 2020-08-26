@@ -10,7 +10,7 @@
                         <span style="font-weight: bold;">¿El expediente fue objeto de una solicitud de acceso a la información?</span>
                     </el-col>
                     <el-col :span="5">
-                        <el-radio-group v-model="formFormalities.question_one" size="medium" :disabled="formFormalities.disableControl">
+                        <el-radio-group v-model="formFormalities.question_one" size="medium" :disabled="formFormalities.disableControl || ($store.state.user.profile !== 1 && formFormalities.hash !== undefined)">
                             <el-radio border label="Sí"></el-radio>
                             <el-radio border label="No"></el-radio>
                         </el-radio-group>
@@ -26,7 +26,7 @@
                         <span style="font-weight: bold;">¿El expediente fue clasificado como confidencial o reservado?</span>
                     </el-col>
                     <el-col :span="5">
-                        <el-radio-group v-model="formFormalities.question_two" size="medium" :disabled="formFormalities.disableControl">
+                        <el-radio-group v-model="formFormalities.question_two" size="medium" :disabled="formFormalities.disableControl || ($store.state.user.profile !== 1 && formFormalities.hash !== undefined)">
                             <el-radio border label="Sí"></el-radio>
                             <el-radio border label="No"></el-radio>
                         </el-radio-group>
@@ -249,7 +249,6 @@
                 this.tableData3[0].quality =false;
 
                 let aux = this.formFormalities.serie[0] !== undefined ? this.formFormalities.serie[0] : this.formFormalities.serie;
-                console.log('calculando valores',aux)
                 this.tableData2[0].AT = parseInt(aux.AT);
                 this.tableData2[0].AC = parseInt(aux.AC);
 

@@ -62,7 +62,7 @@
             return{
                 selectedCat: null,
                 cats: [
-                    {id:1,  name: 'Unidades Administrativas'},
+                    {id:1,  name: 'Determinantes'},
                     {id:2,  name: 'Seccion documental'},
                     {id:3,  name: 'Serie documental'},
                     {id:4,  name: 'Subserie documental'},

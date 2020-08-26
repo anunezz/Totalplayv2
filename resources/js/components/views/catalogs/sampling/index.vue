@@ -44,13 +44,13 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="quality"
-                        label="Cualidad">
+                        prop="serie.name"
+                        label="Serie documental"
+                        width="600">
                     </el-table-column>
                     <el-table-column
-                        prop="serie.name"
-                        label="Serie"
-                        width="600">
+                        prop="quality"
+                        label="Cualidad">
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
