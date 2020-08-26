@@ -122,7 +122,7 @@
                     legajo: 0,
                     sort_code: '',
                     title: '',
-                    scope_and_content: '',
+                    description_id: null,
                     additional_information: '',
                     format_id: null,
                     documentary_tradition_id: null,
@@ -147,6 +147,7 @@
                     name_public_server: '',
                     position_public_server: '',
 
+                    scope_and_content: '',
                     auxOpening_date: '',
                     auxClose_date: '',
                     auxSort_code: '',

@@ -26,7 +26,7 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('legajo');
             $table->string('sort_code')->nullable();
             $table->string('title');
-            $table->text('scope_and_content')->nullable();
+            $table->unsignedBigInteger('description_id')->nullable();
             $table->text('additional_information')->nullable();
             $table->unsignedBigInteger('format_id');
             $table->unsignedBigInteger('documentary_tradition_id');

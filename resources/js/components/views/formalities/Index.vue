@@ -13,6 +13,7 @@
                     :disabled="formalitiesTable.length === 0"
                     size="small"
                     type="warning"
+                    @click="labelBox"
                     icon="fas fa-box-open">
                     Descargar etiqueta de caja
                 </el-button>
@@ -358,14 +359,14 @@
                     });
                 });
             },
-            box(id){
-                console.log('caja',id)
+            labelBox(){
                 this.startLoading();
+                console.log("unidad: ",  this.$store.state.user.cat_unit_id );
                 axios({
                     responseType: 'blob',
-                    method: 'POST',
+                    method: 'post',
                     url: '/api/report/labelBox',
-                    data: {id:id}
+                    data: { 'cat_unit_id': this.$store.state.user.cat_unit_id   }
                 }).then(response => {
                     this.loading = true;
                     setTimeout(() => {

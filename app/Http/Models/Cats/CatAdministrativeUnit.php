@@ -25,6 +25,26 @@ class CatAdministrativeUnit extends Model
         )->whereIsactive(true)->orderBy('name');
     }
 
+    public function series()
+    {
+        return $this->belongsToMany(
+            CatSeries::class,
+            'series_units',
+            'cat_administrative_unit_id',
+            'cat_serie_id'
+        )->whereIsactive(true)->orderBy('name');
+    }
+
+    public function descriptions()
+    {
+        return $this->belongsToMany(
+            CatDescription::class,
+            'description_units',
+            'cat_unit_id',
+            'cat_description_id'
+        )->whereIsactive(true);
+    }
+
 //    public function sections()
 //    {
 //        return $this->belongsToMany(

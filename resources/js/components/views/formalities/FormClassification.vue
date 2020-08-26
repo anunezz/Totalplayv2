@@ -1,5 +1,7 @@
 <template>
     <div>
+        <pre>1.-{{formFormalities.description_id}}</pre>
+        <pre>2.-{{formFormalities.scope_and_content}}</pre>
         <el-row class="body-form">
             <el-row style="padding: 15px">
                 <el-row :gutter="20">
@@ -124,7 +126,9 @@
                 }],
                 sections:[],
                 series:[],
+                auxSeries:[],
                 subSeries:[],
+                descriptions:[],
                 pickerOptionsEnd: {
                     disabledDate: this.delimtDays
                 },
@@ -143,6 +147,8 @@
                 console.log(params)
                 axios.get('/api/all/section',{params}).then(response => {
                     this.sections = response.data.sections;
+                    this.descriptions = response.data.descriptions;
+                    this.auxSeries = response.data.auxSeries;
                     this.stopLoading();
                 }).catch(error => {
                     this.stopLoading();
@@ -161,7 +167,8 @@
                 }
 
                 let params = {
-                    id:this.formFormalities.section_id
+                    id:this.formFormalities.section_id,
+                    auxSeries:this.auxSeries
                 }
                 if (this.formFormalities.section_id){
                     this.startLoading();
@@ -211,15 +218,19 @@
             },
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
-
-                this.formFormalities.scope_and_content = result[0].descriptions[0].description;
+                 const resultDescrip = this.descriptions.filter(description => description.cat_series_id === this.formFormalities.serie_id);
+                console.log('calculando contenido',this.formFormalities.serie_id,this.descriptions,resultDescrip)
+                this.formFormalities.scope_and_content = resultDescrip[0].description;
+                this.formFormalities.description_id = resultDescrip[0].id;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();
             },
             calSortCodeSubSerie(){
                  const result = this.subSeries.filter(subSerie => subSerie.id === this.formFormalities.subserie_id);
+                console.log('Hola content sub serie',result)
                 this.formFormalities.scope_and_content = result[0].descrip[0].description;
+                this.formFormalities.description_id = result[0].descrip[0].id;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();
             },
