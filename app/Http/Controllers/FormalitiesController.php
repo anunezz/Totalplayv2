@@ -204,15 +204,33 @@ class FormalitiesController extends Controller
     {
         $data = $request->all();
         $id = isset($data['unit_id']) ? (int)$data['unit_id'] : null;
-
+        $sect = [];
         try {
-            $sections = CatAdministrativeUnit::find($id);
-            if (!is_null($sections->sectionAll)) {
-                return response()->json([
-                    'success' => true,
-                    'sections' =>$sections->sectionAll
-                ]);
+            $sections = CatAdministrativeUnit::with('series.section','descriptions')->find($id);
+
+            foreach ($sections->series as $serie){
+
+                if (isset($serie->section->code)) {
+                    $good = false;
+                    foreach ($sect as $aux) {
+                        if($aux->code === $serie->section->code){
+                            $good = true;
+                        }
+                    }
+
+                    if (!$good) {
+                        $sect [] = $serie->section;
+                    }
+                }
+
             }
+
+            return response()->json([
+                'success' => true,
+                'sections' => $sect,
+                'descriptions'=>$sections->descriptions
+            ]);
+
         }
         catch ( \Exception $e ) {
             return response()->json([

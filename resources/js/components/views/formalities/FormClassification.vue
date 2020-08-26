@@ -125,6 +125,7 @@
                 sections:[],
                 series:[],
                 subSeries:[],
+                descriptions:[],
                 pickerOptionsEnd: {
                     disabledDate: this.delimtDays
                 },
@@ -143,6 +144,7 @@
                 console.log(params)
                 axios.get('/api/all/section',{params}).then(response => {
                     this.sections = response.data.sections;
+                    this.descriptions = response.data.descriptions;
                     this.stopLoading();
                 }).catch(error => {
                     this.stopLoading();
@@ -211,8 +213,10 @@
             },
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
-
-                this.formFormalities.scope_and_content = result[0].descriptions[0].description;
+                 const resultDescrip = this.descriptions.filter(description => description.cat_series_id === this.formFormalities.serie_id);
+                console.log('calculando contenido',this.formFormalities.serie_id,this.descriptions,resultDescrip)
+                this.formFormalities.scope_and_content = resultDescrip[0].description;
+                this.formFormalities.description_id = resultDescrip[0].id;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
                 this.calSortCodeGeneral();

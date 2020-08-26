@@ -123,6 +123,7 @@
                     sort_code: '',
                     title: '',
                     scope_and_content: '',
+                    description_id: null,
                     additional_information: '',
                     format_id: null,
                     documentary_tradition_id: null,
