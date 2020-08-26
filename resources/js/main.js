@@ -79,7 +79,6 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(response => {
     return response;
 }, function (error) {
-    const originalRequest = error.config;
     if (error.response.status === 401){
         setTimeout(function(){
             location.reload();

@@ -318,7 +318,7 @@
                 });
             },
             confirmShipment(type){
-                this.$confirm('¿Esta completamente seguro que los datos son los conrrectos?', 'Precaución', {
+                this.$confirm('¿Estas seguro que la información es correcta?', 'Precaución', {
                     confirmButtonText: 'Sí',
                     cancelButtonText: 'No',
                     type: 'warning'

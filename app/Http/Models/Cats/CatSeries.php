@@ -11,6 +11,8 @@ class CatSeries extends Model
 
     protected $appends = ['full_name', 'hash'];
 
+    protected $with = ['sampling'];
+
     public function getHashAttribute()
     {
         return encrypt($this->id);
@@ -19,6 +21,11 @@ class CatSeries extends Model
     public function getFullNameAttribute()
     {
         return $this->code . '-' . $this->name;
+    }
+
+    public function sampling()
+    {
+        return $this->hasOne(CatSampling::class,'cat_series_id');
     }
 
     public function primarivalues()

@@ -1,9 +1,10 @@
 <template>
     <div>
-        <pre>1.-{{formFormalities.description_id}}</pre>
-        <pre>2.-{{formFormalities.scope_and_content}}</pre>
         <el-row class="body-form">
             <el-row style="padding: 15px">
+                <el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="quality">
+                    <p><h4>Cualidad:</h4>{{quality}}</p>
+                </el-row>
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Sección:" prop="section_id"
@@ -129,6 +130,7 @@
                 auxSeries:[],
                 subSeries:[],
                 descriptions:[],
+                quality:null,
                 pickerOptionsEnd: {
                     disabledDate: this.delimtDays
                 },
@@ -136,7 +138,6 @@
         },
         mounted() {
             this.getSections();
-            if (this.formFormalities.hash !== undefined) this.editRegisterTap();
         },
         methods:{
             getSections(){
@@ -144,12 +145,13 @@
                 let params = {
                     unit_id : this.formFormalities.hash !== undefined ? this.formFormalities.unit.id : this.$store.state.user.cat_unit_id
                 };
-                console.log(params)
+
                 axios.get('/api/all/section',{params}).then(response => {
                     this.sections = response.data.sections;
                     this.descriptions = response.data.descriptions;
                     this.auxSeries = response.data.auxSeries;
                     this.stopLoading();
+                    if (this.formFormalities.hash !== undefined) this.editRegisterTap();
                 }).catch(error => {
                     this.stopLoading();
                     this.$message({
@@ -164,6 +166,9 @@
                     this.formFormalities.subserie_id = null;
                     this.formFormalities.sort_code = '';
                     this.formFormalities.scope_and_content = '';
+                    this.series = [];
+                    this.subSeries = [];
+                    this.quality = null;
                 }
 
                 let params = {
@@ -174,6 +179,7 @@
                     this.startLoading();
                     axios.get('/api/all/series',{params}).then(response => {
                         this.series = response.data.series;
+                        if (this.formFormalities.hash !== undefined) this.getQuality();
                         this.stopLoading();
                     }).catch(error => {
                         this.stopLoading();
@@ -219,16 +225,16 @@
             calSortCodeSerie(){
                  const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
                  const resultDescrip = this.descriptions.filter(description => description.cat_series_id === this.formFormalities.serie_id);
-                console.log('calculando contenido',this.formFormalities.serie_id,this.descriptions,resultDescrip)
-                this.formFormalities.scope_and_content = resultDescrip[0].description;
-                this.formFormalities.description_id = resultDescrip[0].id;
+
+                this.formFormalities.scope_and_content = resultDescrip.length > 0 ? resultDescrip[0].description : '';
+                this.formFormalities.description_id = resultDescrip.length > 0 ? resultDescrip[0].id : null;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
+                this.quality = result[0].sampling !== null ? result[0].sampling.quality : null;
                 this.calSortCodeGeneral();
             },
             calSortCodeSubSerie(){
                  const result = this.subSeries.filter(subSerie => subSerie.id === this.formFormalities.subserie_id);
-                console.log('Hola content sub serie',result)
                 this.formFormalities.scope_and_content = result[0].descrip[0].description;
                 this.formFormalities.description_id = result[0].descrip[0].id;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
@@ -291,6 +297,10 @@
                     const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
                     this.formFormalities.serie = result;
                 }
+            },
+            getQuality(){
+                const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
+                this.quality = result[0].sampling !== null ? result[0].sampling.quality : null;
             }
         }
     }

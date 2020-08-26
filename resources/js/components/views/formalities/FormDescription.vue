@@ -20,7 +20,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="Alcance y contenido:" prop="scope_and_content">
+                        <el-form-item label="Alcance y contenido:" prop="scope_and_content" :rules="[
+                                        { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-input
                                 type="textarea"
                                 :rows="10"
