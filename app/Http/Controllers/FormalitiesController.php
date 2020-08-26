@@ -125,6 +125,8 @@ class FormalitiesController extends Controller
 
             $formality = $this->formalityRepo->find($id);
             $formality->primariValues = $formality->serie->primarivalues;
+            $formality->scope_and_content = $formality->description->description;
+
             return response()->json([
                 'success' => true,
                 'formality' =>$formality
@@ -205,11 +207,12 @@ class FormalitiesController extends Controller
         $data = $request->all();
         $id = isset($data['unit_id']) ? (int)$data['unit_id'] : null;
         $sect = [];
+        $auxSeries = [];
         try {
             $sections = CatAdministrativeUnit::with('series.section','descriptions')->find($id);
 
             foreach ($sections->series as $serie){
-
+                $auxSeries [] = $serie->hash;
                 if (isset($serie->section->code)) {
                     $good = false;
                     foreach ($sect as $aux) {
@@ -228,7 +231,8 @@ class FormalitiesController extends Controller
             return response()->json([
                 'success' => true,
                 'sections' => $sect,
-                'descriptions'=>$sections->descriptions
+                'descriptions'=>$sections->descriptions,
+                'auxSeries' => $auxSeries
             ]);
 
         }
@@ -243,10 +247,18 @@ class FormalitiesController extends Controller
     public function allSeries(Request $request)
     {
         try {
-            $serie = $request->all();
+            $data = $request->all();
+            $allSeries = [];
+            $result = CatSeries::with('primarivalues','descriptions')->whereCatSectionId($data['id'])->get();
+            foreach ($result as $serie){
+                $aux = false;
+//                for ()
+                dd($data,$serie);
+            }
+
             return response()->json([
                 'success' => true,
-                'series' =>CatSeries::with('primarivalues','descriptions')->whereCatSectionId($serie['id'])->get()
+                'series' =>$allSeries
             ]);
         }
         catch ( \Exception $e ) {

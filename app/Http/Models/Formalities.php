@@ -3,6 +3,7 @@
 namespace App\Http\Models;
 
 use App\Http\Models\Cats\CatAdministrativeUnit;
+use App\Http\Models\Cats\CatDescription;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Cats\CatSection;
@@ -16,7 +17,7 @@ class Formalities extends Model
     use SoftDeletes;
 
     protected $fillable = ['user_id','section_id', 'serie_id', 'subserie_id', 'opening_date', 'close_date', 'consecutive',
-        'legajo', 'sort_code', 'title', 'scope_and_content','additional_information', 'format_id', 'documentary_tradition_id',
+        'legajo', 'sort_code', 'title', 'description_id','additional_information', 'format_id', 'documentary_tradition_id',
         'legajos', 'initial_folio', 'end_folio', 'total_fojas', 'question_one', 'question_two', 'transparency_resolution_id',
         'nature_information_id', 'classification_reason_id', 'classification_date', 'name_titular', 'transparency_proceedings',
         'restricted_parts', 'legal_basis', 'reservation_period', 'deadline_extension', 'Record_official_number',
@@ -63,6 +64,11 @@ class Formalities extends Model
             User::class,
             'user_id'
         );
+    }
+
+    public function description()
+    {
+        return $this->hasOne(CatDescription::class,'id','description_id');
     }
 
     public function section()
