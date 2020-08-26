@@ -132,7 +132,7 @@ class LabelBox implements
                 }
 
                 $data = [
-                    [ 'cell'=>'B4:G4',   'bold'=> true, 'fontSize'=> 24,  'field' => ''],
+                    [ 'cell'=>'B4:G4',   'bold'=> true, 'fontSize'=> 24,  'field' => $this->fields['unidad_admin']],
                     [ 'cell'=>'B5:G5',   'bold'=> true, 'fontSize'=> 26,  'field' => ''],
                     [ 'cell'=>'C6',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Fondo:'],
                     [ 'cell'=>'D6:F6',   'bold'=> true, 'fontSize'=> 18,  'field' => 'SRE Secretaría de Relaciones Exteriores.'],
@@ -142,13 +142,13 @@ class LabelBox implements
                     [ 'cell'=>'D8:F8',   'bold'=> true, 'fontSize'=> 14,  'field' => ''],
                     [ 'cell'=>'C9',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Subserie:'],
                     [ 'cell'=>'D9:F9',   'bold'=> true, 'fontSize'=> 14,  'field' => ''],
-                    [ 'cell'=>'B11:G11', 'bold'=> true, 'fontSize'=> 34,  'field' => '[00]'],
+                    [ 'cell'=>'B11:G11', 'bold'=> true, 'fontSize'=> 34,  'field' => ''],
                     [ 'cell'=>'B12:G12', 'bold'=> true, 'fontSize'=> 20,  'field' => 'Expedientes'],
                     [ 'cell'=>'C14',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Del:'],
                     [ 'cell'=>'E14',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Al:'],
                     [ 'cell'=>'C16',     'bold'=> true, 'fontSize'=> 20,  'field' => 'Perido'],
                     [ 'cell'=>'C18:F18', 'bold'=> true, 'fontSize'=> 18,  'field' => 'Caja'],
-                    [ 'cell'=>'C19:F19', 'bold'=> true, 'fontSize'=> 60,  'field' => '0'],
+                    [ 'cell'=>'C19:F19', 'bold'=> true, 'fontSize'=> 60,  'field' => ''],
                     [ 'cell'=>'C21:F21', 'bold'=> true, 'fontSize'=> 16,  'field' => 'No. de transferencia'],
                 ];
                 foreach ($data as $i) {

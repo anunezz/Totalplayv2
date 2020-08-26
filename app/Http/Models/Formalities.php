@@ -85,4 +85,28 @@ class Formalities extends Model
         return $this->belongsTo(CatSubseries::class);
     }
 
+    public function scopeFilter($query, $filters)
+    {
+        return $query->where(function ($q) use ($filters) {
+
+            // $q->whereHas('unit', function($q) use ($filters) {
+            //     if (!empty($filters->determinant)) {
+            //         $q->where('determinant',$filters->determinant);
+            //     }
+            // });
+
+            if ( isset( $filters['classification'] ) &&  !empty($filters['classification'])){
+                $q->where('sort_code', 'like', '%' .$filters->classification . '%');
+            }
+
+            if ( isset( $filters['year'] ) &&  !empty($filters['year'])){
+                $q->whereYear('close_date',$filters->year);
+            }
+            // if (!empty($filters->userId)){
+            //     $q->whereUserId($filters->userId);
+            // }
+        });
+
+    }
+
 }

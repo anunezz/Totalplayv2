@@ -46,16 +46,29 @@
         </el-row> -->
 
         <el-row :gutter='20'>
+              <el-col :span='24' class='animated fadeIn fast'>
+                  <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
+                      <div>
+                          <pre>
+                              <!-- {{$store.state.user}} -->
+                              {{$store.state.cat_unit_id}}
+                          </pre>
+                      </div>
+                  </div>
+              </el-col>
+        </el-row>
+
+        <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
-                        <el-button
+                        <!-- <el-button
                             icon="far fa-file-excel"
                             size="mini"
                             @click="labelBox"
                             type="success">
                             Etiqueta de caja
-                        </el-button>
+                        </el-button> -->
                         <el-button
                             icon="far fa-file-excel"
                             size="mini"
@@ -240,7 +253,7 @@
 
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
-    import ShowFilters from "../formalities/FormFiltros";
+    import ShowFilters from "./FormFiltros";
     export default {
         components: {
             HeaderSection,
@@ -251,8 +264,6 @@
                 dataTable: [],
                 filters:{
                     show: false,
-                    determinant:'',
-                    classification:'',
                     year:null,
                     user:''
                 },
@@ -282,12 +293,12 @@
             getFormalities(currentPage =  1) {
                 this.filters.show = false;
                 this.startLoading();
-                let data = { params: {
+
+                axios.post('/api/report/fileFilter',{
                         page: currentPage,
                         perPage: this.pagination.perPage,
-                        filters: this.filters}
-                };
-                axios.get('/api/formalities',data).then(response => {
+                        filters: this.filters
+                }).then(response => {
                     this.dataTable = response.data.formalities.data;
                     console.log("this.formalitiesTable", this.dataTable)
 
