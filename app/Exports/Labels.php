@@ -86,7 +86,7 @@ class Labels implements
         return [
             AfterSheet::class => function (AfterSheet $event) {
 
-                $event->sheet->setShowGridlines(false);
+                //$event->sheet->setShowGridlines(false);
 
                 $event->sheet->getColumnDimension('A')->setWidth(2.00);
                 $event->sheet->getColumnDimension('B')->setWidth(2.00);
