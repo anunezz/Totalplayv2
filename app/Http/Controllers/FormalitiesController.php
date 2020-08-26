@@ -125,6 +125,8 @@ class FormalitiesController extends Controller
 
             $formality = $this->formalityRepo->find($id);
             $formality->primariValues = $formality->serie->primarivalues;
+            $formality->scope_and_content = $formality->description->description;
+
             return response()->json([
                 'success' => true,
                 'formality' =>$formality
@@ -204,15 +206,35 @@ class FormalitiesController extends Controller
     {
         $data = $request->all();
         $id = isset($data['unit_id']) ? (int)$data['unit_id'] : null;
-
+        $sect = [];
+        $auxSeries = [];
         try {
-            $sections = CatAdministrativeUnit::find($id);
-            if (!is_null($sections->sectionAll)) {
-                return response()->json([
-                    'success' => true,
-                    'sections' =>$sections->sectionAll
-                ]);
+            $sections = CatAdministrativeUnit::with('series.section','descriptions')->find($id);
+
+            foreach ($sections->series as $serie){
+                $auxSeries [] = $serie->hash;
+                if (isset($serie->section->code)) {
+                    $good = false;
+                    foreach ($sect as $aux) {
+                        if($aux->code === $serie->section->code){
+                            $good = true;
+                        }
+                    }
+
+                    if (!$good) {
+                        $sect [] = $serie->section;
+                    }
+                }
+
             }
+
+            return response()->json([
+                'success' => true,
+                'sections' => $sect,
+                'descriptions'=>$sections->descriptions,
+                'auxSeries' => $auxSeries
+            ]);
+
         }
         catch ( \Exception $e ) {
             return response()->json([
@@ -225,10 +247,20 @@ class FormalitiesController extends Controller
     public function allSeries(Request $request)
     {
         try {
-            $serie = $request->all();
+            $data = $request->all();
+            $allSeries = [];
+            $result = CatSeries::with('primarivalues','descriptions')->whereCatSectionId($data['id'])->get();
+            foreach ($result as $serie){
+               foreach ($data['auxSeries'] as $id){
+                   if(decrypt($id) === $serie->id){
+                    $allSeries [] = $serie;
+                   }
+               }
+            }
+
             return response()->json([
                 'success' => true,
-                'series' =>CatSeries::with('primarivalues','descriptions')->whereCatSectionId($serie['id'])->get()
+                'series' =>$allSeries
             ]);
         }
         catch ( \Exception $e ) {
