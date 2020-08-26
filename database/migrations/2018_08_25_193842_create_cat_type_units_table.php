@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCatAdministrativeUnitsTable extends Migration
+class CreateCatTypeUnitsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,9 @@ class CreateCatAdministrativeUnitsTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat_administrative_units', function (Blueprint $table) {
+        Schema::create('cat_type_units', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
-            $table->string('specialName')->nullable();
-            $table->string('determinant')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
         });
@@ -30,6 +28,6 @@ class CreateCatAdministrativeUnitsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat_administrative_units');
+        Schema::dropIfExists('cat_type_units');
     }
 }

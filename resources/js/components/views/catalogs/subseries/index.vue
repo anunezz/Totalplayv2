@@ -4,7 +4,7 @@
             <template slot="buttons">
                 <el-col :span="5" :offset="7">
                     <el-button type="success" @click="newCatalog" style="width: 100%">
-                        Nueva subserie
+                        Nuevo registro
                     </el-button>
                 </el-col>
                 <el-col :span="10" :offset="1">
@@ -44,16 +44,16 @@
                     border
                     style="width: 100%">
                     <el-table-column
+                        prop="serie.name"
+                        label="Serie documental">
+                    </el-table-column>
+                    <el-table-column
                         prop="name"
-                        label="Nombre">
+                        label="Subserie documental">
                     </el-table-column>
                     <el-table-column
                         prop="code"
                         label="Código">
-                    </el-table-column>
-                    <el-table-column
-                        prop="serie.name"
-                        label="Serie">
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
@@ -68,9 +68,9 @@
                                         type="info"
                                         size="mini"
                                         icon="fas fa-edit"
-
-                                    >
+                                        @click="editForm(scope.row)">
                                     </el-button>
+                                </el-tooltip>
                                 </el-tooltip>
 <!--                                <el-tooltip v-if="scope.row.operatives.length > 0 || scope.row.id === 14" placement="right-start">-->
 <!--                                    <div slot="content">-->
@@ -141,7 +141,7 @@
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="12">
-                        <el-form-item label="Serie"
+                        <el-form-item label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -212,12 +212,57 @@
             </el-main>
         </el-dialog>
 
-        <el-dialog title="Editar Registro"
-                   :visible.sync="editRegisterDialog"
-                   width="50%" :before-close="handleClose">
+        <el-dialog :visible.sync="editRegisterDialog"
+                   :before-close="handleClose"
+                   @close="resetEditForm"
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Editar Registro</span>
+                    </div>
 
             <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-form-item label="Serie documental"
+                                      prop="cat_series_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select v-if="editRegisterDialog"
+                                       @change="determinante(catalogEditForm.cat_series_id)"
+                                       style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogEditForm.cat_series_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(serie , index) in series"
+                                    :key="index"
+                                    :label="serie.name"
+                                    :value="serie.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Codigo"
+                                      prop="codeSubseries"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[0-9.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales ni letras', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="catalogEditForm.codeSubseries"
+                                maxlength="3"
+                                show-word-limit
+                                clearable>
+                                <template slot="prepend">{{codeEditSerie}}</template>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="24">
                         <el-form-item label="Nombre"
                                       prop="name"
@@ -236,12 +281,20 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
-            <el-button v-if="editRegisterDialog"
-                       type="primary"
-                       @click="editRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
+                            <el-button
+                                v-if="editRegisterDialog"
+                                type="primary"
+                                @click="editRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog
@@ -289,7 +342,9 @@
                     newCode: '',
                 },
                 catalogEditForm:{
-                    name: ''
+                    name: '',
+                    cat_series_id: [],
+                    codeSubseries: ''
                 },
                 hashRegister: null,
                 nameRegister: null,
@@ -439,9 +494,14 @@
             },
 
             editForm(row){
+                console.log('llegaaaaaaa', row)
+                const result = row.serie.code;
+                this.codeEditSerie = result + '.';
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
+                    cat_series_id: row.cat_series_id,
+                    codeSubseries: row.codeSubseries,
                 };
                 this.editRegisterDialog = true;
             },
@@ -449,7 +509,16 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 4, name: this.catalogEditForm.name};
+                this.editCodeComplete = this.codeEditSerie + this.catalogEditForm.codeSubseries;
+
+                let data = {
+                    id: this.catalogEditForm.id,
+                    cat: 4,
+                    name: this.catalogEditForm.name,
+                    codeSubseries: this.catalogEditForm.codeSubseries,
+                    code: this.editCodeComplete,
+                    cat_series_id: this.catalogEditForm.cat_series_id,
+                };
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {

@@ -4,7 +4,7 @@
             <template slot="buttons">
                 <el-col :span="5" :offset="7">
                     <el-button type="success" @click="newCatalog" style="width: 100%">
-                        Nueva serie
+                        Nuevo registro
                     </el-button>
                 </el-col>
                 <el-col :span="10" :offset="1">
@@ -44,16 +44,25 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="name"
-                        label="Nombre">
-                    </el-table-column>
-                    <el-table-column
-                        prop="code"
-                        label="Código">
+                        prop="type"
+                        label="Determinantes"
+                        width="600">
+                        <template slot-scope="scope">
+                            {{nameUnits(scope.row.administrative)}}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="section.name"
-                        label="Sección">
+                        label="Sección documental">
+                    </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        label="Serie documental">
+                    </el-table-column>
+                    <el-table-column
+                        prop="code"
+                        label="Código"
+                        width="90">
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
@@ -161,7 +170,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="Sección"
+                        <el-form-item label="Sección documental"
                                       prop="cat_section_id"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -340,7 +349,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="Sección"
+                        <el-form-item label="Sección documental"
                                       prop="cat_section_id"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -728,12 +737,10 @@
 
             editForm(row){
 
-                console.log('editarrrrrrrrrr', row);
                 let section = [];
                 const result = row.section.code;
                 this.codeEditSection = result + '.';
 
-                // console.log('sectioooooon', result + '.' - row.code);
                 let administrative = [];
                 row.administrative.forEach(element => administrative.push(element.id));
                 let primarivalues = [];
@@ -891,6 +898,13 @@
             resetEditForm(){
                 this.editRegisterDialog = false;
                 this.$refs['catalogEditForm'].resetFields();
+            },
+
+            nameUnits(data){
+                let administrative = [];
+                data.forEach(element => administrative.push(' '+element.name));
+                let aux = administrative.toString();
+                return aux;
             },
         },
     }
