@@ -251,9 +251,11 @@ class FormalitiesController extends Controller
             $allSeries = [];
             $result = CatSeries::with('primarivalues','descriptions')->whereCatSectionId($data['id'])->get();
             foreach ($result as $serie){
-                $aux = false;
-//                for ()
-                dd($data,$serie);
+               foreach ($data['auxSeries'] as $id){
+                   if(decrypt($id) === $serie->id){
+                    $allSeries [] = $serie;
+                   }
+               }
             }
 
             return response()->json([
