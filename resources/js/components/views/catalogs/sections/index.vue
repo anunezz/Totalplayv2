@@ -2,12 +2,12 @@
     <div>
         <header-section icon="el-icon-document" title="Seccion documental">
             <template slot="buttons">
-<!--                <el-col :span="5" :offset="7">-->
-<!--                    <el-button type="success" @click="newCatalog" style="width: 100%">-->
-<!--                        Nueva sección-->
-<!--                    </el-button>-->
-<!--                </el-col>-->
-                <el-col :span="10" :offset="13">
+                <el-col :span="5" :offset="7">
+                    <el-button type="success" @click="newCatalog" style="width: 100%">
+                        Nuevo registro
+                    </el-button>
+                </el-col>
+                <el-col :span="10" :offset="1">
                     <el-input
                         clearable
                         suffix-icon="fas fa-search"
@@ -45,7 +45,7 @@
                     style="width: 100%">
                     <el-table-column
                         prop="name"
-                        label="Nombre">
+                        label="Sección documental">
                     </el-table-column>
                     <el-table-column
                         prop="code"
@@ -132,11 +132,15 @@
             </el-col>
         </el-row>
 
-        <el-dialog title="Nuevo Registro"
-                   :visible.sync="newRegisterDialog"
+        <el-dialog :visible.sync="newRegisterDialog"
                    :before-close="handleClose"
                    @close="resetForm"
-                   width="50%">
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Nuevo Registro</span>
+                    </div>
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="24">
@@ -155,14 +159,52 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Codigo"
+                                      prop="code"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="newRegisterDialog"
+                                placeholder="Codigo"
+                                v-model="catalogForm.code"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item prop="cat_type_id" label="Tipo de sección documental" :rules="[
+                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                              ]">
+                            <el-row>
+                                <el-col :span="6" style="margin-right: 200px">
+                                    <el-checkbox v-model="catalogForm.checkedL" @change="legislatorLevel(2)">Sustantivas </el-checkbox>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-checkbox v-model="catalogForm.checkedC" @change="legislatorLevel(1)">Comunes</el-checkbox>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="resetForm">Cancelar</el-button>
-            <el-button v-if="newRegisterDialog"
-                       type="primary"
-                       @click="newRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetForm()">Cancelar</el-button>
+                            <el-button
+                                v-if="newRegisterDialog"
+                                type="primary"
+                                @click="newRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog :visible.sync="editRegisterDialog"
@@ -210,7 +252,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item prop="cat_type_id" label="Tipo de sección" :rules="[
+                        <el-form-item prop="cat_type_id" label="Tipo de sección documental" :rules="[
                                                 { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                               ]">
                             <el-row>
@@ -280,6 +322,10 @@
 
                 catalogForm: {
                     newRegisterName: '',
+                    code: '',
+                    cat_type_id: null,
+                    checkedC: false,
+                    checkedL: false,
                 },
                 catalogEditForm:{
                     name: '',
@@ -368,7 +414,12 @@
             newRegister() {
                 this.startLoading();
 
-                let data = {cat: 4, name: this.catalogForm.newRegisterName};
+                let data = {
+                    cat: 2,
+                    name: this.catalogForm.newRegisterName,
+                    code: this.catalogForm.code,
+                    cat_type_id: this.catalogForm.cat_type_id
+                };
 
                 this.$refs['catalogForm'].validate((valid) => {
                     if (valid) {
@@ -563,6 +614,17 @@
                 if (type === 1 && this.catalogEditForm.checkedC === true) {
                     this.catalogEditForm.checkedL = false;
                     this.catalogEditForm.cat_type_id = type;
+                }
+                if (!this.catalogForm.checkedC && !this.catalogForm.checkedL){
+                    this.catalogForm.cat_type_id = null;
+                }
+                if (type === 2 && this.catalogForm.checkedL === true) {
+                    this.catalogForm.checkedC = false;
+                    this.catalogForm.cat_type_id = type;
+                }
+                if (type === 1 && this.catalogForm.checkedC === true) {
+                    this.catalogForm.checkedL = false;
+                    this.catalogForm.cat_type_id = type;
                 }
             },
         },

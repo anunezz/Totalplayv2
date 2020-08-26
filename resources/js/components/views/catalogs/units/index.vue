@@ -1,13 +1,13 @@
 <template>
     <div>
-        <header-section icon="el-icon-document" title="Unidades Administrativas">
+        <header-section icon="el-icon-document" title="Determinantes">
             <template slot="buttons">
-<!--                <el-col :span="5" :offset="7">-->
-<!--                    <el-button type="success" @click="newCatalog" style="width: 100%">-->
-<!--                        Nueva unidad-->
-<!--                    </el-button>-->
-<!--                </el-col>-->
-                <el-col :span="10" :offset="13">
+                <el-col :span="5" :offset="7">
+                    <el-button type="success" @click="newCatalog" style="width: 100%">
+                        Nuevo registro
+                    </el-button>
+                </el-col>
+                <el-col :span="10" :offset="1">
                     <el-input
                         clearable
                         suffix-icon="fas fa-search"
@@ -44,12 +44,12 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="name"
-                        label="Nombre">
-                    </el-table-column>
-                    <el-table-column
                         prop="determinant"
                         label="Determinante">
+                    </el-table-column>
+                    <el-table-column
+                        prop="name"
+                        label="Nombre">
                     </el-table-column>
 <!--                    <el-table-column-->
 <!--                        prop="type"-->
@@ -132,37 +132,110 @@
             </el-col>
         </el-row>
 
-        <el-dialog title="Nuevo Registro"
-                   :visible.sync="newRegisterDialog"
+        <el-dialog :visible.sync="newRegisterDialog"
                    :before-close="handleClose"
                    @close="resetForm"
-                   width="50%">
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Nuevo Registro</span>
+                    </div>
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
-                    <el-col :span="24">
-                        <el-form-item label="Nombre"
-                                      prop="newRegisterName"
+                    <el-col :span="12">
+                        <el-form-item label="Determinante"
+                                      prop="determinant"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
-                        <el-input
+                            <el-input
                                 v-if="newRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogForm.newRegisterName"
+                                placeholder="Determinante"
+                                v-model="catalogForm.determinant"
                                 maxlength="100"
                                 clearable>
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Tipo de adscripción"
+                                      prop="cat_type_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select @change="typeUnits(catalogForm.cat_type_id)"
+                                       style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogForm.cat_type_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(type , index) in types"
+                                    :key="index"
+                                    :label="type.name"
+                                    :value="type.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+<!--                    <el-col :span="12">-->
+<!--                        <el-form-item label="Tipo de consulado"-->
+<!--                                      prop="cat_type_id"-->
+<!--                                      :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    ]">-->
+<!--                            <el-select v-if="catalogForm.cat_type_id === 5" -->
+<!--                                       @change="typeUnits(catalogForm.cat_type_id)"-->
+<!--                                       style="width: 100%;"-->
+<!--                                       size="medium"-->
+<!--                                       v-model="catalogForm.cat_type_id"-->
+<!--                                       placeholder="Seleccionar">-->
+<!--                                <el-option-->
+<!--                                    v-for="(type , index) in types"-->
+<!--                                    :key="index"-->
+<!--                                    :label="type.name"-->
+<!--                                    :value="type.id">-->
+<!--                                </el-option>-->
+<!--                            </el-select>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+                    <el-col :span="24">
+                        <el-form-item label="Nombre"
+                                      prop="newRegisterName"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.,\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="newRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="catalogForm.newRegisterName"
+                                maxlength="100"
+                                clearable>
+                                <template v-if="catalogForm.cat_type_id === 2 || catalogForm.cat_type_id === 3"
+                                    slot="prepend">{{nameUnit}}</template>
+                                <template v-if="catalogForm.cat_type_id === 4 || catalogForm.cat_type_id === 6"
+                                    slot="append">{{nameUnit}}</template>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="resetForm">Cancelar</el-button>
-            <el-button v-if="newRegisterDialog"
-                       type="primary"
-                       @click="newRegister">Aceptar</el-button>
-            </span>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetForm()">Cancelar</el-button>
+                            <el-button
+                                v-if="newRegisterDialog"
+                                type="primary"
+                                @click="newRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog :visible.sync="editRegisterDialog"
@@ -274,6 +347,7 @@
         data() {
             return {
 
+                nameUnit: '',
                 elements: [],
 
                 search: '',
@@ -286,12 +360,15 @@
 
                 catalogForm: {
                     newRegisterName: '',
+                    determinant: '',
+                    cat_type_id: []
                 },
                 catalogEditForm:{
                     name: '',
                     determinant: '',
                     section_all: [],
                 },
+                types:[],
                 sections:[],
                 hashRegister: null,
                 nameRegister: null,
@@ -314,6 +391,7 @@
             this.getSections();
             axios.get('/api/cats/create').then(response => {
                 this.sections = response.data.sections;
+                this.types = response.data.types;
                 this.stopLoading();
             })
         },
@@ -377,8 +455,27 @@
 
             newRegister() {
                 this.startLoading();
+                this.specialName = null;
 
-                let data = {cat: 1, name: this.catalogForm.newRegisterName};
+                if (this.catalogForm.cat_type_id === 4 || this.catalogForm.cat_type_id === 6)
+                {
+                    this.specialName = this.catalogForm.newRegisterName;
+                    this.catalogForm.newRegisterName = this.catalogForm.newRegisterName + ', ' + this.nameUnit;
+                }
+
+                if (this.catalogForm.cat_type_id === 2 ||this.catalogForm.cat_type_id === 3)
+                {
+                    this.specialName = this.catalogForm.newRegisterName;
+                    this.catalogForm.newRegisterName = this.nameUnit + this.catalogForm.newRegisterName;
+                }
+
+                let data = {
+                    cat: 1,
+                    name: this.catalogForm.newRegisterName,
+                    specialName: this.specialName,
+                    determinant: this.catalogForm.determinant,
+                    cat_type_id: this.catalogForm.cat_type_id
+                };
 
                 this.$refs['catalogForm'].validate((valid) => {
                     if (valid) {
@@ -575,6 +672,18 @@
                 data.forEach(element => section_all.push(' '+element.name));
                 let aux = section_all.toString();
                 return aux;
+            },
+            typeUnits(data){
+
+                if (data === 2 || data === 3){
+                    this.nameUnit = 'Delegación'
+                }
+                if (data === 4){
+                    this.nameUnit = 'Embajada'
+                }
+                if (data === 6){
+                    this.nameUnit = 'Delegación permanente'
+                }
             },
         },
     }

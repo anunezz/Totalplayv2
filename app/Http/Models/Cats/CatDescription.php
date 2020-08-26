@@ -15,4 +15,12 @@ class CatDescription extends Model
     {
         return $this->belongsTo(CatSeries::class, 'cat_series_id');
     }
+
+    public function administrative()
+    {
+        return $this->belongsToMany(CatAdministrativeUnit::class,
+            'description_units',
+            'cat_description_id',
+            'cat_unit_id');
+    }
 }
