@@ -53,11 +53,22 @@ class FormalitiesSicarController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'formalitySicar' => FormalitiesSicar::find(decrypt($id))
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
