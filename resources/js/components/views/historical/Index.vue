@@ -79,10 +79,10 @@
                                     content="Consultar"
                                     placement="top-start">
                                     <el-button
-                                        type="warning"
+                                        type="primary"
                                         size="mini"
                                         icon="fas fa-eye"
-                                        @click="$router.push( {name:'HistoricalShow'})">
+                                        @click="seeRegister(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
                             </el-button-group>
@@ -167,6 +167,12 @@
             handleCurrentChange(currentPage) {
                 this.getFormalitiesSicar(currentPage);
             },
+            seeRegister(id){
+                this.$router.push({
+                    name: 'HistoricalShow',
+                    params: {id: id}
+                });
+            }
         },
     }
 </script>
