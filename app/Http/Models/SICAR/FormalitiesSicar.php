@@ -98,4 +98,28 @@ class FormalitiesSicar extends Model
         );
     }
 
+    public function scopeSearch($query, $filters)
+    {
+        return $query->where(function ($q) use ($filters) {
+            $filters = json_decode($filters);
+
+            if (!empty($filters->determinant)){
+                $q->where('key_units', 'like', '%' .$filters->determinant . '%');
+            }
+
+            if (!empty($filters->classification)){
+                $q->where('i_topograf', 'like', '%' .$filters->classification . '%');
+            }
+
+            if (!empty($filters->year)){
+                $q->where('date',$filters->year);
+            }
+
+            if (!empty($filters->userId)){
+                $q->whereUserId($filters->userId);
+            }
+        });
+
+    }
+
 }
