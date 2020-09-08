@@ -9,7 +9,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('report/labelBox', 'ReportController@LabelBox');
     Route::post('report/lowDocumentary', 'ReportController@lowDocumentary');
     Route::post('report/lowAccounting', 'ReportController@lowAccounting');
-
+    Route::post('report/Transfer', 'ReportController@Transfer');
     //Filros
     Route::post('report/fileFilter', 'ReportController@fileFilter');
 

@@ -57,6 +57,15 @@
             </el-col>
         </el-row> -->
 
+<el-row :gutter='20'>
+      <el-col :span='24' class='animated fadeIn fast'>
+          <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
+              <div></div>
+          </div>
+      </el-col>
+</el-row>
+
+
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
@@ -75,8 +84,15 @@
                             type="success">
                             Baja documental
                         </el-button>
-                        <el-button
+                        <!-- <el-button
                             v-if="$store.state.user.cat_unit_id === 5"
+                            icon="far fa-file-excel"
+                            size="mini"
+                            @click="lowAccounting"
+                            type="primary">
+                            Baja contable
+                        </el-button> -->
+                        <el-button
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowAccounting"
@@ -86,12 +102,14 @@
                         <el-button
                             icon="far fa-file-excel"
                             size="mini"
+                            @click="Transfer('primary')"
                             type="default">
                             Transferencia primaria
                         </el-button>
                         <el-button
                             icon="far fa-file-excel"
                             size="mini"
+                            @click="Transfer('secondary')"
                             type="warning">
                             Transferencia secundaria
                         </el-button>
@@ -394,7 +412,42 @@
                             type: 'warning'
                         });
                     });
-            }
+            },
+            Transfer(type){
+                axios({ responseType: 'blob',
+                        method: 'post',
+                        url: '/api/report/Transfer',
+                        data: {
+                            transfer: type
+                        } }).then(response => {
+                            this.loading = true;
+                        setTimeout(()=>{
+                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = linkUrl;
+                            let name =  null;
+                            if(type === 'primary'){
+                                name = 'Transferencia_primaria.xlsx';
+                            }
+
+                            if(type === 'secondary'){
+                                name = 'Transferencia_secundaria.xlsx';
+                            }
+
+                            link.setAttribute('download', name);
+                            document.body.appendChild(link);
+                            link.click();
+                            this.loading = false;
+                        },500)
+
+                    }).catch(error => {
+                        this.$notify({
+                            title: 'Mensaje',
+                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                            type: 'warning'
+                        });
+                    });
+            },
         }
     }
 </script>
