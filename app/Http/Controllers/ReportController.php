@@ -13,6 +13,7 @@ use App\Exports\Labels;
 use App\Exports\LabelBox;
 use App\Exports\lowDocumentary;
 use App\Exports\lowAccounting;
+use App\Exports\Transfer;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSeries;
 
@@ -159,6 +160,11 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
+                $results = Formalities::with('serie.primarivalues','SubSerie','section')->get();
+
+                // $data = $collection->map(function ($item, $key) {
+                //     return $item * 2;
+                // });
 
                 return Excel::download(new lowDocumentary([],$data), 'Baja_documental.xlsx');
 
@@ -192,6 +198,40 @@ class ReportController extends Controller
         }
     }
 
+    public function Transfer(Request $request){
+        try{
+            if ($request->wantsJson()){
+
+                $data = $request->all();
+                //dd($data);
+
+                if($data['transfer'] === 'primary'){
+                    $data['transfer'] = 'Transferencia primaria';
+                }
+                if($data['transfer'] === 'secondary'){
+                    $data['transfer'] = 'Transferencia secundaria';
+                }
+
+
+                return Excel::download(new Transfer([],[
+                    'transfer' => $data['transfer']
+                ]), 'Transferencia_primaria.xlsx');
+
+                return response()->json([
+                    'success' => true,
+                    'lResults' => [],
+                ], 200);
+                }else{
+                return response()->view('errors.404', [], 404);
+                }
+            } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+            }
+    }
+
     public function fileFilter(Request $request){
         try{
             if ($request->wantsJson()){
@@ -211,16 +251,9 @@ class ReportController extends Controller
                 }else{
                     //dd(  auth()->user()->admin()->first()->id   );
                     //$unidadid = auth()->user()->admin()->first()->id;
-
                     // if(auth()->user()->cat_unit_id === 4){
-
-
-
                     // }else{
-
                     // }
-
-
                     // $formalities = Formalities::with('user.determinant')
                     // ->whereUnitId(auth()->user()->cat_unit_id)
                     // ->filter($data['filters'])

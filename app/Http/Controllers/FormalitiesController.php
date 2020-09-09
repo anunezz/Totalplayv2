@@ -310,16 +310,20 @@ class FormalitiesController extends Controller
 
     public function allUserUnit(Request $request)
     {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+        ini_set('max_execution_time', 0);
+
         try {
             if(auth()->user()->cat_profile_id === 1){
-                $usersId = Formalities::all()->pluck('user_id');
+                $usersId = Formalities::select('user_id')->distinct()->pluck('user_id');
             }else{
-                $usersId = Formalities::whereUnit_id(auth()->user()->cat_unit_id)->get()->pluck('user_id');
+                $usersId = Formalities::whereUnitId(auth()->user()->cat_unit_id)->get()->pluck('user_id');
             }
 
             return response()->json([
                 'success' => true,
-                'users' => User::whereIn('id',$usersId)->get()
+                'users' => User::whereIn('id',$usersId)->orderBy('name', 'asc')->get()
             ]);
         }
         catch ( \Exception $e ) {

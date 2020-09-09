@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SICAR;
 
 use App\Http\Controllers\Controller;
 use App\Http\Models\SICAR\FormalitiesSicar;
+use App\Http\Models\SICAR\UserSicar;
 use Illuminate\Http\Request;
 
 class FormalitiesSicarController extends Controller
@@ -19,6 +20,7 @@ class FormalitiesSicarController extends Controller
         if ($request->wantsJson()){
             $data = $request->all();
             $formalities = FormalitiesSicar::orderBy('created_at', 'DESC')
+                ->search($data['filters'])
                 ->paginate($data['perPage']);
 
             return response()->json([
@@ -53,11 +55,22 @@ class FormalitiesSicarController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show($id)
     {
-        //
+        try {
+            return response()->json([
+                'success' => true,
+                'formalitySicar' => FormalitiesSicar::find(decrypt($id))
+            ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -92,5 +105,18 @@ class FormalitiesSicarController extends Controller
     public function destroy($id)
     {
         //
+    }
+    public function allUserUnitSicar()
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
+        ini_set('max_execution_time', 0);
+
+        $usersId = FormalitiesSicar::select('user_id')->distinct()->pluck('user_id');
+
+        return response()->json([
+            'success' => true,
+            'users' => UserSicar::whereIn('id',$usersId)->orderBy('name', 'asc')->get()
+        ]);
     }
 }

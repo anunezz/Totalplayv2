@@ -22,10 +22,11 @@
         <el-row>
             <el-col :span="6" :offset="18">
                 <el-button
-                    size="medium"
+                    size="small"
                     icon="fas fa-search"
-                    style="width: 100%">
-                    Filtros
+                    style="width: 100%"
+                    @click="filters.show = true">
+                    Filtros avanzados
                 </el-button>
             </el-col>
         </el-row> <br>
@@ -79,10 +80,10 @@
                                     content="Consultar"
                                     placement="top-start">
                                     <el-button
-                                        type="warning"
+                                        type="primary"
                                         size="mini"
                                         icon="fas fa-eye"
-                                        @click="$router.push( {name:'HistoricalShow'})">
+                                        @click="seeRegister(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
                             </el-button-group>
@@ -103,18 +104,21 @@
                 :total="pagination.total">
             </el-pagination>
         </el-row>
+        <!--        Mostrar filtros-->
+        <show-filters :items="filters" @search="getFormalitiesSicar"/>
     </div>
 </template>
 
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
     import FiltersComponent from "../recommendations/FiltersRecomendations";
-    import {mapGetters, mapActions} from 'vuex';
+    import ShowFilters from "./FormFiltros";
 
     export default {
         components: {
             HeaderSection,
-            FiltersComponent
+            FiltersComponent,
+            ShowFilters
         },
 
         data() {
@@ -167,6 +171,12 @@
             handleCurrentChange(currentPage) {
                 this.getFormalitiesSicar(currentPage);
             },
+            seeRegister(id){
+                this.$router.push({
+                    name: 'HistoricalShow',
+                    params: {id: id}
+                });
+            }
         },
     }
 </script>
