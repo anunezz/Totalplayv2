@@ -2,6 +2,7 @@
 
 namespace App\Http\Models\Cats;
 
+use App\Http\Models\Formalities;
 use Illuminate\Database\Eloquent\Model;
 
 class CatAdministrativeUnit extends Model
@@ -13,6 +14,14 @@ class CatAdministrativeUnit extends Model
     public function getHashAttribute()
     {
         return encrypt($this->id);
+    }
+
+    public function formalities()
+    {
+        return $this->hasOne(
+            Formalities::class,
+            'unit_id'
+        );
     }
 
     public function sectionAll()
@@ -61,7 +70,8 @@ class CatAdministrativeUnit extends Model
 
             return $query->where(function($q) use ($search)
             {
-                $q->where('name', 'like', '%' .$search . '%');
+                $q->where('name', 'like', '%' .$search . '%')
+                    ->orWhere ('determinant', 'like', '%' .$search . '%');
             });
         });
     }

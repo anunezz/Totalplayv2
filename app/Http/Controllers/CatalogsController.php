@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 
+use App\CatInventory;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
@@ -29,8 +30,9 @@ class CatalogsController extends Controller
                 $elements = null;
 
                 if ($data['cat'] == 1) {
-                    $elements = CatAdministrativeUnit::with('sectionAll')
-                        ->select(['id', 'name', 'determinant', 'isActive'])
+                    $elements = CatAdministrativeUnit::with('sectionAll', 'formalities')
+                        ->search($data['search'])
+                        ->select(['id', 'name', 'determinant', 'specialName', 'cat_type_id', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
@@ -38,33 +40,43 @@ class CatalogsController extends Controller
                     if (isset($data['allSections'])){
                         return CatSection::orderBy('name')->get(['id','name']);
                     }else{
-                        $elements = CatSection::select(['id', 'name', 'code', 'cat_type_id', 'isActive'])
+                        $elements = CatSection::with('formalities')
+                            ->select(['id', 'name', 'code', 'cat_type_id', 'isActive'])
+                            ->search($data['search'])
                             ->orderBy('name')
                             ->paginate($data['perPage']);
                     }
                 }
                 if ($data['cat'] == 3) {
-                    $elements = CatSeries::with('section', 'primarivalues', 'selection', 'administrative')
+                    $elements = CatSeries::with('section', 'primarivalues', 'selection', 'administrative', 'formalities')
+                        ->search($data['search'])
                         ->select(['id', 'name', 'code', 'codeSeries', 'cat_section_id', 'AT', 'AC', 'total', 'cat_selection_id', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 4) {
-                    $elements = CatSubseries::with('serie')
+                    $elements = CatSubseries::with('serie', 'formalities')
+                        ->search($data['search'])
                         ->select(['id', 'name', 'code', 'codeSubseries', 'cat_series_id', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 5) {
                     $elements = CatDescription::with('serie', 'administrative')
+                        ->search($data['search'])
                         ->select(['id', 'description', 'cat_series_id', 'isActive'])
-                        ->orderBy('id')
+                        ->orderBy('description')
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 6) {
                     $elements = CatSampling::with('serie')
                         ->select(['id', 'quality', 'cat_series_id', 'isActive'])
-                        ->orderBy('id')
+                        ->orderBy('quality')
+                        ->paginate($data['perPage']);
+                }
+                if ($data['cat'] == 7) {
+                    $elements = CatInventory::select(['id', 'name', 'elaborated', 'revised', 'authorized', 'received', 'viewed', 'isActive'])
+                        ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
 
@@ -148,14 +160,13 @@ class CatalogsController extends Controller
     public function newRegister(Request $request)
     {
         try {
-
             DB::beginTransaction();
 
             $duplicityCheck = false;
 
             if ($request->cat === 1) {
                 $cat = new CatAdministrativeUnit();
-                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, null, $request->name, $request->specialName, $request->determinant);
+                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, null, $request->name, $request->specialName, $request->determinant, $request->cat_type_id);
             }
             elseif ($request->cat === 2) {
                 $cat = new CatSection();
@@ -169,15 +180,20 @@ class CatalogsController extends Controller
                 $cat = new CatSubseries();
                 $duplicityCheck = self::duplicityCheck(CatSubseries::class, null, $request->name, $request->code, $request->codeSubseries, $request->cat_series_id);
             }
+            elseif ($request->cat === 5) {
+                $cat = new CatDescription();
+                $duplicityCheck = self::duplicityCheck(CatDescription::class, null, $request->description, $request->cat_series_id);
+            }
 
 
             if (! $duplicityCheck) {
-                if ($request->cat!==3){
+                if ($request->cat!==3 && $request->cat!==5){
                     $cat->name = $request->name;
 
                     if ($request->cat === 1){
                         $cat->specialName = $request->specialName;
                         $cat->determinant = $request->determinant;
+                        $cat->cat_type_id = $request->cat_type_id;
                     }
 
                     if ($request->cat === 2){
@@ -200,6 +216,11 @@ class CatalogsController extends Controller
                         $cat->codeSubseries = $request->codeSubseries;
                         $cat->cat_series_id = $request->cat_series_id;
                     }
+
+//                    if ($request->cat === 5){
+//                        $cat->cat_series_id = $request->cat_series_id;
+//                        $cat->cat_subserie_id = $request->cat_subserie_id;
+//                    }
 //
 //                    $request->cat === 11 ? $cat->rights_recommendations_id = $request->rights_recommendations_id : null;
 //
@@ -209,11 +230,25 @@ class CatalogsController extends Controller
 //                        $cat->ods_id = $request->ods_id;
 //                        $cat->acronym = $request->acronym;
 //                    }
-                }else{
+                }else if ($request->cat===3){
                     $cat->fill($request->all());
                     $cat->save();
                     $cat->primarivalues()->sync($request->cat_primary_value_id);
                     $cat->administrative()->sync($request->cat_administrative_unit_id);
+
+                    GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
+                    DB::commit();
+
+                    return response()->json([
+                        'success' => true
+                    ], 200);
+
+                }else if ($request->cat===5){
+              //      dd('entro al cincoooooo', $cat);
+                    $cat->fill($request->all());
+                    $cat->save();
+                    $cat->administrative()->sync($request->cat_unit_id);
+                    $cat->subserie()->sync($request->cat_subserie_id);
 
                     GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
                     DB::commit();
@@ -237,7 +272,7 @@ class CatalogsController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Ya existe un registro con ese nombre o acrónimo, favor de verificar'
+                    'message' => 'Ya existe un registro con ese nombre o código, favor de verificar'
                 ], 200);
             }
         } catch (Exception $e) {
@@ -259,7 +294,7 @@ class CatalogsController extends Controller
 
             if ($request->cat === 1) {
                 $cat = CatAdministrativeUnit::find(decrypt($request->id));
-                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name, $request->determinant);
+                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name, $request->specialName, $request->determinant, $request->cat_type_id);
             }
 
             elseif ($request->cat === 2) {
@@ -272,7 +307,7 @@ class CatalogsController extends Controller
                 $duplicityCheck = self::duplicityCheck(CatSeries::class, $cat->id, $request->name, $request->code, $request->codeSeries, $request->cat_section_id, $request->AT, $request->AC, $request->total, $request->cat_selection_id);
             }
             elseif ($request->cat === 4) {
-                $cat = new CatSubseries();
+                $cat = CatSubseries::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatSubseries::class, $cat->id, $request->name, $request->code, $request->codeSubseries, $request->cat_series_id);
             }
 
@@ -281,7 +316,9 @@ class CatalogsController extends Controller
                 $cat->name = $request->name;
 
                 if ($request->cat === 1){
+                    $cat->specialName = $request->specialName;
                     $cat->determinant = $request->determinant;
+                    $cat->cat_type_id = $request->cat_type_id;
                 }
 
                 if ($request->cat === 2){
@@ -330,7 +367,7 @@ class CatalogsController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Ya existe un registro con ese nombre o acrónimo, favor de verificar'
+                    'message' => 'Ya existe un registro con ese nombre o código, favor de verificar'
                 ], 200);
             }
         } catch (Exception $e) {
@@ -343,46 +380,55 @@ class CatalogsController extends Controller
         }
     }
 
-    private static function duplicityCheck($cat, $id, $name, $acronym = null, $topicId = null, $rightId = null, $subrightId = null, $odsId = null, $aux=null)
+    private static function duplicityCheck($cat, $id, $name, $aux = null, $code = null)
     {
         try {
+
+          //  dd($cat, $id, $name, $aux, $code);
+//
+
+//            dd('salioooooooooooo');
             if ($aux !=null) {
                 //dd($name,$aux);
-                $nam = $cat::where('name', $name)->whereIsactive(true)->first();
-                $acro = $cat::where('acronym', $aux)->whereIsactive(true)->first();
-                if (is_null($nam) && is_null($acro)) return false;
+                $nam = $cat::where('id', '!=', $id)->where('name', $name)->whereIsactive(true)->first();
+                $cod = $cat::where('id', '!=', $id)->where('code', $aux)->whereIsactive(true)->first();
+           //     dd($name, $aux);
+                if (is_null($nam) && is_null($cod)) return false;
                 else return true;
             }
 
-            if ( is_null($topicId)) {
-                return $cat::where('id', '!=', $id)->where('name', $name)->whereIsactive(true)->first() ? true : false;
-            }
-
-            if ( is_null($rightId)) {
-                return $cat::where('id', '!=', $id)->where('name', $name)->whereIsactive(true)->first() ? true : false;
-            }
-
-            if ( is_null($subrightId)) {
+            if ($code != null) {
                 return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
             }
 
-            if ( is_null($odsId)) {
-                return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
-            }
-
-            if (is_null($acronym)) {
-                return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
-            }
+      //      dd('salioooooooooooo');
+//            if ( is_null($topicId)) {
+//                return $cat::where('id', '!=', $id)->where('name', $name)->whereIsactive(true)->first() ? true : false;
+//            }
+//
+//            if ( is_null($rightId)) {
+//                return $cat::where('id', '!=', $id)->where('name', $name)->whereIsactive(true)->first() ? true : false;
+//            }
+//
+//            if ( is_null($subrightId)) {
+//                return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
+//            }
+//
+//            if ( is_null($odsId)) {
+//                return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
+//            }
+//
+//            if (is_null($acronym)) {
+//                return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
+//            }
 
             else {
-                if ($acronym) {
+          //      dd('entro al else');
+                if ($code) {
                     return $cat::where('id', '!=', $id)->where('name', $name)->where('acronym', $acronym)->first() ? true : false;
                 }
 
             }
-
-
-
 
         } catch (Exception $e) {
             return false;
@@ -396,10 +442,16 @@ class CatalogsController extends Controller
             DB::beginTransaction();
 
             if ($request->cat === 1) {
-                $cat = CatConsulate::find(decrypt($request->id));
+                $cat = CatAdministrativeUnit::find(decrypt($request->id));
             }
             elseif ($request->cat === 2) {
-                $cat = CatGobOrder::find(decrypt($request->id));
+                $cat = CatSection::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 3) {
+                $cat = CatSeries::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 4) {
+                $cat = CatSubseries::find(decrypt($request->id));
             }
 
             $cat->isActive = false;
@@ -427,10 +479,16 @@ class CatalogsController extends Controller
             DB::beginTransaction();
 
             if ($request->cat === 1) {
-                $cat = CatConsulate::find(decrypt($request->id));
+                $cat = CatAdministrativeUnit::find(decrypt($request->id));
             }
             elseif ($request->cat === 2) {
-                $cat = CatGobOrder::find(decrypt($request->id));
+                $cat = CatSection::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 3) {
+                $cat = CatSeries::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 4) {
+                $cat = CatSubseries::find(decrypt($request->id));
             }
 
             $cat->isActive = true;

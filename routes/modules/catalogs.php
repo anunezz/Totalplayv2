@@ -11,5 +11,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('cats/create', 'CatalogsController@create');
     Route::post('cats/new-register', 'CatalogsController@newRegister');
     Route::get('cats/allunits', 'CatalogsController@allunits');
+    Route::post('cats/disable-register', 'CatalogsController@disableRegister');
+    Route::post('cats/enable-register', 'CatalogsController@enableRegister');
 });
 

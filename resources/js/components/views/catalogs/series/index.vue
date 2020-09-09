@@ -11,7 +11,7 @@
                     <el-input
                         clearable
                         suffix-icon="fas fa-search"
-                        placeholder="Buscar por nombre"
+                        placeholder="Buscar por serie documental o código"
                         v-model="search"
                         @change="getTitles(search)">
                     </el-input>
@@ -67,6 +67,7 @@
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
+                            <!--                            <pre>{{scope.row.formalities}}</pre>-->
                             <el-button-group size="mini">
                                 <el-tooltip
                                     class="item"
@@ -80,22 +81,23 @@
                                         @click="editForm(scope.row)">
                                     </el-button>
                                 </el-tooltip>
-<!--                                <el-tooltip v-if="scope.row.operatives.length > 0 || scope.row.id === 14" placement="right-start">-->
-<!--                                    <div slot="content">-->
-<!--                                        Este elemento no se puede eliminar dado que-->
-<!--                                        <br/>-->
-<!--                                        esta siendo utilizado por un registro-->
-<!--                                    </div>-->
-<!--                                    <span>-->
-<!--                                        <el-button-->
-<!--                                            type="danger"-->
-<!--                                            size="mini"-->
-<!--                                            icon="fas fa-trash"-->
-<!--                                            disabled>-->
-<!--                                        </el-button>-->
-<!--                                    </span>-->
-<!--                                </el-tooltip>-->
+                                <el-tooltip v-if="scope.row.formalities !== null" placement="right-start">
+                                    <div slot="content">
+                                        Este elemento no se puede eliminar dado que
+                                        <br/>
+                                        esta siendo utilizado por un registro
+                                    </div>
+                                    <span>
+                                        <el-button
+                                            type="danger"
+                                            size="mini"
+                                            icon="fas fa-trash"
+                                            disabled>
+                                        </el-button>
+                                    </span>
+                                </el-tooltip>
                                 <el-tooltip
+                                    v-if="scope.row.formalities === null && scope.row.isActive"
                                     class="item"
                                     effect="dark"
                                     content="Deshabilitar"
@@ -107,19 +109,19 @@
                                         @click="disableDialog(scope.row.hash)">
                                     </el-button>
                                 </el-tooltip>
-<!--                                <el-tooltip-->
-<!--                                    v-if="! scope.row.operatives.length > 0 && ! scope.row.is_used && ! scope.row.isActive"-->
-<!--                                    class="item"-->
-<!--                                    effect="dark"-->
-<!--                                    content="Habilitar"-->
-<!--                                    placement="right-start">-->
-<!--                                    <el-button-->
-<!--                                        type="success"-->
-<!--                                        size="mini"-->
-<!--                                        icon="fas fa-check"-->
-<!--                                        @click="enableRegister(scope.row.hash)">-->
-<!--                                    </el-button>-->
-<!--                                </el-tooltip>-->
+                                <el-tooltip
+                                    v-if=" scope.row.formalities === null && ! scope.row.isActive"
+                                    class="item"
+                                    effect="dark"
+                                    content="Habilitar"
+                                    placement="right-start">
+                                    <el-button
+                                        type="success"
+                                        size="mini"
+                                        icon="fas fa-check"
+                                        @click="enableRegister(scope.row.hash)">
+                                    </el-button>
+                                </el-tooltip>
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -608,18 +610,19 @@
 
             determinante(data){
 
-    //            console.log('wwwwwwwwww', data);
+                console.log('wwwwwwwwww', data);
                 let sections = [];
      //           console.log('secciones', this.sections);
      //           this.catalogForm.newCode = '';
                 const result = this.sections.filter(section => section.id === data);
                 console.log('result', result);
                 this.codeSection = result[0].code + '.';
+                this.codeEditSection = result[0].code + '.';
 
             },
 
             Search(search){
-                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,.%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
+                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
                 if(re.test(search)){
                     return search.replace(re, '');
                 }else{
@@ -634,6 +637,7 @@
                 let data = { params: {
                         page: currentPage,
                         perPage: this.pagination.perPage,
+                        search: this.search,
                         cat: 3}
                 };
 
@@ -832,6 +836,7 @@
 
             newCatalog(){
                 this.catalogForm.newRegisterName = '';
+                this.codeSection = '';
                 this.newRegisterDialog = true;
             },
 
@@ -848,7 +853,7 @@
             disableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 3};
 
                 axios.post('/api/cats/disable-register', data).then(response => {
                     this.$notify({
@@ -872,7 +877,7 @@
             enableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 4};
+                let data ={id: id, cat: 3};
 
                 axios.post('/api/cats/enable-register', data).then(response => {
                     this.$notify({

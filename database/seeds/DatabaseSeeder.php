@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             CatDescriptionSeeder::class,
             CatSamplingSeeder::class,
             CatTypeUnitSeeder::class,
+            CatInventorySeeder::class,
 
             AdminUnitSectionSeeder::class,
             SeriesPrimaryValuesSeeder::class,
