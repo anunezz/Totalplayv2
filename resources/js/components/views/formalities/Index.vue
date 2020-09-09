@@ -21,7 +21,8 @@
                     :disabled="formalitiesTable.length === 0"
                     size="small"
                     type="primary"
-                    icon="far fa-file-excel">
+                    icon="far fa-file-excel"
+                    @click="downloadExcel">
                     Descargar Excel
                 </el-button>
                 <el-button-group>
@@ -389,6 +390,23 @@
                     });
                 });
             },
+            downloadExcel(){
+                let data = { params: {
+                        filters: this.filters}
+                };
+                this.startLoading();
+                axios.get('/api/download/excel',data).then(response => {
+                    console.log(response)
+                    this.stopLoading();
+                }).catch(error => {
+                    console.log(error)
+                    this.stopLoading();
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            }
         }
 
     }

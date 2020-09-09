@@ -333,4 +333,17 @@ class FormalitiesController extends Controller
             ]);
         }
     }
+
+    public function downloadExcel(Request $request)
+    {
+        try {
+            dd('hola mundo',$request->all());
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
 }
