@@ -396,7 +396,12 @@
                 };
                 this.startLoading();
                 axios.get('/api/download/excel',data).then(response => {
-                    console.log(response)
+                    const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = linkUrl;
+                    link.setAttribute('download', 'users.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
                     this.stopLoading();
                 }).catch(error => {
                     console.log(error)

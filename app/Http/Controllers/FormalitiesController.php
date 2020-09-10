@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FormalitiesExport;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
@@ -12,6 +13,7 @@ use App\Repositories\Formality\FormalityRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormalitiesController extends Controller
 {
@@ -337,7 +339,7 @@ class FormalitiesController extends Controller
     public function downloadExcel(Request $request)
     {
         try {
-            dd('hola mundo',$request->all());
+            return Excel::download(new FormalitiesExport(), 'users.xlsx');
         }
         catch ( \Exception $e ) {
             return response()->json([
