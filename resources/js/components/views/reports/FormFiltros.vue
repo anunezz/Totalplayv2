@@ -8,12 +8,33 @@
             <el-row style="background: rgb(157, 36, 56);margin-bottom: 20px">
                 <h3 style="color: white;margin-left: 30px">Filtros</h3>
             </el-row>
+
+            <el-row :gutter='20'>
+                <el-col :span='24' class='animated fadeIn fast'>
+                    <pre>
+                        {{ items }}
+                    </pre>
+                </el-col>
+            </el-row>
+
             <el-row style="margin-bottom: 20px">
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
+
+                            <el-col :span='24' class='animated fadeIn fast'>
+                                <el-form-item label="Buscar por">
+                                    <el-radio-group v-model="items.reports" size="mini">
+                                        <el-radio-button :label="1">Baja documental</el-radio-button>
+                                        <el-radio-button :label="2" v-if="$store.state.user.cat_unit_id === 5">Baja contable</el-radio-button>
+                                        <el-radio-button :label="3">Transferencia primaria</el-radio-button>
+                                        <el-radio-button :label="4">Transferencia secundaria</el-radio-button>
+                                    </el-radio-group>
+                                </el-form-item>
+                            </el-col>
+
                             <el-col :span="12">
-                                <el-form-item label="Serie">
+                                <el-form-item label="Serie documental">
                                     <el-select v-model="items.serie_id" filterable clearable placeholder="Selecciona" style="width: 100%">
                                         <el-option
                                             v-for="item in series" :key="item.id"
@@ -50,6 +71,7 @@
                 </el-col>
                 <el-col :span="5">
                     <el-button
+                        :disabled="disabledSearch"
                         size="small"
                         icon="fas fa-filter"
                         type="primary"
@@ -69,12 +91,26 @@
         data(){
             return{
                 users:[],
-                series:[]
+                series:[],
+                reports: null,
             }
         },
         created() {
             this.getCats();
             this.getUsers();
+        },
+        computed:{
+            disabledSearch(){
+                let aux = true;
+                let sum = this.items.reports === null ? 0 : 1;
+                    //sum = sum + (this.items.year === null && this.items.serie_id === null ? 0 : 1  );
+                if( sum > 0){
+                    aux = false;
+                }
+                console.log("sum: ",sum);
+                return aux;
+               // (items.reports === null)? true: false && (items.year === null && items.serie_id === null)? true: false
+            }
         },
         methods:{
             getCats(){
@@ -102,6 +138,7 @@
                 this.items.show = true;
                 this.items.year = null;
                 this.items.serie_id = null;
+                this.items.reports = null;
                 this.$emit('search');
             },
             searchitems(){

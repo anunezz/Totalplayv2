@@ -28,6 +28,7 @@ class ReportController extends Controller
             $data = $request->all();
 
             $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            //$Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( $data['id'] )->first();
 
             $results = [
                         //Nivel de descripción documental
@@ -83,7 +84,14 @@ class ReportController extends Controller
             //return (  new Proceedings([],$results)   )->download('invoices.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
 
             //return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
-            return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
+
+            $pdf = \PDF::loadView('pdf.caratula_pdf',compact('results'));
+            //$pdf->setOptions(['isPhpEnabled' => true]);
+            return $pdf->download('caratula.pdf');
+
+
+
+            //return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
 
 
             //return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');

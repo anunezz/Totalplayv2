@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="el-icon-s-management" title="Reportes">
+        <header-section icon="el-icon-s-management" title="Inventarios">
             <template slot="buttons">
                 <el-button
                     align="right"
@@ -57,13 +57,29 @@
             </el-col>
         </el-row> -->
 
-<el-row :gutter='20'>
-      <el-col :span='24' class='animated fadeIn fast'>
-          <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
-              <div></div>
-          </div>
-      </el-col>
-</el-row>
+        <!-- <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <pre>
+                    {{ filters.reports }}
+                </pre>
+            </el-col>
+        </el-row> -->
+
+        <el-row :gutter='20'>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <pre>
+                    {{ $store.state.user.cat_unit_id }}
+                </pre>
+            </el-col>
+            <el-col :span='24' class='animated fadeIn fast'>
+                <el-tabs type="border-card">
+                    <el-tab-pane  v-show="$store.state.user.cat_unit_id === 5 && index === 1"
+                        v-for="(item, index ) in dataComponent" :key="index" :label='item.name'>
+                        <ReportComponent :items="filters" @search="getFormalities" />
+                    </el-tab-pane>
+                </el-tabs>
+            </el-col>
+        </el-row>
 
 
         <el-row :gutter='20'>
@@ -78,6 +94,7 @@
                             Etiqueta de caja
                         </el-button> -->
                         <el-button
+                            :disabled="filters.reports === 1 ? false : true"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowDocumentary"
@@ -93,6 +110,8 @@
                             Baja contable
                         </el-button> -->
                         <el-button
+                            v-if="$store.state.user.cat_unit_id === 5"
+                            :disabled="filters.reports === 2?false: true"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="lowAccounting"
@@ -100,6 +119,7 @@
                             Baja contable
                         </el-button>
                         <el-button
+                            :disabled="filters.reports === 3 ? false : true"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="Transfer('primary')"
@@ -107,6 +127,7 @@
                             Transferencia primaria
                         </el-button>
                         <el-button
+                            :disabled="filters.reports === 4 ? false : true"
                             icon="far fa-file-excel"
                             size="mini"
                             @click="Transfer('secondary')"
@@ -181,73 +202,6 @@
                             {{ scope.row.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
                         </template>
                     </el-table-column>
-                    <!-- <el-table-column
-                        label="Acciones" header-align="left" align="center">
-                        <template slot-scope="scope">
-                            <el-button-group>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Editar"
-                                    placement="top-start">
-                                    <el-button
-                                        type="primary"
-                                        size="mini"
-                                        icon="fas fa-edit"
-                                        @click="editRegister(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Eliminar"
-                                    placement="top-start">
-                                    <el-button
-                                        type="danger"
-                                        size="mini"
-                                        icon="el-icon-delete"
-                                        @click="deleteRegister(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Carátula"
-                                    placement="top-start">
-                                    <el-button
-                                        type="info"
-                                        size="mini"
-                                        icon="fas fa-book"
-                                        @click="cover(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Ceja"
-                                    placement="top-start">
-                                    <el-button
-                                        type="warning"
-                                        size="mini"
-                                        icon="far fa-bookmark"
-                                        @click="eyebrow(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Caja"
-                                    placement="top-start">
-                                    <el-button
-                                        type="success"
-                                        size="mini"
-                                        icon="fas fa-box-open"
-                                        @click="box(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                            </el-button-group>
-                        </template>
-                    </el-table-column> -->
                 </el-table>
                 <br>
             </el-col>
@@ -272,10 +226,12 @@
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
     import ShowFilters from "./FormFiltros";
+    import ReportComponent from "./Report_component";
     export default {
         components: {
             HeaderSection,
-            ShowFilters
+            ShowFilters,
+            ReportComponent
         },
         data(){
             return{
@@ -283,13 +239,22 @@
                 filters:{
                     show: false,
                     year:null,
-                    user:''
+                    user:'',
+                    serie_id: null,
+                    reports: null
                 },
                 pagination: {
                     currentPage: 1,
                     total: 0,
                     perPage: 10
                 },
+                LowDocumentary:[], //Baja documental
+                dataComponent :  [
+                    { name: 'Baja documental'  },
+                    { name: 'Baja contable' },
+                    { name: 'Transferencia primaria'},
+                    { name: 'Transferencia secundaria'}
+                ]
             }
         },
         created(){
@@ -447,7 +412,7 @@
                             type: 'warning'
                         });
                     });
-            },
+            }
         }
     }
 </script>
@@ -459,4 +424,32 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.fast {
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+}
+
+to {
+opacity: 1;
+}
+}
+
+.fadeIn {
+animation-name: fadeIn;
+}
+
 </style>
