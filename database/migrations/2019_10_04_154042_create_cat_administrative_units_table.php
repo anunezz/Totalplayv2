@@ -16,10 +16,15 @@ class CreateCatAdministrativeUnitsTable extends Migration
         Schema::create('cat_administrative_units', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name');
+            $table->unsignedBigInteger('cat_type_id')->nullable();
             $table->string('specialName')->nullable();
             $table->string('determinant')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
+
+            $table->foreign('cat_type_id')
+                ->references('id')
+                ->on('cat_type_units');
         });
     }
 

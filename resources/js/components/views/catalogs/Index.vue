@@ -33,6 +33,7 @@
         <subserie v-if="selectedCat === 4"/>
         <descriptions v-if="selectedCat ===5"/>
         <sampling v-if="selectedCat ===6"/>
+        <inventory v-if="selectedCat ===7"/>
 
     </div>
 </template>
@@ -46,6 +47,7 @@
     import Subserie from "./subseries/index";
     import Descriptions from "./descriptions/index";
     import Sampling from "./sampling/index";
+    import Inventory from "./inventory/index";
 
     export default {
         components: {
@@ -55,7 +57,8 @@
             Series,
             Subserie,
             Descriptions,
-            Sampling
+            Sampling,
+            Inventory
         },
 
         data(){
@@ -67,7 +70,8 @@
                     {id:3,  name: 'Serie documental'},
                     {id:4,  name: 'Subserie documental'},
                     {id:5,  name: 'CGCA'},
-                    {id:6,  name: 'CDD'}
+                    {id:6,  name: 'CDD'},
+                    {id:7,  name: 'Inventarios'}
                 ],
             }
         },
