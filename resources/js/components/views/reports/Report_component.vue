@@ -4,12 +4,22 @@
 
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
-                    <el-button
-                        icon="far fa-file-excel"
-                        size="mini"
-                        type="success">
-                        Baja documental
-                    </el-button>
+                    <el-button-group>
+                        <el-button
+                            @click="DownloadExcel"
+                            icon="far fa-file-excel"
+                            size="mini"
+                            type="success">
+                            {{ items.name }}
+                        </el-button>
+                        <el-button
+                            type="default"
+                            size="mini"
+                            icon="fas fa-search"
+                            @click="filters.show = true">
+                            Filtros avanzados
+                        </el-button>
+                    </el-button-group>
                 </div>
             </el-col>
 
@@ -72,11 +82,18 @@
                 </el-pagination>
             </el-col>
         </el-row>
+
+        <show-filters :items="filters" @search="getFormalities"/>
+
     </div>
 </template>
 
 <script>
+
+    import ShowFilters from "./FormFiltros";
+
     export default {
+        components: { ShowFilters },
         props:['items'],
         data(){
             return{
@@ -84,10 +101,18 @@
                     currentPage: 1,
                     total: 0,
                     perPage: 10},
-                dataTable:[]
+                dataTable:[],
+                filters:{
+                    show: false,
+                    year:null,
+                    user:'',
+                    serie_id: null,
+                    reports: null
+                },
             }
         },
         created() {
+            console.log("Este es el items de cada componente: ",this.items);
         },
         computed:{
         },
@@ -98,6 +123,57 @@
             },
             handleCurrentChange(currentPage) {
                 this.getFormalities(currentPage);
+            },
+            DownloadExcel(){
+                axios({ responseType: 'blob',
+                        method: 'post',
+                        url: '/api/report/'+this.items.url,
+                        data: { name:'ejemplo' } }).then(response => {
+                            this.loading = true;
+                        setTimeout(()=>{
+                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                            const link = document.createElement('a');
+                            link.href = linkUrl;
+                            link.setAttribute('download', this.items.name+'.xlsx');
+
+                            document.body.appendChild(link);
+                            link.click();
+                            this.loading = false;
+                        },500)
+
+                    }).catch(error => {
+                        this.$notify({
+                            title: 'Mensaje',
+                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
+                            type: 'warning'
+                        });
+                    });
+            },
+            getFormalities(currentPage =  1) {
+                this.filters.show = false;
+                this.startLoading();
+
+                axios.post('/api/report/fileFilter',{
+                        page: currentPage,
+                        perPage: this.pagination.perPage,
+                        filters: this.filters
+                }).then(response => {
+                    this.dataTable = response.data.formalities.data;
+                    console.log("this.formalitiesTable", this.dataTable)
+
+                    this.pagination.total = response.data.formalities.total;
+                    this.stopLoading();
+                }).catch(error => {
+                    this.stopLoading();
+                    //console.log(error)
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
+                });
+            },
+            formatDate(date){
+                return new Date(date)
             },
         }
     }
