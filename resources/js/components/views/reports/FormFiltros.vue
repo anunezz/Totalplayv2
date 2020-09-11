@@ -92,6 +92,20 @@
                 }).catch(error => {
                     console.error(error);
                 });
+                // let params = {
+                //     unit_id : this.$store.state.user.cat_unit_id
+                // };
+
+                // axios.get('/api/all/section',{params}).then(response => {
+                //     this.series = response.data.auxSeries;
+                //     this.stopLoading();
+                // }).catch(error => {
+                //     this.stopLoading();
+                //     this.$message({
+                //         type: "warning",
+                //         message: "No fue posible completar la acción, intente nuevamente."
+                //     });
+                // });
             },
             getUsers(){
                 axios.get('/api/all/user/unit').then(response => {

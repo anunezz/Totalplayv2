@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use Cache;
 use DB;
 use Illuminate\Http\Request;
@@ -314,7 +315,36 @@ class ReportController extends Controller
     public function getCats(){
         try{
 
-            $series = CatSeries::get();
+
+            $user = User::with('profile')->find( auth()->user()->id );
+            $Profile = $user->profile()->first();
+
+            if( $Profile->id === 1 ){
+                $series = CatSeries::get();
+            }else{
+
+
+
+            }
+
+
+            // if($idProfile === 1){
+            //     $consulates = CatConsulate::where('frontier_id',1)->get(['id','name','isMirror']);
+            // }else if($idProfile === 2){
+            //     $consulates = $user->consulate()
+            //     ->where('frontier_id',1)
+            //     ->get(['id','name','isMirror']);
+            // }else{
+            //     $consulates = [];
+            // }
+
+
+
+
+
+
+
+
 
             return response()->json([
                 'success' => true,
