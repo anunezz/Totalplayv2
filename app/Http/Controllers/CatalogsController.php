@@ -166,25 +166,24 @@ class CatalogsController extends Controller
 
             if ($request->cat === 1) {
                 $cat = new CatAdministrativeUnit();
-                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, null, $request->name, $request->specialName, $request->determinant, $request->cat_type_id);
+                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, null, $request->name, $request->specialName, $request->null, $request->null);
             }
             elseif ($request->cat === 2) {
                 $cat = new CatSection();
-                $duplicityCheck = self::duplicityCheck(CatSection::class, null, $request->name, $request->code, $request->cat_type_id);
+                $duplicityCheck = self::duplicityCheck(CatSection::class, null, $request->name, $request->code, $request->null, $request->null, $request->cat_type_id);
             }
             elseif ($request->cat === 3) {
                 $cat = new CatSeries();
-                $duplicityCheck = self::duplicityCheck(CatSeries::class, null, $request->name, $request->code, $request->codeSeries, $request->cat_section_id, $request->AT, $request->AC, $request->total, $request->cat_selection_id);
+                $duplicityCheck = self::duplicityCheck(CatSeries::class, null, $request->name, $request->code, $request->cat_section_id, $request->null);
             }
             elseif ($request->cat === 4) {
                 $cat = new CatSubseries();
-                $duplicityCheck = self::duplicityCheck(CatSubseries::class, null, $request->name, $request->code, $request->codeSubseries, $request->cat_series_id);
+                $duplicityCheck = self::duplicityCheck(CatSubseries::class, null, $request->name, $request->code, $request->cat_series_id, $request->null);
             }
             elseif ($request->cat === 5) {
                 $cat = new CatDescription();
-                $duplicityCheck = self::duplicityCheck(CatDescription::class, null, $request->description, $request->cat_series_id);
+                $duplicityCheck = self::duplicityCheck(CatDescription::class, null, $request->description, $request->cat_series_id, $request->cat_subserie_id, $request->cat_unit_id);
             }
-
 
             if (! $duplicityCheck) {
                 if ($request->cat!==3 && $request->cat!==5){
@@ -272,7 +271,7 @@ class CatalogsController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Ya existe un registro con ese nombre o código, favor de verificar'
+                    'message' => 'Ya existe un registro similar, favor de verificar'
                 ], 200);
             }
         } catch (Exception $e) {
@@ -294,21 +293,21 @@ class CatalogsController extends Controller
 
             if ($request->cat === 1) {
                 $cat = CatAdministrativeUnit::find(decrypt($request->id));
-                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name, $request->specialName, $request->determinant, $request->cat_type_id);
+                $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name, $request->specialName, $request->null, $request->null);
             }
 
             elseif ($request->cat === 2) {
                 $cat = CatSection::find(decrypt($request->id));
-                $duplicityCheck = self::duplicityCheck(CatSection::class, $cat->id, $request->name, $request->code, $request->cat_type_id);
+                $duplicityCheck = self::duplicityCheck(CatSection::class, $cat->id, $request->name, $request->code, $request->null, $request->null, $request->cat_type_id);
             }
 
             elseif ($request->cat === 3) {
                 $cat = CatSeries::find(decrypt($request->id));
-                $duplicityCheck = self::duplicityCheck(CatSeries::class, $cat->id, $request->name, $request->code, $request->codeSeries, $request->cat_section_id, $request->AT, $request->AC, $request->total, $request->cat_selection_id);
+                $duplicityCheck = self::duplicityCheck(CatSeries::class, $cat->id, $request->name, $request->code, $request->cat_section_id, $request->null);
             }
             elseif ($request->cat === 4) {
                 $cat = CatSubseries::find(decrypt($request->id));
-                $duplicityCheck = self::duplicityCheck(CatSubseries::class, $cat->id, $request->name, $request->code, $request->codeSubseries, $request->cat_series_id);
+                $duplicityCheck = self::duplicityCheck(CatSubseries::class, $cat->id, $request->name, $request->code, $request->cat_series_id, $request->null);
             }
 
             if (! $duplicityCheck) {
@@ -367,7 +366,7 @@ class CatalogsController extends Controller
 
                 return response()->json([
                     'success' => false,
-                    'message' => 'Ya existe un registro con ese nombre o código, favor de verificar'
+                    'message' => 'Ya existe un registro similar, favor de verificar'
                 ], 200);
             }
         } catch (Exception $e) {
@@ -380,25 +379,55 @@ class CatalogsController extends Controller
         }
     }
 
-    private static function duplicityCheck($cat, $id, $name, $aux = null, $code = null)
+    private static function duplicityCheck($cat, $id, $name, $cat_series_id, $cat_subserie_id, $cat_unit_id, $aux = null, $code = null)
     {
         try {
 
-          //  dd($cat, $id, $name, $aux, $code);
-//
+        //    dd($id, $name, $cat_series_id, $cat_subserie_id, $cat_unit_id, $aux, $code);
 
-//            dd('salioooooooooooo');
-            if ($aux !=null) {
+            if ($name !=null && $cat_series_id !=null && $cat_unit_id ==null) {
+         //       dd('entro a name y code', $name);
                 //dd($name,$aux);
                 $nam = $cat::where('id', '!=', $id)->where('name', $name)->whereIsactive(true)->first();
-                $cod = $cat::where('id', '!=', $id)->where('code', $aux)->whereIsactive(true)->first();
-           //     dd($name, $aux);
+                $cod = $cat::where('id', '!=', $id)->where('code', $cat_series_id)->whereIsactive(true)->first();
+           //     dd(is_null($nam) && is_null($cod));
                 if (is_null($nam) && is_null($cod)) return false;
                 else return true;
             }
 
-            if ($code != null) {
+            if ($name != null && $cat_series_id == null && $cat_subserie_id ==null) {
+          //      dd('entro solo a name', $name);
                 return $cat::where('id', '!=', $id)->where('name', $name)->first() ? true : false;
+            }
+
+            if ($cat_series_id !=null && $cat_unit_id !=null) {
+        //        dd('entro a series');
+                $nam = $cat::where('id', '!=', $id)->where('description', $name)->whereIsactive(true)->first();
+                $ser = $cat::where('id', '!=', $id)->where('cat_series_id', $cat_series_id)->where(function ($q) use ($cat_unit_id) {
+                    $q->whereHas('administrative', function ($q) use ($cat_unit_id){
+                        $q->whereIn('id', $cat_unit_id);
+                    });
+                })->whereIsactive(true)->first();
+             //   dd('nam', $ser);
+                if (is_null($nam) && is_null($ser)) return false;
+                else return true;
+            }
+
+            if ($cat_subserie_id !=null && $cat_unit_id !=null) {
+         //       dd('entro desc subserie');
+                $nam = $cat::where('id', '!=', $id)->where('description', $name)->whereIsactive(true)->first();
+                $ser = $cat::where('id', '!=', $id)->where(function ($q) use ($cat_subserie_id) {
+                    $q->whereHas('subserie', function ($q) use ($cat_subserie_id){
+                        $q->whereIn('id', $cat_subserie_id);
+                    });
+                })->where(function ($q) use ($cat_unit_id) {
+                    $q->whereHas('administrative', function ($q) use ($cat_unit_id){
+                        $q->whereIn('id', $cat_unit_id);
+                    });
+                })->whereIsactive(true)->first();
+                //   dd('nam', $ser);
+                if (is_null($nam) && is_null($ser)) return false;
+                else return true;
             }
 
       //      dd('salioooooooooooo');
