@@ -150,8 +150,8 @@
                         <el-form-item label="Documental" prop="type_documentary" :rules="[
                                                 { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                               ]">
-                            <el-row style="border: 1px solid rgb(220, 223, 230);padding: 10px;border-radius: 4px">
-                                <el-col :span="4" style="margin-right: 200px">
+                            <el-row>
+                                <el-col :span="4" style="margin-right: 100px">
                                     <el-checkbox v-model="serie" @change="typeDocumentary(1)">Serie</el-checkbox>
                                 </el-col>
                                 <el-col :span="8">
@@ -258,36 +258,50 @@
             </el-main>
         </el-dialog>
 
-        <el-dialog title="Editar Registro"
-                   :visible.sync="editRegisterDialog"
-                   width="50%" :before-close="handleClose">
+        <el-dialog :visible.sync="editRegisterDialog"
+                   :before-close="handleClose"
+                   @close="resetEditForm"
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Editar registro</span>
+                    </div>
 
-            <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
-                <el-row :gutter="10">
-                    <el-col :span="24">
-                        <el-form-item label="Descripción"
-                                      prop="name"
-                                      :rules="[
+                    <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
+                        <el-row :gutter="10">
+                            <el-col :span="12">
+                                <el-form-item label="Determinante"
+                                              prop="determinant"
+                                              :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
-                        <el-input
+                                    <el-input
+                                        v-if="editRegisterDialog"
+                                        placeholder="Determinante"
+                                        v-model="catalogEditForm.determinant"
+                                        maxlength="100"
+                                        clearable>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
+                            <el-button
                                 v-if="editRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogEditForm.name"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
-            <el-button v-if="editRegisterDialog"
-                       type="primary"
-                       @click="editRegister">Aceptar</el-button>
-            </span>
+                                type="primary"
+                                @click="editRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog
@@ -550,6 +564,12 @@
 
             newCatalog(){
                 this.catalogForm.newRegisterName = '';
+                this.catalogForm.type_documentary = null;
+                this.catalogForm.cat_unit_id = null;
+                this.catalogForm.cat_series_id = null;
+                this.catalogForm.cat_subserie_id = null;
+                this.serie = null;
+                this.subserie = null;
                 this.newRegisterDialog = true;
             },
 
