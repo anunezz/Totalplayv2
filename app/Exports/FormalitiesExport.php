@@ -2,16 +2,27 @@
 
 namespace App\Exports;
 
-use App\User;
+use App\Http\Models\Formalities;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class FormalitiesExport implements FromCollection
+class FormalitiesExport implements
+    FromCollection,
+    WithTitle
 {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
+
+    private static $ALIGNMENT = '\\PhpOffice\\PhpSpreadsheet\\Style\\Alignment';
+    private static $FILL = '\\PhpOffice\\PhpSpreadsheet\\Style\\Fill';
+    private static $BORDER = '\\PhpOffice\\PhpSpreadsheet\\Style\\Border';
+
+    public function title(): string
+    {
+        return 'Archivos de trámite';
+    }
+
     public function collection()
     {
-        return User::all();
+        return Formalities::all();
     }
 }

@@ -391,15 +391,16 @@
                 });
             },
             downloadExcel(){
-                let data = { params: {
-                        filters: this.filters}
+                let data = {
+                    params: {filters: this.filters},
+                    responseType: 'blob'
                 };
                 this.startLoading();
                 axios.get('/api/download/excel',data).then(response => {
                     const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
                     const link = document.createElement('a');
                     link.href = linkUrl;
-                    link.setAttribute('download', 'users.xlsx');
+                    link.setAttribute('download', 'Archivos_de_tramite.xlsx');
                     document.body.appendChild(link);
                     link.click();
                     this.stopLoading();

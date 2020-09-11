@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\FormalitiesExport;
+use App\Exports\UsersExport;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
@@ -339,7 +340,7 @@ class FormalitiesController extends Controller
     public function downloadExcel(Request $request)
     {
         try {
-            return Excel::download(new FormalitiesExport(), 'users.xlsx');
+            return Excel::download(new FormalitiesExport, 'Archivos_de_tramite.xlsx');
         }
         catch ( \Exception $e ) {
             return response()->json([
