@@ -7,4 +7,5 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('all/subSeries', 'FormalitiesController@allSubSeries');
     Route::post('sort-code', 'FormalitiesController@SortCode');
     Route::get('all/user/unit', 'FormalitiesController@allUserUnit');
+    Route::get('download/excel', 'FormalitiesController@downloadExcel');
 });

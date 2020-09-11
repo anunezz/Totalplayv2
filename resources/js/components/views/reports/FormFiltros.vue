@@ -8,12 +8,15 @@
             <el-row style="background: rgb(157, 36, 56);margin-bottom: 20px">
                 <h3 style="color: white;margin-left: 30px">Filtros</h3>
             </el-row>
+
+
             <el-row style="margin-bottom: 20px">
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
+
                             <el-col :span="12">
-                                <el-form-item label="Serie">
+                                <el-form-item label="Serie documental">
                                     <el-select v-model="items.serie_id" filterable clearable placeholder="Selecciona" style="width: 100%">
                                         <el-option
                                             v-for="item in series" :key="item.id"
@@ -69,12 +72,15 @@
         data(){
             return{
                 users:[],
-                series:[]
+                series:[],
+                reports: null,
             }
         },
         created() {
             this.getCats();
             this.getUsers();
+        },
+        computed:{
         },
         methods:{
             getCats(){
@@ -102,6 +108,7 @@
                 this.items.show = true;
                 this.items.year = null;
                 this.items.serie_id = null;
+                this.items.reports = null;
                 this.$emit('search');
             },
             searchitems(){

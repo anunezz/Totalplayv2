@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="el-icon-s-management" title="Reportes">
+        <header-section icon="el-icon-s-management" title="Inventarios">
             <template slot="buttons">
                 <el-button
                     align="right"
@@ -13,112 +13,18 @@
             </template>
         </header-section>
 
-        <!-- <el-row :gutter='20'>
-            <el-col :span="8">
-                <el-badge class="item">
-                    <a class="links" @click="$router.push( {name:'Record'})">
-                        Reportes de Expedientes ffff
-                    </a>
-                </el-badge>
-                <br /><br />
-                <span>Reportes de Expedientes</span>
-            </el-col>
-
-            <el-col :span="8">
-                <el-badge class="item">
-                    <a class="links" @click="goTo('LabelIndex', { cat_transaction_type_id: 1, action: 'Ingresa a reportes de etiqueta'})">
-                        Etiqueta
-                    </a>
-                </el-badge>
-                <br /><br />
-                <span>Etiqueta</span>
-            </el-col>
-
-            <el-col :span="8">
-                <el-badge class="item">
-                    <a class="links" @click="$router.push( {name:'Transfer'})">
-                        Formatos de Trasferencia
-                    </a>
-                </el-badge>
-                <br /><br />
-                <span>Formatos de Trasferencia</span>
-            </el-col>
-        </el-row> -->
-
-        <!-- <el-row :gutter='20'>
-            <el-col :span='24' class='animated fadeIn fast'>
-                <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
-                    <div>
-                        <pre>
-                            {{$store.state.user}}
-                        </pre>
-                    </div>
-                </div>
-            </el-col>
-        </el-row> -->
-
-<el-row :gutter='20'>
-      <el-col :span='24' class='animated fadeIn fast'>
-          <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
-              <div></div>
-          </div>
-      </el-col>
-</el-row>
-
-
         <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
-                <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
-                    <el-button-group>
-                        <!-- <el-button
-                            icon="far fa-file-excel"
-                            size="mini"
-                            @click="labelBox"
-                            type="success">
-                            Etiqueta de caja
-                        </el-button> -->
-                        <el-button
-                            icon="far fa-file-excel"
-                            size="mini"
-                            @click="lowDocumentary"
-                            type="success">
-                            Baja documental
-                        </el-button>
-                        <!-- <el-button
-                            v-if="$store.state.user.cat_unit_id === 5"
-                            icon="far fa-file-excel"
-                            size="mini"
-                            @click="lowAccounting"
-                            type="primary">
-                            Baja contable
-                        </el-button> -->
-                        <el-button
-                            icon="far fa-file-excel"
-                            size="mini"
-                            @click="lowAccounting"
-                            type="primary">
-                            Baja contable
-                        </el-button>
-                        <el-button
-                            icon="far fa-file-excel"
-                            size="mini"
-                            @click="Transfer('primary')"
-                            type="default">
-                            Transferencia primaria
-                        </el-button>
-                        <el-button
-                            icon="far fa-file-excel"
-                            size="mini"
-                            @click="Transfer('secondary')"
-                            type="warning">
-                            Transferencia secundaria
-                        </el-button>
-                    </el-button-group>
-                </div>
+                <el-tabs type="border-card">
+                    <el-tab-pane v-for="(item , index) in dataComponent" :key="index" :label='item.name'>
+                        <ReportComponent :items="item" @search="getFormalities" />
+                    </el-tab-pane>
+                </el-tabs>
             </el-col>
         </el-row>
 
-        <el-row :gutter='20'>
+
+        <!-- <el-row :gutter='20'>
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-end;'>
                     <div>
@@ -132,137 +38,8 @@
                     </div>
                 </div>
             </el-col>
-        </el-row>
+        </el-row> -->
 
-        <el-row :gutter='20'>
-            <el-col :span='24' class='animated fadeIn fast'>
-                <el-pagination
-                    :page-size="parseInt(pagination.perPage)"
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    layout="total"
-                    :total="pagination.total"
-                    :current-page.sync="pagination.currentPage">
-                </el-pagination>
-            </el-col>
-        </el-row>
-
-        <el-row :gutter="20">
-            <el-col :span="24">
-                <el-table
-                    size="mini"
-                    :data="dataTable"
-                    style="width: 100%">
-                    <el-table-column
-                        label="Determinante">
-                        <template slot-scope="scope">
-                            {{scope.row.unit.determinant}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        prop="sort_code"
-                        label="Clasificación">
-                    </el-table-column>
-                    <el-table-column
-                        label="Fecha de cierre">
-                        <template slot-scope="scope">
-                            {{ formatDate(scope.row.close_date) | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY') }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="Creado por:">
-                        <template slot-scope="scope">
-                            {{scope.row.user.full_name}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        label="Fecha y Hora de  Creación">
-                        <template slot-scope="scope">
-                            {{ scope.row.created_at | moment('timezone', 'America/Mexico_City') | moment('DD/MM/YYYY h:mm a') }}
-                        </template>
-                    </el-table-column>
-                    <!-- <el-table-column
-                        label="Acciones" header-align="left" align="center">
-                        <template slot-scope="scope">
-                            <el-button-group>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Editar"
-                                    placement="top-start">
-                                    <el-button
-                                        type="primary"
-                                        size="mini"
-                                        icon="fas fa-edit"
-                                        @click="editRegister(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Eliminar"
-                                    placement="top-start">
-                                    <el-button
-                                        type="danger"
-                                        size="mini"
-                                        icon="el-icon-delete"
-                                        @click="deleteRegister(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Carátula"
-                                    placement="top-start">
-                                    <el-button
-                                        type="info"
-                                        size="mini"
-                                        icon="fas fa-book"
-                                        @click="cover(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Ceja"
-                                    placement="top-start">
-                                    <el-button
-                                        type="warning"
-                                        size="mini"
-                                        icon="far fa-bookmark"
-                                        @click="eyebrow(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                                <el-tooltip
-                                    class="item"
-                                    effect="dark"
-                                    content="Caja"
-                                    placement="top-start">
-                                    <el-button
-                                        type="success"
-                                        size="mini"
-                                        icon="fas fa-box-open"
-                                        @click="box(scope.row.hash)">
-                                    </el-button>
-                                </el-tooltip>
-                            </el-button-group>
-                        </template>
-                    </el-table-column> -->
-                </el-table>
-                <br>
-            </el-col>
-        </el-row>
-        <el-row>
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="pagination.currentPage"
-                :page-sizes="[10, 20, 50, 100]"
-                :page-size="parseInt(pagination.perPage)"
-                layout="sizes, ->, prev, pager, next"
-                :total="pagination.total">
-            </el-pagination>
-        </el-row>
 
         <show-filters :items="filters" @search="getFormalities"/>
 
@@ -272,10 +49,12 @@
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
     import ShowFilters from "./FormFiltros";
+    import ReportComponent from "./Report_component";
     export default {
         components: {
             HeaderSection,
-            ShowFilters
+            ShowFilters,
+            ReportComponent
         },
         data(){
             return{
@@ -283,18 +62,36 @@
                 filters:{
                     show: false,
                     year:null,
-                    user:''
+                    user:'',
+                    serie_id: null,
+                    reports: null
                 },
                 pagination: {
                     currentPage: 1,
                     total: 0,
                     perPage: 10
                 },
+                LowDocumentary:[], //Baja documental,
+                dataComponent: []
             }
         },
         created(){
             this.getFormalities();
             console.log("Estas aqui");
+            let data = [ { name: 'Baja documental', url: 'lowDocumentary'  },
+                        { name: 'Baja contable', url: 'lowAccounting' },
+                        { name: 'Transferencia primaria', url: 'PrimaryTransfer' },
+                        { name: 'Transferencia secundariaa', url: 'TransferSecondary' }];
+
+            for (let i = 0; i < data.length; i++) {
+                if( this.$store.state.user.cat_unit_id === 5 && data[i].name === 'Baja contable'){
+                    this.dataComponent.push( data[i] );
+                }
+                if( data[i].name !== 'Baja contable' ){
+                    this.dataComponent.push( data[i] );
+                }
+            }
+
         },
         methods: {
             goTo(link, data) {
@@ -334,120 +131,6 @@
             formatDate(date){
                 return new Date(date)
             },
-            handleSizeChange(sizePerPage) {
-                this.pagination.perPage = sizePerPage;
-                this.getFormalities();
-            },
-            handleCurrentChange(currentPage) {
-                this.getFormalities(currentPage);
-            },
-            labelBox(){
-                axios({ responseType: 'blob',
-                        method: 'get',
-                        url: '/api/report/labelBox',
-                        data: 'hola' }).then(response => {
-                            this.loading = true;
-                        setTimeout(()=>{
-                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
-                            const link = document.createElement('a');
-                            link.href = linkUrl;
-                            link.setAttribute('download', 'Etiquetas_de_caja.xlsx');
-                            document.body.appendChild(link);
-                            link.click();
-                            this.loading = false;
-                        },500)
-
-                    }).catch(error => {
-                        this.$notify({
-                            title: 'Mensaje',
-                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
-                            type: 'warning'
-                        });
-                    });
-            },
-            lowDocumentary(){
-                axios({ responseType: 'blob',
-                        method: 'post',
-                        url: '/api/report/lowDocumentary',
-                        data: 'hola' }).then(response => {
-                            this.loading = true;
-                        setTimeout(()=>{
-                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
-                            const link = document.createElement('a');
-                            link.href = linkUrl;
-                            link.setAttribute('download', 'Baja_documental.xlsx');
-                            document.body.appendChild(link);
-                            link.click();
-                            this.loading = false;
-                        },500)
-
-                    }).catch(error => {
-                        this.$notify({
-                            title: 'Mensaje',
-                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
-                            type: 'warning'
-                        });
-                    });
-            },
-            lowAccounting(){
-                axios({ responseType: 'blob',
-                        method: 'post',
-                        url: '/api/report/lowAccounting',
-                        data: 'hola' }).then(response => {
-                            this.loading = true;
-                        setTimeout(()=>{
-                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
-                            const link = document.createElement('a');
-                            link.href = linkUrl;
-                            link.setAttribute('download', 'Baja_contable.xlsx');
-                            document.body.appendChild(link);
-                            link.click();
-                            this.loading = false;
-                        },500)
-
-                    }).catch(error => {
-                        this.$notify({
-                            title: 'Mensaje',
-                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
-                            type: 'warning'
-                        });
-                    });
-            },
-            Transfer(type){
-                axios({ responseType: 'blob',
-                        method: 'post',
-                        url: '/api/report/Transfer',
-                        data: {
-                            transfer: type
-                        } }).then(response => {
-                            this.loading = true;
-                        setTimeout(()=>{
-                            const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
-                            const link = document.createElement('a');
-                            link.href = linkUrl;
-                            let name =  null;
-                            if(type === 'primary'){
-                                name = 'Transferencia_primaria.xlsx';
-                            }
-
-                            if(type === 'secondary'){
-                                name = 'Transferencia_secundaria.xlsx';
-                            }
-
-                            link.setAttribute('download', name);
-                            document.body.appendChild(link);
-                            link.click();
-                            this.loading = false;
-                        },500)
-
-                    }).catch(error => {
-                        this.$notify({
-                            title: 'Mensaje',
-                            text: 'No fue posible realizar la descarga, inténtelo nuevamente.',
-                            type: 'warning'
-                        });
-                    });
-            },
         }
     }
 </script>
@@ -459,4 +142,32 @@
     cursor: pointer;
     text-decoration: underline;
 }
+
+.animated {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.fast {
+    -webkit-animation-duration: 0.4s;
+    animation-duration: 0.4s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+@keyframes fadeIn {
+from {
+opacity: 0;
+}
+
+to {
+opacity: 1;
+}
+}
+
+.fadeIn {
+animation-name: fadeIn;
+}
+
 </style>

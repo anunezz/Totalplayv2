@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\FormalitiesExport;
+use App\Exports\UsersExport;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSection;
 use App\Http\Models\Cats\CatSeries;
@@ -12,6 +14,7 @@ use App\Repositories\Formality\FormalityRepository;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormalitiesController extends Controller
 {
@@ -325,6 +328,19 @@ class FormalitiesController extends Controller
                 'success' => true,
                 'users' => User::whereIn('id',$usersId)->orderBy('name', 'asc')->get()
             ]);
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+    public function downloadExcel(Request $request)
+    {
+        try {
+            return Excel::download(new FormalitiesExport, 'Archivos_de_tramite.xlsx');
         }
         catch ( \Exception $e ) {
             return response()->json([

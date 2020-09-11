@@ -28,6 +28,7 @@ class ReportController extends Controller
             $data = $request->all();
 
             $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            //$Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( $data['id'] )->first();
 
             $results = [
                         //Nivel de descripción documental
@@ -83,7 +84,14 @@ class ReportController extends Controller
             //return (  new Proceedings([],$results)   )->download('invoices.pdf', \Maatwebsite\Excel\Excel::DOMPDF);
 
             //return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
-            return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
+
+            $pdf = \PDF::loadView('pdf.caratula_pdf',compact('results'));
+            //$pdf->setOptions(['isPhpEnabled' => true]);
+            return $pdf->download('caratula.pdf');
+
+
+
+            //return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
 
 
             //return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
@@ -198,23 +206,39 @@ class ReportController extends Controller
         }
     }
 
-    public function Transfer(Request $request){
+    public function PrimaryTransfer(Request $request){
         try{
             if ($request->wantsJson()){
 
                 $data = $request->all();
-                //dd($data);
-
-                if($data['transfer'] === 'primary'){
-                    $data['transfer'] = 'Transferencia primaria';
-                }
-                if($data['transfer'] === 'secondary'){
-                    $data['transfer'] = 'Transferencia secundaria';
-                }
-
 
                 return Excel::download(new Transfer([],[
-                    'transfer' => $data['transfer']
+                    'transfer' => 'Transferencia primaria'
+                ]), 'Transferencia_primaria.xlsx');
+
+                return response()->json([
+                    'success' => true,
+                    'lResults' => [],
+                ], 200);
+                }else{
+                return response()->view('errors.404', [], 404);
+                }
+            } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+            }
+    }
+
+    public function TransferSecondary(Request $request){
+        try{
+            if ($request->wantsJson()){
+
+                $data = $request->all();
+
+                return Excel::download(new Transfer([],[
+                    'transfer' => 'Transferencia secundaria'
                 ]), 'Transferencia_primaria.xlsx');
 
                 return response()->json([
