@@ -251,24 +251,24 @@
 
             <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
+<!--                    <el-col :span="24">-->
+<!--                        <el-form-item label="Nombre de inventario"-->
+<!--                                      prop="name"-->
+<!--                                      :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}-->
+<!--                                  ]">-->
+<!--                            <el-input-->
+<!--                                v-if="editRegisterDialog"-->
+<!--                                placeholder="Nombre"-->
+<!--                                v-model="catalogEditForm.name"-->
+<!--                                maxlength="100"-->
+<!--                                clearable>-->
+<!--                            </el-input>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
                     <el-col :span="24">
-                        <el-form-item label="Nombre de inventario"
-                                      prop="name"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="editRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogEditForm.name"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="Responsable"
+                        <el-form-item :label="ela"
                                       prop="elaborated"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -284,7 +284,24 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="Coordinador"
+                        <el-form-item v-if="this.catalogEditForm.viewed !== null"
+                                      label="Área Productora"
+                                      prop="viewed"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="catalogEditForm.viewed"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item :label="rev"
                                       prop="revised"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -300,7 +317,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="Titular"
+                        <el-form-item :label="aut"
                                       prop="authorized"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -310,6 +327,23 @@
                                 v-if="editRegisterDialog"
                                 placeholder="Nombre"
                                 v-model="catalogEditForm.authorized"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item v-if="this.catalogEditForm.received !== null"
+                                      :label="rec"
+                                      prop="received"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="catalogEditForm.received"
                                 maxlength="100"
                                 clearable>
                             </el-input>
@@ -360,6 +394,10 @@
         data() {
             return {
 
+                ela: '',
+                rev: '',
+                aut: '',
+                rec: '',
                 nameUnit: '',
                 elements: [],
 
@@ -537,7 +575,29 @@
 
             editForm(row){
 
-                console.log('llegaaaaaaaaaaaaaa', row)
+                if (row.id === 1) {
+                    this.ela = 'Responsable del archivo de concentración'
+                    this.rev = 'Coordinador de Archivos'
+                    this.aut = 'Titular de la Unidad administrativa'
+                }
+                if (row.id === 2) {
+                    this.ela = 'Responsable'
+                    this.rev = 'Área Tramitadora'
+                    this.aut = 'Unidad Administrativa Productora'
+                }
+                if (row.id === 3) {
+                    this.ela = 'Responsable del Archivo de Trámite'
+                    this.rev = 'Coordinador de Archivos'
+                    this.aut = 'Titular de la Unidad Administrativa'
+                    this.rec = 'Responsable del Archivo de Concentración'
+                }
+                if (row.id === 4) {
+                    this.ela = 'Responsable del Archivo de Concentración'
+                    this.rev = 'Coordinador de Archivos'
+                    this.aut = 'Titular de la Unidad Administrativa'
+                    this.rec = 'Responsable del Archivo Histórico'
+                }
+                //console.log('llegaaaaaaaaaaaaaa', row)
 
                 this.catalogEditForm = {
                     id:row.hash,
@@ -748,6 +808,71 @@
                     this.catalogEditForm.specialName = null;
                     this.catalogEditForm.name = null;
                 }
+            },
+
+            Modal() {
+                "hola";
+                console.log('llegaaaa')
+                this.modal = 'hola';
+                // switch (action) {
+                //     case "resgister": {
+                //         if (
+                //             this.ruleForm.consulate === 0 || this.selectPeriod === null
+                //         ) {
+                //             this.$message({
+                //                 message: "Verifique los campos del formulario.",
+                //                 type: "warning"
+                //             });
+                //             return;
+                //         }
+                //
+                //         this.showFormOperative = true;
+                //         this.titleModal = "Nuevo operativo";
+                //         this.clearFields();
+                //         break;
+                //     }
+                //     case "close": {
+                //         this.titleModal = "";
+                //         this.showFormOperative = false;
+                //         this.dialogActive = false;
+                //         this.centerDialogVisible = false;
+                //         this.clearFields();
+                //         break;
+                //     }
+                //     case "delete": {
+                //         this.idEditOperative = data;
+                //         this.titleModal = "Eliminar operativo";
+                //         this.dialogActive = true;
+                //         this.msjModal = '¿Estas completamente seguro de eliminar este operativo?';
+                //         break;
+                //     }
+                //     case "nothingOperative": {
+                //         this.titleModal = "Sin operativos";
+                //         this.dialogActive = true;
+                //         this.msjModal = "";
+                //         break;
+                //     }
+                //     case "editNew": {
+                //         this.showFormOperative = true;
+                //         this.idEditOperative = data[1];
+                //         this.updateOperative(data[0]);
+                //         this.activeNames = "1";
+                //         this.titleModal = "Actualizar operativo";
+                //         break;
+                //     }
+                //     case "sendToValidate": {
+                //         this.dialogActive = true;
+                //         this.msjModal = this.$store.state.user.profile === 1?
+                //             "¿Estas completamente seguro de publicar todos los operativos?" :
+                //             "¿Estas completamente seguro de enviar a validar todos los operativos?";
+                //
+                //         this.titleModal = this.$store.state.user.profile === 1?
+                //             "Publicar operativos" :
+                //             "Enviar a validar";
+                //
+                //         break;
+                //     }
+                // }
             },
         },
     }
