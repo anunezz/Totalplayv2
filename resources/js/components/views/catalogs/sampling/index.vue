@@ -314,6 +314,14 @@
                 }
             },
 
+            getSeries() {
+                axios.get('/api/cats/create').then(response => {
+                    this.series = response.data.series;
+                    this.results = response.data.results;
+                    this.stopLoading();
+                })
+            },
+
 
             getTitles(currentPage =  1) {
                 this.startLoading();
@@ -375,6 +383,7 @@
                                 this.catalogForm.newRegisterName = '';
                                 this.newRegisterDialog = false;
                                 this.getTitles();
+                                this.getSeries();
                             } else {
                                 this.$notify({
                                     type: "warning",
