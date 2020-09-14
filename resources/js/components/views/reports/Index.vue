@@ -77,16 +77,23 @@
         },
         created(){
             this.getFormalities();
-            console.log("Estas aqui");
+            console.log("Estas perfil: ",this.$store.state.user);
             let data = [ { name: 'Baja documental', url: 'lowDocumentary'  },
                         { name: 'Baja contable', url: 'lowAccounting' },
                         { name: 'Transferencia primaria', url: 'PrimaryTransfer' },
                         { name: 'Transferencia secundariaa', url: 'TransferSecondary' }];
 
             for (let i = 0; i < data.length; i++) {
-                if( this.$store.state.user.cat_unit_id === 5 && data[i].name === 'Baja contable'){
+                if( ( this.$store.state.user.profile !== 1 && this.$store.state.user.cat_unit_id === 5 && data[i].name === 'Baja contable' ) ||
+                    ( this.$store.state.user.profile === 1 && data[i].name === 'Baja contable') ){
                     this.dataComponent.push( data[i] );
                 }
+
+                // if( this.$store.state.user.profile === 1 && data[i].name === 'Baja contable' ){
+                //     this.dataComponent.push( data[i] );
+                // }
+
+
                 if( data[i].name !== 'Baja contable' ){
                     this.dataComponent.push( data[i] );
                 }
