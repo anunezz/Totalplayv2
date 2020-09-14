@@ -52,10 +52,21 @@
                         </template>
                     </el-table-column>
                     <el-table-column
-                        prop="serie.name"
-                        label="Serie documental"
-                        width="400">
+                        prop="cat_series_id"
+                        label="Documental">
+                        <template slot-scope="scope">
+                            {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}
+                        </template>
+<!--                        <template slot-scope="scope">-->
+<!--                            {{scope.row.cat_series_id ? scope.row.cat_series_id != null : 'Sin asignar',-->
+<!--                              scope.row.cat_series_id ? scope.row.cat_series_id = null : 'Serie documental'}}-->
+<!--                        </template>-->
                     </el-table-column>
+<!--                    <el-table-column-->
+<!--                        prop="serie.name"-->
+<!--                        label="Serie documental"-->
+<!--                        width="400">-->
+<!--                    </el-table-column>-->
                     <el-table-column
                         prop="description"
                         label="Descripción"
@@ -74,8 +85,7 @@
                                         type="info"
                                         size="mini"
                                         icon="fas fa-edit"
-
-                                    >
+                                        @click="editForm(scope.row)">
                                     </el-button>
                                 </el-tooltip>
 <!--                                <el-tooltip v-if="scope.row.operatives.length > 0 || scope.row.id === 14" placement="right-start">-->
@@ -233,6 +243,7 @@
                             <el-input
                                 v-if="newRegisterDialog"
                                 type="textarea"
+                                :rows="8"
                                 placeholder="Descripción"
                                 v-model="catalogForm.newRegisterName"
                                 maxlength="100"
@@ -267,20 +278,101 @@
                     <div slot="header">
                         <span  class="title">Editar registro</span>
                     </div>
-
                     <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                         <el-row :gutter="10">
                             <el-col :span="12">
-                                <el-form-item label="Determinante"
-                                              prop="determinant"
+                                <el-form-item label="Documental" prop="type_documentary" :rules="[
+                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                              ]">
+                                    <el-row>
+                                        <el-col :span="4" style="margin-right: 100px">
+                                            <el-checkbox v-if="editRegisterDialog" v-model="serie" @change="typeEditDocumentary(1)">Serie</el-checkbox>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-checkbox v-if="editRegisterDialog" v-model="subserie" @change="typeEditDocumentary(2)">Subserie</el-checkbox>
+                                        </el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="24">
+                                <el-form-item v-if="this.serie === true"
+                                              label="Serie documental"
+                                              prop="cat_series_id"
+                                              :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                                    <el-select v-if="editRegisterDialog"
+                                               style="width: 100%;"
+                                               size="medium"
+                                               v-model="catalogEditForm.cat_series_id"
+                                               placeholder="Seleccionar">
+                                        <el-option
+                                            v-for="(serie , index) in series"
+                                            :key="index"
+                                            :label="serie.name"
+                                            :value="serie.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-form-item v-if="this.subserie === true"
+                                              label="Subserie documental"
+                                              prop="subserie"
+                                              :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                                    <el-select v-if="editRegisterDialog"
+                                               v-model="catalogEditForm.subserie"
+                                               filterable placeholder="Seleccionar"
+                                               remove-tag="remove-tag"
+                                               multiple
+                                               style="width: 100%">
+                                        <el-option
+                                            v-for="(sub , index) in subseries"
+                                            :key="index"
+                                            :label="sub.name"
+                                            :value="sub.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-form-item label="Unidad Administrativa"
+                                              prop="administrative"
+                                              :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                                    <el-select v-if="editRegisterDialog"
+                                               v-model="catalogEditForm.administrative"
+                                               filterable placeholder="Seleccionar"
+                                               remove-tag="remove-tag"
+                                               multiple
+                                               style="width: 100%">
+                                        <el-option
+                                            v-for="(unit , index) in units"
+                                            :key="index"
+                                            :label="unit.name"
+                                            :value="unit.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-form-item label="Descripción"
+                                              prop="description"
                                               :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                                     <el-input
                                         v-if="editRegisterDialog"
-                                        placeholder="Determinante"
-                                        v-model="catalogEditForm.determinant"
+                                        type="textarea"
+                                        :rows="8"
+                                        placeholder="Descripción"
+                                        v-model="catalogEditForm.description"
                                         maxlength="100"
                                         clearable>
                                     </el-input>
@@ -354,7 +446,11 @@
                     cat_subserie_id: [],
                 },
                 catalogEditForm:{
-                    name: ''
+                    description: '',
+                    type_documentary: null,
+                    administrative: [],
+                    cat_series_id: [],
+                    subserie: [],
                 },
                 hashRegister: null,
                 nameRegister: null,
@@ -504,9 +600,28 @@
             },
 
             editForm(row){
+                console.log('editarrrrrr', row)
+
+                this.serie = true
+                this.subserie = false
+             //   this.catalogEditForm.type_documentary = 1
+                if (row.cat_series_id == null){
+                    this.subserie = true
+                    this.serie = false
+             //       this.catalogEditForm.type_documentary = 2
+                }
+                let administrative = [];
+                row.administrative.forEach(element => administrative.push(element.id));
+                let subserie = []
+                row.subserie.forEach(element => subserie.push(element.id));
+
                 this.catalogEditForm = {
                     id:row.hash,
-                    name:row.name,
+                    description:row.description,
+                    cat_series_id:row.cat_series_id,
+                    administrative: administrative,
+                    subserie: subserie,
+                    type_documentary: 1
                 };
                 this.editRegisterDialog = true;
             },
@@ -514,7 +629,14 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 5, name: this.catalogEditForm.name};
+                let data = {
+                    id: this.catalogEditForm.id,
+                    cat: 5,
+                    description: this.catalogEditForm.description,
+                    cat_unit_id: this.catalogEditForm.administrative,
+                    cat_series_id: this.catalogEditForm.cat_series_id,
+                    cat_subserie_id: this.catalogEditForm.subserie,
+                };
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
@@ -655,6 +777,20 @@
                 if (type === 1 && this.serie===true){
                     this.subserie = false;
                     this.catalogForm.type_documentary = type;
+                }
+            },
+            typeEditDocumentary(type){
+
+                if (!this.serie && !this.subserie){
+                    this.catalogEditForm.type_documentary = null;
+                }
+                if (type===2 && this.subserie===true){
+                    this.serie = false;
+                    this.catalogEditForm.type_documentary = type;
+                }
+                if (type === 1 && this.serie===true){
+                    this.subserie = false;
+                    this.catalogEditForm.type_documentary = type;
                 }
             },
         },

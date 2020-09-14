@@ -19,9 +19,18 @@ class FormalitiesSicarController extends Controller
 
         if ($request->wantsJson()){
             $data = $request->all();
-            $formalities = FormalitiesSicar::orderBy('created_at', 'DESC')
-                ->search($data['filters'])
-                ->paginate($data['perPage']);
+            $formalities = [];
+            if(auth()->user()->cat_profile_id === 1){
+                $formalities = FormalitiesSicar::orderBy('created_at', 'DESC')
+                    ->search($data['filters'])
+                    ->paginate($data['perPage']);
+            }else if (!is_null(auth()->user()->cat_unit_id)){
+                $formalities = FormalitiesSicar::orderBy('created_at', 'DESC')
+                    ->where('key_units',auth()->user()->determinant->determinant)
+                    ->search($data['filters'])
+                    ->paginate($data['perPage']);
+            }
+
 
             return response()->json([
                 'formalitiesSicar' => $formalities,
