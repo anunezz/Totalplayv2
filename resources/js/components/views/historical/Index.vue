@@ -13,7 +13,8 @@
                     <el-button
                         size="small"
                         type="primary"
-                        icon="fas fa-file-excel">
+                        icon="fas fa-file-excel"
+                        @click="downloadExcel">
                         Descargar Excel
                     </el-button>
                 </el-button-group>
@@ -175,6 +176,29 @@
                 this.$router.push({
                     name: 'HistoricalShow',
                     params: {id: id}
+                });
+            },
+            downloadExcel(){
+                let data = {
+                    params: {filters: this.filters},
+                    responseType: 'blob'
+                };
+                this.startLoading();
+                axios.get('/api/download/excel/sicar',data).then(response => {
+                    const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
+                    const link = document.createElement('a');
+                    link.href = linkUrl;
+                    link.setAttribute('download', 'Archivos_de_tramite_historicos.xlsx');
+                    document.body.appendChild(link);
+                    link.click();
+                    this.stopLoading();
+                }).catch(error => {
+                    console.log(error)
+                    this.stopLoading();
+                    this.$message({
+                        type: "warning",
+                        message: "No fue posible completar la acción, intente nuevamente."
+                    });
                 });
             }
         },
