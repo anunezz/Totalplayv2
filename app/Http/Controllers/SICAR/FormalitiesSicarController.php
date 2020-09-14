@@ -134,20 +134,7 @@ class FormalitiesSicarController extends Controller
     public function downloadExcel(Request $request)
     {
         try {
-            $data = $request->all();
-            $formalities = [];
-            if(auth()->user()->cat_profile_id === 1){
-                $formalities = FormalitiesSicar::orderBy('created_at', 'DESC')
-                    ->search($data['filters'])
-                    ->get();
-            }else if (!is_null(auth()->user()->cat_unit_id)){
-                $formalities = FormalitiesSicar::orderBy('created_at', 'DESC')
-                    ->where('key_units',auth()->user()->determinant->determinant)
-                    ->search($data['filters'])
-                    ->get();
-            }
-
-            return Excel::download(new FormalitiesSicarExport($formalities),'Archivos_de_tramite_historico.xlsx');
+            return Excel::download(new FormalitiesSicarExport($request->all()),'Archivos_de_tramite_historico.xlsx');
         }
         catch ( \Exception $e ) {
             return response()->json([
