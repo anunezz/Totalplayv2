@@ -25,7 +25,7 @@
                         </el-row>
                         <el-row :gutter="20">
                             <el-col :span="12">
-                                <el-form-item label="Año de cierre">
+                                <el-form-item label="Año de apertura">
                                     <el-date-picker
                                         v-model="items.year"
                                         type="year"
