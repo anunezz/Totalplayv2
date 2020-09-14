@@ -33,6 +33,7 @@
                 </el-pagination>
             </el-col>
         </el-row>
+<!--        <pre>{{results}}</pre>-->
 
         <p></p>
         <br>
@@ -137,7 +138,7 @@
                     </div>
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
-                    <el-col :span="12">
+                    <el-col :span="24">
                         <el-form-item label="Serie"
                                       prop="cat_series_id"
                                       :rules="[
@@ -148,7 +149,7 @@
                                        v-model="catalogForm.cat_series_id"
                                        placeholder="Seleccionar">
                                 <el-option
-                                    v-for="(serie , index) in series"
+                                    v-for="(serie , index) in results"
                                     :key="index"
                                     :label="serie.name"
                                     :value="serie.id">
@@ -166,6 +167,7 @@
                             <el-input
                                 v-if="newRegisterDialog"
                                 type="textarea"
+                                :rows="6"
                                 placeholder="Cualidad"
                                 v-model="catalogForm.newRegisterName"
                                 maxlength="100"
@@ -182,7 +184,7 @@
                             <el-button
                                 v-if="newRegisterDialog"
                                 type="primary"
-                                @click="newRegisterDialog = false">
+                                @click="newRegister">
                                 Aceptar
                             </el-button>
                         </div>
@@ -250,6 +252,7 @@
         data() {
             return {
 
+                results: [],
                 series: [],
                 elements: [],
 
@@ -263,6 +266,7 @@
 
                 catalogForm: {
                     newRegisterName: '',
+                    cat_series_id: null
                 },
                 catalogEditForm:{
                     name: ''
@@ -287,6 +291,7 @@
             this.getTitles();
             axios.get('/api/cats/create').then(response => {
                 this.series = response.data.series;
+                this.results = response.data.results;
                 this.stopLoading();
             })
         },
@@ -351,7 +356,11 @@
             newRegister() {
                 this.startLoading();
 
-                let data = {cat: 5, name: this.catalogForm.newRegisterName};
+                let data = {
+                    cat: 6,
+                    quality: this.catalogForm.newRegisterName,
+                    cat_series_id: this.catalogForm.cat_series_id
+                };
 
                 this.$refs['catalogForm'].validate((valid) => {
                     if (valid) {

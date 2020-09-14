@@ -2,9 +2,9 @@
 namespace App\Http\Controllers;
 
 use App\CatInventory;
+use App\Http\Controllers\GeneralController;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\GeneralController;
 
 use App\Http\Models\Cats\CatDescription;
 use App\Http\Models\Cats\CatPrimaryValues;
@@ -62,7 +62,7 @@ class CatalogsController extends Controller
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 5) {
-                    $elements = CatDescription::with('serie', 'administrative')
+                    $elements = CatDescription::with('serie', 'administrative', 'subserie')
                         ->search($data['search'])
                         ->select(['id', 'description', 'cat_series_id', 'isActive'])
                         ->orderBy('description')
@@ -119,6 +119,11 @@ class CatalogsController extends Controller
                     ->orderBy('name')
                     ->get(['id', 'name', 'code']);
 
+                $results = CatSeries::doesntHave('sampling')
+                    ->where('isActive', 1)
+                    ->orderBy('name')
+                    ->get(['id', 'name', 'code']);
+
                 $units = CatAdministrativeUnit::where('isActive', 1)
                     ->orderBy('name')
                     ->get(['id', 'name']);
@@ -137,6 +142,7 @@ class CatalogsController extends Controller
                     'selections'  => $selections,
                     'values'      => $values,
                     'series'      => $series,
+                    'results'     => $results,
                     'units'       => $units,
                     'subseries'   => $subseries,
                     'types'       => $types,
@@ -184,18 +190,23 @@ class CatalogsController extends Controller
                 $cat = new CatDescription();
                 $duplicityCheck = self::duplicityCheck(CatDescription::class, null, $request->description, $request->cat_series_id, $request->cat_subserie_id, $request->cat_unit_id);
             }
+            elseif ($request->cat === 6) {
+                $cat = new CatSampling();
+                $duplicityCheck = self::duplicityCheck(CatSampling::class, null, $request->quality, $request->cat_series_id, $request->null, $request->null);
+            }
 
             if (! $duplicityCheck) {
                 if ($request->cat!==3 && $request->cat!==5){
-                    $cat->name = $request->name;
 
                     if ($request->cat === 1){
+                        $cat->name = $request->name;
                         $cat->specialName = $request->specialName;
                         $cat->determinant = $request->determinant;
                         $cat->cat_type_id = $request->cat_type_id;
                     }
 
                     if ($request->cat === 2){
+                        $cat->name = $request->name;
                         $cat->code = $request->code;
                         $cat->cat_type_id = $request->cat_type_id;
                     }
@@ -211,8 +222,14 @@ class CatalogsController extends Controller
 //                    }
 
                     if ($request->cat === 4){
+                        $cat->name = $request->name;
                         $cat->code = $request->code;
                         $cat->codeSubseries = $request->codeSubseries;
+                        $cat->cat_series_id = $request->cat_series_id;
+                    }
+
+                    if ($request->cat === 6){
+                        $cat->quality = $request->quality;
                         $cat->cat_series_id = $request->cat_series_id;
                     }
 
@@ -309,51 +326,74 @@ class CatalogsController extends Controller
                 $cat = CatSubseries::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatSubseries::class, $cat->id, $request->name, $request->code, $request->cat_series_id, $request->null);
             }
+            elseif ($request->cat === 5) {
+                $cat = CatDescription::find(decrypt($request->id));
+                $duplicityCheck = self::duplicityCheck(CatDescription::class, $cat->id, $request->description, $request->cat_series_id, $request->cat_subserie_id, $request->cat_unit_id);
+            }
 
             if (! $duplicityCheck) {
+                if ($request->cat !== 5) {
+                    $cat->name = $request->name;
 
-                $cat->name = $request->name;
+                    if ($request->cat === 1) {
+                        $cat->specialName = $request->specialName;
+                        $cat->determinant = $request->determinant;
+                        $cat->cat_type_id = $request->cat_type_id;
+                    }
 
-                if ($request->cat === 1){
-                    $cat->specialName = $request->specialName;
-                    $cat->determinant = $request->determinant;
-                    $cat->cat_type_id = $request->cat_type_id;
-                }
+                    if ($request->cat === 2) {
+                        $cat->code = $request->code;
+                        $cat->cat_type_id = $request->cat_type_id;
+                    }
 
-                if ($request->cat === 2){
-                    $cat->code = $request->code;
-                    $cat->cat_type_id = $request->cat_type_id;
-                }
+                    if ($request->cat === 3) {
+                        $cat->code = $request->code;
+                        $cat->codeSeries = $request->codeSeries;
+                        $cat->cat_section_id = $request->cat_section_id;
+                        $cat->AT = $request->AT;
+                        $cat->AC = $request->AC;
+                        $cat->total = $request->total;
+                        $cat->cat_selection_id = $request->cat_selection_id;
+                    }
 
-                if ($request->cat === 3){
-                    $cat->code = $request->code;
-                    $cat->codeSeries = $request->codeSeries;
-                    $cat->cat_section_id = $request->cat_section_id;
-                    $cat->AT = $request->AT;
-                    $cat->AC = $request->AC;
-                    $cat->total = $request->total;
-                    $cat->cat_selection_id = $request->cat_selection_id;
-                }
+                    if ($request->cat === 4) {
+                        $cat->code = $request->code;
+                        $cat->codeSubseries = $request->codeSubseries;
+                        $cat->cat_series_id = $request->cat_series_id;
+                    }
 
-                if ($request->cat === 4){
-                    $cat->code = $request->code;
-                    $cat->codeSubseries = $request->codeSubseries;
-                    $cat->cat_series_id = $request->cat_series_id;
-                }
-
-                 $cat->isActive = true;
+                    $cat->isActive = true;
 //
-                if ($request->cat === 1){
-                    $cat->sectionAll()->sync($request->cat_section_id);
-                }
+                    if ($request->cat === 1) {
+                        $cat->sectionAll()->sync($request->cat_section_id);
+                    }
 
-                if ($request->cat === 3){
-                    $cat->primarivalues()->sync($request->cat_primary_value_id);
-                    $cat->administrative()->sync($request->cat_administrative_unit_id);
-                }
+                    if ($request->cat === 3) {
+                        $cat->primarivalues()->sync($request->cat_primary_value_id);
+                        $cat->administrative()->sync($request->cat_administrative_unit_id);
+                    }
 
+//                if ($request->cat === 5){
+//                    $cat->administrative()->sync($request->cat_unit_id);
+//                    $cat->subserie()->sync($request->cat_subserie_id);
+//                }
+
+
+                } else if ($request->cat === 5) {
+                    //      dd('entro al cincoooooo', $cat);
+                    $cat->fill($request->all());
+                    $cat->save();
+                    $cat->administrative()->sync($request->cat_unit_id);
+                    $cat->subserie()->sync($request->cat_subserie_id);
+
+                    GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
+                    DB::commit();
+
+                    return response()->json([
+                        'success' => true
+                    ], 200);
+                }
                 $cat->save();
-
                 GeneralController::saveTransactionLog(3, 'Se actualizo elemento en catalogo con id: ' . $cat->id);
                 DB::commit();
 
