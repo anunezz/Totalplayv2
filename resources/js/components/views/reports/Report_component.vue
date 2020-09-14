@@ -112,7 +112,8 @@
             }
         },
         created() {
-            console.log("Este es el items de cada componente: ",this.items);
+            //console.log("Este es el items de cada componente: ",this.items);
+            this.getFormalities();
         },
         computed:{
         },
