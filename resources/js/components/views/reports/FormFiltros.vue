@@ -87,7 +87,7 @@
                 axios.get('/api/report/getCats').then(response => {
                     if(response.data.success){
                         this.series = response.data.lResults.series;
-                        console.log('axios.get -> ', this.series);
+                        //console.log('axios.get -> ', this.series);
                     }
                 }).catch(error => {
                     console.error(error);
