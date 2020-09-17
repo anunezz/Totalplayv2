@@ -146,6 +146,7 @@
                     declassification_date: null,
                     name_public_server: '',
                     position_public_server: '',
+                    haveQuality: null,
 
                     scope_and_content: '',
                     auxOpening_date: '',
@@ -154,6 +155,7 @@
                     primariValues:[],
                     serie:[],
                     disableControl: false,
+                    quality:null,
                 },
             }
         },
@@ -185,6 +187,7 @@
                     let data = Object.assign({}, _this.formFormalities);
                     data.question_one = this.formFormalities.question_one === 'Sí' ? true : this.formFormalities.question_one === 'No' ? false : null;
                     data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
+                    data.haveQuality = this.formFormalities.haveQuality === 'Sí' ? true : this.formFormalities.haveQuality === 'No' ? false : null;
                     data.unit_id = this.$store.state.user.cat_unit_id;
 
                     axios.post('/api/formalities', data).then(response => {
@@ -212,6 +215,7 @@
                     let data = Object.assign({}, _this.formFormalities);
                     data.question_one = this.formFormalities.question_one === 'Sí' ? true : this.formFormalities.question_one === 'No' ? false : null;
                     data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
+                    data.haveQuality = this.formFormalities.haveQuality === 'Sí' ? true : this.formFormalities.haveQuality === 'No' ? false : null;
 
                     axios.put(`/api/formalities/${data.hash}`,data).then(response => {
                         _this.stopLoading();
@@ -302,6 +306,7 @@
 
                 axios.get('/api/formalities/' + this.editFormalitiy_id + '/edit').then(response => {
                     const aux = {...response.data.formality}
+                    console.log('hola mundo',aux)
                     this.formFormalities = response.data.formality;
                     this.formFormalities.disableControl = aux.question_two === 1;
                     this.tapOne = true;

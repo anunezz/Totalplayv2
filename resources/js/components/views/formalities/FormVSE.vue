@@ -162,6 +162,7 @@
                                 prop="quality"
                                 align="center"
                                 width="238"
+                                v-if="formFormalities.haveQuality === 'Sí'"
                                 label="Cualidad de la muestra">
                                 <template slot-scope="scope">
                                     <i class="fas fa-times" v-if="scope.row.quality"></i>
@@ -255,7 +256,9 @@
                 if (aux.cat_selection_id === 1) this.tableData3[0].elimination = true;
                 if (aux.cat_selection_id === 2) this.tableData3[0].conservation = true;
                 if (aux.cat_selection_id === 3) this.tableData3[0].sampling = true;
-                if (aux.cat_selection_id === 4) this.tableData3[0].quality =true;
+                // if (aux.cat_selection_id === 4) this.tableData3[0].quality =true;
+
+                if (this.formFormalities.haveQuality === 'Sí') this.tableData3[0].quality =true;
             }
         }
     }
