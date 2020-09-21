@@ -2,9 +2,9 @@
     <div>
         <el-row class="body-form">
             <el-row style="padding: 15px">
-                <el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="quality">
+                <!--<el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="quality">
                     <p><h4>Cualidad:</h4>{{quality}}</p>
-                </el-row>
+                </el-row>-->
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Sección:" prop="section_id"
@@ -130,7 +130,7 @@
                 auxSeries:[],
                 subSeries:[],
                 descriptions:[],
-                quality:null,
+                // quality:null,
                 pickerOptionsEnd: {
                     disabledDate: this.delimtDays
                 },
@@ -168,7 +168,7 @@
                     this.formFormalities.scope_and_content = '';
                     this.series = [];
                     this.subSeries = [];
-                    this.quality = null;
+                    this.formFormalities.quality = null;
                 }
 
                 let params = {
@@ -230,7 +230,7 @@
                 this.formFormalities.description_id = resultDescrip.length > 0 ? resultDescrip[0].id : null;
                 this.formFormalities.primariValues = result[0].primarivalues;
                 this.formFormalities.auxSort_code = 'SRE.' + result[0].code + '-';
-                this.quality = result[0].sampling !== null ? result[0].sampling.quality : null;
+                this.formFormalities.quality = result[0].sampling !== null ? result[0].sampling.quality : null;
                 this.calSortCodeGeneral();
             },
             calSortCodeSubSerie(){
@@ -300,7 +300,7 @@
             },
             getQuality(){
                 const result = this.series.filter(serie => serie.id === this.formFormalities.serie_id);
-                this.quality = result[0].sampling !== null ? result[0].sampling.quality : null;
+                this.formFormalities.quality = result[0].sampling !== null ? result[0].sampling.quality : null;
             }
         }
     }

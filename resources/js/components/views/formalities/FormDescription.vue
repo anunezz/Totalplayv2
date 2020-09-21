@@ -2,6 +2,25 @@
     <div>
         <el-row class="body-form">
             <el-row style="padding: 15px">
+                <el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="formFormalities.quality">
+                    <p><h4>Cualidad:</h4>{{formFormalities.quality}}</p>
+                </el-row>
+                <el-row style="margin-bottom: 10px;margin-top: 50px" v-if="qualityShow">
+                    <el-form-item prop="haveQuality"
+                                  :rules="[
+                    { required: true, message: 'La pregunta es obligatoria', trigger: ['blur','change'] }]">
+                        <el-col :span="19">
+                            <span style="color: red">*</span>
+                            <span style="font-weight: bold;">¿El expediente cuenta con alguna cualidad?</span>
+                        </el-col>
+                        <el-col :span="5">
+                            <el-radio-group v-model="formFormalities.haveQuality" size="medium">
+                                <el-radio border label="Sí"></el-radio>
+                                <el-radio border label="No"></el-radio>
+                            </el-radio-group>
+                        </el-col>
+                    </el-form-item>
+                </el-row>
                 <el-row :gutter="20">
                     <el-col :span="24">
                         <el-form-item label="Asunto/Título:" prop="title" :rules="[
@@ -53,6 +72,24 @@
 <script>
     export default {
         props:['formFormalities'],
+        data(){
+            return{
+                qualityShow:false,
+            }
+        },
+        mounted() {
+            this.haveQuality();
+            if (this.$route.params.id !== undefined) {
+                this.formFormalities.haveQuality = this.formFormalities.haveQuality === 1 ? 'Sí' : this.formFormalities.haveQuality === 0 ? 'No' : null;
+            }
+        },
+        methods:{
+            haveQuality(){
+                let aux = this.formFormalities.serie[0] !== undefined ? this.formFormalities.serie[0] : this.formFormalities.serie;
+                console.log('calculando la cualidad',aux)
+                if (aux.cat_selection_id === 3) this.qualityShow = true;
+            }
+        }
     }
 </script>
 

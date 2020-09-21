@@ -7,13 +7,12 @@
 
     <style>
         table {
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .rotar {
             width: 1000px;
             height: 20px;
-            /* background: red; */
             transform: rotate(270deg);
             margin: 300px 0px 0px -490px;
             z-index: 1000;
@@ -89,13 +88,13 @@
         <table style="width:100%; border-collapse:collapse; text-align: center;" border='1'> <!-- Lo cambiaremos por CSS -->
             <tr>
                 <td rowspan="2" align="center" WIDTH="80"
-                style="background-color: #F6F6F6; align-content: center;">
+                style="background-color: #DDDDDD; align-content: center;">
                     <strong><b> Código de referencia <b></strong>
                 </td>
                 <td rowspan="2" WIDTH="47.5" align="center">Clasificación Archivística </td>
-                <td style="font-size: 22px;">SRE.</td>
-                <td colspan="5" style="border-left: 1px solid White; font-size: 22px; font-weight: 900;">08C.24-2019-2019/1</td>
-                <td style="font-size: 22px;">1/15</td>
+                <td style="border-right-style: none; font-size: 22px; font-weight: 1000;">SRE.</td>
+                <td colspan="5" style="border-left-style: none; font-size: 22px; font-weight: 1000;">08C.24-2019-2019/1</td>
+                <td style="font-size: 22px; font-weight: 1000;">1/15</td>
             </tr>
             <tr>
                 <td>Fondo (.)</td>
@@ -105,6 +104,88 @@
                 <td>Año inicio (-) y cierre/</td>
                 <td>Consecutivo</td>
                 <td>Legajo</td>
+            </tr>
+        </table>
+
+        <div style="height: 5px;"></div>
+
+        <table style="width:100%; border-collapse:collapse; text-align: center;" border='1'> <!-- Lo cambiaremos por CSS -->
+            <tr>
+                <td align="center" WIDTH="80"
+                style="background-color: #DDDDDD; align-content: center;">
+                    <strong><b> Título <b></strong>
+                </td>
+                <td style="font-size: 22px; font-weight: 1000;" align="center"> REUNIONES DE LA COMISIÓN EDITORIAL 2019 </td>
+            </tr>
+        </table>
+
+        <div style="height: 5px;"></div>
+
+        <table style="width:100%; border-collapse:collapse; text-align: center;" border='1'> <!-- Lo cambiaremos por CSS -->
+            <tr>
+                <td align="center" WIDTH="80"
+                style="background-color: #DDDDDD; align-content: center;">
+                    <strong><b> Alcance y contenido (asunto) <b></strong>
+                </td>
+                <td align="center"> Dictámenes, minutas de la Comisión Editorial. </td>
+            </tr>
+        </table>
+
+        <div style="height: 5px;"></div>
+
+        <table style="width:100%; border-collapse:collapse;" border='1'>
+            <tr>
+                <td rowspan="3" align="center" WIDTH="80"
+                style="background-color: #DDDDDD; align-content: center;">
+                    <strong><b> Fecha(s) <b></strong>
+                </td>
+                <td align="center" style="color: #545454;">Día (00)</td>
+                <td align="center" style="color: #545454;">Mes (letra)</td>
+                <td align="center" style="color: #545454;">Año (0000)</td>
+                <td align="center" style="color: #545454;">Día (00)</td>
+                <td align="center" style="color: #545454;">Mes (letra)</td>
+                <td align="center" style="color: #545454;">Año (0000)</td>
+            </tr>
+            <tr>
+                <td align="center" style="font-weight: 600;">05</td>
+                <td align="center" style="font-weight: 600;">Enero</td>
+                <td align="center" style="font-weight: 600;">2020</td>
+                <td align="center" style="font-weight: 600;">07</td>
+                <td align="center" style="font-weight: 600;">Agosto</td>
+                <td align="center" style="font-weight: 600;">2019</td>
+            </tr>
+            <tr>
+                <td colspan="3" align="center">Inicio del trámite o asunto</td>
+                <td colspan="3" align="center">Cierre del trámite o asunto</td>
+            </tr>
+        </table>
+
+        <div style="height: 5px;"></div>
+
+        <table style="width:100%; border-collapse:collapse;" border='1'>
+            <tr>
+                <td rowspan="4" align="center" WIDTH="80"
+                style="background-color: #DDDDDD; align-content: center;">
+                    <strong><b> Volumen y soporte <b></strong>
+                </td>
+                <td align="center" style="font-weight: 600;">papel</td>
+                <td align="center" style="font-weight: 600;">tamaño carta</td>
+                <td align="center" style="font-weight: 600;">original</td>
+            </tr>
+            <tr>
+                <td align="center">Soporte</td>
+                <td align="center">Formato</td>
+                <td align="center">Tradición o forma documental</td>
+            </tr>
+            <tr>
+                <td align="center" style="font-weight: 600;">01</td>
+                <td align="center" style="font-weight: 600;">180</td>
+                <td align="center" style="font-weight: 600;">180</td>
+            </tr>
+            <tr>
+                <td align="center">Folio inicial</td>
+                <td align="center">Folio final</td>
+                <td align="center">Total Fojas útiles al cierre del expediente</td>
             </tr>
         </table>
 

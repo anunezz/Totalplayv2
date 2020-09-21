@@ -36,6 +36,7 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('total_fojas')->nullable();
             $table->boolean('question_one');
             $table->boolean('question_two')->nullable();
+            $table->boolean('haveQuality')->nullable();
             $table->unsignedBigInteger('transparency_resolution_id')->nullable();
             $table->unsignedBigInteger('nature_information_id')->nullable();
             $table->unsignedBigInteger('classification_reason_id')->nullable();
