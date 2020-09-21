@@ -66,8 +66,7 @@
                                         type="info"
                                         size="mini"
                                         icon="fas fa-edit"
-
-                                    >
+                                        >
                                     </el-button>
                                 </el-tooltip>
 <!--                                <el-tooltip v-if="scope.row.operatives.length > 0 || scope.row.id === 14" placement="right-start">-->
@@ -138,8 +137,25 @@
                     </div>
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
+                    <el-col :span="12">
+                        <el-form-item label="Documental" prop="type_documentary" :rules="[
+                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                              ]">
+                            <el-row>
+                                <el-col :span="4" style="margin-right: 100px">
+                                    <el-checkbox v-model="serie" @change="typeDocumentary(1)">Serie</el-checkbox>
+                                </el-col>
+                                <el-col :span="8">
+                                    <el-checkbox v-model="subserie" @change="typeDocumentary(2)">Subserie</el-checkbox>
+                                </el-col>
+                            </el-row>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row :gutter="10">
                     <el-col :span="24">
-                        <el-form-item label="Serie"
+                        <el-form-item v-if="this.serie === true"
+                                      label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -153,6 +169,27 @@
                                     :key="index"
                                     :label="serie.name"
                                     :value="serie.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item v-if="this.subserie === true"
+                                      label="Subserie documental"
+                                      prop="cat_subserie_id"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                            <el-select v-model="catalogForm.cat_subserie_id"
+                                       filterable placeholder="Seleccionar"
+                                       remove-tag="remove-tag"
+                                       multiple
+                                       style="width: 100%">
+                                <el-option
+                                    v-for="(sub , index) in subseries"
+                                    :key="index"
+                                    :label="sub.name"
+                                    :value="sub.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -193,36 +230,110 @@
             </el-main>
         </el-dialog>
 
-        <el-dialog title="Editar Registro"
-                   :visible.sync="editRegisterDialog"
-                   width="50%" :before-close="handleClose">
-
-            <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
-                <el-row :gutter="10">
-                    <el-col :span="24">
-                        <el-form-item label="Descripción"
-                                      prop="name"
-                                      :rules="[
+        <el-dialog :visible.sync="editRegisterDialog"
+                   :before-close="handleClose"
+                   @close="resetEditForm"
+                   width="55%">
+            <el-main style="border-left: 16px solid #E9EEF3 ">
+                <el-card shadow="never">
+                    <div slot="header">
+                        <span  class="title">Editar registro</span>
+                    </div>
+                    <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
+                        <el-row :gutter="10">
+                            <el-col :span="12">
+                                <el-form-item label="Documental" prop="type_documentary" :rules="[
+                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                              ]">
+                                    <el-row>
+                                        <el-col :span="4" style="margin-right: 100px">
+                                            <el-checkbox v-if="editRegisterDialog" v-model="serie" @change="typeEditDocumentary(1)">Serie</el-checkbox>
+                                        </el-col>
+                                        <el-col :span="8">
+                                            <el-checkbox v-if="editRegisterDialog" v-model="subserie" @change="typeEditDocumentary(2)">Subserie</el-checkbox>
+                                        </el-col>
+                                    </el-row>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row :gutter="10">
+                            <el-col :span="24">
+                                <el-form-item v-if="this.serie === true"
+                                              label="Serie documental"
+                                              prop="cat_series_id"
+                                              :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                                    <el-select v-if="editRegisterDialog"
+                                               style="width: 100%;"
+                                               size="medium"
+                                               v-model="catalogEditForm.cat_series_id"
+                                               placeholder="Seleccionar">
+                                        <el-option
+                                            v-for="(serie , index) in series"
+                                            :key="index"
+                                            :label="serie.name"
+                                            :value="serie.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-form-item v-if="this.subserie === true"
+                                              label="Subserie documental"
+                                              prop="subserie"
+                                              :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                  ]">
+                                    <el-select v-if="editRegisterDialog"
+                                               v-model="catalogEditForm.subserie"
+                                               filterable placeholder="Seleccionar"
+                                               remove-tag="remove-tag"
+                                               multiple
+                                               style="width: 100%">
+                                        <el-option
+                                            v-for="(sub , index) in subseries"
+                                            :key="index"
+                                            :label="sub.name"
+                                            :value="sub.id">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="24">
+                                <el-form-item label="Descripción"
+                                              prop="quality"
+                                              :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
-                        <el-input
+                                    <el-input
+                                        v-if="editRegisterDialog"
+                                        type="textarea"
+                                        :rows="8"
+                                        placeholder="Descripción"
+                                        v-model="catalogEditForm.quality"
+                                        maxlength="100"
+                                        clearable>
+                                    </el-input>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </el-form>
+                    <br> <p></p>
+                    <el-row>
+                        <div align="right">
+                            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
+                            <el-button
                                 v-if="editRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogEditForm.name"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-            <el-button type="danger" @click="getTitles(), resetEditForm()">Cancelar</el-button>
-            <el-button v-if="editRegisterDialog"
-                       type="primary"
-                       @click="editRegister">Aceptar</el-button>
-            </span>
+                                type="primary"
+                                @click="editRegister">
+                                Aceptar
+                            </el-button>
+                        </div>
+                    </el-row>
+                </el-card>
+            </el-main>
         </el-dialog>
 
         <el-dialog
@@ -252,8 +363,11 @@
         data() {
             return {
 
+                serie: false,
+                subserie: false,
                 results: [],
                 series: [],
+                subseries: [],
                 elements: [],
 
                 search: '',
@@ -266,10 +380,15 @@
 
                 catalogForm: {
                     newRegisterName: '',
-                    cat_series_id: null
+                    cat_series_id: null,
+                    cat_subserie_id: [],
+                    type_documentary: null,
                 },
                 catalogEditForm:{
-                    name: ''
+                    quality: '',
+                    cat_series_id: null,
+                    cat_subserie_id: [],
+                    type_documentary: null,
                 },
                 hashRegister: null,
                 nameRegister: null,
@@ -291,6 +410,7 @@
             this.getTitles();
             axios.get('/api/cats/create').then(response => {
                 this.series = response.data.series;
+                this.subseries = response.data.subseries;
                 this.results = response.data.results;
                 this.stopLoading();
             })
@@ -367,7 +487,8 @@
                 let data = {
                     cat: 6,
                     quality: this.catalogForm.newRegisterName,
-                    cat_series_id: this.catalogForm.cat_series_id
+                    cat_series_id: this.catalogForm.cat_series_id,
+                    cat_subserie_id: this.catalogForm.cat_subserie_id
                 };
 
                 this.$refs['catalogForm'].validate((valid) => {
@@ -413,6 +534,14 @@
             },
 
             editForm(row){
+                this.serie = true
+                this.subserie = false
+                if (row.cat_series_id == null){
+                    this.subserie = true
+                    this.serie = false
+                }
+                let subserie = []
+                row.subserie.forEach(element => subserie.push(element.id));
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
@@ -539,6 +668,32 @@
             resetEditForm(){
                 this.editRegisterDialog = false;
                 this.$refs['catalogEditForm'].resetFields();
+            },
+            typeDocumentary(type){
+                if (!this.serie && !this.subserie){
+                    this.catalogForm.type_documentary = null;
+                }
+                if (type===2 && this.subserie===true){
+                    this.serie = false;
+                    this.catalogForm.type_documentary = type;
+                }
+                if (type === 1 && this.serie===true){
+                    this.subserie = false;
+                    this.catalogForm.type_documentary = type;
+                }
+            },
+            typeEditDocumentary(type){
+                if (!this.serie && !this.subserie){
+                    this.catalogEditForm.type_documentary = null;
+                }
+                if (type===2 && this.subserie===true){
+                    this.serie = false;
+                    this.catalogEditForm.type_documentary = type;
+                }
+                if (type === 1 && this.serie===true){
+                    this.subserie = false;
+                    this.catalogEditForm.type_documentary = type;
+                }
             },
         },
     }

@@ -25,6 +25,7 @@ class CreateUserUnitsTable extends Migration
                 ->references('id')
                 ->on('cat_administrative_units');
         });
+
     }
 
     /**
