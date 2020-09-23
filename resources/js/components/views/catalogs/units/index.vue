@@ -222,6 +222,44 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Responsable de unidad"
+                                      prop="cat_responsible_id"
+                                      :rules="[
+                                    { required: false, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogForm.cat_responsible_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(user , index) in users"
+                                    :key="index"
+                                    :label="user.full_name"
+                                    :value="user.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Usuario"
+                                      prop="cat_user_id"
+                                      :rules="[
+                                    { required: false, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogForm.cat_user_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(user , index) in users"
+                                    :key="index"
+                                    :label="user.full_name"
+                                    :value="user.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
                     <br> <p></p>
@@ -291,7 +329,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item v-if="catalogEditForm.cat_type_id === 1 || catalogEditForm.cat_type_id === 5 || catalogEditForm.cat_type_id === 7 || catalogEditForm.cat_type_id === 8 || catalogEditForm.cat_type_id === 9"
-                                      label="Nombre sin"
+                                      label="Nombre"
                                       prop="name"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -312,7 +350,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item v-if="catalogEditForm.cat_type_id === 2 || catalogEditForm.cat_type_id === 3|| catalogEditForm.cat_type_id === 4 || catalogEditForm.cat_type_id === 6"
-                                      label="Nombre con"
+                                      label="Nombre"
                                       prop="specialName"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -329,6 +367,46 @@
                                 <template v-if="catalogEditForm.cat_type_id === 4 || catalogEditForm.cat_type_id === 6"
                                           slot="append">{{nameUnit}}</template>
                             </el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Responsable de unidad"
+                                      prop="cat_responsible_id"
+                                      :rules="[
+                                    { required: false, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select v-if="editRegisterDialog"
+                                       style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogEditForm.cat_responsible_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(user , index) in users"
+                                    :key="index"
+                                    :label="user.full_name"
+                                    :value="user.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="Usuario"
+                                      prop="cat_user_id"
+                                      :rules="[
+                                    { required: false, message: 'Este campo es requerido', trigger: 'blur'},
+                                    ]">
+                            <el-select v-if="editRegisterDialog"
+                                       style="width: 100%;"
+                                       size="medium"
+                                       v-model="catalogEditForm.cat_user_id"
+                                       placeholder="Seleccionar">
+                                <el-option
+                                    v-for="(user , index) in users"
+                                    :key="index"
+                                    :label="user.full_name"
+                                    :value="user.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -390,16 +468,21 @@
                 catalogForm: {
                     newRegisterName: '',
                     determinant: '',
-                    cat_type_id: []
+                    cat_type_id: [],
+                    cat_responsible_id: null,
+                    cat_user_id: null
                 },
                 catalogEditForm:{
                     name: '',
                     determinant: '',
                     cat_type_id: [],
-                    specialName: ''
+                    specialName: '',
+                    cat_responsible_id: null,
+                    cat_user_id: null
                 },
                 types:[],
                 sections:[],
+                users:[],
                 hashRegister: null,
                 nameRegister: null,
 
@@ -422,6 +505,7 @@
             axios.get('/api/cats/create').then(response => {
                 this.sections = response.data.sections;
                 this.types = response.data.types;
+                this.users = response.data.users;
                 this.stopLoading();
             })
         },
@@ -505,7 +589,9 @@
                     name: this.catalogForm.newRegisterName,
                     specialName: this.specialName,
                     determinant: this.catalogForm.determinant,
-                    cat_type_id: this.catalogForm.cat_type_id
+                    cat_type_id: this.catalogForm.cat_type_id,
+                    cat_responsible_id: this.catalogForm.cat_responsible_id,
+                    cat_user_id: this.catalogForm.cat_user_id
                 };
 
                 this.$refs['catalogForm'].validate((valid) => {
@@ -561,13 +647,14 @@
                     this.nameUnit = 'Delegación permanente'
                 }
 
-                console.log('llegaaaaaaaaaaaaaa', row)
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
                     determinant: row.determinant,
                     specialName: row.specialName,
-                    cat_type_id: row.cat_type_id
+                    cat_type_id: row.cat_type_id,
+                    cat_responsible_id: row.cat_responsible_id,
+                    cat_user_id: row.cat_user_id
                 };
                 this.editRegisterDialog = true;
             },
@@ -594,18 +681,17 @@
 
                 }
 
-                console.log('editarr', this.catalogEditForm)
-
                 let data = {
                     id: this.catalogEditForm.id,
                     cat: 1,
                     name: this.catalogEditForm.name,
                     specialName: this.catalogEditForm.specialName,
                     determinant: this.catalogEditForm.determinant,
-                    cat_type_id: this.catalogEditForm.cat_type_id
+                    cat_type_id: this.catalogEditForm.cat_type_id,
+                    cat_responsible_id: this.catalogEditForm.cat_responsible_id,
+                    cat_user_id: this.catalogEditForm.cat_user_id
                 };
 
-                console.log('dataaaaaaa', data)
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
                         axios.put('/api/cats/update/register', data).then(response => {

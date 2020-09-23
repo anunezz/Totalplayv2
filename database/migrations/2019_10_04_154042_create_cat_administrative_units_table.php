@@ -19,6 +19,8 @@ class CreateCatAdministrativeUnitsTable extends Migration
             $table->unsignedBigInteger('cat_type_id')->nullable();
             $table->string('specialName')->nullable();
             $table->string('determinant')->nullable();
+            $table->unsignedBigInteger('cat_responsible_id')->nullable();
+            $table->unsignedBigInteger('cat_user_id')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
 

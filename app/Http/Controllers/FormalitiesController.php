@@ -129,6 +129,8 @@ class FormalitiesController extends Controller
             $formality = $this->formalityRepo->find($id);
             $formality->primariValues = $formality->serie->primarivalues;
             $formality->scope_and_content = $formality->description->description;
+            $formality->quality = $formality->serie->sampling !== null ? $formality->serie->sampling->quality : '';
+//            dd('hola mundo',);
 
             return response()->json([
                 'success' => true,
