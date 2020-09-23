@@ -50,6 +50,7 @@
                                                     <el-select style="width: 100%;" size="medium"
                                                                v-model="userForm.cat_unit_id"
                                                                @change="submitForm"
+                                                               filterable
                                                                placeholder="Seleccionar">
                                                         <el-option
                                                             v-for="(unit , index) in units"
@@ -76,6 +77,7 @@
                                                     <el-select style="width: 100%;" size="medium"
                                                                v-model="userForm.cat_unit_id"
                                                                @change="submitForm"
+                                                               filterable
                                                                placeholder="Seleccionar">
                                                         <el-option
                                                             v-for="(unit , index) in allunits"
