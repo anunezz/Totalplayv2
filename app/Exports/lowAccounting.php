@@ -181,23 +181,24 @@ class lowAccounting implements
                 $event->sheet->mergeCells("A7:P7");
                 $event->sheet->setCellValue('A7','Subserie documental:');
 
-                $arrayData = [
-                    [1,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [2,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [3,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [4,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [5,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [6,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [7,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [8,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [9,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [10,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [11,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [12,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [13,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [14,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                    [15,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
-                ];
+                // $arrayData = [
+                //     [1,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [2,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [3,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [4,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [5,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [6,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [7,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [8,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [9,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [10,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [11,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [12,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [13,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [14,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                //     [15,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+                // ];
+                $arrayData = $this->fields['data'];
 
                 for ($i=0; $i < count($arrayData); $i++) {
                     $rowData = 11 + $i;
@@ -205,6 +206,9 @@ class lowAccounting implements
 
                         $event->sheet->mergeCells("E".$rowData.":I". $rowData);
                         $event->sheet->mergeCells("J".$rowData.":N". $rowData);
+
+                        $row = strlen($arrayData[$i][5]) / 4;
+                        $event->sheet->rowHeight($rowData, $row);
 
                         $event->sheet->setCellValue('A'.$rowData,$arrayData[$i][0]);
                         $event->sheet->setCellValue('B'.$rowData,$arrayData[$i][1]);
@@ -245,7 +249,7 @@ class lowAccounting implements
                     $row3 = $rowEnd + 6;
                     $event->sheet->rowHeight($row3, 18);
                     $event->sheet->mergeCells('A'.$row3.':W'.$row3);
-                    $event->sheet->setCellValue('A'.$row3,'El presente inventario consta de 000 foja(s) y ampara la cantidad de 0000 expedientes de los años 0000 contenidos en 000 cajas,  con un peso aproximado de 0000 kilogramos.');
+                    $event->sheet->setCellValue('A'.$row3,'El presente inventario consta de ___ foja(s) y ampara la cantidad de ___ expedientes de los años ___ contenidos en ___ cajas,  con un peso aproximado de ___ kilogramos.');
 
                 //Nota(s): Las CLC'S no incluidas en este inventario corresponden a gastos de inversión, mismas que se encuentran bajo resguardo de la Dirección de Contabilidad de la Secretaría de Relaciones Exteriores.
                     $row4 = $rowEnd + 8;

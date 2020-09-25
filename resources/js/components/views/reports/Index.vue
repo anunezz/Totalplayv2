@@ -17,7 +17,8 @@
             <el-col :span='24' class='animated fadeIn fast'>
                 <el-tabs type="border-card">
                     <el-tab-pane v-for="(item , index) in dataComponent" :key="index" :label='item.name'>
-                        <ReportComponent :items="item" @search="getFormalities" />
+                        <!-- <ReportComponent :items="item" @search="getFormalities" /> -->
+                        <ReportComponent :items="item" />
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -41,19 +42,19 @@
         </el-row> -->
 
 
-        <show-filters :items="filters" @search="getFormalities"/>
+        <!-- <show-filters :items="filters" @search="getFormalities"/> -->
 
     </div>
 </template>
 
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
-    import ShowFilters from "./FormFiltros";
+    // import ShowFilters from "./FormFiltros";
     import ReportComponent from "./Report_component";
     export default {
         components: {
             HeaderSection,
-            ShowFilters,
+            //ShowFilters,
             ReportComponent
         },
         data(){
@@ -76,8 +77,6 @@
             }
         },
         created(){
-            this.getFormalities();
-            console.log("Estas perfil: ",this.$store.state.user);
             let data = [ { name: 'Baja documental', url: 'lowDocumentary'  },
                         { name: 'Baja contable', url: 'lowAccounting' },
                         { name: 'Transferencia primaria', url: 'PrimaryTransfer' },
@@ -88,10 +87,6 @@
                     ( this.$store.state.user.profile === 1 && data[i].name === 'Baja contable') ){
                     this.dataComponent.push( data[i] );
                 }
-
-                // if( this.$store.state.user.profile === 1 && data[i].name === 'Baja contable' ){
-                //     this.dataComponent.push( data[i] );
-                // }
 
 
                 if( data[i].name !== 'Baja contable' ){
@@ -111,33 +106,7 @@
                             "No fue posible completar la acción, intente nuevamente."
                     });
                 });
-            },
-            getFormalities(currentPage =  1) {
-                this.filters.show = false;
-                this.startLoading();
-
-                axios.post('/api/report/fileFilter',{
-                        page: currentPage,
-                        perPage: this.pagination.perPage,
-                        filters: this.filters
-                }).then(response => {
-                    this.dataTable = response.data.formalities.data;
-                    console.log("this.formalitiesTable", this.dataTable)
-
-                    this.pagination.total = response.data.formalities.total;
-                    this.stopLoading();
-                }).catch(error => {
-                    this.stopLoading();
-                    //console.log(error)
-                    this.$message({
-                        type: "warning",
-                        message: "No fue posible completar la acción, intente nuevamente."
-                    });
-                });
-            },
-            formatDate(date){
-                return new Date(date)
-            },
+            }
         }
     }
 </script>

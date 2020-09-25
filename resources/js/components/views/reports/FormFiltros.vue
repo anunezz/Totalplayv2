@@ -11,6 +11,17 @@
 
 
             <el-row style="margin-bottom: 20px">
+
+                <el-col :span='24' class='animated fadeIn fast'>
+                    <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
+                        <div>
+                        <pre>
+                        {{  items }}
+                        </pre>
+                        </div>
+                    </div>
+                </el-col>
+
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
@@ -120,6 +131,7 @@
             },
             cleanitems(){
                 this.items.show = true;
+                //this.items.documentType = null;
                 this.items.year = null;
                 this.items.serie_id = null;
                 this.items.reports = null;

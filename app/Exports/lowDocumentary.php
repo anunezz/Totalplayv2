@@ -157,23 +157,19 @@ class lowDocumentary implements
                 $event->sheet->setCellValue('A6','Subserie documental:');
 
 
-                $arrayData = [
-                    [1,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [2,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [3,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [4,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [5,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [6,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [7,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [8,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    [9,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    // [10,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    // [11,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    // [12,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    // [13,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    // [14,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                    // [15,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                ];
+                // $arrayData = [
+                //     [1,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [2,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [3,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [4,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [5,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [6,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [7,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [8,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                //     [9,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
+                // ];
+                $arrayData = $this->fields['data'];
+                //dd($arrayData);
 
                 for ($i=0; $i < count($arrayData); $i++) {
                     $rowData = 9 + $i;
@@ -181,6 +177,8 @@ class lowDocumentary implements
 
                         $event->sheet->mergeCells("E".$rowData.":J". $rowData);
 
+                        $row = strlen($arrayData[$i][4]) / 4;
+                        $event->sheet->rowHeight($rowData, $row);
                         $event->sheet->setCellValue('A'.$rowData,$arrayData[$i][0]);
                         $event->sheet->setCellValue('B'.$rowData,$arrayData[$i][1]);
                         $event->sheet->setCellValue('C'.$rowData,$arrayData[$i][2]);
@@ -223,7 +221,7 @@ class lowDocumentary implements
                 $row3 = $rowEnd + 5;
                 $event->sheet->rowHeight($row3, 18);
                 $event->sheet->mergeCells('A'.$row3.':U'.$row3);
-                $event->sheet->setCellValue('A'.$row3,'El presente inventario consta de  000   foja(s) y ampara la cantidad de   0000  expedientes de los años   0000  contenidos en   000   cajas,  con un peso aproximado de  0000   kilogramos.');
+                $event->sheet->setCellValue('A'.$row3,'El presente inventario consta de  ___ foja(s) y ampara la cantidad de ___ expedientes de los años ___ contenidos en ___ cajas, con un peso aproximado de ___ kilogramos.');
 
                 //Elaboro
                 $row4 = $rowEnd + 7;
@@ -244,8 +242,8 @@ class lowDocumentary implements
                         $border = 'C'.$this->fusion($row4,5).':E'.$this->fusion($row4,5);
                         $event->sheet->mergeCells( 'B'.$this->fusion($row4,7).':F'.$this->fusion($row4,7)  );
                         $event->sheet->mergeCells( 'B'.$this->fusion($row4,8).':F'.$this->fusion($row4,8)  );
-                        $event->sheet->setCellValue( 'B'.$this->fusion($row4,7) , 'Adrian Núñez Alanis 1');
-                        $event->sheet->setCellValue( 'B'.$this->fusion($row4,8) , 'Cargo 1');
+                        $event->sheet->setCellValue( 'B'.$this->fusion($row4,7) , $this->fields['Inventory']->elaborated);
+                        $event->sheet->setCellValue( 'B'.$this->fusion($row4,8) , 'Cargo');
                     }
                     if($i === 1){
                         $cell = 'H'.$row4.':L'.$row4End;
@@ -255,8 +253,8 @@ class lowDocumentary implements
                         $border = 'I'.$this->fusion($row4,5).':K'.$this->fusion($row4,5);
                         $event->sheet->mergeCells( 'H'.$this->fusion($row4,7).':L'.$this->fusion($row4,7)  );
                         $event->sheet->mergeCells( 'H'.$this->fusion($row4,8).':L'.$this->fusion($row4,8)  );
-                        $event->sheet->setCellValue( 'H'.$this->fusion($row4,7) , 'Adrian Núñez Alanis 2');
-                        $event->sheet->setCellValue( 'H'.$this->fusion($row4,8) , 'Cargo 2');
+                        $event->sheet->setCellValue( 'H'.$this->fusion($row4,7) , $this->fields['Inventory']->revised);
+                        $event->sheet->setCellValue( 'H'.$this->fusion($row4,8) , 'Cargo');
                     }
                     if($i === 2){
                         $cell = 'N'.$row4.':R'.$row4End;
@@ -266,8 +264,8 @@ class lowDocumentary implements
                         $border = 'O'.$this->fusion($row4,5).':Q'.$this->fusion($row4,5);
                         $event->sheet->mergeCells( 'N'.$this->fusion($row4,7).':R'.$this->fusion($row4,7)  );
                         $event->sheet->mergeCells( 'N'.$this->fusion($row4,8).':R'.$this->fusion($row4,8)  );
-                        $event->sheet->setCellValue( 'N'.$this->fusion($row4,7) , 'Adrian Núñez Alanis 3');
-                        $event->sheet->setCellValue( 'N'.$this->fusion($row4,8) , 'Cargo 3');
+                        $event->sheet->setCellValue( 'N'.$this->fusion($row4,7) , $this->fields['Inventory']->authorized);
+                        $event->sheet->setCellValue( 'N'.$this->fusion($row4,8) , 'Cargo');
                     }
 
                     $event->sheet->mergeCells($cellMerge);
