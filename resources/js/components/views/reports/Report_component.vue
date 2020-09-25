@@ -2,6 +2,16 @@
     <div>
         <el-row :gutter='20'>
 
+            <!-- <el-col :span='24' class='animated fadeIn fast'>
+                <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
+                    <div>
+                        <pre>
+                            {{ filters }}
+                        </pre>
+                    </div>
+                </div>
+            </el-col> -->
+
             <el-col :span='24' class='animated fadeIn fast'>
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
@@ -112,7 +122,6 @@
             }
         },
         created() {
-            //console.log("Este es el items de cada componente: ",this.items);
             this.getFormalities();
         },
         computed:{
@@ -129,7 +138,7 @@
                 axios({ responseType: 'blob',
                         method: 'post',
                         url: '/api/report/'+this.items.url,
-                        data: { name:'ejemplo' } }).then(response => {
+                        data: { documentType:this.items.url } }).then(response => {
                             this.loading = true;
                         setTimeout(()=>{
                             const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
@@ -154,11 +163,15 @@
                 this.filters.show = false;
                 this.startLoading();
 
+                console.log("----------------: ",this.items.url);
+
                 axios.post('/api/report/fileFilter',{
                         page: currentPage,
                         perPage: this.pagination.perPage,
+                   documentType: this.items.url,
                         filters: this.filters
                 }).then(response => {
+                    console.log("Response: ",response);
                     this.dataTable = response.data.formalities.data;
                     console.log("this.formalitiesTable", this.dataTable)
 

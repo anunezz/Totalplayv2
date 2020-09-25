@@ -232,38 +232,42 @@ class Transfer implements
                 $event->sheet->setCellValue('A10','Subserie documental:');
                 $event->sheet->mergeCells("A10:R10");
 
-                $arrayData = [
-                    [1,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [2,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [3,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [4,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [5,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [6,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [7,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [8,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [9,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [10,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [11,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [12,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [13,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [14,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                    [15,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
-                ];
+                // $arrayData = [
+                //     [1,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [2,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [3,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [4,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [5,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [6,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [7,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [8,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [9,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [10,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [11,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [12,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [13,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [14,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                //     [15,  2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19],
+                // ];
+                $arrayData = $this->fields['data'];
 
                 for ($i=0; $i < count($arrayData); $i++) {
                     $rowData = 14 + $i;
                     foreach ($arrayData[$i] as $item) {
 
+                        $row = strlen($arrayData[$i][5]) / 4;
+                        $event->sheet->rowHeight($rowData, $row);
+
                         $event->sheet->mergeCells("F".$rowData.":I". $rowData);
                         $event->sheet->mergeCells("J".$rowData.":N". $rowData);
+                        $event->sheet->mergeCells("B".$rowData.":C". $rowData);
 
                         $event->sheet->setCellValue('A'.$rowData,$arrayData[$i][0]);
                         $event->sheet->setCellValue('B'.$rowData,$arrayData[$i][1]);
-                        $event->sheet->setCellValue('C'.$rowData,$arrayData[$i][2]);
-                        $event->sheet->setCellValue('D'.$rowData,$arrayData[$i][3]);
-                        $event->sheet->setCellValue('E'.$rowData,$arrayData[$i][4]);
-                        $event->sheet->setCellValue('F'.$rowData,$arrayData[$i][5]);
-                        $event->sheet->setCellValue('J'.$rowData,$arrayData[$i][6]);
+                        $event->sheet->setCellValue('D'.$rowData,$arrayData[$i][2]);
+                        $event->sheet->setCellValue('E'.$rowData,$arrayData[$i][3]);
+                        $event->sheet->setCellValue('F'.$rowData,$arrayData[$i][4]);
+                        $event->sheet->setCellValue('J'.$rowData,$arrayData[$i][5]);
                         $event->sheet->setCellValue('O'.$rowData,$arrayData[$i][6]);
                         $event->sheet->setCellValue('P'.$rowData,$arrayData[$i][7]);
                         $event->sheet->setCellValue('Q'.$rowData,$arrayData[$i][8]);
@@ -289,7 +293,7 @@ class Transfer implements
                 //El presente inventario consta de  000   foja(s) y ampara la cantidad de   0000  expedientes de los años   0000  contenidos en  000   cajas,  con un peso aproximado de  0000  kilogramos.
                     $row1 = $rowEnd + 2;
                     $event->sheet->mergeCells('A'.$this->fusion($row1 , 1).':W'.$this->fusion($row1 , 1));
-                    $event->sheet->setCellValue('A'.$this->fusion($row1 , 1),'El presente inventario consta de  000   foja(s) y ampara la cantidad de   0000  expedientes de los años   0000  contenidos en  000   cajas,  con un peso aproximado de  0000  kilogramos.');
+                    $event->sheet->setCellValue('A'.$this->fusion($row1 , 1),'El presente inventario consta de ___ foja(s) y ampara la cantidad de ___ expedientes de los años ___ contenidos en ___ cajas, con un peso aproximado de ___ kilogramos.');
 
                 //Elaboro
                 $row5 = $rowEnd + 6;

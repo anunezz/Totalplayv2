@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\User;
+use App\CatInventory;
 use Cache;
 use DB;
 use Illuminate\Http\Request;
@@ -31,25 +33,33 @@ class ReportController extends Controller
             $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
             //$Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( $data['id'] )->first();
 
+            // foreach ($Formalities->serie()->get() as $item) {
+            //     $value = $item->primarivalues()->get();
+            //     dd($item->primarivalues()->get());
+            // }
+
+            //dd($Formalities->serie()->get());
+
             $results = [
                         //Nivel de descripción documental
-                        'unidad' => $Formalities->unit()->first()->name,
-                        'serieCode' => $Formalities->serie()->first()->code,
-                        'serieName' => $Formalities->serie()->first()->name,
-                        'subserieName' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->name : '',
-                        'subserieCode' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->code : 'N/A',
-                        'sectionCode' => $Formalities->section()->first()->code,
-                        'sectionName'=> $Formalities->section()->first()->name,
+                        'unidad' => $Formalities->unit()->first()->name, //unidad administrativa
+                                                                         // area generadora
+                        'section' => $Formalities->section()->first()->code,  // seccion
+                        'sectionName' => $Formalities->section()->first()->name,  // seccion nombre
+                        'serieCode' => $Formalities->serie()->first()->code, //Serie
+                        'serieName' => $Formalities->serie()->first()->name, // Serie nombre
+                        'subserieCode' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->code : 'N/A', //Subserie code
+                        'subserieName' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->name : '', // Subserie nombre
 
                         //Código de referencia
-                        'codeOfReference' => substr($Formalities->sort_code, 4),
-                        'legajo' => "1/".$Formalities->legajo,
+                        'codeOfReference' => substr($Formalities->sort_code, 4), // ejemplo SRE. 08C.24-2019-2019/1
+                        'legajo' => "1/".$Formalities->legajo, //Lejajo  ejemplo = 1/15
 
                         //Titulo
-                        'title' => $Formalities->title,
+                        'title' => $Formalities->title, // Título
 
                         //Alcance y contenido (asunto)
-                        'alcance_y_contenido' => $Formalities->scope_and_content,
+                        'alcance_y_contenido' => $Formalities->scope_and_content, //Pendiente
 
                         //Fechas
                         'opening_date' => $Formalities->opening_date,
@@ -87,16 +97,7 @@ class ReportController extends Controller
             //return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
 
             $pdf = \PDF::loadView('pdf.caratula_pdf',compact('results'));
-            //$pdf->setOptions(['isPhpEnabled' => true]);
             return $pdf->download('caratula.pdf');
-
-
-
-            //return Excel::download( new Proceedings([],$results), 'invoices.xlsx');
-
-
-            //return Excel::download(new Proceedings([],['holasdjdjdjsdjdsjdsj']), 'invoices.xlsx');
-
 
         } catch (Exception $e) {
             return response()->json([
@@ -169,13 +170,49 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
-                $results = Formalities::with('serie.primarivalues','SubSerie','section')->get();
+                $Formalities = Formalities::with('description','unit','serie.primarivalues','SubSerie','section')->get();
 
-                // $data = $collection->map(function ($item, $key) {
-                //     return $item * 2;
-                // });
+                $sum = 0;
+                $data = [];
+                foreach ($Formalities as $item) {
+                    dd($item);
 
-                return Excel::download(new lowDocumentary([],$data), 'Baja_documental.xlsx');
+                    $original = ($item->documentary_tradition_id === 1 || $item->documentary_tradition_id === 3)? 'X':'-';
+                    $copia    = ($item->documentary_tradition_id === 2 || $item->documentary_tradition_id === 3)? 'X':'-';
+
+                    $serie = $item->serie()->fiRst();
+
+                    $sum++; //0
+                    array_push($data,[
+                    $sum, //0
+                    //$item->serie()->first()->code, //1
+                    $item->sort_code, //1
+                    null, //2
+                    $item->consecutive, //3
+                    $item->description()->first()->description, //4
+                    $item->opening_date, //5
+                    $item->close_date, //6
+                    $original,//7
+                    $copia,//8
+                    null,//9
+                    null,//10
+                    null,//1|
+                    null,//12
+                    $serie->AT,//13
+                    $serie->AC,//14
+                    $serie->total//15
+                    ]);
+                }
+
+                //$user = User::with('unit')->find( auth()->user()->id );
+
+                //dd($user);
+
+                $Inventory = CatInventory::find(1);
+                return Excel::download(new lowDocumentary([],[
+                    "data" => $data,
+                    "Inventory" => $Inventory
+                ]), 'Baja_documental.xlsx');
 
             }else{
                 return response()->view('errors.404', [], 404);
@@ -194,7 +231,38 @@ class ReportController extends Controller
 
                 $data = $request->all();
 
-                return Excel::download(new lowAccounting([],$data), 'Baja_contable.xlsx');
+                $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->get();
+
+                //[1,   2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11],
+
+                $sum = 0;
+                $data = [];
+                foreach ($Formalities as $item) {
+                    $serie = $item->serie()->first();
+                    $sum++;
+                    array_push($data,[
+                        $sum, //0 No.consecutivo
+                        $item->serie()->first()->code, //1 Código de clasificación archivística
+                        null, //2 Unidad de Medida y cantidad (Cajas)
+                        null, //3 Cantidad de Expedientes
+                        $item->title, //4 Título (nombre) del expediente
+                        $item->description()->first()->description, //5 Descripción de la documentación anexa
+                        $item->opening_date, //6 Año de apertura
+                        $item->close_date, //7 Año de cierre
+                        null, //8 Corriente
+                        null, //9 Inversión
+                        null, //10 Ingreso
+                        null, //11 Otro
+                        $serie->AT, //12 AT
+                        $serie->AC, //13 AC
+                        $serie->total, //14 Total
+                    ]);
+
+                }
+
+                return Excel::download(new lowAccounting([],[
+                    "data" => $data
+                ]), 'Baja_contable.xlsx');
 
             }else{
                 return response()->view('errors.404', [], 404);
@@ -212,9 +280,80 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
+                $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->get();
+
+                $sum = 0;
+                $data = [];
+                foreach ($Formalities as $item) {
+                    $serie = $item->serie()->first();
+                    $original = ($item->documentary_tradition_id === 1 || $item->documentary_tradition_id === 3)? 'X':'-';
+                    $copia    = ($item->documentary_tradition_id === 2 || $item->documentary_tradition_id === 3)? 'X':'-';
+                    $sum++;
+
+                    $A = '-';
+                    $L = '-';
+                    $F = '-';
+                    $C = '-';
+
+                    foreach ($item->serie()->get() as $serie) {
+                        if( count( $serie->primarivalues()->get() ) > 0 ){
+                            foreach ($serie->primarivalues()->get() as $itm) {
+                                $id = $itm->id;
+                                    switch ($id) {
+                                        case 1:
+                                        {
+                                            $A = "X";
+                                        break;
+                                        }
+                                        case 2:
+                                        {
+                                            $L = "X";
+                                        break;
+                                        }
+                                        case 3:
+                                        {
+                                            $F = "X";
+                                        break;
+                                        }
+                                        case 4:
+                                        {
+                                            $C = "X";
+                                        break;
+                                        }
+                                    }
+                            }
+                        }
+                    }
+
+                    array_push($data,[
+                        $sum,//0 No. consecutivo
+                        $item->serie()->first()->code,//1 Código de clasificación archivística del expediente
+                        null,//2 Número consecutivo de caja
+                        $item->consecutive,//3 Número consecutivo de expediente
+                        $item->title,//4 Título del expediente
+                        $item->description()->first()->description,//5 Descripción de la documentación anexa
+                        $item->end_folio,//6 Número de folios que integra el expediente
+                        $item->opening_date,//7 Año de apertura
+                        $item->close_date,//8 Año de cierre
+                        $original,//9 Original
+                        $copia,//10 Copia
+                        $A,//11 A
+                        $L,//12 L
+                        $F,//13 F
+                        $C,//14 C
+                        $serie->AT,//15 AT
+                        $serie->AC,//16 AC
+                        $serie->total,//17 total
+                        null,//18 C
+                        null,//19 A
+                        null,//20 Ubicación topográfica
+                        null,//21 Observaciones
+                    ]);
+                }
 
                 return Excel::download(new Transfer([],[
-                    'transfer' => 'Transferencia primaria'
+                    'transfer' => 'Transferencia primaria',
+                    'data' => $data
                 ]), 'Transferencia_primaria.xlsx');
 
                 return response()->json([
@@ -238,9 +377,83 @@ class ReportController extends Controller
 
                 $data = $request->all();
 
+                $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->get();
+
+                $sum = 0;
+                $data = [];
+                foreach ($Formalities as $item) {
+                    $serie = $item->serie()->first();
+                    $original = ($item->documentary_tradition_id === 1 || $item->documentary_tradition_id === 3)? 'X':'-';
+                    $copia    = ($item->documentary_tradition_id === 2 || $item->documentary_tradition_id === 3)? 'X':'-';
+                    $sum++;
+
+                    $A = '-';
+                    $L = '-';
+                    $F = '-';
+                    $C = '-';
+
+                    foreach ($item->serie()->get() as $serie) {
+                        if( count( $serie->primarivalues()->get() ) > 0 ){
+                            foreach ($serie->primarivalues()->get() as $itm) {
+                                $id = $itm->id;
+                                    switch ($id) {
+                                        case 1:
+                                        {
+                                            $A = "X";
+                                        break;
+                                        }
+                                        case 2:
+                                        {
+                                            $L = "X";
+                                        break;
+                                        }
+                                        case 3:
+                                        {
+                                            $F = "X";
+                                        break;
+                                        }
+                                        case 4:
+                                        {
+                                            $C = "X";
+                                        break;
+                                        }
+                                    }
+                            }
+                        }
+                    }
+
+                    array_push($data,[
+                        $sum,//0 No. consecutivo
+                        $item->serie()->first()->code,//1 Código de clasificación archivística del expediente
+                        null,//2 Número consecutivo de caja
+                        $item->consecutive,//3 Número consecutivo de expediente
+                        $item->title,//4 Título del expediente
+                        $item->description()->first()->description,//5 Descripción de la documentación anexa
+                        $item->end_folio,//6 Número de folios que integra el expediente
+                        $item->opening_date,//7 Año de apertura
+                        $item->close_date,//8 Año de cierre
+                        $original,//9 Original
+                        $copia,//10 Copia
+                        $A,//11 A
+                        $L,//12 L
+                        $F,//13 F
+                        $C,//14 C
+                        $serie->AT,//15 AT
+                        $serie->AC,//16 AC
+                        $serie->total,//17 total
+                        null,//18 C
+                        null,//19 A
+                        null,//20 Ubicación topográfica
+                        null,//21 Observaciones
+                    ]);
+                }
+
+
+
                 return Excel::download(new Transfer([],[
-                    'transfer' => 'Transferencia secundaria'
-                ]), 'Transferencia_primaria.xlsx');
+                    'transfer' => 'Transferencia secundaria',
+                    'data' => $data
+                ]), 'Transferencia_secundaria.xlsx');
 
                 return response()->json([
                     'success' => true,
@@ -262,39 +475,53 @@ class ReportController extends Controller
             if ($request->wantsJson()){
                 $data = $request->all();
 
+                //dd($data);
+                //dd(date("d-m-Y"));
 
 
-                if(auth()->user()->cat_profile_id === 1){
-                    //dd("Estas aqui..");
+               // SELECT close_date, haveQuality
+               // FROM `formalities`
+               // -- WHERE 1
+               // -- WHERE close_date <= '2020-09-18'
+               // WHERE close_date <= '2020-09-18' AND haveQuality = 1
+
+                //whereBetween('reservation_from', [, date("Y-m-d")])
+
+                $formalities = collect([]);
+
+                if( $data['documentType'] === "lowDocumentary" ){
                     $formalities = Formalities::with('user.determinant')
-                        ->filter($data['filters'])
-                        ->whereYear('close_date', '>=', date("Y"))
+                        ->where('haveQuality','=',0)
+                        ->whereDate('close_date', '<=', date("Y-m-d"))
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate($data['perPage']);
+                }
+
+                if( $data['documentType'] === "PrimaryTransfer" ){
+                    $formalities = Formalities::with('user.determinant','serie')
+                        //->whereBetween('reservation_from', [, date("Y-m-d")])
+                        ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
 
-                    //////dd($formalities);
-                }else{
-                    //dd(  auth()->user()->admin()->first()->id   );
-                    //$unidadid = auth()->user()->admin()->first()->id;
-                    // if(auth()->user()->cat_unit_id === 4){
-                    // }else{
-                    // }
-                    // $formalities = Formalities::with('user.determinant')
-                    // ->whereUnitId(auth()->user()->cat_unit_id)
-                    // ->filter($data['filters'])
-                    // ->orderBy('created_at', 'DESC')
-                    // ->paginate($data['perPage']);
+                    foreach ($formalities as $item) {
+                        $serie = $item->serie()->first();
+                        $primary = $serie->AT;
+                        $secondary = $serie->AC;
+                        $newdate = preg_split("/[-]+/", $item->opening_date);
 
+                        $datePrimary = $newdate[0] + $primary.'-'.$newdate[1].'-'.$newdate[2];
+                        $dateSecondary = $newdate[0] + $primary + $secondary.'-'.$newdate[1].'-'.$newdate[2];
+                       // dd("########: ", $datePrimary ,$dateSecondary);
+                    }
+                }
+
+                if( $data['documentType'] === "TransferSecondary" ){
                     $formalities = Formalities::with('user.determinant')
-                    ->filter($data['filters'])
-                    ->whereYear('close_date', '>=', date("Y"))
-                    ->orderBy('created_at', 'DESC')
-                    ->paginate($data['perPage']);
-
-
-
-
-
+                        ->where('haveQuality','=',1)
+                        ->whereDate('close_date', '<=', date("Y-m-d"))
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate($data['perPage']);
                 }
 
                 return response()->json([

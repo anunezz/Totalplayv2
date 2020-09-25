@@ -189,7 +189,6 @@
                     data.question_two = this.formFormalities.question_two === 'Sí' ? true : this.formFormalities.question_two === 'No' ? false : null;
                     data.haveQuality = this.formFormalities.haveQuality === 'Sí' ? true : this.formFormalities.haveQuality === 'No' ? false : null;
                     data.unit_id = this.$store.state.user.cat_unit_id;
-
                     axios.post('/api/formalities', data).then(response => {
                         _this.stopLoading();
                         _this.$router.push('/tramites');
