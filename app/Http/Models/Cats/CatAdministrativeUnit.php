@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CatAdministrativeUnit extends Model
 {
-    protected $fillable = ['name', 'cat'];
+    protected $fillable = ['name', 'specialName', 'determinant', 'cat_type_id'];
 
     protected $appends = ['hash'];
 
@@ -54,14 +54,20 @@ class CatAdministrativeUnit extends Model
         )->whereIsactive(true);
     }
 
-//    public function sections()
+//    public function responsible()
 //    {
-//        return $this->belongsToMany(
-//            CatSection::class,
-//            'admin_unit_section',
-//            'cat_administrative_unit_id',
-//            'cat_section_id'
-//        )->whereIsactive(true)->orderBy('name');
+//        return $this->hasOne(CatAdministrativeUnit::class,
+//            'users_units',
+//            'cat_responsible_id'
+//            );
+//    }
+//
+//    public function user()
+//    {
+//        return $this->belongsToMany(CatAdministrativeUnit::class,
+//            'users_units',
+//            'cat_user_id',
+//            'cat_administrative_unit_id');
 //    }
 
     public function scopeSearch($query, $search)

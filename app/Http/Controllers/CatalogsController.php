@@ -14,6 +14,7 @@ use App\Http\Models\Cats\CatSelectionTechniques;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Cats\CatTypeUnit;
+use App\Http\Models\SICAR\UserSicar;
 use App\User;
 use Illuminate\Support\Facades\DB;
 use Exception;
@@ -32,7 +33,7 @@ class CatalogsController extends Controller
                 if ($data['cat'] == 1) {
                     $elements = CatAdministrativeUnit::with('sectionAll', 'formalities')
                         ->search($data['search'])
-                        ->select(['id', 'name', 'determinant', 'specialName', 'cat_type_id', 'isActive'])
+                        ->select(['id', 'name', 'determinant', 'specialName', 'cat_type_id', 'cat_responsible_id', 'cat_user_id', 'isActive'])
                         ->orderBy('name')
                         ->paginate($data['perPage']);
                 }
@@ -136,6 +137,8 @@ class CatalogsController extends Controller
                     ->orderBy('name')
                     ->get(['id', 'name']);
 
+                $users =    User::all();
+
                 return response()->json([
 
                     'sections'    => $sections,
@@ -146,6 +149,7 @@ class CatalogsController extends Controller
                     'units'       => $units,
                     'subseries'   => $subseries,
                     'types'       => $types,
+                    'users'       => $users,
                     'success'     => true
                 ]);
 
@@ -192,17 +196,19 @@ class CatalogsController extends Controller
             }
             elseif ($request->cat === 6) {
                 $cat = new CatSampling();
-                $duplicityCheck = self::duplicityCheck(CatSampling::class, null, $request->quality, $request->cat_series_id, $request->null, $request->null);
+                $duplicityCheck = self::duplicityCheck(CatSampling::class, null, $request->quality, $request->cat_series_id, $request->cat_subserie_id, $request->null);
             }
 
             if (! $duplicityCheck) {
-                if ($request->cat!==3 && $request->cat!==5){
+                if ($request->cat!==3 && $request->cat!==5 && $request->cat!==6){
 
                     if ($request->cat === 1){
                         $cat->name = $request->name;
                         $cat->specialName = $request->specialName;
                         $cat->determinant = $request->determinant;
                         $cat->cat_type_id = $request->cat_type_id;
+                        $cat->cat_responsible_id = $request->cat_responsible_id;
+                        $cat->cat_user_id = $request->cat_user_id;
                     }
 
                     if ($request->cat === 2){
@@ -228,10 +234,10 @@ class CatalogsController extends Controller
                         $cat->cat_series_id = $request->cat_series_id;
                     }
 
-                    if ($request->cat === 6){
-                        $cat->quality = $request->quality;
-                        $cat->cat_series_id = $request->cat_series_id;
-                    }
+//                    if ($request->cat === 6){
+//                        $cat->quality = $request->quality;
+//                        $cat->cat_series_id = $request->cat_series_id;
+//                    }
 
 //                    if ($request->cat === 5){
 //                        $cat->cat_series_id = $request->cat_series_id;
@@ -260,10 +266,20 @@ class CatalogsController extends Controller
                     ], 200);
 
                 }else if ($request->cat===5){
-              //      dd('entro al cincoooooo', $cat);
                     $cat->fill($request->all());
                     $cat->save();
                     $cat->administrative()->sync($request->cat_unit_id);
+                    $cat->subserie()->sync($request->cat_subserie_id);
+
+                    GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
+                    DB::commit();
+
+                    return response()->json([
+                        'success' => true
+                    ], 200);
+                }else if ($request->cat===6){
+                    $cat->fill($request->all());
+                    $cat->save();
                     $cat->subserie()->sync($request->cat_subserie_id);
 
                     GeneralController::saveTransactionLog(2, 'Se creo elemento en catalogo con id: ' . $cat->id);
@@ -339,6 +355,8 @@ class CatalogsController extends Controller
                         $cat->specialName = $request->specialName;
                         $cat->determinant = $request->determinant;
                         $cat->cat_type_id = $request->cat_type_id;
+                        $cat->cat_responsible_id = $request->cat_responsible_id;
+                        $cat->cat_user_id = $request->cat_user_id;
                     }
 
                     if ($request->cat === 2) {

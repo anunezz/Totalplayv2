@@ -47,18 +47,18 @@
                         prop="name"
                         label="Inventario">
                     </el-table-column>
-                    <el-table-column
-                        prop="elaborated"
-                        label="Responsable">
-                    </el-table-column>
+<!--                    <el-table-column-->
+<!--                        prop="elaborated"-->
+<!--                        label="Responsable">-->
+<!--                    </el-table-column>-->
                     <el-table-column
                         prop="revised"
                         label="Coordinador">
                     </el-table-column>
-                    <el-table-column
+ <!--                   <el-table-column
                         prop="authorized"
                         label="Titular">
-                    </el-table-column>
+                    </el-table-column>-->
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
@@ -267,39 +267,39 @@
 <!--                            </el-input>-->
 <!--                        </el-form-item>-->
 <!--                    </el-col>-->
-                    <el-col :span="24">
-                        <el-form-item :label="ela"
-                                      prop="elaborated"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="editRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogEditForm.elaborated"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item v-if="this.catalogEditForm.viewed !== null"
-                                      label="Área Productora"
-                                      prop="viewed"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="editRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogEditForm.viewed"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
+<!--                    <el-col :span="24">-->
+<!--                        <el-form-item :label="ela"-->
+<!--                                      prop="elaborated"-->
+<!--                                      :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}-->
+<!--                                  ]">-->
+<!--                            <el-input-->
+<!--                                v-if="editRegisterDialog"-->
+<!--                                placeholder="Nombre"-->
+<!--                                v-model="catalogEditForm.elaborated"-->
+<!--                                maxlength="100"-->
+<!--                                clearable>-->
+<!--                            </el-input>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+<!--                    <el-col :span="24">-->
+<!--                        <el-form-item v-if="this.catalogEditForm.viewed !== null"-->
+<!--                                      label="Área Productora"-->
+<!--                                      prop="viewed"-->
+<!--                                      :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}-->
+<!--                                  ]">-->
+<!--                            <el-input-->
+<!--                                v-if="editRegisterDialog"-->
+<!--                                placeholder="Nombre"-->
+<!--                                v-model="catalogEditForm.viewed"-->
+<!--                                maxlength="100"-->
+<!--                                clearable>-->
+<!--                            </el-input>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
                     <el-col :span="24">
                         <el-form-item :label="rev"
                                       prop="revised"
@@ -316,22 +316,22 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item :label="aut"
-                                      prop="authorized"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="editRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogEditForm.authorized"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
+<!--                    <el-col :span="24">-->
+<!--                        <el-form-item :label="aut"-->
+<!--                                      prop="authorized"-->
+<!--                                      :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}-->
+<!--                                  ]">-->
+<!--                            <el-input-->
+<!--                                v-if="editRegisterDialog"-->
+<!--                                placeholder="Nombre"-->
+<!--                                v-model="catalogEditForm.authorized"-->
+<!--                                maxlength="100"-->
+<!--                                clearable>-->
+<!--                            </el-input>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
                     <el-col :span="24">
                         <el-form-item v-if="this.catalogEditForm.received !== null"
                                       :label="rec"

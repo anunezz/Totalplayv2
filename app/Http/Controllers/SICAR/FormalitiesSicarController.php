@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\SICAR;
 
+use App\Exports\FormalitiesSicarExport;
 use App\Http\Controllers\Controller;
 use App\Http\Models\SICAR\FormalitiesSicar;
 use App\Http\Models\SICAR\UserSicar;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class FormalitiesSicarController extends Controller
 {
@@ -127,5 +129,18 @@ class FormalitiesSicarController extends Controller
             'success' => true,
             'users' => UserSicar::whereIn('id',$usersId)->orderBy('name', 'asc')->get()
         ]);
+    }
+
+    public function downloadExcel(Request $request)
+    {
+        try {
+            return Excel::download(new FormalitiesSicarExport($request->all()),'Archivos_de_tramite_historico.xlsx');
+        }
+        catch ( \Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 }

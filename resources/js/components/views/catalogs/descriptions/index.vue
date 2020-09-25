@@ -600,15 +600,11 @@
             },
 
             editForm(row){
-                console.log('editarrrrrr', row)
-
                 this.serie = true
                 this.subserie = false
-             //   this.catalogEditForm.type_documentary = 1
                 if (row.cat_series_id == null){
                     this.subserie = true
                     this.serie = false
-             //       this.catalogEditForm.type_documentary = 2
                 }
                 let administrative = [];
                 row.administrative.forEach(element => administrative.push(element.id));

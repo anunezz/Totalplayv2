@@ -45,7 +45,6 @@ class lowDocumentary implements
 
     public function headings(): array
     {
-
         return $this->headers;
     }
 

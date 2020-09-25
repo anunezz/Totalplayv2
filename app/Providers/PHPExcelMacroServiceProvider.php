@@ -21,6 +21,10 @@ class PHPExcelMacroServiceProvider extends ServiceProvider {
             $sheet->getDelegate()->getPageSetup()->setOrientation($orientation);
         });
 
+        Sheet::macro('autoFilter', function (Sheet $sheet, string $cellRange) {
+            $sheet->getDelegate()->setAutoFilter($cellRange);
+        });
+
         /**
          * Cell macros
          */
