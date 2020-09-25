@@ -342,7 +342,7 @@ class FormalitiesController extends Controller
     public function downloadExcel(Request $request)
     {
         try {
-            return Excel::download(new FormalitiesExport, 'Archivos_de_tramite.xlsx');
+            return Excel::download(new FormalitiesExport($request->all()), 'Archivos_de_tramite.xlsx');
         }
         catch ( \Exception $e ) {
             return response()->json([
