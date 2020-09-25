@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
 
 use PhpOffice\PhpSpreadsheet\Worksheet\Drawing;
@@ -24,7 +25,8 @@ class FormalitiesSicarExport implements
     WithHeadings,
     WithTitle,
     WithEvents,
-    WithCustomStartCell
+    WithCustomStartCell,
+    ShouldAutoSize
 {
     private $data;
     private $totalRecords;
@@ -59,33 +61,32 @@ class FormalitiesSicarExport implements
 
     public function startCell(): string
     {
-        return 'A6';
+        return 'A3';
     }
 
     public function registerEvents(): array
 {
-    $cols = 'A6:I6';
+    $cols = 'A3:I3';
     return [
         AfterSheet::class => function(AfterSheet $event) use ($cols) {
             $event->sheet->setShowGridlines(false);
             $event->sheet->getDelegate()->getSheetView()->setZoomScale(90);
 
-            $event->sheet->mergeCells("E1:AB1");
-            $event->sheet->setCellValue('E1','REGISTROS HISTORICOS');
-
-            /*$event->sheet->mergeCells("A2:F4");
-            $drawing = new Drawing();
-            $drawing->setName('Logo');
-            $drawing->setDescription('Logo');
-            $drawing->setResizeProportional(false);
-            $drawing->setWidth(379);
-            $drawing->setHeight(49);
-            $drawing->setOffsetX(13);
-            $drawing->setOffsetY(7);
-            $drawing->setPath(public_path('/img/RelacionesExterioresExcelEtqueta.png'));
-            $drawing->setCoordinates('A2');
-            $drawing->setWorksheet($event->sheet->getDelegate());*/
-
+            $event->sheet->mergeCells("A1:I1");
+            $event->sheet->setCellValue('A1','REGISTROS HISTORICOS');
+             $event->sheet->styleCells(
+                 'A1:I1',
+                [
+                    'font' => [
+                        'bold' => true,
+                        'name' =>  'Montserrat',
+                        'size' =>  12
+                    ],
+                    'fill' => [
+                        'fillType' => static::$FILL::FILL_SOLID,
+                    ]
+                ]
+            );
 
             $event->sheet->styleCells(
                 $cols,
@@ -93,7 +94,7 @@ class FormalitiesSicarExport implements
                     'font' => [
                         'bold' => true,
                         'name' =>  'Montserrat',
-                        'size' =>  13
+                        'size' =>  12
                     ],
                     'alignment' => [
                         'horizontal' => static::$ALIGNMENT::HORIZONTAL_CENTER,
@@ -113,7 +114,7 @@ class FormalitiesSicarExport implements
                     'font' => [
                         'bold' => true,
                         'name' =>  'Montserrat',
-                        'size' =>  13
+                        'size' =>  12
                     ],
                     'alignment' => [
                         'horizontal' => static::$ALIGNMENT::HORIZONTAL_CENTER,
@@ -128,7 +129,7 @@ class FormalitiesSicarExport implements
                 ]
             );
             $event->sheet->styleCells(
-                'A6:I'.$this->totalRecords,
+                'A3:I'.$this->totalRecords,
                 [
                     'font' => [
                         'name' =>  'Montserrat',
@@ -193,7 +194,7 @@ class FormalitiesSicarExport implements
 
             return [$determinant,$classification,$section,$serie,$subserie,$fileNumber,$date,$openDate,$creator];
         });
-        ++$this->totalRecords;
+        $this->totalRecords += 3;
 
         return $records;
     }
