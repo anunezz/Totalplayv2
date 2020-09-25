@@ -47,18 +47,14 @@
                         prop="name"
                         label="Inventario">
                     </el-table-column>
-<!--                    <el-table-column-->
-<!--                        prop="elaborated"-->
-<!--                        label="Responsable">-->
-<!--                    </el-table-column>-->
                     <el-table-column
                         prop="revised"
                         label="Coordinador">
                     </el-table-column>
- <!--                   <el-table-column
-                        prop="authorized"
-                        label="Titular">
-                    </el-table-column>-->
+                    <el-table-column
+                        prop="positionRevised"
+                        label="Cargo">
+                    </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
                         <template slot-scope="scope">
@@ -75,47 +71,6 @@
                                         @click="editForm(scope.row)">
                                     </el-button>
                                 </el-tooltip>
-<!--                                <el-tooltip v-if="scope.row.formalities !== null" placement="right-start">-->
-<!--                                    <div slot="content">-->
-<!--                                        Este elemento no se puede eliminar dado que-->
-<!--                                        <br/>-->
-<!--                                        esta siendo utilizado por un registro-->
-<!--                                    </div>-->
-<!--                                    <span>-->
-<!--                                        <el-button-->
-<!--                                            type="danger"-->
-<!--                                            size="mini"-->
-<!--                                            icon="fas fa-trash"-->
-<!--                                            disabled>-->
-<!--                                        </el-button>-->
-<!--                                    </span>-->
-<!--                                </el-tooltip>-->
-<!--                                <el-tooltip-->
-<!--                                    v-if="scope.row.formalities === null && scope.row.isActive"-->
-<!--                                    class="item"-->
-<!--                                    effect="dark"-->
-<!--                                    content="Deshabilitar"-->
-<!--                                    placement="right-start">-->
-<!--                                    <el-button-->
-<!--                                        type="danger"-->
-<!--                                        size="mini"-->
-<!--                                        icon="fas fa-trash"-->
-<!--                                        @click="disableDialog(scope.row.hash)">-->
-<!--                                    </el-button>-->
-<!--                                </el-tooltip>-->
-<!--                                <el-tooltip-->
-<!--                                    v-if=" scope.row.formalities === null && ! scope.row.isActive"-->
-<!--                                    class="item"-->
-<!--                                    effect="dark"-->
-<!--                                    content="Habilitar"-->
-<!--                                    placement="right-start">-->
-<!--                                    <el-button-->
-<!--                                        type="success"-->
-<!--                                        size="mini"-->
-<!--                                        icon="fas fa-check"-->
-<!--                                        @click="enableRegister(scope.row.hash)">-->
-<!--                                    </el-button>-->
-<!--                                </el-tooltip>-->
                             </el-button-group>
                         </template>
                     </el-table-column>
@@ -132,112 +87,6 @@
                 </el-pagination>
             </el-col>
         </el-row>
-
-        <el-dialog :visible.sync="newRegisterDialog"
-                   :before-close="handleClose"
-                   @close="resetForm"
-                   width="55%">
-            <el-main style="border-left: 16px solid #E9EEF3 ">
-                <el-card shadow="never">
-                    <div slot="header">
-                        <span  class="title">Nuevo Registro</span>
-                    </div>
-            <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
-                <el-row :gutter="10">
-                    <el-col :span="12">
-                        <el-form-item label="Determinante"
-                                      prop="determinant"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="newRegisterDialog"
-                                placeholder="Determinante"
-                                v-model="catalogForm.determinant"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="Tipo de adscripción"
-                                      prop="cat_type_id"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    ]">
-                            <el-select @change="typeUnits(catalogForm.cat_type_id)"
-                                       style="width: 100%;"
-                                       size="medium"
-                                       v-model="catalogForm.cat_type_id"
-                                       placeholder="Seleccionar">
-                                <el-option
-                                    v-for="(type , index) in types"
-                                    :key="index"
-                                    :label="type.name"
-                                    :value="type.id">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-<!--                    <el-col :span="12">-->
-<!--                        <el-form-item label="Tipo de consulado"-->
-<!--                                      prop="cat_type_id"-->
-<!--                                      :rules="[-->
-<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
-<!--                                    ]">-->
-<!--                            <el-select v-if="catalogForm.cat_type_id === 5" -->
-<!--                                       @change="typeUnits(catalogForm.cat_type_id)"-->
-<!--                                       style="width: 100%;"-->
-<!--                                       size="medium"-->
-<!--                                       v-model="catalogForm.cat_type_id"-->
-<!--                                       placeholder="Seleccionar">-->
-<!--                                <el-option-->
-<!--                                    v-for="(type , index) in types"-->
-<!--                                    :key="index"-->
-<!--                                    :label="type.name"-->
-<!--                                    :value="type.id">-->
-<!--                                </el-option>-->
-<!--                            </el-select>-->
-<!--                        </el-form-item>-->
-<!--                    </el-col>-->
-                    <el-col :span="24">
-                        <el-form-item label="Nombre"
-                                      prop="newRegisterName"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    { type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.,\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="newRegisterDialog"
-                                placeholder="Nombre"
-                                v-model="catalogForm.newRegisterName"
-                                maxlength="100"
-                                clearable>
-                                <template v-if="catalogForm.cat_type_id === 2 || catalogForm.cat_type_id === 3"
-                                    slot="prepend">{{nameUnit}}</template>
-                                <template v-if="catalogForm.cat_type_id === 4 || catalogForm.cat_type_id === 6"
-                                    slot="append">{{nameUnit}}</template>
-                            </el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-                    <br> <p></p>
-                    <el-row>
-                        <div align="right">
-                            <el-button type="danger" @click="getTitles(), resetForm()">Cancelar</el-button>
-                            <el-button
-                                v-if="newRegisterDialog"
-                                type="primary"
-                                @click="newRegister">
-                                Aceptar
-                            </el-button>
-                        </div>
-                    </el-row>
-                </el-card>
-            </el-main>
-        </el-dialog>
 
         <el-dialog :visible.sync="editRegisterDialog"
                    :before-close="handleClose"
@@ -316,6 +165,22 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="24">
+                        <el-form-item :label="porev"
+                                      prop="positionRevised"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="catalogEditForm.positionRevised"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
 <!--                    <el-col :span="24">-->
 <!--                        <el-form-item :label="aut"-->
 <!--                                      prop="authorized"-->
@@ -349,6 +214,23 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="24">
+                        <el-form-item v-if="this.catalogEditForm.received !== null"
+                                      :label="porec"
+                                      prop="positionReceived"
+                                      :rules="[
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                  ]">
+                            <el-input
+                                v-if="editRegisterDialog"
+                                placeholder="Nombre"
+                                v-model="catalogEditForm.positionReceived"
+                                maxlength="100"
+                                clearable>
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
             </el-form>
                     <br> <p></p>
@@ -358,7 +240,7 @@
                             <el-button
                                 v-if="editRegisterDialog"
                                 type="primary"
-                                @click="editRegisterDialog = false">
+                                @click="editRegister">
                                 Aceptar
                             </el-button>
                         </div>
@@ -396,8 +278,10 @@
 
                 ela: '',
                 rev: '',
+                porev: '',
                 aut: '',
                 rec: '',
+                porec: '',
                 nameUnit: '',
                 elements: [],
 
@@ -419,7 +303,9 @@
                     authorized: '',
                     elaborated: '',
                     received: '',
+                    positionReceived: '',
                     revised: '',
+                    positionRevised: '',
                     viewed: '',
                 },
                 types:[],
@@ -460,7 +346,7 @@
         methods: {
 
             Search(search){
-                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,.%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
+                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
                 if(re.test(search)){
                     return search.replace(re, '');
                 }else{
@@ -578,35 +464,40 @@
                 if (row.id === 1) {
                     this.ela = 'Responsable del archivo de concentración'
                     this.rev = 'Coordinador de Archivos'
+                    this.porev = 'Cargo del coordinador de archivos'
                     this.aut = 'Titular de la Unidad administrativa'
                 }
                 if (row.id === 2) {
                     this.ela = 'Responsable'
                     this.rev = 'Área Tramitadora'
+                    this.porev = 'Cargo del área tramitadora'
                     this.aut = 'Unidad Administrativa Productora'
                 }
                 if (row.id === 3) {
                     this.ela = 'Responsable del Archivo de Trámite'
                     this.rev = 'Coordinador de Archivos'
+                    this.porev = 'Cargo del coordinador de archivos'
                     this.aut = 'Titular de la Unidad Administrativa'
                     this.rec = 'Responsable del Archivo de Concentración'
+                    this.porec = 'Cargo del responsable del archivo de concentración'
                 }
                 if (row.id === 4) {
                     this.ela = 'Responsable del Archivo de Concentración'
                     this.rev = 'Coordinador de Archivos'
+                    this.porev = 'Cargo del coordinador de archivos'
                     this.aut = 'Titular de la Unidad Administrativa'
                     this.rec = 'Responsable del Archivo Histórico'
+                    this.porec = 'Cargo del responsable del archivo de histórico'
                 }
                 //console.log('llegaaaaaaaaaaaaaa', row)
 
                 this.catalogEditForm = {
                     id:row.hash,
                     name:row.name,
-                    authorized: row.authorized,
-                    elaborated: row.elaborated,
                     received: row.received,
                     revised: row.revised,
-                    viewed: row.viewed
+                    positionRevised: row.positionRevised,
+                    positionReceived: row.positionReceived,
                 };
                 this.editRegisterDialog = true;
             },
@@ -614,37 +505,16 @@
             editRegister() {
                 this.startLoading();
 
-                if (this.catalogEditForm.specialName == null){
-                    this.name = this.catalogEditForm.name
-                }
-                if (this.catalogEditForm.specialName != null){
-                    console.log('specialName va lleno')
-                    if (this.catalogEditForm.cat_type_id === 4 || this.catalogEditForm.cat_type_id === 6)
-                    {
-                        // this.specialName = this.catalogEditForm.specialName;
-                        this.catalogEditForm.name = this.catalogEditForm.specialName + ', ' + this.nameUnit;
-                    }
-
-                    if (this.catalogEditForm.cat_type_id === 2 ||this.catalogEditForm.cat_type_id === 3)
-                    {
-                        // this.specialName = this.catalogForm.newRegisterName;
-                        this.catalogEditForm.name = this.nameUnit + ' ' + this.catalogEditForm.specialName;
-                    }
-
-                }
-
-                console.log('editarr', this.catalogEditForm)
-
                 let data = {
                     id: this.catalogEditForm.id,
-                    cat: 1,
+                    cat: 7,
                     name: this.catalogEditForm.name,
-                    specialName: this.catalogEditForm.specialName,
-                    determinant: this.catalogEditForm.determinant,
-                    cat_type_id: this.catalogEditForm.cat_type_id
+                    received: this.catalogEditForm.received,
+                    revised: this.catalogEditForm.revised,
+                    positionRevised: this.catalogEditForm.positionRevised,
+                    positionReceived: this.catalogEditForm.positionReceived
                 };
 
-                console.log('dataaaaaaa', data)
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
                         axios.put('/api/cats/update/register', data).then(response => {

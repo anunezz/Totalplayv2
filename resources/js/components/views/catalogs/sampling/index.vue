@@ -45,13 +45,18 @@
                     border
                     style="width: 100%">
                     <el-table-column
-                        prop="serie.name"
-                        label="Serie documental"
-                        width="600">
+                        prop="cat_series_id"
+                        label="Documental">
+                        <template slot-scope="scope">
+                            {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}
+                        </template>
                     </el-table-column>
                     <el-table-column
                         prop="quality"
                         label="Cualidad">
+                        <template slot-scope="scope">
+                            <span v-html="scope.row.format_rec"></span>
+                        </template>
                     </el-table-column>
                     <el-table-column
                         label="Acciones" header-align="left" align="center" width="250">
@@ -66,7 +71,7 @@
                                         type="info"
                                         size="mini"
                                         icon="fas fa-edit"
-                                        >
+                                        @click="editForm(scope.row)">
                                     </el-button>
                                 </el-tooltip>
 <!--                                <el-tooltip v-if="scope.row.operatives.length > 0 || scope.row.id === 14" placement="right-start">-->
@@ -186,7 +191,7 @@
                                        multiple
                                        style="width: 100%">
                                 <el-option
-                                    v-for="(sub , index) in subseries"
+                                    v-for="(sub , index) in lresults"
                                     :key="index"
                                     :label="sub.name"
                                     :value="sub.id">
@@ -194,22 +199,31 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
+
+<!--                    <el-col :span="24">-->
+<!--                        <el-form-item label="Cualidad"-->
+<!--                                      prop="newRegisterName"-->
+<!--                                      :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}-->
+<!--                                  ]">-->
+<!--                            <el-input-->
+<!--                                v-if="newRegisterDialog"-->
+<!--                                type="textarea"-->
+<!--                                :rows="6"-->
+<!--                                placeholder="Cualidad"-->
+<!--                                v-model="catalogForm.newRegisterName"-->
+<!--                                maxlength="100"-->
+<!--                                clearable>-->
+<!--                            </el-input>-->
+<!--                        </el-form-item>-->
+<!--                    </el-col>-->
+
+                    <el-col :span="24" style="padding: 11px">
                         <el-form-item label="Cualidad"
                                       prop="newRegisterName"
-                                      :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                            <el-input
-                                v-if="newRegisterDialog"
-                                type="textarea"
-                                :rows="6"
-                                placeholder="Cualidad"
-                                v-model="catalogForm.newRegisterName"
-                                maxlength="100"
-                                clearable>
-                            </el-input>
+                                      :rules="[{ validator: description, trigger: ['blur','change'] }]">
+                            <tinymce id="d1" v-model="catalogForm.newRegisterName" :other_options="tinyOptions"></tinymce>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -300,22 +314,30 @@
                                     </el-select>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="24">
-                                <el-form-item label="Descripción"
+<!--                            <el-col :span="24">-->
+<!--                                <el-form-item label="Descripción"-->
+<!--                                              prop="quality"-->
+<!--                                              :rules="[-->
+<!--                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},-->
+<!--                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}-->
+<!--                                  ]">-->
+<!--                                    <el-input-->
+<!--                                        v-if="editRegisterDialog"-->
+<!--                                        type="textarea"-->
+<!--                                        :rows="8"-->
+<!--                                        placeholder="Descripción"-->
+<!--                                        v-model="catalogEditForm.quality"-->
+<!--                                        maxlength="100"-->
+<!--                                        clearable>-->
+<!--                                    </el-input>-->
+<!--                                </el-form-item>-->
+<!--                            </el-col>-->
+
+                            <el-col :span="24" style="padding: 11px">
+                                <el-form-item label="Cualidad"
                                               prop="quality"
-                                              :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
-                                  ]">
-                                    <el-input
-                                        v-if="editRegisterDialog"
-                                        type="textarea"
-                                        :rows="8"
-                                        placeholder="Descripción"
-                                        v-model="catalogEditForm.quality"
-                                        maxlength="100"
-                                        clearable>
-                                    </el-input>
+                                              :rules="[{ validator: description, trigger: ['blur','change'] }]">
+                                    <tinymce id="d2" v-model="catalogEditForm.quality" :other_options="tinyOptions"></tinymce>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -363,9 +385,11 @@
         data() {
             return {
 
+                validMessage:true,
                 serie: false,
                 subserie: false,
                 results: [],
+                lresults: [],
                 series: [],
                 subseries: [],
                 elements: [],
@@ -387,7 +411,7 @@
                 catalogEditForm:{
                     quality: '',
                     cat_series_id: null,
-                    cat_subserie_id: [],
+                    subserie: [],
                     type_documentary: null,
                 },
                 hashRegister: null,
@@ -403,6 +427,34 @@
                 hashId: null,
 
                 apiToken: 'Bearer ' + sessionStorage.getItem('SERIDH_token'),
+
+                tinyOptions: {
+                    language_url: '/js/tiny_es_MX.js',
+                    indent_use_margin: true,
+                    forced_root_block_attrs: {
+                        "style": "font-family: Montserrat;font-size:14px;font-style: normal;font-weight: normal"
+                    },
+                    menubar: '',
+                    statusbar: false,
+                    branding: false,
+                    min_height: 150,
+                    browser_spellcheck: true,
+                    font_formats: 'Montserrat=Montserrat;Soberana Sans=Soberana Sans;Arial=arial,helvetica,sans-serif;Times New Roman=Times New Roman, Times, serif;',
+                    setup: function (ed) {
+                        ed.settings.paste_postprocess = function (pl, o) {
+                            ed.dom.setAttrib(ed.dom.select('li', o.node), 'style', 'font-family: Montserrat;font-size:14px;font-style: normal;font-weight: normal');
+                            ed.dom.setAttrib(ed.dom.select('p', o.node), 'style', 'font-family: Montserrat;font-size:14px;font-style: normal;font-weight: normal');
+                        }
+                    },
+                    paste_as_text: true,
+                    paste_text_sticky: true,
+                    paste_text_sticky_default: true,
+                    toolbar1: 'bold italic underline forecolor backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent  ',
+                    toolbar2: "",
+                    plugins: [
+                        'paste'
+                    ]
+                },
             }
         },
 
@@ -412,6 +464,7 @@
                 this.series = response.data.series;
                 this.subseries = response.data.subseries;
                 this.results = response.data.results;
+                this.lresults = response.data.lresults;
                 this.stopLoading();
             })
         },
@@ -424,9 +477,26 @@
 
 
         methods: {
+            description(rule, value, callback){
+                value = value.trim();
+                let exp = new RegExp(/((<script|<xml|\?>|<\?xml|(<\?php|<\?)|java|xss|htaccess|&lt;)|([%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
+                if(!value) {
+                    this.validMessage = false;
+                    return callback(new Error('Este campo es requerido'));
+                }else{
+                    if( exp.test(value) ){
+                        this.validMessage = false;
+                        return callback(new Error('Este campo no puede contener caracteres especiales'));
+                    } else {
+                        this.validMessage = true;
+                        return callback();
+
+                    }
+                }
+            },
 
             Search(search){
-                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,.%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
+                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&=¨´%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
                 if(re.test(search)){
                     return search.replace(re, '');
                 }else{
@@ -449,6 +519,7 @@
                 let data = { params: {
                         page: currentPage,
                         perPage: this.pagination.perPage,
+                        search: this.search,
                         cat: 6}
                 };
 
@@ -488,7 +559,8 @@
                     cat: 6,
                     quality: this.catalogForm.newRegisterName,
                     cat_series_id: this.catalogForm.cat_series_id,
-                    cat_subserie_id: this.catalogForm.cat_subserie_id
+                    cat_subserie_id: this.catalogForm.cat_subserie_id,
+                    aux: 1
                 };
 
                 this.$refs['catalogForm'].validate((valid) => {
@@ -544,7 +616,10 @@
                 row.subserie.forEach(element => subserie.push(element.id));
                 this.catalogEditForm = {
                     id:row.hash,
-                    name:row.name,
+                    quality:row.quality,
+                    cat_series_id:row.cat_series_id,
+                    subserie: subserie,
+                    type_documentary: 1
                 };
                 this.editRegisterDialog = true;
             },
@@ -552,7 +627,14 @@
             editRegister() {
                 this.startLoading();
 
-                let data = {id: this.catalogEditForm.id, cat: 5, name: this.catalogEditForm.name};
+                let data = {
+                    id: this.catalogEditForm.id,
+                    cat: 6,
+                    quality: this.catalogEditForm.quality,
+                    cat_series_id: this.catalogEditForm.cat_series_id,
+                    cat_subserie_id: this.catalogEditForm.subserie,
+                    aux: 1
+                };
 
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
@@ -602,6 +684,11 @@
 
             newCatalog(){
                 this.catalogForm.newRegisterName = '';
+                this.catalogForm.type_documentary = null;
+                this.catalogForm.cat_series_id = null;
+                this.catalogForm.cat_subserie_id = null;
+                this.serie = null;
+                this.subserie = null;
                 this.newRegisterDialog = true;
             },
 
@@ -672,26 +759,34 @@
             typeDocumentary(type){
                 if (!this.serie && !this.subserie){
                     this.catalogForm.type_documentary = null;
+                    this.catalogForm.cat_series_id = null;
+                    this.catalogForm.cat_subserie_id = null;
                 }
                 if (type===2 && this.subserie===true){
                     this.serie = false;
+                    this.catalogForm.cat_series_id = null;
                     this.catalogForm.type_documentary = type;
                 }
                 if (type === 1 && this.serie===true){
                     this.subserie = false;
+                    this.catalogForm.cat_subserie_id = null;
                     this.catalogForm.type_documentary = type;
                 }
             },
             typeEditDocumentary(type){
                 if (!this.serie && !this.subserie){
                     this.catalogEditForm.type_documentary = null;
+                    this.catalogEditForm.cat_series_id = null;
+                    this.catalogEditForm.subserie = null;
                 }
                 if (type===2 && this.subserie===true){
                     this.serie = false;
+                    this.catalogEditForm.cat_series_id = null;
                     this.catalogEditForm.type_documentary = type;
                 }
                 if (type === 1 && this.serie===true){
                     this.subserie = false;
+                    this.catalogEditForm.subserie = null;
                     this.catalogEditForm.type_documentary = type;
                 }
             },

@@ -3,7 +3,7 @@
         <el-row class="body-form">
             <el-row style="padding: 15px">
                 <el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="formFormalities.quality">
-                    <p><h4>Cualidad:</h4>{{formFormalities.quality}}</p>
+                    <h4>Cualidad:</h4><span v-html="formFormalities.quality"></span>
                 </el-row>
                 <el-row style="margin-bottom: 10px;margin-top: 50px" v-if="qualityShow">
                     <el-form-item prop="haveQuality"

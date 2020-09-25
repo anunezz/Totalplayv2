@@ -57,10 +57,6 @@
                         <template slot-scope="scope">
                             {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}
                         </template>
-<!--                        <template slot-scope="scope">-->
-<!--                            {{scope.row.cat_series_id ? scope.row.cat_series_id != null : 'Sin asignar',-->
-<!--                              scope.row.cat_series_id ? scope.row.cat_series_id = null : 'Serie documental'}}-->
-<!--                        </template>-->
                     </el-table-column>
 <!--                    <el-table-column-->
 <!--                        prop="serie.name"-->
@@ -238,7 +234,7 @@
                                       prop="newRegisterName"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                             <el-input
                                 v-if="newRegisterDialog"
@@ -365,7 +361,7 @@
                                               prop="description"
                                               :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                                     <el-input
                                         v-if="editRegisterDialog"
@@ -488,7 +484,7 @@
         methods: {
 
             Search(search){
-                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´,.%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
+                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨;:´%$¿?|#!¡+_{}()^*'`\[\]]))/,'igm');
                 if(re.test(search)){
                     return search.replace(re, '');
                 }else{
@@ -765,13 +761,17 @@
 
                 if (!this.serie && !this.subserie){
                     this.catalogForm.type_documentary = null;
+                    this.catalogForm.cat_series_id = null;
+                    this.catalogForm.cat_subserie_id = null;
                 }
                 if (type===2 && this.subserie===true){
                     this.serie = false;
+                    this.catalogForm.cat_series_id = null;
                     this.catalogForm.type_documentary = type;
                 }
                 if (type === 1 && this.serie===true){
                     this.subserie = false;
+                    this.catalogForm.cat_subserie_id = null;
                     this.catalogForm.type_documentary = type;
                 }
             },
@@ -779,13 +779,17 @@
 
                 if (!this.serie && !this.subserie){
                     this.catalogEditForm.type_documentary = null;
+                    this.catalogEditForm.cat_series_id = null;
+                    this.catalogEditForm.subserie = null;
                 }
                 if (type===2 && this.subserie===true){
                     this.serie = false;
+                    this.catalogEditForm.cat_series_id = null;
                     this.catalogEditForm.type_documentary = type;
                 }
                 if (type === 1 && this.serie===true){
                     this.subserie = false;
+                    this.catalogEditForm.subserie = null;
                     this.catalogEditForm.type_documentary = type;
                 }
             },
