@@ -41,6 +41,15 @@ class CatSubseries extends Model
 
     }
 
+    public function sampli()
+    {
+        return $this->belongsToMany(CatDescription::class,
+            'sampling_subseries',
+            'cat_subserie_id',
+            'cat_sampling_id');
+
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when(! empty ($search), function ($query) use ($search) {

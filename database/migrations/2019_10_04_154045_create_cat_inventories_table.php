@@ -16,11 +16,10 @@ class CreateCatInventoriesTable extends Migration
         Schema::create('cat_inventories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('name')->nullable();
-            $table->string('elaborated')->nullable();
             $table->string('revised')->nullable();
-            $table->string('authorized')->nullable();
+            $table->string('positionRevised')->nullable();
             $table->string('received')->nullable();
-            $table->string('viewed')->nullable();
+            $table->string('positionReceived')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
         });
