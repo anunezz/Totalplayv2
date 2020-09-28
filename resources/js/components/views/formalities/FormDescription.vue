@@ -5,7 +5,7 @@
                 <el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="formFormalities.quality">
                     <h4>Cualidad:</h4><span v-html="formFormalities.quality"></span>
                 </el-row>
-                <el-row style="margin-bottom: 10px;margin-top: 50px" v-if="qualityShow">
+                <el-row style="margin-bottom: 10px;margin-top: 50px" v-if="qualityShow && formFormalities.quality">
                     <el-form-item prop="haveQuality"
                                   :rules="[
                     { required: true, message: 'La pregunta es obligatoria', trigger: ['blur','change'] }]">
@@ -14,7 +14,7 @@
                             <span style="font-weight: bold;">¿El expediente cuenta con alguna cualidad?</span>
                         </el-col>
                         <el-col :span="5">
-                            <el-radio-group v-model="formFormalities.haveQuality" size="medium">
+                            <el-radio-group v-model="formFormalities.haveQuality" size="medium" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined">
                                 <el-radio border label="Sí"></el-radio>
                                 <el-radio border label="No"></el-radio>
                             </el-radio-group>
