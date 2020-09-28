@@ -16,6 +16,7 @@
                 <div style='width:100%; padding: 5px 0px; display:flex; justify-content:flex-end;'>
                     <el-button-group>
                         <el-button
+                            :disabled="dataTable.length > 0 ? false:true"
                             @click="DownloadExcel"
                             icon="far fa-file-excel"
                             size="mini"
@@ -99,7 +100,6 @@
 </template>
 
 <script>
-
     import ShowFilters from "./FormFiltros";
 
     export default {
