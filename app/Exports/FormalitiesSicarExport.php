@@ -56,7 +56,7 @@ class FormalitiesSicarExport implements
 
     public function title(): string
     {
-        return 'Archivos de trámite historicos' . $this->totalRecords;
+        return 'Archivos de trámite historicos';
     }
 
     public function startCell(): string

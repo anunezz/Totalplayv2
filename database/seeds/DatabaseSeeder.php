@@ -34,7 +34,8 @@ class DatabaseSeeder extends Seeder
             SeriesPrimaryValuesSeeder::class,
             DescriptionSubseriesSeeder::class,
             DescriptionUnitsSeeder::class,
-            SeriesUnitsSeeder::class
+            SeriesUnitsSeeder::class,
+            SamplingSubseriesSeeder::class
         ]);
     }
 }

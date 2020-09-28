@@ -86,7 +86,7 @@ class Formalities extends Model
         return $this->belongsTo(CatSeries::class);
     }
 
-    public function SubSerie()
+    public function subserie()
     {
         return $this->belongsTo(CatSubseries::class);
     }
