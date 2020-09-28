@@ -136,9 +136,6 @@ class lowDocumentary implements
                 $event->sheet->setShowGridlines(false);
                 $event->sheet->getDelegate()->getSheetView()->setZoomScale(90);
 
-                //$event->sheet->getColumnDimension('A')->setWidth(40.00);
-                //$event->sheet->getColumnDimension('E')->setWidth(50.00);
-
                 $event->sheet->rowHeight('7', 35);
                 $event->sheet->rowHeight('8', 35);
 
@@ -155,20 +152,7 @@ class lowDocumentary implements
                 $event->sheet->mergeCells("A6:P6");
                 $event->sheet->setCellValue('A6','Subserie documental:');
 
-
-                // $arrayData = [
-                //     [1,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [2,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [3,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [4,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [5,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [6,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [7,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [8,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                //     [9,2010, null , 2012,1,2,3,4,5,6,7,8,9,10,11,12],
-                // ];
                 $arrayData = $this->fields['data'];
-                //dd($arrayData);
 
                 for ($i=0; $i < count($arrayData); $i++) {
                     $rowData = 9 + $i;
@@ -298,7 +282,6 @@ class lowDocumentary implements
                         ]
                     );
                 }
-
 
                 $rowsBorder = [
                     [ 'cell'=> 'A7:A8', 'bold' => true, 'merge' => true,  'field' => "No. \nconsecutivo", 'fill'=> 'FFCCD1D1'],
