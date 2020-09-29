@@ -2,9 +2,6 @@
     <div>
         <el-row class="body-form">
             <el-row style="padding: 15px">
-                <!--<el-row style="padding-left: 10px; border-left: 8px solid #b3b9c8; margin-bottom: 10px" v-if="quality">
-                    <p><h4>Cualidad:</h4>{{quality}}</p>
-                </el-row>-->
                 <el-row :gutter="20">
                     <el-col :span="12">
                         <el-form-item label="Sección:" prop="section_id"
@@ -42,7 +39,7 @@
 
                 <el-row :gutter="20">
                     <el-col :span="12">
-                        <el-form-item label="Subserie:" prop="subserie_id" v-if="subSeries.length > 0"
+                        <el-form-item label="Subserie:" prop="subserie_id" v-if="showSubserie"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-select v-model="formFormalities.subserie_id" clearable filterable @change="calSortCodeSubSerie"
@@ -134,6 +131,17 @@
                 pickerOptionsEnd: {
                     disabledDate: this.delimtDays
                 },
+                showSubserie:false
+            }
+        },
+        watch:{
+            'subSeries'(){
+                if (this.formFormalities.hash !== undefined){
+                    this.showSubserie = this.formFormalities.subserie_id !== null;
+
+                }else {
+                    this.showSubserie = this.subSeries.length > 0;
+                }
             }
         },
         mounted() {
