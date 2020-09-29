@@ -49,11 +49,10 @@
 <section>
     <div style="margin: 5%;">
 
-
         <p>
-            A t e n t a m e n t e,
-            <br>
-            Subsecretar&iacute;a para Asuntos Multilaterales y Derechos Humanos
+        Estimado usuario le informamos que se acaban de vencer 3 trámites.
+        <br><br>
+        El número va a ir cambiando de acuerdo a los trámites vencidos
         </p>
 
     </div>
