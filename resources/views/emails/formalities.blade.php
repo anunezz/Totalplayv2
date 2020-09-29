@@ -51,8 +51,7 @@
 
         <p>
         Estimado usuario le informamos que se acaban de vencer 3 trámites.
-        <br><br>
-        El número va a ir cambiando de acuerdo a los trámites vencidos
+        <br>
         </p>
 
     </div>
