@@ -177,6 +177,7 @@
                     this.series = [];
                     this.subSeries = [];
                     this.formFormalities.quality = null;
+                    this.formFormalities.haveQuality = null;
                 }
 
                 let params = {
@@ -207,6 +208,7 @@
                 if (this.formFormalities.hash === undefined) {
                     this.formFormalities.sort_code = '';
                     this.formFormalities.primariValues = [];
+                    this.formFormalities.haveQuality = null;
                 }
                 let params = {
                     id:this.formFormalities.serie_id
