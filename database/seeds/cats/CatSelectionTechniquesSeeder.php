@@ -17,8 +17,6 @@ class CatSelectionTechniquesSeeder extends Seeder
             ['id' => 1, 'name' => 'Eliminación', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
             ['id' => 2, 'name' => 'Conservación', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
             ['id' => 3, 'name' => 'Muestreo', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
-            ['id' => 4, 'name' => 'Cualidad de la muestra', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
-
         ]);
     }
 }
