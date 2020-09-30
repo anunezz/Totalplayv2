@@ -101,7 +101,7 @@ class CronJobFormalities extends Command
         }
 
         $data = "pasando variables para la vista";
-         Mail::to('adriann@sre.gob.mx')->send(new MailFormalities($data));
+        Mail::to('adriann@sre.gob.mx')->send(new MailFormalities($data));
         \Log::info("Este es un mensaje de CronJobFormalities desde el log:");
     }
 }

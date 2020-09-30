@@ -207,7 +207,8 @@ class lowAccounting implements
                         $event->sheet->mergeCells("E".$rowData.":I". $rowData);
                         $event->sheet->mergeCells("J".$rowData.":N". $rowData);
 
-                        $row = strlen($arrayData[$i][5]) / 4;
+                        $strlen = strlen($arrayData[$i][4]) / 4;
+                        $row = (  $strlen > 35 )? $strlen : 35;
                         $event->sheet->rowHeight($rowData, $row);
 
                         $event->sheet->setCellValue('A'.$rowData,$arrayData[$i][0]);
@@ -348,13 +349,6 @@ class lowAccounting implements
                         ]
                     );
                 }
-
-
-
-
-
-
-
 
                 //Total
                 $rowTotal = $rowEnd + 1;

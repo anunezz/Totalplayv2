@@ -151,12 +151,11 @@ class TraitReport
             $sum++;
             array_push($data,[
                 $sum, //0 No.consecutivo
-                //$item->serie()->first()->code, //1 Código de clasificación archivística
                 $item->sort_code, //1 Código de clasificación archivística
                 null, //2 Unidad de Medida y cantidad (Cajas)
                 null, //3 Cantidad de Expedientes
                 $item->title, //4 Título (nombre) del expediente
-                $item->description()->first()->description, //5 Descripción de la documentación anexa
+                null, //5 Descripción de la documentación anexa
                 $item->opening_date, //6 Año de apertura
                 $item->close_date, //7 Año de cierre
                 null, //8 Corriente
@@ -185,12 +184,11 @@ class TraitReport
 
             array_push($data,[
                 $sum,//0 No. consecutivo
-                //$item->serie()->first()->code,//1 Código de clasificación archivística del expediente
                 $item->sort_code,//1 Código de clasificación archivística del expediente
                 null,//2 Número consecutivo de caja
                 $item->consecutive,//3 Número consecutivo de expediente
                 $item->title,//4 Título del expediente
-                $item->description()->first()->description,//5 Descripción de la documentación anexa
+                null,//5 Descripción de la documentación anexa
                 $item->end_folio,//6 Número de folios que integra el expediente
                 $item->opening_date,//7 Año de apertura
                 $item->close_date,//8 Año de cierre
