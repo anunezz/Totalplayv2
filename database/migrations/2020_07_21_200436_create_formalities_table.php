@@ -23,6 +23,7 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('serie_id');
             $table->unsignedBigInteger('subserie_id')->nullable();
+            $table->unsignedBigInteger('quality_id')->nullable();
             $table->string('opening_date');
             $table->string('close_date');
             $table->unsignedBigInteger('consecutive');
