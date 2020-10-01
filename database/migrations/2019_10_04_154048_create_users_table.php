@@ -29,14 +29,6 @@ class CreateUsersTable extends Migration
                 ->references('id')
                 ->on('cat_profiles');
 
-            $table->foreign('cat_determinant_id')
-                ->references('id')
-                ->on('cat_administrative_units');
-
-            $table->foreign('cat_unit_id')
-                ->references('id')
-                ->on('cat_administrative_units');
-
         });
     }
 
