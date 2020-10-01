@@ -178,6 +178,7 @@
                     this.subSeries = [];
                     this.formFormalities.quality = null;
                     this.formFormalities.haveQuality = null;
+                    this.formFormalities.quality_id = null;
                 }
 
                 let params = {
@@ -209,6 +210,7 @@
                     this.formFormalities.sort_code = '';
                     this.formFormalities.primariValues = [];
                     this.formFormalities.haveQuality = null;
+                    this.formFormalities.quality_id = null;
                 }
                 let params = {
                     id:this.formFormalities.serie_id

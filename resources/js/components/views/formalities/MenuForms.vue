@@ -147,7 +147,9 @@
                     name_public_server: '',
                     position_public_server: '',
                     haveQuality: null,
-                    type_selection:null,
+                    type_selection: null,
+                    quality_id: null,
+
 
                     scope_and_content: '',
                     auxOpening_date: '',
@@ -306,7 +308,6 @@
 
                 axios.get('/api/formalities/' + this.editFormalitiy_id + '/edit').then(response => {
                     const aux = {...response.data.formality}
-                    console.log('hola mundo',aux)
                     this.formFormalities = response.data.formality;
                     this.formFormalities.disableControl = aux.question_two === 1;
                     this.tapOne = true;
