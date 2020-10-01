@@ -147,6 +147,7 @@
                     name_public_server: '',
                     position_public_server: '',
                     haveQuality: null,
+                    type_selection:null,
 
                     scope_and_content: '',
                     auxOpening_date: '',

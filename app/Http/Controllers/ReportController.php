@@ -20,7 +20,6 @@ use App\Exports\Transfer;
 use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatSeries;
 use App\Http\Traits\TraitReport;
-
 use App\Http\Models\Formalities;
 
 class ReportController extends Controller

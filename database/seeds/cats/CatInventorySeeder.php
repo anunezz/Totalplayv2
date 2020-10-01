@@ -17,7 +17,7 @@ class CatInventorySeeder extends Seeder
             [
                 'id' => 1,
                 'name' => 'Baja Documental',
-                'revised' => 'Laura Beatriz Moreno',
+                'revised' => null,
                 'positionRevised' => null,
                 'received' => null,
                 'positionReceived' => null,
@@ -27,7 +27,7 @@ class CatInventorySeeder extends Seeder
             [
                 'id' => 2,
                 'name' => 'Baja Contable',
-                'revised' => 'Laura Beatriz Moreno',
+                'revised' => null,
                 'positionRevised' => null,
                 'received' => null,
                 'positionReceived' => null,
@@ -37,9 +37,9 @@ class CatInventorySeeder extends Seeder
             [
                 'id' => 3,
                 'name' => 'Transferencia Primaria',
-                'revised' => 'Laura Beatriz Moreno',
+                'revised' => null,
                 'positionRevised' => null,
-                'received' => 'Francisco Javier Estrada Herrera',
+                'received' => null,
                 'positionReceived' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -49,7 +49,7 @@ class CatInventorySeeder extends Seeder
                 'name' => 'Transferencia Secundaria',
                 'revised' => null,
                 'positionRevised' => null,
-                'received' => 'Rafael Anaya',
+                'received' => null,
                 'positionReceived' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

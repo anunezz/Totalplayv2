@@ -224,6 +224,9 @@
             },
             'formFormalities.serie'(){
                 this.calcuVigenciasDoc();
+            },
+            'formFormalities.haveQuality'(){
+                this.calcuVigenciasDoc();
             }
         },
         methods:{
@@ -253,12 +256,22 @@
                 this.tableData2[0].AT = parseInt(aux.AT);
                 this.tableData2[0].AC = parseInt(aux.AC);
 
-                if (aux.cat_selection_id === 1) this.tableData3[0].elimination = true;
-                if (aux.cat_selection_id === 2) this.tableData3[0].conservation = true;
-                if (aux.cat_selection_id === 3) this.tableData3[0].sampling = true;
-                // if (aux.cat_selection_id === 4) this.tableData3[0].quality =true;
-
-                if (this.formFormalities.haveQuality === 'Sí') this.tableData3[0].quality =true;
+                if (aux.cat_selection_id === 1) {
+                    this.tableData3[0].elimination = true;
+                    this.formFormalities.type_selection = 1;
+                }
+                if (aux.cat_selection_id === 2) {
+                    this.tableData3[0].conservation = true;
+                    this.formFormalities.type_selection = 2;
+                }
+                if (aux.cat_selection_id === 3) {
+                    this.tableData3[0].sampling = true;
+                    this.formFormalities.type_selection = 3;
+                }
+                if (this.formFormalities.haveQuality === 'Sí') {
+                    this.tableData3[0].quality =true;
+                    this.formFormalities.type_selection = 4;
+                }
             }
         }
     }
