@@ -29,8 +29,7 @@ class MailFormalities extends Mailable
      */
     public function build()
     {
-        return $this->subject('El notificacion sirge ha sido enviado.')
+        return $this->subject('Expedientes vencidos.')
         ->view('emails.formalities')->with($this->data);
-
     }
 }
