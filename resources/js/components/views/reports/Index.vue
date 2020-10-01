@@ -83,7 +83,7 @@
                         { name: 'Transferencia secundariaa', url: 'TransferSecondary' }];
 
             for (let i = 0; i < data.length; i++) {
-                if( ( this.$store.state.user.profile !== 1 && this.$store.state.user.cat_unit_id === 5 && data[i].name === 'Baja contable' ) ||
+                if( ( this.$store.state.user.profile !== 1 && this.$store.state.user.cat_unit_id === 4 && data[i].name === 'Baja contable' ) ||
                     ( this.$store.state.user.profile === 1 && data[i].name === 'Baja contable') ){
                     this.dataComponent.push( data[i] );
                 }

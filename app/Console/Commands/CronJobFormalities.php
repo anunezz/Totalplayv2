@@ -52,46 +52,63 @@ class CronJobFormalities extends Command
             // $item->type_selection conservacion = 2
             // $item->type_selection muestreo = 3
             // $item->type_selection cualidad de la muestra = 4
+            $serie = $item->serie()->first();
+            $total = date("Y-m-d", strtotime($item->close_date . "+ ".$serie->total." year"));
 
-            if($item->type_selection === 3 && $item->unit_id !== 5 ){ //Validar baja documental
-                $item->type_report = 1;
+            if( strtotime( date("Y-m-d") ) > strtotime( $total )  ){
+                //echo "total: ".$total."\n";
+
+                if($item->type_selection === 3 && $item->unit_id !== 4 ){ //Validar baja documental
+                    //echo "baja documental muestreo sin dgpop: \n";
+                    $item->type_report = 1;
+                }
+
+                if($item->type_selection === 3 && $item->unit_id === 4 ){ //Validar baja contable
+                    //echo "baja contable muestreo dgpop: \n";
+                    $item->type_report = 2;
+                }
+
+                if($item->type_selection === 1 && $item->unit_id !== 4 ){ //Validar baja documental
+                   // echo "baja documental eliminacion: \n";
+                    $item->type_report = 1;
+                }
+
+                if($item->type_selection === 1 && $item->unit_id === 4 ){ //Validar baja contable
+                   // echo "baja contable eliminacion: \n";
+                    $item->type_report = 2;
+                }
+
+                if($item->type_selection === 4 ){ //Validar transferencia secundaria
+                    //echo "cualidad de la muestra tras secundaria: \n";
+                    $item->type_report = 4;
+                }
             }
-
-            if($item->type_selection === 3 && $item->unit_id === 5 ){ //Validar baja contable
-                $item->type_report = 2;
-            }
-
-            if($item->type_selection === 1 && $item->unit_id !== 5 ){ //Validar baja documental
-                $item->type_report = 1;
-            }
-
-            if($item->type_selection === 1 && $item->unit_id === 5 ){ //Validar baja contable
-                $item->type_report = 2;
-            }
-
-            if($item->type_selection === 4 ){ //Validar transferencia secundaria
-                $item->type_report = 4;
-            }
-
             if($item->type_selection === 2 ){ //Validar conservacion
-
+                //echo "Fechas registro: ".$item->close_date."\n\n";
                 $serie = $item->serie()->first();
-                echo $item->opening_date."\n";
 
-                $AT = date("Y-m-d", strtotime($item->opening_date . "+ ".$serie->AT." year"));
+                $AT = date("Y-m-d", strtotime($item->close_date . "+ ".$serie->AT." year"));
                 $AC = date("Y-m-d", strtotime($AT . "+ ".$serie->AC." year"));
 
-                //inicio
-                if( strtotime( date("Y-m-d") ) <= strtotime( $AT )  ){
-                    $aux = true;
-                    if(strtotime( $AT ) < strtotime( $AC ) && strtotime( $AT ) > strtotime( $AC )){
-                        $item->type_report = 3;
-                        $aux = false;
-                    }
+                // echo "-----------------------------------------------------\n";
+                // echo "fecha hoy: ".date("Y-m-d")."\n";
+                // echo "fecha cierre: ".$item->close_date."\n";
+                // echo "fecha AT: ".$AT."\n";
+                // echo "fecha AC: ".$AC."\n";
 
-                    if($aux === true){
-                        $item->type_report = 4;
-                    }
+                if( (strtotime( date("Y-m-d") ) > strtotime( $AT )) && ( strtotime( date("Y-m-d") ) < strtotime( $AC ) )  ){
+                    //echo "conservacion tras PRIMARIA: \n";
+                    $item->type_report = 3;
+                }
+
+                if(
+                    ( strtotime( date("Y-m-d") ) > strtotime( $AT ) )
+                    &&
+                    ( strtotime( date("Y-m-d") ) > strtotime( $AC ) )
+
+                ){
+                    //echo "conservacion tras SECUNDARIA: \n";
+                    $item->type_report = 4;
                 }
 
             }
@@ -101,7 +118,7 @@ class CronJobFormalities extends Command
         }
 
         $data = "pasando variables para la vista";
-        Mail::to('adriann@sre.gob.mx')->send(new MailFormalities($data));
+        //Mail::to('adriann@sre.gob.mx')->send(new MailFormalities($data));
         \Log::info("Este es un mensaje de CronJobFormalities desde el log:");
     }
 }

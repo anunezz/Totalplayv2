@@ -19,6 +19,7 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('type_report')->nullable();
             $table->unsignedBigInteger('type_selection')->nullable();
+            $table->unsignedBigInteger('email_notify')->default(0);
             $table->unsignedBigInteger('section_id');
             $table->unsignedBigInteger('serie_id');
             $table->unsignedBigInteger('subserie_id')->nullable();

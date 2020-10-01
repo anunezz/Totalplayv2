@@ -220,9 +220,9 @@ class ReportController extends Controller
                 }
 
                 // Ejemplo de datos
-                $formalities = Formalities::with('user.determinant')
-                ->orderBy('created_at', 'DESC')
-                ->paginate($data['perPage']);
+                //$formalities = Formalities::with('user.determinant')
+                //->orderBy('created_at', 'DESC')
+                //->paginate($data['perPage']);
                 //Fin de ejemplo de datos
 
                 return response()->json([
