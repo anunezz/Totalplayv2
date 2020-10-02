@@ -25,7 +25,7 @@
                     <el-col :span="24">
                         <el-form-item label="Asunto/Título:" prop="title" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
                                 type="textarea"
                                 :rows="3"
@@ -52,7 +52,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="Información adicional:" prop="additional_information">
+                        <el-form-item label="Información adicional:" prop="additional_information" :rules="[
+                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                             <el-input
                                 type="textarea"
                                 :rows="3"
