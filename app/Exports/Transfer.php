@@ -254,8 +254,8 @@ class Transfer implements
                 for ($i=0; $i < count($arrayData); $i++) {
                     $rowData = 14 + $i;
                     foreach ($arrayData[$i] as $item) {
-
-                        $row = strlen($arrayData[$i][5]) / 4;
+                        $strlen = strlen($arrayData[$i][5]) / 4;
+                        $row = (  $strlen > 35 )? $strlen : 35;
                         $event->sheet->rowHeight($rowData, $row);
 
                         $event->sheet->mergeCells("F".$rowData.":I". $rowData);

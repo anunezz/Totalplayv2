@@ -179,8 +179,14 @@ class ReportController extends Controller
                 $formalities = collect([]);
 
                 if( $data['documentType'] === "lowDocumentary" ){
+                    // $formalities = Formalities::with('user.determinant')
+                    //     ->where('haveQuality','=',0)
+                    //     ->whereDate('close_date', '<=', date("Y-m-d"))
+                    //     ->orderBy('created_at', 'DESC')
+                    //     ->paginate($data['perPage']);
                     $formalities = Formalities::with('user.determinant')
-                        ->where('haveQuality','=',0)
+                        //->where('haveQuality','=',0)
+                        ->where('type_report','=',1)
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
@@ -188,7 +194,8 @@ class ReportController extends Controller
 
                 if( $data['documentType'] === "lowAccounting" ){
                     $formalities = Formalities::with('user.determinant')
-                        ->where('haveQuality','=',0)
+                        //->where('haveQuality','=',0)
+                        ->where('type_report','=',2)
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
@@ -197,6 +204,7 @@ class ReportController extends Controller
                 if( $data['documentType'] === "PrimaryTransfer" ){
                     $formalities = Formalities::with('user.determinant','serie')
                         //->whereBetween('reservation_from', [, date("Y-m-d")])
+                        ->where('type_report','=',3)
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
@@ -204,16 +212,17 @@ class ReportController extends Controller
 
                 if( $data['documentType'] === "TransferSecondary" ){
                     $formalities = Formalities::with('user.determinant')
-                        ->where('haveQuality','=',1)
+                        //->where('haveQuality','=',1)
+                        ->where('type_report','=',4)
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
                 }
 
                 // Ejemplo de datos
-                $formalities = Formalities::with('user.determinant')
-                ->orderBy('created_at', 'DESC')
-                ->paginate($data['perPage']);
+                //$formalities = Formalities::with('user.determinant')
+                //->orderBy('created_at', 'DESC')
+                //->paginate($data['perPage']);
                 //Fin de ejemplo de datos
 
                 return response()->json([

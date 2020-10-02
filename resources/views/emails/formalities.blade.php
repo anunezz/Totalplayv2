@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Painani</title>
+    <title>Sirge</title>
     <style type="text/css">
         .header{
         background: #9f1e47;
@@ -50,14 +50,13 @@
     <div style="margin: 5%;">
 
         <p>
-        Estimado usuario le informamos que se acaban de vencer 3 trámites.
-        <br>
+        "A trav&eacute;s de este medio, se le notifica que el expediente <strong><b> {{ $data['sort_code'] }} y {{ $data['title'] }} </b></strong> registrado en el SIRGE,  ha cumplido su periodo de vigencia, por lo que deber&aacute; ser transferido o dado de baja conforme a lo establecido en el Cat&aacute;logo de Disposici&oacute;n Documental vigente".
         </p>
 
     </div>
     <br>
     <div style="text-align:center; margin: 2%;">
-        <img src="{{ $message->embed(public_path('img/logo_sre_red.png'))}}" width="20%">
+        <img src="{{ $message->embed( public_path('img/logo_sre_red.png')) }}" width="20%">
     </div>
 </section>
 </body>
