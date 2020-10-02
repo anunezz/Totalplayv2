@@ -15,7 +15,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('report/fileFilter', 'ReportController@fileFilter');
 
     //catalogos
-    Route::get('report/getCats', 'ReportController@getCats');
+    Route::post('report/getCats', 'ReportController@getCats');
 
 
 

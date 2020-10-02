@@ -103,11 +103,6 @@ class Formalities extends Model
                 $q->whereYear('close_date',$filters['year']);
             }
 
-            // $q->whereHas('unit', function($q) use ($filters) {
-            //     $q->where('determinant',$filters->determinant);
-            // });
-
-
         });
 
     }

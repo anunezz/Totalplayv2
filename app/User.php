@@ -107,7 +107,7 @@ class User extends Authenticatable
             'user_units',
             'user_id',
             'cat_administrative_unit_id'
-         );
+        );
     }
 
 //    public function topics()
