@@ -25,7 +25,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('formalities:start')->everyMinute();
+        $schedule->command('formalities:start')->everyFiveMinutes();
         //$schedule->command('formalities:start')->daily('12:00');
     }
 
