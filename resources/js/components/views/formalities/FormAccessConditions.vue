@@ -69,7 +69,7 @@
                     <el-form-item label="Nombre y firma del titular de la unidad administrativa:" prop="name_titular"
                                   :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                         <el-input
                             :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                             v-model="formFormalities.name_titular"
@@ -110,7 +110,7 @@
                     <el-form-item label="Fundamento legal:" prop="legal_basis"
                                   :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                         <el-input
                             :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                             v-model="formFormalities.legal_basis"
@@ -167,7 +167,7 @@
                             <el-form-item label="Nombre completo:" prop="name_public_server"
                                           :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                 <el-input
                                     :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                     type="textarea"
@@ -183,7 +183,7 @@
                             <el-form-item label="Cargo:" prop="position_public_server"
                                           :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
                                 <el-input
                                     :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                     type="textarea"
