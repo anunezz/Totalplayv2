@@ -63,14 +63,14 @@ class CatalogsController extends Controller
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 5) {
-                    $elements = CatDescription::with('serie', 'administrative', 'subserie')
+                    $elements = CatDescription::with('serie', 'administrative', 'subserie', 'formalities')
                         ->search($data['search'])
                         ->select(['id', 'description', 'cat_series_id', 'isActive'])
                         ->orderBy('description')
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 6) {
-                    $elements = CatSampling::with('serie', 'subserie')
+                    $elements = CatSampling::with('serie', 'subserie', 'formalities')
                         ->search($data['search'])
                         ->select(['id', 'quality', 'cat_series_id', 'isActive'])
                         ->orderBy('quality')
@@ -577,6 +577,12 @@ class CatalogsController extends Controller
             elseif ($request->cat === 4) {
                 $cat = CatSubseries::find(decrypt($request->id));
             }
+            elseif ($request->cat === 5) {
+                $cat = CatDescription::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 6) {
+                $cat = CatSampling::find(decrypt($request->id));
+            }
 
             $cat->isActive = false;
             $cat->save();
@@ -613,6 +619,12 @@ class CatalogsController extends Controller
             }
             elseif ($request->cat === 4) {
                 $cat = CatSubseries::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 5) {
+                $cat = CatDescription::find(decrypt($request->id));
+            }
+            elseif ($request->cat === 6) {
+                $cat = CatSampling::find(decrypt($request->id));
             }
 
             $cat->isActive = true;

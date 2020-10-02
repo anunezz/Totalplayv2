@@ -1,5 +1,6 @@
 <?php namespace App\Http\Models\Cats;
 
+use App\Http\Models\Formalities;
 use Illuminate\Database\Eloquent\Model;
 
 class CatDescription extends Model
@@ -11,6 +12,14 @@ class CatDescription extends Model
     public function getHashAttribute()
     {
         return encrypt($this->id);
+    }
+
+    public function formalities()
+    {
+        return $this->hasOne(
+            Formalities::class,
+            'description_id'
+        );
     }
 
     public function serie()
