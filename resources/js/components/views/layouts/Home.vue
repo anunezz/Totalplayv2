@@ -381,6 +381,9 @@
 
             submitForm() {
                 this.startLoading();
+           //console.log( "Loger: ",this.$store.state.user.profile );
+                console.log("Unidad administrativa: ",this.userForm.cat_unit_id);
+
 
                 let data ={id: this.user.id, cat_unit_id: this.userForm.cat_unit_id };
 

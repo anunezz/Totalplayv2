@@ -12,16 +12,6 @@
 
             <el-row style="margin-bottom: 20px">
 
-                <el-col :span='24' class='animated fadeIn fast'>
-                    <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
-                        <div>
-                        <pre>
-                        {{  items }}
-                        </pre>
-                        </div>
-                    </div>
-                </el-col>
-
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
@@ -95,7 +85,10 @@
         },
         methods:{
             getCats(){
-                axios.get('/api/report/getCats').then(response => {
+                //console.log("----Unidad administrativa: ",this.$store.state.user.cat_unit_id);
+                axios.post('/api/report/getCats',{
+                    "unidad": this.$store.state.user.cat_unit_id
+                }).then(response => {
                     if(response.data.success){
                         this.series = response.data.lResults.series;
                         //console.log('axios.get -> ', this.series);
@@ -134,7 +127,7 @@
                 //this.items.documentType = null;
                 this.items.year = null;
                 this.items.serie_id = null;
-                this.items.reports = null;
+                //this.items.reports = null;
                 this.$emit('search');
             },
             searchitems(){
