@@ -117,7 +117,7 @@
                     year:null,
                     user:'',
                     serie_id: null,
-                    reports: null
+                    //reports: null
                 },
             }
         },

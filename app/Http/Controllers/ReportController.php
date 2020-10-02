@@ -176,17 +176,14 @@ class ReportController extends Controller
             if ($request->wantsJson()){
                 $data = $request->all();
 
+                //dd($data);
+
                 $formalities = collect([]);
 
                 if( $data['documentType'] === "lowDocumentary" ){
-                    // $formalities = Formalities::with('user.determinant')
-                    //     ->where('haveQuality','=',0)
-                    //     ->whereDate('close_date', '<=', date("Y-m-d"))
-                    //     ->orderBy('created_at', 'DESC')
-                    //     ->paginate($data['perPage']);
                     $formalities = Formalities::with('user.determinant')
-                        //->where('haveQuality','=',0)
                         ->where('type_report','=',1)
+                        ->filter($data['filters'])
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
@@ -194,8 +191,8 @@ class ReportController extends Controller
 
                 if( $data['documentType'] === "lowAccounting" ){
                     $formalities = Formalities::with('user.determinant')
-                        //->where('haveQuality','=',0)
                         ->where('type_report','=',2)
+                        ->filter($data['filters'])
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
@@ -203,8 +200,8 @@ class ReportController extends Controller
 
                 if( $data['documentType'] === "PrimaryTransfer" ){
                     $formalities = Formalities::with('user.determinant','serie')
-                        //->whereBetween('reservation_from', [, date("Y-m-d")])
                         ->where('type_report','=',3)
+                        ->filter($data['filters'])
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
@@ -212,18 +209,12 @@ class ReportController extends Controller
 
                 if( $data['documentType'] === "TransferSecondary" ){
                     $formalities = Formalities::with('user.determinant')
-                        //->where('haveQuality','=',1)
                         ->where('type_report','=',4)
+                        ->filter($data['filters'])
                         ->whereDate('close_date', '<=', date("Y-m-d"))
                         ->orderBy('created_at', 'DESC')
                         ->paginate($data['perPage']);
                 }
-
-                // Ejemplo de datos
-                //$formalities = Formalities::with('user.determinant')
-                //->orderBy('created_at', 'DESC')
-                //->paginate($data['perPage']);
-                //Fin de ejemplo de datos
 
                 return response()->json([
                     'success' => true,
@@ -241,19 +232,41 @@ class ReportController extends Controller
         }
     }
 
-    public function getCats(){
+    public static function series_id($data){
+
+        $user = User::with('profile','unit')->find( auth()->user()->id );
+        $Profile = $user->profile()->first();
+
+        $series = [];
+
+        //dd($data);
+
+        if( $Profile->id === 1 ){
+
+            $series = CatSeries::get();
+           // dd( count($serie) );
+
+
+            //dd($series);
+        }else{
+
+            $unit = CatAdministrativeUnit::with('series')->find($data);
+
+            $series = $unit->series;
+
+
+        }
+
+        return $series;
+    }
+
+    public function getCats(Request $request){
         try{
-            $user = User::with('profile')->find( auth()->user()->id );
-            $Profile = $user->profile()->first();
-
-            if( $Profile->id === 1 ){
-                $series = CatSeries::get();
-            }
-
+            $data = $request->all();
             return response()->json([
                 'success' => true,
                 'lResults' => [
-                    'series' => $series
+                    'series' => $this->series_id($data['unidad'])
                 ],
             ], 200);
 
