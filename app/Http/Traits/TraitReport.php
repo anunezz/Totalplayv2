@@ -1,6 +1,9 @@
 <?php
 
 namespace App\Http\Traits;
+use App\Http\Models\Cats\CatAdministrativeUnit;
+use App\Http\Models\Cats\CatSeries;
+use App\User;
 
 class TraitReport
 {
@@ -210,4 +213,54 @@ class TraitReport
 
         return $data;
     }
+
+    public static function documentType($data){
+
+        switch ($data) {
+            case 'lowDocumentary':
+            {
+                $data = 1;
+            break;
+            }
+            case 'lowAccounting':
+            {
+                $data = 2;
+            break;
+            }
+            case 'PrimaryTransfer':
+            {
+                $data = 3;
+            break;
+            }
+            case 'TransferSecondary':
+            {
+                $data = 4;
+            break;
+            }
+        }
+
+        return $data;
+    }
+
+    public static function series_id($data){
+        $user = User::with('profile','unit')->find( auth()->user()->id );
+        $Profile = $user->profile()->first();
+        $series = [];
+
+        if( $Profile->id === 1 ){
+            $series = CatSeries::get();
+        }else{
+            $unit = CatAdministrativeUnit::with('series')->find($data);
+            $series = $unit->series;
+        }
+
+        return $series;
+    }
+
+    public static function series($data){
+        $user = User::with('profile','unit')->find( auth()->user()->id );
+        return ($user->profile()->first()->id)? false : $this->series_id( $data )->pluck('id');
+    }
+
+
 }

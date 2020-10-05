@@ -12,6 +12,16 @@
 
             <el-row style="margin-bottom: 20px">
 
+                <el-col :span='24' class='animated fadeIn fast'>
+                    <div style='width:100%; padding: 5px 0px; display:flex; justify-content: space-between;'>
+                        <div>
+                            <pre>
+                                {{ items }}
+                            </pre>
+                        </div>
+                    </div>
+                </el-col>
+
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
@@ -78,6 +88,7 @@
             }
         },
         created() {
+            this.items.unidad = this.$store.state.user.cat_unit_id;
             this.getCats();
             this.getUsers();
         },
@@ -85,31 +96,15 @@
         },
         methods:{
             getCats(){
-                //console.log("----Unidad administrativa: ",this.$store.state.user.cat_unit_id);
                 axios.post('/api/report/getCats',{
                     "unidad": this.$store.state.user.cat_unit_id
                 }).then(response => {
                     if(response.data.success){
                         this.series = response.data.lResults.series;
-                        //console.log('axios.get -> ', this.series);
                     }
                 }).catch(error => {
                     console.error(error);
                 });
-                // let params = {
-                //     unit_id : this.$store.state.user.cat_unit_id
-                // };
-
-                // axios.get('/api/all/section',{params}).then(response => {
-                //     this.series = response.data.auxSeries;
-                //     this.stopLoading();
-                // }).catch(error => {
-                //     this.stopLoading();
-                //     this.$message({
-                //         type: "warning",
-                //         message: "No fue posible completar la acción, intente nuevamente."
-                //     });
-                // });
             },
             getUsers(){
                 axios.get('/api/all/user/unit').then(response => {
@@ -124,10 +119,8 @@
             },
             cleanitems(){
                 this.items.show = true;
-                //this.items.documentType = null;
                 this.items.year = null;
                 this.items.serie_id = null;
-                //this.items.reports = null;
                 this.$emit('search');
             },
             searchitems(){

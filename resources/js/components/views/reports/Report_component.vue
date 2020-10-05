@@ -116,12 +116,13 @@
                     show: false,
                     year:null,
                     user:'',
-                    serie_id: null,
-                    //reports: null
+                    serie_id: null
                 },
             }
         },
         created() {
+            this.filters.unidad = this.$store.state.user.cat_unit_id;
+            console.log("Este es el items: ",this.filters);
             this.getFormalities();
         },
         computed:{
@@ -138,7 +139,10 @@
                 axios({ responseType: 'blob',
                         method: 'post',
                         url: '/api/report/'+this.items.url,
-                        data: { documentType:this.items.url } }).then(response => {
+                        data: {
+                    documentType: this.items.url,
+                        filters: this.filters
+                            } }).then(response => {
                             this.loading = true;
                         setTimeout(()=>{
                             const linkUrl = window.URL.createObjectURL(new Blob([response.data]));
@@ -163,12 +167,10 @@
                 this.filters.show = false;
                 this.startLoading();
 
-                console.log("----------------: ",this.items.url);
-
                 axios.post('/api/report/fileFilter',{
                         page: currentPage,
                         perPage: this.pagination.perPage,
-                   documentType: this.items.url,
+                    documentType: this.items.url,
                         filters: this.filters
                 }).then(response => {
                     console.log("Response: ",response);
@@ -179,7 +181,6 @@
                     this.stopLoading();
                 }).catch(error => {
                     this.stopLoading();
-                    //console.log(error)
                     this.$message({
                         type: "warning",
                         message: "No fue posible completar la acción, intente nuevamente."

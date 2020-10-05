@@ -95,8 +95,22 @@ class Formalities extends Model
     {
         return $query->where(function ($q) use ($filters) {
 
-            if ( isset( $filters['serie_id'] ) &&  !empty($filters['classification'])){
-                $q->where('serie_id', '=', $filters['serie_id'] );
+            $q->whereDate('close_date', '<=', date("Y-m-d"))->orderBy('created_at', 'DESC');
+
+            $q->when( $filters['serie_id'] !== null, function ($q) use ( $filters ){
+                return $q->whereHas('serie', function ($qq) use ( $filters ) {
+                    return $qq->where('id',$filters['serie_id']);
+                });
+            });
+
+            $q->when( $filters['unidad'] !== false, function ($q) use ( $filters ){
+                return $q->whereHas('serie', function ($qq) use ( $filters ) {
+                    return $qq->whereIn('id',$filters['unidad']);
+                });
+            });
+
+            if ( isset( $filters['documentType'] ) && !empty($filters['documentType'])){
+                $q->where('type_report','=',$filters['documentType']);
             }
 
             if ( isset( $filters['year'] ) && !empty($filters['year'])){

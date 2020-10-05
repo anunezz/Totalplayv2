@@ -64,6 +64,7 @@
                     show: false,
                     year:null,
                     user:'',
+                    unidad: null,
                     serie_id: null,
                     reports: null
                 },

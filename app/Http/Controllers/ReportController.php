@@ -79,15 +79,13 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
-                $Formalities = Formalities::with('description','unit','serie.primarivalues','SubSerie','section')->get();
-
-                //$user = User::with('unit')->find( auth()->user()->id );
-
-                //dd($user);
+                $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
+                $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );
+                $formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->filter($data['filters'])->get();
 
                 $Inventory = CatInventory::find(1);
                 return Excel::download(new lowDocumentary([],[
-                    "data" => TraitReport::documentary( $Formalities ),
+                    "data" => TraitReport::documentary( $formalities ),
                     "Inventory" => $Inventory
                 ]), 'Baja_documental.xlsx');
 
@@ -107,11 +105,12 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
-
-                $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->get();
+                $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
+                $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );
+                $formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->filter($data['filters'])->get();
 
                 return Excel::download(new lowAccounting([],[
-                    "data" => TraitReport::accounting( $Formalities )
+                    "data" => TraitReport::accounting( $formalities )
                 ]), 'Baja_contable.xlsx');
 
             }else{
@@ -130,11 +129,13 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
-                $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->get();
+                $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
+                $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );
+                $formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->filter($data['filters'])->get();
 
                 return Excel::download(new Transfer([],[
                     'transfer' => 'Transferencia primaria',
-                    'data' => TraitReport::transfer( $Formalities )
+                    'data' => TraitReport::transfer( $formalities )
                 ]), 'Transferencia_primaria.xlsx');
 
                 }else{
@@ -153,11 +154,13 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
-                $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->get();
+                $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
+                $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );
+                $formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->filter($data['filters'])->get();
 
                 return Excel::download(new Transfer([],[
                     'transfer' => 'Transferencia secundaria',
-                    'data' => TraitReport::transfer( $Formalities )
+                    'data' => TraitReport::transfer( $formalities )
                 ]), 'Transferencia_secundaria.xlsx');
 
                 }else{
@@ -176,45 +179,12 @@ class ReportController extends Controller
             if ($request->wantsJson()){
                 $data = $request->all();
 
-                //dd($data);
+                $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
+                $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );
 
-                $formalities = collect([]);
-
-                if( $data['documentType'] === "lowDocumentary" ){
-                    $formalities = Formalities::with('user.determinant')
-                        ->where('type_report','=',1)
-                        ->filter($data['filters'])
-                        ->whereDate('close_date', '<=', date("Y-m-d"))
-                        ->orderBy('created_at', 'DESC')
-                        ->paginate($data['perPage']);
-                }
-
-                if( $data['documentType'] === "lowAccounting" ){
-                    $formalities = Formalities::with('user.determinant')
-                        ->where('type_report','=',2)
-                        ->filter($data['filters'])
-                        ->whereDate('close_date', '<=', date("Y-m-d"))
-                        ->orderBy('created_at', 'DESC')
-                        ->paginate($data['perPage']);
-                }
-
-                if( $data['documentType'] === "PrimaryTransfer" ){
-                    $formalities = Formalities::with('user.determinant','serie')
-                        ->where('type_report','=',3)
-                        ->filter($data['filters'])
-                        ->whereDate('close_date', '<=', date("Y-m-d"))
-                        ->orderBy('created_at', 'DESC')
-                        ->paginate($data['perPage']);
-                }
-
-                if( $data['documentType'] === "TransferSecondary" ){
-                    $formalities = Formalities::with('user.determinant')
-                        ->where('type_report','=',4)
-                        ->filter($data['filters'])
-                        ->whereDate('close_date', '<=', date("Y-m-d"))
-                        ->orderBy('created_at', 'DESC')
-                        ->paginate($data['perPage']);
-                }
+                $formalities = Formalities::with('user.determinant')
+                    ->filter($data['filters'])
+                    ->paginate($data['perPage']);
 
                 return response()->json([
                     'success' => true,
@@ -233,28 +203,15 @@ class ReportController extends Controller
     }
 
     public static function series_id($data){
-
         $user = User::with('profile','unit')->find( auth()->user()->id );
         $Profile = $user->profile()->first();
-
         $series = [];
 
-        //dd($data);
-
         if( $Profile->id === 1 ){
-
             $series = CatSeries::get();
-           // dd( count($serie) );
-
-
-            //dd($series);
         }else{
-
             $unit = CatAdministrativeUnit::with('series')->find($data);
-
             $series = $unit->series;
-
-
         }
 
         return $series;
@@ -266,7 +223,7 @@ class ReportController extends Controller
             return response()->json([
                 'success' => true,
                 'lResults' => [
-                    'series' => $this->series_id($data['unidad'])
+                    'series' => TraitReport::series_id($data['unidad'])
                 ],
             ], 200);
 

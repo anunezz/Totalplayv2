@@ -94,7 +94,7 @@ class CronJobFormalities extends Command
                         ->where('id','=',$cat_responsible_id )
                         ->first();
                         if( !is_null( $responsible_name ) ){
-                            echo "Responsable:   ".$responsible_name->username."\n";
+                            //echo "Responsable:   ".$responsible_name->username."\n";
                             Mail::to($responsible_name->username.'@sre.gob.mx')->send(new MailFormalities($data));
                         }
                     }
@@ -106,7 +106,7 @@ class CronJobFormalities extends Command
                         ->where('id','=', $cat_user_id )
                         ->first();
                         if( !is_null( $user ) ){
-                            echo "USUARIO:   ".$user->username."\n";
+                            //echo "USUARIO:   ".$user->username."\n";
                             Mail::to($user->username.'@sre.gob.mx')->send(new MailFormalities($data));
                         }
                     }
@@ -114,7 +114,7 @@ class CronJobFormalities extends Command
                     //Administradores
                     $admin = User::where('cat_profile_id','=',1)->get();
                     foreach ($admin as $itm) {
-                        echo "aDMINISTRADOR:   ".$itm->username."\n";
+                        //echo "aDMINISTRADOR:   ".$itm->username."\n";
                         Mail::to($itm->username.'@sre.gob.mx')->send(new MailFormalities($data));
                     }
 
@@ -152,14 +152,9 @@ class CronJobFormalities extends Command
                 }
 
             }
-
-
             $item->save();
 
         }
-
-
-        //Mail::to('adriann@sre.gob.mx')->send(new MailFormalities($data));
-        \Log::info("Este es un mensaje de CronJobFormalities desde el log:");
+        //\Log::info("Este es un mensaje de CronJobFormalities desde el log:");
     }
 }
