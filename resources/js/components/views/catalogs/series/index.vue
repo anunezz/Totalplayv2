@@ -214,7 +214,7 @@
                                       prop="newRegisterName"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                             <el-input
                                 v-if="newRegisterDialog"
@@ -394,7 +394,7 @@
                                       prop="name"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                             <el-input
                                 v-if="editRegisterDialog"
@@ -530,6 +530,7 @@
                 values: [],
                 newCodeComplete: '',
                 codeSection: '',
+                codeEditSection: '',
                 sections: [],
                 selections: [],
                 elements: [],
@@ -767,7 +768,7 @@
             editRegister() {
                 this.startLoading();
 
-                this.newCodeComplete = this.codeSection + this.catalogEditForm.codeSeries;
+                this.newCodeComplete = this.codeEditSection + this.catalogEditForm.codeSeries;
                 this.catalogEditForm.total = this.catalogEditForm.AT + this.catalogEditForm.AC;
 
                 let data = {
@@ -787,7 +788,6 @@
 
                 // let data = {id: this.catalogEditForm.id, cat: 4, name: this.catalogEditForm.name};
 
-                console.log('envio al back', this.catalogEditForm);
                 this.$refs['catalogEditForm'].validate((valid) => {
                     if (valid) {
                         axios.put('/api/cats/update/register', data).then(response => {
