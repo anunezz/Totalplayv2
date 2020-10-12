@@ -153,6 +153,17 @@ class UsersTableSeeder extends Seeder
                 'created_at'       => Carbon::now(),
                 'updated_at'       => Carbon::now(),
             ],
+            [
+                'id'               => 19,
+                'username'         => 'vdejesusl',
+                'cat_profile_id'   => 1,
+                'cat_unit_id'      => null,
+                'name'             => 'Victor Paulino',
+                'firstName'        => 'de Jesús',
+                'secondName'       => 'López',
+                'created_at'       => Carbon::now(),
+                'updated_at'       => Carbon::now(),
+            ],
 
         ]);
 
