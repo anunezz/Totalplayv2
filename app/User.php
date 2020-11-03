@@ -130,6 +130,10 @@ class User extends Authenticatable
                 $q->orWhere( 'firstName', 'like', '%' . $search . '%' );
                 $q->orWhere( 'secondName', 'like', '%' . $search . '%' );
 
+                $q->orWhereHas('determinant', function($q) use ($search) {
+                    $q->where('determinant', 'like', '%' .$search . '%');
+                });
+
                 $q->orWhereHas('profile', function($q) use ($search) {
                     $q->where('name', 'like', '%' .$search . '%');
                 });

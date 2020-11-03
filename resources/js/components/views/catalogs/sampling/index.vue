@@ -707,7 +707,7 @@
             disableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 5};
+                let data ={id: id, cat: 6};
 
                 axios.post('/api/cats/disable-register', data).then(response => {
                     this.$notify({
@@ -731,7 +731,7 @@
             enableRegister(id) {
                 this.startLoading();
 
-                let data ={id: id, cat: 5};
+                let data ={id: id, cat: 6};
 
                 axios.post('/api/cats/enable-register', data).then(response => {
                     this.$notify({
