@@ -20,48 +20,22 @@ class CacheControl
 
         foreach ($request->server as $key => $value){
             if ($key == 'REQUEST_URI' ){
-                if ($value != "/"){
-                    
-                    $valid = false;
+                if ($value !== "/"){
 
-                   // dd($value);
-
-                    if (strpos($value,"/api/recommendations/download/Excel") !=false){
+                    if (strpos($value,"/api/download/excel") !==false){
+                        $valid = false;
+                    }
+                    if (strpos($value,"/api/report/label") !==false){
                         $valid = false;
                     }
 
-                    if (strpos($value,"api/get-lang/") !=false){
-                        $valid = false;
-                    }
-                    if(strpos($value,'responseType=blob')!=false){
-                        $valid = false;
-                    }
-                    if ($value == "/api/get-langs" || $value == "/administracion/panel"){
-                        $valid = false;
-                    }
-                    if ($value == "/api/public/exportRecomendaciones"){
+                    if(strpos($value,'responseType=blob')!==false){
                         $valid = false;
                     }
                 }
 
             }
         }
-       /*foreach ($request->server as $key => $value){
-           if ($key == 'REQUEST_URI' && $value == "/api/get-lang/es"){
-               $valid = false;
-           }
-           if ($key == 'REQUEST_URI' && $value == "/api/get-langs") {
-               $valid = false;
-           }
-           if ($key == 'REQUEST_URI' && $value == "/administracion/panel") {
-               $valid = false;
-           }
-           if ($key == 'REQUEST_URI'){
-               if(strpos($value,'responseType=blob')){
-                   $valid = false;
-               }
-           }
-        }*/
 
         if ($valid==true){
            $response->header('Cache-Control', "no-cache='Set-Cookie', no-store, must-revalidate");
