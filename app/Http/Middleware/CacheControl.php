@@ -25,7 +25,8 @@ class CacheControl
                     if (strpos($value,"/api/download/excel") !==false){
                         $valid = false;
                     }
-                    if (strpos($value,"/api/report/label") !==false){
+                    
+                    if (strpos($value,"/api/report") !==false){
                         $valid = false;
                     }
 
