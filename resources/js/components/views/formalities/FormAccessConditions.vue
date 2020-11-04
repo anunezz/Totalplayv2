@@ -59,7 +59,7 @@
                                 v-model="formFormalities.classification_date"
                                 type="date"
                                 format="dd/MM/yyyy"
-                                value-format="dd/MM/yyyy"
+                                value-format="yyyy-MM-dd"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -69,7 +69,7 @@
                     <el-form-item label="Nombre y firma del titular de la unidad administrativa:" prop="name_titular"
                                   :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                         <el-input
                             :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                             v-model="formFormalities.name_titular"
@@ -82,7 +82,7 @@
                         <el-form-item label="Acta del comité de transparencia:" prop="transparency_proceedings"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,\-\/ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                             <el-input
                                 placeholder="Ejemplo: CT/025/2020"
                                 :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
@@ -95,7 +95,7 @@
                         <el-form-item label="Partes restringidas (folios):" prop="restricted_parts"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,\-ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                             <el-input
                                 placeholder="Ejemplo: 5, 8-10, 15-19 "
                                 :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
@@ -110,7 +110,7 @@
                     <el-form-item label="Fundamento legal:" prop="legal_basis"
                                   :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                         <el-input
                             :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                             v-model="formFormalities.legal_basis"
@@ -137,7 +137,7 @@
                         <el-form-item label="Número de acta/oficio:" prop="Record_official_number"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9\.,\-\/ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                             <el-input
                                 placeholder="CTA-04/2020-SIPOT"
                                 :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
@@ -154,7 +154,7 @@
                                 v-model="formFormalities.declassification_date"
                                 type="date"
                                 format="dd/MM/yyyy"
-                                value-format="dd/MM/yyyy"
+                                value-format="yyyy-MM-dd"
                                 style="width: 100%">
                             </el-date-picker>
                         </el-form-item>
@@ -167,7 +167,7 @@
                             <el-form-item label="Nombre completo:" prop="name_public_server"
                                           :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                                 <el-input
                                     :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                     type="textarea"
@@ -183,7 +183,7 @@
                             <el-form-item label="Cargo:" prop="position_public_server"
                                           :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
-                    { pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\(\)-\s]+$/, message:'Este campo no admite caracteres especiales.'}]">
+                    { validator: validT, trigger: ['blur','change']}]">
                                 <el-input
                                     :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                     type="textarea"
@@ -201,8 +201,11 @@
 </template>
 
 <script>
+    import {validateText} from "../../../mixins/validateText";
+
     export default {
         props:['formFormalities'],
+        mixins:[validateText],
         data(){
             return{
                 options:[{

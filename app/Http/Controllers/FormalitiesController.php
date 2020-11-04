@@ -10,6 +10,8 @@ use App\Http\Models\Cats\CatSeries;
 use App\Http\Models\Cats\CatSubseries;
 use App\Http\Models\Formalities;
 use App\Http\Models\SICAR\FormalitiesSicar;
+use App\Http\Requests\StoreFormality;
+use App\Http\Requests\UpdateFormality;
 use App\Repositories\Formality\FormalityRepository;
 use App\User;
 use Illuminate\Http\Request;
@@ -65,7 +67,7 @@ class FormalitiesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(StoreFormality $request)
     {
 
         try {
@@ -152,7 +154,7 @@ class FormalitiesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateFormality $request, $id)
     {
 
         try {
