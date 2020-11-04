@@ -23,7 +23,7 @@ class UsersTableSeeder extends Seeder
 
             [
                 'id' => 7,
-                'username' =>'pdominguez',
+                'username' =>'lmorenor',
                 'cat_profile_id' => 1,
                 'cat_unit_id' => null,
                 'name' => 'Laura Beatriz',

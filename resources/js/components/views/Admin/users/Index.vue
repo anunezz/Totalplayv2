@@ -124,7 +124,22 @@
             this.getUsers();
         },
 
+        watch:{
+            search(neew,old){
+                return this.search = this.Search(neew);
+            }
+        },
+
         methods: {
+            Search(search){
+                let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨´%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
+                if(re.test(search)){
+                    return search.replace(re, '');
+                }else{
+                    return search;
+                }
+            },
+
             notAssignedUser({row}) {
 
                 if (row.profile.id === 5) {
