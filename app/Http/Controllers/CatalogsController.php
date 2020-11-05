@@ -23,10 +23,23 @@ use Illuminate\Http\Request;
 
 class CatalogsController extends Controller
 {
+    public $alphanumeric = "/^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\()\-\s]+$/";
+    public $codeSeries = "/^[0-9.-\s]+$/";
+    public $RegExpScript = "/(<\\xml|<\/script|<\/|<\\script|<script|<xml|<\\|\?>|<\?xml|(<\?php|<\?|\?\>)|java|xss|htaccess)/im";
+
     public function getCatalogByType(Request $request)
     {
         try {
             if ($request->wantsJson()) {
+
+                //page esta mal
+
+                $request->validate([
+                    'perPage' => 'required|numeric',
+                    'search' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'cat' => 'required|numeric',
+                ]);
+
                 $data     = $request->all();
                 $elements = null;
 
@@ -178,17 +191,49 @@ class CatalogsController extends Controller
         try {
             DB::beginTransaction();
 
+            //dd("ejemplojjj",$request->all());
+
             $duplicityCheck = false;
 
             if ($request->cat === 1) {
+
+                $request->validate([
+                    'cat' => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'specialName' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'determinant' => 'required|regex:'.$this->alphanumeric.'im',
+                    'cat_type_id' => 'required|numeric',
+                    'cat_responsible_id' => 'nullable|numeric',
+                    'cat_user_id' => 'nullable|numeric'
+                ]);
+
                 $cat = new CatAdministrativeUnit();
                 $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, null, $request->name, $request->specialName, $request->null, $request->null);
             }
             elseif ($request->cat === 2) {
+
+                $request->validate([
+                    'cat'  => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'code' => 'required|regex:'.$this->alphanumeric.'im',
+                    'cat_type_id' => 'required|numeric'
+                ]);
+
                 $cat = new CatSection();
                 $duplicityCheck = self::duplicityCheck(CatSection::class, null, $request->name, $request->code, $request->null, $request->null, $request->cat_type_id);
             }
             elseif ($request->cat === 3) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat'  => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'codeSubseries' => 'required|regex:'.$this->codeSeries.'im',
+                    'code' => 'required|regex:'.$this->codeSeries.'im',
+                    'cat_type_id' => 'required|numeric',
+                    'cat_series_id' => 'required|numeric'
+                ]);
+
                 $cat = new CatSeries();
                 $duplicityCheck = self::duplicityCheck(CatSeries::class, null, $request->name, $request->code, $request->cat_section_id, $request->null);
             }
@@ -197,10 +242,37 @@ class CatalogsController extends Controller
                 $duplicityCheck = self::duplicityCheck(CatSubseries::class, null, $request->name, $request->code, $request->cat_series_id, $request->null);
             }
             elseif ($request->cat === 5) {
+
+                $request->validate([
+                    'cat' => 'required|numeric',
+                    'description' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'cat_unit_id' => 'required|array',
+                    'cat_unit_id.*' => 'required|numeric',
+                    'cat_series_id' => 'nullable|numeric',
+                    'cat_subserie_id' => 'nullable|array',
+                    'cat_subserie_id.*' => 'nullable|numeric',
+                ]);
+
                 $cat = new CatDescription();
                 $duplicityCheck = self::duplicityCheck(CatDescription::class, null, $request->description, $request->cat_series_id, $request->cat_subserie_id, $request->cat_unit_id);
             }
             elseif ($request->cat === 6) {
+
+               // dd("....");
+
+                $request->validate([
+                    'cat' => 'required|numeric',
+                    // 'quality' =>  [
+                    //     function ($attribute, $value, $fail) {
+                    //         static::validateText($attribute, $value, $fail);
+                    //     }
+                    // ],
+                    'cat_series_id' => 'required|numeric',
+                    'cat_subserie_id' => 'nullable|array',
+                    'cat_subserie_id.*' => 'nullable|numeric',
+                    'aux' => 'nullable|numeric'
+                ]);
+
                 $cat = new CatSampling();
                 $duplicityCheck = self::duplicityCheck(CatSampling::class, null, $request->quality, $request->null, $request->null, $request->null, $request->null, $request->aux);
             }
@@ -330,17 +402,49 @@ class CatalogsController extends Controller
 
             $duplicityCheck = false;
 
+            //dd($request->all());
+
             if ($request->cat === 1) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat' => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'codeSubseries' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'code' => 'required|regex:'.$this->alphanumeric.'im',
+                    'at_series_id' => 'required|numeric'
+                ]);
+
                 $cat = CatAdministrativeUnit::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatAdministrativeUnit::class, $cat->id, $request->name, $request->specialName, $request->null, $request->null);
             }
 
             elseif ($request->cat === 2) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat'  => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'code' => 'required|regex:'.$this->alphanumeric.'im',
+                    'cat_type_id' => 'required|numeric'
+                ]);
+
                 $cat = CatSection::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatSection::class, $cat->id, $request->name, $request->code, $request->null, $request->null, $request->cat_type_id);
             }
 
             elseif ($request->cat === 3) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat'  => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'codeSubseries' => 'required|regex:'.$this->codeSeries.'im',
+                    'code' => 'required|regex:'.$this->codeSeries.'im',
+                    'cat_type_id' => 'required|numeric',
+                    'cat_series_id' => 'required|numeric'
+                ]);
+
                 $cat = CatSeries::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatSeries::class, $cat->id, $request->name, $request->code, $request->cat_section_id, $request->null);
             }
@@ -349,14 +453,52 @@ class CatalogsController extends Controller
                 $duplicityCheck = self::duplicityCheck(CatSubseries::class, $cat->id, $request->name, $request->code, $request->cat_series_id, $request->null);
             }
             elseif ($request->cat === 5) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat' => 'required|numeric',
+                    'description' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'cat_unit_id' => 'required|array',
+                    'cat_unit_id.*' => 'required|numeric',
+                    'cat_series_id' => 'nullable|numeric',
+                    'cat_subserie_id' => 'nullable|array',
+                    'cat_subserie_id.*' => 'nullable|numeric',
+                ]);
+
                 $cat = CatDescription::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatDescription::class, $cat->id, $request->description, $request->cat_series_id, $request->cat_subserie_id, $request->cat_unit_id);
             }
             elseif ($request->cat === 6) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat' => 'required|numeric',
+                    // 'quality' =>  [
+                    //     function ($attribute, $value, $fail) {
+                    //         static::validateText($attribute, $value, $fail);
+                    //     }
+                    // ],
+                    'cat_series_id' => 'required|numeric',
+                    'cat_subserie_id' => 'nullable|array',
+                    'cat_subserie_id.*' => 'nullable|numeric',
+                    'aux' => 'nullable|numeric'
+                ]);
+
                 $cat = CatSampling::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatSampling::class, $cat->id, $request->quality, $request->null, $request->null, $request->null, $request->null, $request->aux);
             }
             elseif ($request->cat === 7) {
+
+                $request->validate([
+                    'id' => 'required|string',
+                    'cat' => 'required|numeric',
+                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+                    'received' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'revised' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'positionRevised' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'positionReceived' => 'nullable|regex:'.$this->alphanumeric.'im'
+                ]);
+
                 $cat = CatInventory::find(decrypt($request->id));
                 $duplicityCheck = self::duplicityCheck(CatInventory::class, $cat->id, $request->null, $request->null, $request->null, $request->null);
             }
@@ -469,7 +611,7 @@ class CatalogsController extends Controller
         }
     }
 
-    private static function     duplicityCheck($cat, $id, $name, $cat_series_id, $cat_subserie_id, $cat_unit_id, $aux = null, $code = null)
+    private static function duplicityCheck($cat, $id, $name, $cat_series_id, $cat_subserie_id, $cat_unit_id, $aux = null, $code = null)
     {
         try {
 
@@ -736,6 +878,15 @@ class CatalogsController extends Controller
             ]);
         }
 
+    }
+
+    public static function validateText($attribute, $value, $fail)
+    {
+        if( strlen($value) > 0 ){
+            if ( preg_match('/(<\\xml|<\/script|<\/|<\\script|<script|<xml|<\\|\?>|<\?xml|(<\?php|<\?|\?\>)|java|xss|htaccess)/im', $value) === 1  ) {
+                $fail($attribute.' incorrecto.');
+            }
+        }
     }
 
 }

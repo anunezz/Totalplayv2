@@ -24,6 +24,7 @@ use App\Http\Models\Formalities;
 
 class ReportController extends Controller
 {
+    public $alphanumeric = "/^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\()\-\s]+$/";
 
     public function Proceedings(Request $request){
         try{
@@ -178,6 +179,18 @@ class ReportController extends Controller
         try{
             if ($request->wantsJson()){
                 $data = $request->all();
+                
+                $request->validate([
+                    'page' => 'required|numeric',
+                    'perPage' => 'required|numeric',
+                    'documentType' => 'required|regex:'.$this->alphanumeric.'im',
+                    'filters' => 'required|array',
+                    'filters.*show' => 'required|boolean',
+                    'filters.*year' => 'nullable|numeric',
+                    'filters.*user' => 'nullable|numeric',
+                    'filters.*serie_id' => 'nullable|numeric',
+                    'filters.*unidad' => 'required|numeric',
+                ]);
 
                 $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
                 $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );

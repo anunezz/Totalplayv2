@@ -39,9 +39,9 @@ class CacheControl
         }
 
         if ($valid==true){
-           $response->header('Cache-Control', "no-cache='Set-Cookie', no-store, must-revalidate");
-           $response->header('pragma', 'no-cache');
-           $response->header('no-cache', 'Set-Cookie, Set-Directiva Cookie2');
+            $response->header('Cache-Control', "no-cache='Set-Cookie', no-store, must-revalidate");
+            $response->header('pragma', 'no-cache');
+            $response->header('no-cache', 'Set-Cookie, Set-Directiva Cookie2');
         }
 
         return $response;

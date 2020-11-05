@@ -149,7 +149,7 @@
                                       prop="newRegisterName"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', pattern: alphanumeric, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                         <el-input
                                 v-if="newRegisterDialog"
@@ -165,7 +165,7 @@
                                       prop="code"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: alphanumeric, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                             <el-input
                                 v-if="newRegisterDialog"
@@ -225,7 +225,7 @@
                                       prop="name"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: alphanumeric, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                         <el-input
                                 v-if="editRegisterDialog"
@@ -241,7 +241,7 @@
                                       prop="code"
                                       :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                    {  type: 'string', required: false, pattern: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,()-\s]+$/, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
+                                    {  type: 'string', required: false, pattern: alphanumeric, message: 'El nombre no puede llevar caracteres especiales', trigger: 'change'}
                                   ]">
                             <el-input
                                 v-if="editRegisterDialog"
@@ -310,6 +310,7 @@
 
         data() {
             return {
+                alphanumeric: /^[A-Za-z0-9ÑñäÄëËïÏöÖüÜáéíóúáéíóúÁÉÍÓÚÂÊÎÔÛâêîôûàèìòùÀÈÌÒÙ.;:,\()\-\s]+$/,
 
                 elements: [],
 

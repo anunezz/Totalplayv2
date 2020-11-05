@@ -26,7 +26,7 @@ class CatSeries extends Model
 
     public function sampling()
     {
-        return $this->hasOne(CatSampling::class,'cat_series_id');
+        return $this->hasOne(CatSampling::class,'cat_series_id')->where('isActive',true);
     }
 
     public function primarivalues()

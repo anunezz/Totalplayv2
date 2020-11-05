@@ -17,44 +17,21 @@
             <el-col :span='24' class='animated fadeIn fast'>
                 <el-tabs type="border-card">
                     <el-tab-pane v-for="(item , index) in dataComponent" :key="index" :label='item.name'>
-                        <!-- <ReportComponent :items="item" @search="getFormalities" /> -->
                         <ReportComponent :items="item" />
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
         </el-row>
 
-
-        <!-- <el-row :gutter='20'>
-            <el-col :span='24' class='animated fadeIn fast'>
-                <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-end;'>
-                    <div>
-                        <el-button
-                            type="default"
-                            size="mini"
-                            icon="fas fa-search"
-                            @click="filters.show = true">
-                                    Filtros avanzados
-                        </el-button>
-                    </div>
-                </div>
-            </el-col>
-        </el-row> -->
-
-
-        <!-- <show-filters :items="filters" @search="getFormalities"/> -->
-
     </div>
 </template>
 
 <script>
     import HeaderSection from "../layouts/partials/HeaderSection";
-    // import ShowFilters from "./FormFiltros";
     import ReportComponent from "./Report_component";
     export default {
         components: {
             HeaderSection,
-            //ShowFilters,
             ReportComponent
         },
         data(){
@@ -73,7 +50,7 @@
                     total: 0,
                     perPage: 10
                 },
-                LowDocumentary:[], //Baja documental,
+                LowDocumentary:[],
                 dataComponent: []
             }
         },
@@ -81,7 +58,7 @@
             let data = [ { name: 'Baja documental', url: 'lowDocumentary'  },
                         { name: 'Baja contable', url: 'lowAccounting' },
                         { name: 'Transferencia primaria', url: 'PrimaryTransfer' },
-                        { name: 'Transferencia secundariaa', url: 'TransferSecondary' }];
+                        { name: 'Transferencia secundaria', url: 'TransferSecondary' }];
 
             for (let i = 0; i < data.length; i++) {
                 if( ( this.$store.state.user.profile !== 1 && this.$store.state.user.cat_unit_id === 4 && data[i].name === 'Baja contable' ) ||
