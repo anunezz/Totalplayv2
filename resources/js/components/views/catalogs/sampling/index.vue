@@ -386,7 +386,7 @@
 
         data() {
             return {
-
+                activeReset:false,
                 validMessage:true,
                 serie: false,
                 subserie: false,
@@ -420,7 +420,7 @@
                 nameRegister: null,
 
                 newRegisterDialog: false,
-                editRegisterDialog: false,
+                editRegisterDialog: true,
 
                 removeDialog: false,
                 publicDialog: false,
@@ -469,6 +469,9 @@
                 this.lresults = response.data.lresults;
                 this.stopLoading();
             })
+        },
+        mounted() {
+            this.editRegisterDialog = false;
         },
 
         watch:{
@@ -608,6 +611,7 @@
             },
 
             editForm(row){
+                this.activeReset = true;
                 this.serie = true
                 this.subserie = false
                 if (row.cat_series_id == null){
@@ -756,7 +760,7 @@
             },
             resetEditForm(){
                 this.editRegisterDialog = false;
-                this.$refs['catalogEditForm'].resetFields();
+                if (this.activeReset) this.$refs['catalogEditForm'].resetFields();
             },
             typeDocumentary(type){
                 if (!this.serie && !this.subserie){

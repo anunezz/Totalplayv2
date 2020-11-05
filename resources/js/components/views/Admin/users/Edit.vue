@@ -39,8 +39,8 @@
                 </el-col>
             </el-row>
             <el-row :gutter="10">
-                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 24 : userForm.cat_profile_id !== 1 ? 8 : 8">
-                    <el-form-item label="Perfl"
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 24 : userForm.cat_profile_id !== 1 ? 12 : 12">
+                    <el-form-item label="Perfil"
                                   prop="cat_profile_id"
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
@@ -58,7 +58,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 8 : 8">
+                <el-col :span="userForm.cat_profile_id === 1 || userForm.cat_profile_id === 5 ? 12 : userForm.cat_profile_id !== 1 ? 12 : 12">
                     <el-form-item v-if="userForm.cat_profile_id !== 1"
                                   label="Determinante"
                                   prop="cat_unit_id"
@@ -78,7 +78,7 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col  :span="8">
+                <el-col  :span="24">
                     <el-form-item v-if="userForm.cat_profile_id !== 1"
                                   label="Unidad Administrativa"
                                   prop="cat_administrative_unit_id"
