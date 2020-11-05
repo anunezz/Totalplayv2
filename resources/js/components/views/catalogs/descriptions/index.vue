@@ -53,7 +53,8 @@
                     </el-table-column>
                     <el-table-column
                         prop="cat_series_id"
-                        label="Documental">
+                        label="Documental"
+                        width="150">
                         <template slot-scope="scope">
                             {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}
                         </template>

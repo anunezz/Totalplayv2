@@ -8,6 +8,7 @@ use App\Http\Models\Cats\CatConsulate;
 use App\Http\Models\Cats\CatDeterminant;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\Transaction;
+use App\Http\Requests\UpdateUser;
 use App\User;
 
 use Exception;
@@ -91,7 +92,7 @@ class UsersController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateUser $request, $id)
     {
         try {
             DB::beginTransaction();

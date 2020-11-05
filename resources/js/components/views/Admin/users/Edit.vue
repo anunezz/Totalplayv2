@@ -20,7 +20,7 @@
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
-                        <el-input disabled v-model="userForm.name" maxlength="100"></el-input>
+                        <el-input  v-model="userForm.name" maxlength="100"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -274,7 +274,6 @@
             submitForm() {
                 this.startLoading();
 
-                console.log('userForm', this.userForm)
                 if (this.userForm.cat_profile_id === 1){
                     this.userForm.cat_unit_id = 179;
                 }
