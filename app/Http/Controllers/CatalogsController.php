@@ -32,8 +32,6 @@ class CatalogsController extends Controller
         try {
             if ($request->wantsJson()) {
 
-                //page esta mal
-
                 $request->validate([
                     'perPage' => 'required|numeric',
                     'search' => 'nullable|regex:'.$this->alphanumeric.'im',
@@ -258,16 +256,16 @@ class CatalogsController extends Controller
             }
             elseif ($request->cat === 6) {
 
-               // dd("....");
+                //dd("....",$request->all());
 
                 $request->validate([
                     'cat' => 'required|numeric',
-                    // 'quality' =>  [
-                    //     function ($attribute, $value, $fail) {
-                    //         static::validateText($attribute, $value, $fail);
-                    //     }
-                    // ],
-                    'cat_series_id' => 'required|numeric',
+                    'quality' =>  [
+                        function ($attribute, $value, $fail) {
+                            static::validateText($attribute, $value, $fail);
+                        }
+                    ],
+                    'cat_series_id' => 'nullable|numeric',
                     'cat_subserie_id' => 'nullable|array',
                     'cat_subserie_id.*' => 'nullable|numeric',
                     'aux' => 'nullable|numeric'
@@ -473,12 +471,12 @@ class CatalogsController extends Controller
                 $request->validate([
                     'id' => 'required|string',
                     'cat' => 'required|numeric',
-                    // 'quality' =>  [
-                    //     function ($attribute, $value, $fail) {
-                    //         static::validateText($attribute, $value, $fail);
-                    //     }
-                    // ],
-                    'cat_series_id' => 'required|numeric',
+                    'quality' =>  [
+                        function ($attribute, $value, $fail) {
+                            static::validateText($attribute, $value, $fail);
+                        }
+                    ],
+                    'cat_series_id' => 'nullable|numeric',
                     'cat_subserie_id' => 'nullable|array',
                     'cat_subserie_id.*' => 'nullable|numeric',
                     'aux' => 'nullable|numeric'
@@ -883,7 +881,7 @@ class CatalogsController extends Controller
     public static function validateText($attribute, $value, $fail)
     {
         if( strlen($value) > 0 ){
-            if ( preg_match('/(<\\xml|<\/script|<\/|<\\script|<script|<xml|<\\|\?>|<\?xml|(<\?php|<\?|\?\>)|java|xss|htaccess)/im', $value) === 1  ) {
+            if ( preg_match('/(<\\xml|<\/script|<\\script|<script|<xml|<\\|\?>|<\?xml|(<\?php|<\?|\?\>)|java|xss|htaccess)/im', $value) === 1  ) {
                 $fail($attribute.' incorrecto.');
             }
         }
