@@ -9,11 +9,11 @@
                     <el-form-item prop="haveQuality"
                                   :rules="[
                     { required: true, message: 'La pregunta es obligatoria', trigger: ['blur','change'] }]">
-                        <el-col :span="19">
+                        <el-col :md="19">
                             <span style="color: red">*</span>
                             <span style="font-weight: bold;">¿El expediente cuenta con alguna de las cualidades anteriores?</span>
                         </el-col>
-                        <el-col :span="5">
+                        <el-col :md="5">
                             <el-radio-group v-model="formFormalities.haveQuality" size="medium" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined">
                                 <el-radio border label="Sí"></el-radio>
                                 <el-radio border label="No"></el-radio>

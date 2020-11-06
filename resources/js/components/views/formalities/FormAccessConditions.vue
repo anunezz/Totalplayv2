@@ -3,7 +3,7 @@
         <el-row class="body-form">
             <el-row style="padding: 15px">
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Resolución del comité de transparencia:" prop="transparency_resolution_id"
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
@@ -18,7 +18,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Carácter de la información:" prop="nature_information_id"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
@@ -36,7 +36,7 @@
                 </el-row>
 
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Razón de clasificación:" prop="classification_reason_id"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
@@ -51,7 +51,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Fecha de clasificación: " prop="classification_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-date-picker
@@ -78,7 +78,7 @@
                     </el-form-item>
                 </el-row>
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Acta del comité de transparencia:" prop="transparency_proceedings"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
@@ -91,7 +91,7 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Partes restringidas (folios):" prop="restricted_parts"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
@@ -119,13 +119,13 @@
                     </el-form-item>
                 </el-row>
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Periodo de reserva (años):" prop="reservation_period">
                             <el-input-number v-model="formFormalities.reservation_period" controls-position="right" :min="0" :max="100" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Ampliación del plazo (años):" prop="deadline_extension">
                             <el-input-number v-model="formFormalities.deadline_extension" controls-position="right" :min="0" :max="100" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
@@ -133,7 +133,7 @@
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Número de acta/oficio:" prop="Record_official_number"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] },
@@ -146,7 +146,7 @@
                             </el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Fecha de desclasificación: " prop="declassification_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-date-picker

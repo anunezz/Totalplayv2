@@ -539,12 +539,9 @@
                 this.startLoading();
 
                 if (this.serie === true){
-                    console.log('entro a serie')
                     this.catalogForm.cat_subserie_id = null;
-                    console.log('valor de subserie', this.catalogForm.cat_subserie_id)
                 }
                 if (this.subserie === true){
-                    console.log('entro a subserie')
                     this.catalogForm.cat_series_id = null;
                 }
 

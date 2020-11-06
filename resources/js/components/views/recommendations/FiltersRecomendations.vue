@@ -367,7 +367,6 @@
         methods:{
             rightsTree() {
                 let data = this.$refs.derechosHumanos.getCheckedNodes();
-                console.log("rightsTree -> data", data)
                 let rigths = [];
                 for (let i = 0; i < data.length; i++) {
                     rigths.push({
@@ -376,7 +375,6 @@
                             subrights_id: data[i].subrights_id,
                     });
                 }
-                console.log("iiii: ", rigths);
                 this.$store.state.filter.paginate.filters.rights = rigths;
             },
             OdsTree(){
@@ -475,7 +473,6 @@
             getCats(){
                 axios.get('/api/public/index-public/recommendations').then(response => {
                     if(response.data.success === true){
-                        console.log(response);
                             this.catYears = _.orderBy(response.data.catYears, ['date'], ['asc']);
                             this.catEntities = _.orderBy(response.data.catEntities, ['name'], ['asc']);
                             this.catPopulations = _.orderBy(response.data.catPopulations, ['name'], ['asc']);

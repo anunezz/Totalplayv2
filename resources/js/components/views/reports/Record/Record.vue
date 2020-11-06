@@ -180,8 +180,6 @@
         },
         methods:{
             excelExpediente(){
-                console.log("hhhhh");
-
             axios({ responseType: 'blob',
                 method: 'POST',
                 url: '/api/report/proceedings',

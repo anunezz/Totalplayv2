@@ -31,9 +31,8 @@ export default {
     },
     methods:{
         showRegister(id){
-            console.log('ver el registro',id)
             axios.get(`/api/formalities/${id}`).then(response => {
-                console.log(response)
+
             }).catch(error => {
                 this.$message({
                     type: "warning",

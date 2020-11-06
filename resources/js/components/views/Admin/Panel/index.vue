@@ -101,7 +101,6 @@
                 options: {
                     mode: "code",
                     onEditable: function(node) {
-                        //console.log("node", node);
                         return true;
                     }
                 },

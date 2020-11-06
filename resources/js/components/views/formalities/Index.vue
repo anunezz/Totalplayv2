@@ -1,6 +1,6 @@
 <template>
     <div>
-        <header-section icon="fas fa-copy" title="Listado de expedientes">
+        <header-section icon="fas fa-copy" title="Listado de expedientes" style="margin-top: 30px">
             <template slot="buttons">
                 <el-button
                     size="small"
@@ -25,27 +25,22 @@
                     @click="downloadExcel">
                     Descargar Excel
                 </el-button>
-                <el-button-group>
-                    <el-button
+                <el-button
                         size="small"
                         type="success"
                         icon="fas fa-edit"
                         @click="$router.push({name: 'NewFormalities' })">
                         Nuevo registro
                     </el-button>
-                </el-button-group>
             </template>
         </header-section>
         <el-row type="flex" justify="end">
-            <el-col :span="5">
-                <el-button
-                    size="small"
-                    icon="fas fa-search"
-                    style="width: 100%"
-                    @click="filters.show = true">
-                    Filtros avanzados
-                </el-button>
-            </el-col>
+            <el-button
+                size="small"
+                icon="fas fa-search"
+                @click="filters.show = true">
+                Filtros avanzados
+            </el-button>
         </el-row> <br>
         <el-pagination
             :page-size="parseInt(pagination.perPage)"
@@ -220,7 +215,6 @@
         },
         created() {
             this.getFormalities();
-            console.log( this.$store.state.user.profile)
         },
         methods:{
             SearchData(){
@@ -241,7 +235,6 @@
                 };
                 axios.get('/api/formalities',data).then(response => {
                     this.formalitiesTable = response.data.formalities.data;
-                    console.log("this.formalitiesTable", this.formalitiesTable)
 
                     this.pagination.total = response.data.formalities.total;
                     this.stopLoading();
@@ -303,7 +296,6 @@
                  return new Date(date)
             },
             cover(id){
-                console.log('carátula',id)
                 this.startLoading();
                 axios({
                     responseType: 'blob',
@@ -333,7 +325,7 @@
                 });
             },
             eyebrow(id){
-                console.log('ceja',id)
+
                 this.startLoading();
                 axios({ responseType: 'blob',
                     method: 'POST',
@@ -362,7 +354,6 @@
             },
             labelBox(){
                 this.startLoading();
-                console.log("unidad: ",  this.$store.state.user.cat_unit_id );
                 axios({
                     responseType: 'blob',
                     method: 'post',

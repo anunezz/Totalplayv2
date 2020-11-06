@@ -552,7 +552,6 @@
 
         var link = (rule, value, callback) => {
             value = value.trim();
-            console.log("Valor link: ",value);
             let exp = new RegExp(/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,'i');
                 if(!value) {
                      return callback(new Error('Este campo es requerido'));
@@ -708,7 +707,6 @@
 
         methods: {
             calculosOperativos(){
-                    console.log("REStas aqui. ",this.sqlOperativeSave);
                     this.armas = 0;
                     this.operativos = 0;
 
@@ -726,7 +724,6 @@
 
 
                 this.sqlOperativeSave = response.data.lResults;
-                console.log("getOperatives -> this.sqlOperativeSave", this.sqlOperativeSave)
 
                 }).catch(error => {
 

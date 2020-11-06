@@ -85,7 +85,6 @@
           }
         },
         created() {
-            console.log('hola desde filtros')
             this.getUsers();
         },
         methods:{

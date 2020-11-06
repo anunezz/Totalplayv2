@@ -122,7 +122,6 @@
         },
         created() {
             this.filters.unidad = this.$store.state.user.cat_unit_id;
-            console.log("Este es el items: ",this.filters);
             this.getFormalities();
         },
         computed:{
@@ -173,9 +172,7 @@
                     documentType: this.items.url,
                         filters: this.filters
                 }).then(response => {
-                    console.log("Response: ",response);
                     this.dataTable = response.data.formalities.data;
-                    console.log("this.formalitiesTable", this.dataTable)
 
                     this.pagination.total = response.data.formalities.total;
                     this.stopLoading();

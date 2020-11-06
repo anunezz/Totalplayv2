@@ -89,12 +89,10 @@
                         me.addCats([]);
                         me.addVisits([]);
 
-                      //  console.log("Catalogs: ",me.cats);
 
                          me.addVisits( data );
                         if( me.cats.lenght > 0 ){
                           alert("hay valores");
-                          console.log("data: ",data);
                         }else{
                             me.addCats( response.data.lResults.cats );
                         }

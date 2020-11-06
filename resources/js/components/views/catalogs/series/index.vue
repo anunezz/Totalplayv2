@@ -611,12 +611,10 @@
 
             determinante(data){
 
-                console.log('wwwwwwwwww', data);
                 let sections = [];
      //           console.log('secciones', this.sections);
      //           this.catalogForm.newCode = '';
                 const result = this.sections.filter(section => section.id === data);
-                console.log('result', result);
                 this.codeSection = result[0].code + '.';
                 this.codeEditSection = result[0].code + '.';
 

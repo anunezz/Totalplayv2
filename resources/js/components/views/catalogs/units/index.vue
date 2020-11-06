@@ -668,7 +668,6 @@
                     this.name = this.catalogEditForm.name
                 }
                 if (this.catalogEditForm.specialName != null){
-                    console.log('specialName va lleno')
                     if (this.catalogEditForm.cat_type_id === 4 || this.catalogEditForm.cat_type_id === 6)
                     {
                         // this.specialName = this.catalogEditForm.specialName;

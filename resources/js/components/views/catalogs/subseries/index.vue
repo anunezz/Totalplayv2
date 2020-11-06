@@ -382,12 +382,11 @@
 
             determinante(data){
 
-                console.log('wwwwwwwwww', data);
+
                 let series = [];
                 //           console.log('secciones', this.sections);
                 //           this.catalogForm.newCode = '';
                 const result = this.series.filter(serie => serie.id === data);
-                console.log('result', result);
                 this.codeSeries = result[0].code + '.';
                 this.codeEditSerie = result[0].code + '.';
 
@@ -497,7 +496,6 @@
             },
 
             editForm(row){
-                console.log('llegaaaaaaa', row)
                 const result = row.serie.code;
                 this.codeEditSerie = result + '.';
                 this.catalogEditForm = {

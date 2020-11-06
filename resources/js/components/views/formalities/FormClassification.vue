@@ -3,7 +3,7 @@
         <el-row class="body-form">
             <el-row style="padding: 15px">
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Sección:" prop="section_id"
                                       :rules="[
                     { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
@@ -18,7 +18,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Serie:" prop="serie_id"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
@@ -38,7 +38,7 @@
                 </el-row>
 
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Subserie:" prop="subserie_id" v-if="showSubserie"
                                       :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
@@ -53,7 +53,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Fecha de apertura: " prop="opening_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-date-picker
@@ -70,7 +70,7 @@
                 </el-row>
 
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Fecha de cierre: " prop="close_date" :rules="[
                                         { required: true, message: 'Este campo es requerido', trigger: ['blur','change'] }]">
                             <el-date-picker
@@ -85,7 +85,7 @@
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Consecutivo: " prop="consecutive">
                             <el-input-number v-model="formFormalities.consecutive" controls-position="right" :min="0" disabled
                                              style="width: 100%" :rules="[
@@ -96,13 +96,13 @@
                     </el-col>
                 </el-row>
                 <el-row :gutter="20">
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Legajo:" prop="legajo">
                             <el-input-number v-model="formFormalities.legajo" controls-position="right" :min="0" :max="100" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
                                              style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :md="12">
                         <el-form-item label="Código de clasificaión:" prop="sort_code">
                             <el-input v-model="formFormalities.sort_code" disabled style="width: 100%"></el-input>
                         </el-form-item>

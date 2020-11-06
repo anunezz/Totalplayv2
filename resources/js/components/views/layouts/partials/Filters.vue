@@ -42,7 +42,6 @@
                 axios.get('/api/filter-catalogs', {params: data}).then(response => {
                     if (response.data.success) {
 
-                        console.log("RESPONSE INDEX: ",response);
                         this.recommendations = response.data.recommendations.data;
                         this.pagination.total = response.data.recommendations.total;
                         this.pagination.currentPage = response.data.recommendations.current_page;

@@ -489,7 +489,6 @@
                     this.rec = 'Responsable del Archivo Histórico'
                     this.porec = 'Cargo del responsable del archivo de histórico'
                 }
-                //console.log('llegaaaaaaaaaaaaaa', row)
 
                 this.catalogEditForm = {
                     id:row.hash,
@@ -681,8 +680,6 @@
             },
 
             Modal() {
-                "hola";
-                console.log('llegaaaa')
                 this.modal = 'hola';
                 // switch (action) {
                 //     case "resgister": {

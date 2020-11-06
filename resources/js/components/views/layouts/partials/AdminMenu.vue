@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="20">
-            <el-col :span="7">
+            <el-col class="margin-menu" :xl="7" :lg="7" :md="7" :sm="12" :xs="24">
                 <el-badge :value="registers" class="item">
                     <a class="links" @click="goTo('ListFormalities', { cat_transaction_type_id: 1, action: 'Ingresa al index de tramites'})">
                         Archivo de Trámite
@@ -11,7 +11,7 @@
                 <span>Bandeja de entrada</span>
             </el-col>
 
-            <el-col :span="6">
+            <el-col class="margin-menu" :xl="6" :lg="6" :md="6" :sm="12" :xs="24">
                 <a class="links" @click=" goTo('AdminIndex', { cat_transaction_type_id: 1, action: 'Ingresa a Administración'})">
                     Administración
                 </a>
@@ -19,7 +19,7 @@
                 <span>Configuraciones</span>
             </el-col>
 
-            <el-col :span="6">
+            <el-col class="margin-menu" :xl="6" :lg="6" :md="6" :sm="12" :xs="24">
                 <a class="links" @click="goTo('ReportIndex', {cat_transaction_type_id: 1, action: 'Ingresa a Reportes'})">
                     Inventarios
                 </a>
@@ -27,7 +27,7 @@
                 <span>Inventarios</span>
             </el-col>
 
-            <el-col :span="5">
+            <el-col class="margin-menu" :xl="5" :lg="5" :md="5" :sm="12" :xs="24">
                 <el-badge class="item">
                     <a class="links" @click="goTo('HistoricalIndex', {cat_transaction_type_id: 1, action: 'Ingresa a la consulta de expediente'})">
                         Histórico
@@ -84,5 +84,8 @@ export default {
     color: #9d2449;
     cursor: pointer;
     text-decoration: underline;
+}
+.margin-menu{
+    margin-top: 40px;
 }
 </style>

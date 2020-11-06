@@ -179,7 +179,7 @@
             <el-header style="background-color: rgb(157, 36, 56);">
                 <el-row type="flex" justify="space-between">
 
-                    <el-col :span="2">
+                    <el-col :xl="2" :lg="2" :md="3" :sm="3">
                         <img
                             src="/img/sre_header_logo2.png"
                             class="logo-sre2"
@@ -187,14 +187,14 @@
                             style="margin-top: 10px; margin-left: 5px;">
 
                     </el-col>
-                    <el-col :span="11">
+                    <el-col :xl="11" :lg="11" :md="10" :sm="5">
                         <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
                             <span style="font-size: 15px">SIRGE v {{$version}}</span>
                         </div>
                     </el-col>
 
 
-                    <el-col :span="11">
+                    <el-col :xl="11" :lg="11" :md="11" :sm="16">
                         <el-menu
                             :router="true"
                             mode="horizontal"
@@ -382,7 +382,6 @@
             submitForm() {
                 this.startLoading();
            //console.log( "Loger: ",this.$store.state.user.profile );
-                console.log("Unidad administrativa: ",this.userForm.cat_unit_id);
 
 
                 let data ={id: this.user.id, cat_unit_id: this.userForm.cat_unit_id };
