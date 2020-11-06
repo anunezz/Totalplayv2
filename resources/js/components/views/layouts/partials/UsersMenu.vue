@@ -13,10 +13,10 @@
 
             <el-col :span="8">
                 <a class="links" @click="goTo('ReportIndex', {cat_transaction_type_id: 1, action: 'Ingresa a Reportes'})">
-                    Reportes
+                    Inventarios
                 </a>
                 <br /><br />
-                <span>Reportes</span>
+                <span>Inventarios</span>
             </el-col>
 
             <el-col :span="5">
