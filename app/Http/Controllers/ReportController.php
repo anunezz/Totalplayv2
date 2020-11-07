@@ -179,7 +179,7 @@ class ReportController extends Controller
         try{
             if ($request->wantsJson()){
                 $data = $request->all();
-                
+
                 $request->validate([
                     'page' => 'required|numeric',
                     'perPage' => 'required|numeric',
@@ -189,7 +189,7 @@ class ReportController extends Controller
                     'filters.*year' => 'nullable|numeric',
                     'filters.*user' => 'nullable|numeric',
                     'filters.*serie_id' => 'nullable|numeric',
-                    'filters.*unidad' => 'required|numeric',
+                    'filters.*unidad' => 'nullable|numeric',
                 ]);
 
                 $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
