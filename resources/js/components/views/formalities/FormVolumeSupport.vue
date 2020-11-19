@@ -38,13 +38,13 @@
                     <el-col :md="12">
                         <el-form-item label="Legajo:" prop="legajos">
                             <el-input-number v-model="formFormalities.legajos" controls-position="right" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
-                                             style="width: 100%"></el-input-number>
+                                             :min="0" style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
                     <el-col :md="12">
                         <el-form-item label="Folio inicial:" prop="initial_folio">
                             <el-input-number v-model="formFormalities.initial_folio" controls-position="right" :disabled="$store.state.user.profile !== 1 && formFormalities.hash !== undefined"
-                                             style="width: 100%"></el-input-number>
+                                             :min="0" style="width: 100%"></el-input-number>
                         </el-form-item>
                     </el-col>
                 </el-row>

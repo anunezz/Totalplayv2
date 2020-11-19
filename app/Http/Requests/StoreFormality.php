@@ -29,31 +29,33 @@ class StoreFormality extends FormRequest
             'subserie_id' => 'nullable|numeric',
             'opening_date' => 'required|date',
             'close_date' => 'required|date',
-            'consecutive' => 'required|numeric',
-            'legajo' => 'required|numeric',
+            'consecutive' => 'required|numeric|min:0',
+            'legajo' => 'required|numeric|min:0',
             'sort_code' => [
-                'string',
+                'string','max:255',
                 function ($attribute, $value, $fail) {
                     static::validateText($attribute, $value, $fail);
                 },
             ],
             'title'=> [
+                'max:255',
                 function ($attribute, $value, $fail) {
                     static::validateText($attribute, $value, $fail);
                 },
             ],
             'description_id' => 'required|numeric',
             'additional_information'=> [
+                'max:250',
                 function ($attribute, $value, $fail) {
                     static::validateText($attribute, $value, $fail);
                 },
             ],
             'format_id' => 'numeric',
             'documentary_tradition_id' => 'numeric',
-            'legajos' => 'numeric',
-            'initial_folio' => 'numeric',
-            'end_folio' => 'numeric',
-            'total_fojas' => 'numeric',
+            'legajos' => 'numeric|min:0',
+            'initial_folio' => 'numeric|min:0',
+            'end_folio' => 'numeric|min:0',
+            'total_fojas' => 'numeric|min:0',
             'question_one' => 'boolean',
             'question_two' => 'nullable|boolean',
             'haveQuality' => 'nullable|boolean',
@@ -77,13 +79,15 @@ class StoreFormality extends FormRequest
                 },
             ],
             'legal_basis'=> [
+                'max:255',
                 function ($attribute, $value, $fail) {
                     static::validateText($attribute, $value, $fail);
                 },
             ],
-            'reservation_period' => 'numeric',
-            'deadline_extension' => 'numeric',
+            'reservation_period' => 'numeric|min:0',
+            'deadline_extension' => 'numeric|min:0',
             'Record_official_number'=> [
+                'max:255',
                 function ($attribute, $value, $fail) {
                     static::validateText($attribute, $value, $fail);
                 },
