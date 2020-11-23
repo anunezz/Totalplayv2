@@ -30,7 +30,7 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section','description')->find( decrypt($data['id']) );
             $results = TraitReport::proceedings( $Formalities );
             $pdf = \PDF::loadView('pdf.caratula_pdf',compact('results'));
             return $pdf->download('caratula.pdf');
@@ -47,7 +47,7 @@ class ReportController extends Controller
         try{
 
             $data = $request->all();
-            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) )->first();
+            $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) );
             return Excel::download(new Labels([], TraitReport::label( $Formalities )  ), 'Etiqueta.xlsx');
 
         } catch (Exception $e) {
