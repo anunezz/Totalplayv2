@@ -11,7 +11,7 @@
 
 
             <el-row style="margin-bottom: 20px">
-                
+
                 <el-col :span="21" :offset="1" class="border-form">
                     <el-form ref="form" :model="items" label-width="120px" label-position="top" size="mini">
                         <el-row :gutter="20">
@@ -21,7 +21,7 @@
                                     <el-select v-model="items.serie_id" filterable clearable placeholder="Selecciona" style="width: 100%">
                                         <el-option
                                             v-for="item in series" :key="item.id"
-                                            :label="item.name"
+                                            :label="item.full_name"
                                             :value="item.id">
                                         </el-option>
                                     </el-select>

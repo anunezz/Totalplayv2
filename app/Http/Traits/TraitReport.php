@@ -13,9 +13,11 @@ class TraitReport
         $cels[1] = $cels[1].'-';
 
         $data = [];
+        //dd($Formalities->legajo);
         for ($i= 1; $i < $Formalities->legajo + 1; $i++) {
             $legajo = $i."/".$Formalities->legajo;
-            array_push($data,[$code,$cels[1],$cels[2],'/DAN','/ET001-01',$legajo, $Formalities->title]);
+            //dd($cels);
+            array_push($data,[$code,$cels[1],$cels[1],'/DAN','/ET001-01',$legajo, $Formalities->title]);
         }
 
         return collect($data)->chunk(2);
@@ -41,7 +43,7 @@ class TraitReport
             'title' => $Formalities->title, // Título
 
             //Alcance y contenido (asunto)
-            'alcance_y_contenido' => $Formalities->scope_and_content, //Pendiente
+            'alcance_y_contenido' => optional($Formalities->description)->description, //Pendiente
 
             //Fechas
             'opening_date' => $Formalities->opening_date,
