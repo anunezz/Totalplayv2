@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
             ['id' => 3, 'username' =>'adriann', 'cat_profile_id' => 1, 'cat_unit_id' => null, 'name' => 'Adrian', 'firstName' => 'Nuñez', 'secondName' => 'Alanis', 'created_at' => Carbon::now(),'updated_at' => Carbon::now(),],
             ['id' => 4, 'username' =>'iperdomo', 'cat_profile_id' => 1, 'cat_unit_id' => null, 'name' => 'Ivan', 'firstName' => 'Perdomo', 'secondName' => 'Gomez', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
             ['id' => 5, 'username' => 'rjuarez', 'cat_profile_id' => 1, 'cat_unit_id' => null, 'name' => 'Raúl Alberto', 'firstName' => 'Juárez', 'secondName' => 'Caballero', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
-            ['id' => 6, 'username' => 'jventura', 'cat_profile_id' => 2, 'cat_unit_id' => 39, 'name' => 'Julián', 'firstName' => 'Ventura', 'secondName' => 'Valero', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
+            ['id' => 6, 'username' => 'jventura', 'cat_profile_id' => 1, 'cat_unit_id' => null, 'name' => 'Julián', 'firstName' => 'Ventura', 'secondName' => 'Valero', 'created_at' => Carbon::now(), 'updated_at' => Carbon::now(),],
 
             [
                 'id' => 7,

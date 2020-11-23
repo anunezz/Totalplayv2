@@ -20,7 +20,7 @@
                                   :rules="[
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                   ]">
-                        <el-input  v-model="userForm.name" maxlength="100"></el-input>
+                        <el-input disabled v-model="userForm.name" maxlength="100"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
