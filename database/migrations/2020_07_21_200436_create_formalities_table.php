@@ -29,6 +29,7 @@ class CreateFormalitiesTable extends Migration
             $table->unsignedBigInteger('consecutive');
             $table->unsignedBigInteger('legajo');
             $table->string('sort_code')->nullable();
+            $table->string('generating_area')->nullable();
             $table->string('title');
             $table->unsignedBigInteger('description_id')->nullable();
             $table->text('additional_information')->nullable();

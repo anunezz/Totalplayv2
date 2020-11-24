@@ -32,6 +32,12 @@ class UpdateFormality extends FormRequest
             'close_date' => 'required|date',
             'consecutive' => 'required|numeric',
             'legajo' => 'required|numeric',
+            'generating_area' => [
+                'string', 'nullable',
+                function ($attribute, $value, $fail) {
+                    static::validateText($attribute, $value, $fail);
+                },
+            ],
             'sort_code' => [
                 'string',
                 function ($attribute, $value, $fail) {
