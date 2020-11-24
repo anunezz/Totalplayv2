@@ -21,7 +21,7 @@ class Formalities extends Model
         'legajos', 'initial_folio', 'end_folio', 'total_fojas', 'question_one', 'question_two', 'haveQuality', 'transparency_resolution_id',
         'nature_information_id', 'classification_reason_id', 'classification_date', 'name_titular', 'transparency_proceedings',
         'restricted_parts', 'legal_basis', 'reservation_period', 'deadline_extension', 'Record_official_number', 'declassification_date',
-        'name_public_server', 'position_public_server','unit_id','type_report','type_selection','quality_id'
+        'name_public_server', 'position_public_server','unit_id','type_report','type_selection','quality_id','generating_area'
     ];
 
     protected $with = ['unit'];

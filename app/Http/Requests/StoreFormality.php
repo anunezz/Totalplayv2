@@ -31,6 +31,12 @@ class StoreFormality extends FormRequest
             'close_date' => 'required|date',
             'consecutive' => 'required|numeric|min:0',
             'legajo' => 'required|numeric|min:0',
+            'generating_area' => [
+                'string', 'nullable',
+                function ($attribute, $value, $fail) {
+                    static::validateText($attribute, $value, $fail);
+                },
+            ],
             'sort_code' => [
                 'string','max:255',
                 function ($attribute, $value, $fail) {
