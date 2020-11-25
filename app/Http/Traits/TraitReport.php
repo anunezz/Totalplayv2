@@ -11,13 +11,16 @@ class TraitReport
         $cels = preg_split("/[-]/", $Formalities->sort_code);
         $code = str_replace('SRE.',"", $cels[0]);
         $cels[1] = $cels[1].'-';
+        $determinant = optional( $Formalities->unit()->first())->determinant;
+        $opening_date = date_format(date_create($Formalities->opening_date),'d-m-Y').'-';
+        $close_date = date_format(date_create($Formalities->close_date),'d-m-Y').'-';
 
         $data = [];
         //dd($Formalities->legajo);
         for ($i= 1; $i < $Formalities->legajo + 1; $i++) {
             $legajo = $i."/".$Formalities->legajo;
             //dd($cels);
-            array_push($data,[$code,$cels[1],$cels[1],'/DAN','/ET001-01',$legajo, $Formalities->title]);
+            array_push($data,[$code,$opening_date,$close_date,$determinant,'/ET001-01',$legajo, $Formalities->title]);
         }
 
         return collect($data)->chunk(2);

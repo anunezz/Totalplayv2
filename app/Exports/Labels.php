@@ -97,7 +97,7 @@ class Labels implements
                 $event->sheet->getColumnDimension('F')->setWidth(11.00);
                 $event->sheet->getColumnDimension('G')->setWidth(3.00);
                 $event->sheet->getColumnDimension('H')->setWidth(11.00);
-                $event->sheet->getColumnDimension('I')->setWidth(7.00);
+                $event->sheet->getColumnDimension('I')->setWidth(11.00);
                 $event->sheet->getColumnDimension('J')->setWidth(7.00);
                 $event->sheet->getColumnDimension('K')->setWidth(11.00);
                 $event->sheet->getColumnDimension('L')->setWidth(4.00);
@@ -111,7 +111,7 @@ class Labels implements
                 $event->sheet->getColumnDimension('R')->setWidth(11.00);
                 $event->sheet->getColumnDimension('S')->setWidth(3.00);
                 $event->sheet->getColumnDimension('T')->setWidth(11.00);
-                $event->sheet->getColumnDimension('U')->setWidth(7.00);
+                $event->sheet->getColumnDimension('U')->setWidth(11.00);
                 $event->sheet->getColumnDimension('V')->setWidth(7.00);
                 $event->sheet->getColumnDimension('W')->setWidth(11.00);
                 $event->sheet->getColumnDimension('X')->setWidth(4.00);

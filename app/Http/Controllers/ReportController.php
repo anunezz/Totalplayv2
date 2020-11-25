@@ -48,6 +48,7 @@ class ReportController extends Controller
 
             $data = $request->all();
             $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) );
+            //dd($Formalities->unit()->first()->determinant);
             return Excel::download(new Labels([], TraitReport::label( $Formalities )  ), 'Etiqueta.xlsx');
 
         } catch (Exception $e) {
