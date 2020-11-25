@@ -162,7 +162,7 @@ function question_one($action,$value){
             </tr>
             <tr>
                 <td WIDTH="100" align="center">Área generadora</td>
-                <td>DIRECCIÓN DE HISTORIA DIPLOMÁTICA Y PUBLICACIONES</td>
+                <td align="center"></td>
             </tr>
         </table>
 
@@ -196,7 +196,7 @@ function question_one($action,$value){
             <tr>
                 <td WIDTH="47.5" align="center" style="background-color: #F6F6F6;">Expediente</td>
                 <td WIDTH="49.5" align="center">1</td>
-                <td>COMISIÓN EDITORIAL</td>
+                <td align="center">COMISIÓN EDITORIAL</td>
             </tr>
         </table>
 

@@ -223,13 +223,19 @@ class CatalogsController extends Controller
             elseif ($request->cat === 3) {
 
                 $request->validate([
-                    'id' => 'required|string',
                     'cat'  => 'required|numeric',
                     'name' => 'required|regex:'.$this->alphanumeric.'im',
-                    'codeSubseries' => 'required|regex:'.$this->codeSeries.'im',
-                    'code' => 'required|regex:'.$this->codeSeries.'im',
-                    'cat_type_id' => 'required|numeric',
-                    'cat_series_id' => 'required|numeric'
+                    'codeSeries' => 'required|regex:/^[0-9\.]{1,3}$/im',
+                    'code' => 'required|string|regex:/^[A-Aa-z0-9\.]{1,7}$/im',
+                    'cat_section_id' => 'required|numeric',
+                    'AT' => 'required|numeric',
+                    'AC' => 'required|numeric',
+                    'total' => 'required|numeric',
+                    'cat_selection_id' => 'required|numeric',
+                    'cat_primary_value_id' => 'required|array',
+                    'cat_primary_value_id.*' => 'nullable|numeric',
+                    'cat_administrative_unit_id' => 'required|array',
+                    'cat_administrative_unit_id.*' => 'nullable|numeric',
                 ]);
 
                 $cat = new CatSeries();
@@ -437,10 +443,17 @@ class CatalogsController extends Controller
                     'id' => 'required|string',
                     'cat'  => 'required|numeric',
                     'name' => 'required|regex:'.$this->alphanumeric.'im',
-                    'codeSubseries' => 'required|regex:'.$this->codeSeries.'im',
-                    'code' => 'required|regex:'.$this->codeSeries.'im',
-                    'cat_type_id' => 'required|numeric',
-                    'cat_series_id' => 'required|numeric'
+                    'codeSeries' => 'required|regex:/^[0-9\.]{1,3}$/im',
+                    'code' => 'required|string|regex:/^[A-Aa-z0-9\.]{1,7}$/im',
+                    'cat_section_id' => 'required|numeric',
+                    'AT' => 'required|numeric',
+                    'AC' => 'required|numeric',
+                    'total' => 'required|numeric',
+                    'cat_selection_id' => 'required|numeric',
+                    'cat_primary_value_id' => 'required|array',
+                    'cat_primary_value_id.*' => 'nullable|numeric',
+                    'cat_administrative_unit_id' => 'required|array',
+                    'cat_administrative_unit_id.*' => 'nullable|numeric',
                 ]);
 
                 $cat = CatSeries::find(decrypt($request->id));

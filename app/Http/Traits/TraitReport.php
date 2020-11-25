@@ -250,9 +250,9 @@ class TraitReport
         $series = [];
 
         if( $Profile->id === 1 ){
-            $series = CatSeries::get();
+            $series = CatSeries::orderBy('name', 'ASC')->get();
         }else{
-            $unit = CatAdministrativeUnit::with('series')->find($data);
+            $unit = CatAdministrativeUnit::with('series')->orderBy('name', 'ASC')->find($data);
             $series = $unit->series;
         }
 
