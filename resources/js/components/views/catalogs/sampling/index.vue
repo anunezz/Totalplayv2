@@ -146,7 +146,7 @@
                 <el-row :gutter="10">
                     <el-col :span="12">
                         <el-form-item label="Documental" prop="type_documentary" :rules="[
-                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                                { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                               ]">
                             <el-row>
                                 <el-col :span="4" style="margin-right: 100px">
@@ -165,7 +165,7 @@
                                       label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select style="width: 100%;"
                                        size="medium"
@@ -185,7 +185,7 @@
                                       label="Subserie documental"
                                       prop="cat_subserie_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                             <el-select v-model="catalogForm.cat_subserie_id"
                                        filterable placeholder="Seleccionar"
@@ -259,7 +259,7 @@
                         <el-row :gutter="10">
                             <el-col :span="12">
                                 <el-form-item label="Documental" prop="type_documentary" :rules="[
-                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                                { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                               ]">
                                     <el-row>
                                         <el-col :span="4" style="margin-right: 100px">
@@ -278,7 +278,7 @@
                                               label="Serie documental"
                                               prop="cat_series_id"
                                               :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                                     <el-select v-if="editRegisterDialog"
                                                style="width: 100%;"
@@ -299,7 +299,7 @@
                                               label="Subserie documental"
                                               prop="subserie"
                                               :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                                     <el-select v-if="editRegisterDialog"
                                                v-model="catalogEditForm.subserie"
@@ -386,7 +386,7 @@
 
         data() {
             return {
-                activeReset:false,
+           //     activeReset:false,
                 validMessage:true,
                 serie: false,
                 subserie: false,
@@ -407,20 +407,20 @@
                 catalogForm: {
                     newRegisterName: '',
                     cat_series_id: null,
-                    cat_subserie_id: [],
+                    cat_subserie_id: null,
                     type_documentary: null,
                 },
                 catalogEditForm:{
                     quality: '',
                     cat_series_id: null,
-                    subserie: [],
+                    subserie: null,
                     type_documentary: null,
                 },
                 hashRegister: null,
                 nameRegister: null,
 
                 newRegisterDialog: false,
-                editRegisterDialog: true,
+                editRegisterDialog: false,
 
                 removeDialog: false,
                 publicDialog: false,
@@ -471,7 +471,7 @@
             })
         },
         mounted() {
-            this.editRegisterDialog = false;
+          //  this.editRegisterDialog = false;
         },
 
         watch:{
@@ -484,6 +484,7 @@
         methods: {
             description(rule, value, callback){
                 value = value.trim();
+                console.log('value', value)
                 let exp = new RegExp(/((<script|<xml|\?>|<\?xml|(<\?php|<\?)|java|xss|htaccess|&lt;)|([%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
                 if(!value) {
                     this.validMessage = false;
@@ -611,7 +612,7 @@
             },
 
             editForm(row){
-                this.activeReset = true;
+           //     this.activeReset = true;
                 this.serie = true
                 this.subserie = false
                 if (row.cat_series_id == null){
@@ -760,7 +761,8 @@
             },
             resetEditForm(){
                 this.editRegisterDialog = false;
-                if (this.activeReset) this.$refs['catalogEditForm'].resetFields();
+              //  if (this.activeReset)
+                this.$refs['catalogEditForm'].resetFields();
             },
             typeDocumentary(type){
                 if (!this.serie && !this.subserie){

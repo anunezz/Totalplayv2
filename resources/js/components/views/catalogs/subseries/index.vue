@@ -145,7 +145,7 @@
                         <el-form-item label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select @change="determinante(catalogForm.cat_series_id)"
                                        style="width: 100%;"
@@ -229,7 +229,7 @@
                         <el-form-item label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select v-if="editRegisterDialog"
                                        @change="determinante(catalogEditForm.cat_series_id)"
@@ -339,12 +339,12 @@
 
                 catalogForm: {
                     newRegisterName: '',
-                    cat_series_id: [],
+                    cat_series_id: null,
                     newCode: '',
                 },
                 catalogEditForm:{
                     name: '',
-                    cat_series_id: [],
+                    cat_series_id: null,
                     codeSubseries: ''
                 },
                 hashRegister: null,

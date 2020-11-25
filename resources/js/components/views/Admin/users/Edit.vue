@@ -291,7 +291,9 @@
                             });
 
                             this.$router.push('/administracion/usuarios');
-                            location.reload();
+                            setTimeout(function(){
+                                location.reload();
+                            }, 1000);
 
                         }).catch(error => {
                             this.stopLoading();

@@ -165,7 +165,7 @@
                         <el-form-item label="Tipo de adscripción"
                                       prop="cat_type_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select @change="typeUnits(catalogForm.cat_type_id)"
                                        style="width: 100%;"
@@ -310,7 +310,7 @@
                         <el-form-item label="Tipo de adscripción"
                                       prop="cat_type_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select v-if="editRegisterDialog"
                                        @change="typeEditUnits(catalogEditForm.cat_type_id)"
@@ -470,14 +470,14 @@
                 catalogForm: {
                     newRegisterName: '',
                     determinant: '',
-                    cat_type_id: [],
+                    cat_type_id: null,
                     cat_responsible_id: null,
                     cat_user_id: null
                 },
                 catalogEditForm:{
                     name: '',
                     determinant: '',
-                    cat_type_id: [],
+                    cat_type_id: null,
                     specialName: '',
                     cat_responsible_id: null,
                     cat_user_id: null

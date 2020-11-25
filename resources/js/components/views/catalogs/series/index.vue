@@ -155,7 +155,7 @@
                         <el-form-item label="Unidad administrativa"
                                       prop="cat_administrative_unit_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                             <el-select v-model="catalogForm.cat_administrative_unit_id"
                                        clearable
@@ -175,7 +175,7 @@
                         <el-form-item label="Sección documental"
                                       prop="cat_section_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select @change="determinante(catalogForm.cat_section_id)"
                                        style="width: 100%;"
@@ -263,7 +263,7 @@
                         <el-form-item label="Técnicas de selección"
                                       prop="cat_selection_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select style="width: 100%;"
                                        size="medium"
@@ -282,7 +282,7 @@
                         <el-form-item label="Valores primarios"
                                       prop="cat_primary_value_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                             <el-select v-model="catalogForm.cat_primary_value_id"
                                        filterable placeholder="Seleccionar"
@@ -333,7 +333,7 @@
                         <el-form-item label="Unidad administrativa"
                                       prop="administrative"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                             <el-select v-if="editRegisterDialog"
                                        v-model="catalogEditForm.administrative"
@@ -354,7 +354,7 @@
                         <el-form-item label="Sección documental"
                                       prop="cat_section_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select v-if="editRegisterDialog"
                                        @change="determinante(catalogEditForm.cat_section_id)"
@@ -445,7 +445,7 @@
                         <el-form-item label="Técnicas de selección"
                                       prop="cat_selection_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select v-if="editRegisterDialog"
                                        style="width: 100%;"
@@ -465,7 +465,7 @@
                         <el-form-item label="Valores primarios"
                                       prop="primarivalues"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                             <el-select v-if="editRegisterDialog"
                                        v-model="catalogEditForm.primarivalues"
@@ -545,22 +545,22 @@
 
                 catalogForm: {
                     newRegisterName: '',
-                    cat_section_id: [],
+                    cat_section_id: null,
                     newCode: '',
                     AT: '',
                     AC: '',
-                    cat_selection_id: [],
+                    cat_selection_id: null,
                     cat_primary_value_id: [],
                     cat_administrative_unit_id: []
                 },
                 catalogEditForm:{
                     administrative: [],
                     name: '',
-                    cat_section_id: [],
+                    cat_section_id: null,
                     codeSeries: '',
                     AT: '',
                     AC: '',
-                    cat_selection_id: [],
+                    cat_selection_id: null,
                     primarivalues: []
                 },
                 hashRegister: null,
