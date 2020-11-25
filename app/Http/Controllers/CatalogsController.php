@@ -33,7 +33,7 @@ class CatalogsController extends Controller
             if ($request->wantsJson()) {
 
                 $request->validate([
-                    'perPage' => 'required|numeric',
+                    'perPage' => 'nullable|numeric',
                     'search' => 'nullable|regex:'.$this->alphanumeric.'im',
                     'cat' => 'required|numeric',
                 ]);
@@ -411,12 +411,22 @@ class CatalogsController extends Controller
             if ($request->cat === 1) {
 
                 $request->validate([
+//                    'id' => 'required|string',
+//                    'cat' => 'required|numeric',
+//                    'name' => 'required|regex:'.$this->alphanumeric.'im',
+//                    'codeSubseries' => 'nullable|regex:'.$this->alphanumeric.'im',
+//                    'code' => 'required|regex:'.$this->alphanumeric.'im',
+//                    'at_series_id' => 'required|numeric',
+
                     'id' => 'required|string',
                     'cat' => 'required|numeric',
                     'name' => 'required|regex:'.$this->alphanumeric.'im',
-                    'codeSubseries' => 'nullable|regex:'.$this->alphanumeric.'im',
-                    'code' => 'required|regex:'.$this->alphanumeric.'im',
-                    'at_series_id' => 'required|numeric'
+                    'specialName' => 'nullable|regex:'.$this->alphanumeric.'im',
+                    'determinant' => 'required|regex:'.$this->alphanumeric.'im',
+                    'cat_type_id' => 'required|numeric',
+                    'cat_responsible_id' => 'nullable|numeric',
+                    'cat_user_id' => 'nullable|numeric'
+
                 ]);
 
                 $cat = CatAdministrativeUnit::find(decrypt($request->id));
