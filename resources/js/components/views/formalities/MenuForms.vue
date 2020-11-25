@@ -21,6 +21,18 @@
                 <el-row style="margin-bottom: 15px" v-else>
                     <span style="font-weight: bold;">Unidad:&nbsp;</span> {{$store.state.user.name_unit}}
                 </el-row>
+                <el-row :gutter="20">
+                    <el-col :span="24">
+                        <el-form-item label="Área generadora:" prop="generating_area" :rules="[
+                                        { validator: validT, trigger: ['blur','change']}]">
+                            <el-input
+                                size="medium"
+                                :maxlength="250"
+                                v-model="formFormalities.generating_area">
+                            </el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-tabs type="card" ref="menuTaps" @tab-click="chageTapClick">
                     <el-tab-pane label="Clasificación" style="padding: 10px">
                         <form-classification :formFormalities="formFormalities" v-if="tapOne"></form-classification>
@@ -93,7 +105,9 @@
     import FormVolumeSupport from "./FormVolumeSupport";
     import FormVSE from "./FormVSE";
     import FormAccessConditions from "./FormAccessConditions";
+    import {validateText} from "../../../mixins/validateText";
     export default {
+        mixins:[validateText],
         components: {
             HeaderSection,
             FormClassification,
@@ -113,6 +127,7 @@
                 tapFour: true,
                 formFormalities: {
                     unit_id: null,
+                    generating_area: null,
                     section_id: null,
                     serie_id: null,
                     subserie_id: null,
