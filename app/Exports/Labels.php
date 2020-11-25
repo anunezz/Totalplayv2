@@ -166,9 +166,13 @@ class Labels implements
                         $event->sheet->setCellValue( $Celli.$row, $data[5]);
                         $event->sheet->wrapText( $Celli.$row );
 
+                        $strlen = strlen($data[6]) / 6;
+                        $roww = (  $strlen > 35 )? $strlen : 35;
+                        $event->sheet->rowHeight($row1, $roww);
+
                         $event->sheet->mergeCells( $Cella.$row1.':'.$Celli.$row2 );
                         $event->sheet->setCellValue( $Cella.$row1, $data[6]);
-                        $event->sheet->wrapText( $Cella.$row1 );
+                        $event->sheet->wrapText( $Cella.$row1.':'.$Celli.$row2 );
 
                         $rowsBorder = [
                         [ 'cell'=> $x.$row.':'.$y.$row, 'border'=> 'top'],

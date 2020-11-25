@@ -131,8 +131,11 @@ class LabelBox implements
                     );
                 }
 
+                $strlen = strlen($this->fields['unidad_admin']) / 13;
+                $fontSize = (  $strlen > 12 )? $strlen : 12;
+
                 $data = [
-                    [ 'cell'=>'B4:G4',   'bold'=> true, 'fontSize'=> 24,  'field' => $this->fields['unidad_admin']],
+                    [ 'cell'=>'B4:G4',   'bold'=> true, 'fontSize'=> $fontSize,  'field' => $this->fields['unidad_admin']],
                     [ 'cell'=>'B5:G5',   'bold'=> true, 'fontSize'=> 26,  'field' => ''],
                     [ 'cell'=>'C6',      'bold'=> true, 'fontSize'=> 14,  'field' => 'Fondo:'],
                     [ 'cell'=>'D6:F6',   'bold'=> true, 'fontSize'=> 18,  'field' => 'SRE Secretaría de Relaciones Exteriores.'],
