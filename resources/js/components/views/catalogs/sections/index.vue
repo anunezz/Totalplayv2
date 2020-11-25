@@ -178,7 +178,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item prop="cat_type_id" label="Tipo de sección documental" :rules="[
-                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                                { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                               ]">
                             <el-row>
                                 <el-col :span="6" style="margin-right: 200px">
@@ -254,7 +254,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item prop="cat_type_id" label="Tipo de sección documental" :rules="[
-                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                                { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                               ]">
                             <el-row>
                                 <el-col :span="6" style="margin-right: 200px">

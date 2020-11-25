@@ -33,6 +33,7 @@
                 </el-pagination>
             </el-col>
         </el-row>
+<!--        <pre>{{catalogForm}}</pre>-->
 
         <p></p>
         <br>
@@ -153,11 +154,12 @@
                     <div slot="header">
                         <span  class="title">Nuevo registro</span>
                     </div>
+<!--                    <pre>{{catalogForm}}</pre>-->
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="12">
                         <el-form-item label="Documental" prop="type_documentary" :rules="[
-                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                                { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                               ]">
                             <el-row>
                                 <el-col :span="4" style="margin-right: 100px">
@@ -176,7 +178,7 @@
                                       label="Serie documental"
                                       prop="cat_series_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                             <el-select style="width: 100%;"
                                        size="medium"
@@ -196,7 +198,7 @@
                                       label="Subserie documental"
                                       prop="cat_subserie_id"
                                       :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                             <el-select v-model="catalogForm.cat_subserie_id"
                                        filterable placeholder="Seleccionar"
@@ -212,13 +214,41 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col v-if="this.changeValid === false" :span="24">
                         <el-form-item label="Unidad Administrativa"
                                       prop="cat_unit_id"
                                       :rules="[
+                                    // { required: true, message: 'Este campo es requerido', trigger: 'blur'},
                                     { required: true, message: 'Este campo es requerido', trigger: 'blur'},
-                                  ]">
+
+                                    ]">
+<!--                                    ]">-->
+                            <el-select
+                                       v-model="catalogForm.cat_unit_id"
+                                       clearable
+                                         filterable placeholder="Seleccionar"
+                                       remove-tag="remove-tag"
+                                       multiple
+                                       style="width: 100%">
+                                <el-option
+                                    v-for="(unit , index) in units"
+                                    :key="index"
+                                    :label="unit.name"
+                                    :value="unit.id">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col v-if="this.changeValid === true" :span="24">
+                        <el-form-item label="Unidad Administrativa"
+                                      prop="cat_unit_id"
+                                      :rules="[
+                                    // { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { validator: validT, trigger: ['blur','change'] }]">
+                            <!--                                    ]">-->
                             <el-select v-model="catalogForm.cat_unit_id"
+                                       clearable
                                        filterable placeholder="Seleccionar"
                                        remove-tag="remove-tag"
                                        multiple
@@ -281,7 +311,7 @@
                         <el-row :gutter="10">
                             <el-col :span="12">
                                 <el-form-item label="Documental" prop="type_documentary" :rules="[
-                                                { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                                { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                               ]">
                                     <el-row>
                                         <el-col :span="4" style="margin-right: 100px">
@@ -300,7 +330,7 @@
                                               label="Serie documental"
                                               prop="cat_series_id"
                                               :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                     ]">
                                     <el-select v-if="editRegisterDialog"
                                                style="width: 100%;"
@@ -321,7 +351,7 @@
                                               label="Subserie documental"
                                               prop="subserie"
                                               :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                                     <el-select v-if="editRegisterDialog"
                                                v-model="catalogEditForm.subserie"
@@ -342,7 +372,7 @@
                                 <el-form-item label="Unidad Administrativa"
                                               prop="administrative"
                                               :rules="[
-                                    { required: true, message: 'Este campo es requerido', trigger: 'blur'},
+                                    { required: true, message: 'Este campo es requerido', trigger: ['blur','change']},
                                   ]">
                                     <el-select v-if="editRegisterDialog"
                                                v-model="catalogEditForm.administrative"
@@ -429,6 +459,8 @@
                 subseries: [],
                 elements: [],
 
+                changeValid: false,
+
                 search: '',
 
                 pagination: {
@@ -441,15 +473,15 @@
                     newRegisterName: '',
                     type_documentary: null,
                     cat_unit_id: [],
-                    cat_series_id: [],
-                    cat_subserie_id: [],
+                    cat_series_id: null,
+                    cat_subserie_id: null,
                 },
                 catalogEditForm:{
                     description: '',
                     type_documentary: null,
-                    administrative: [],
-                    cat_series_id: [],
-                    subserie: [],
+                    administrative: null,
+                    cat_series_id: null,
+                    subserie: null,
                 },
                 hashRegister: null,
                 nameRegister: null,
@@ -480,11 +512,20 @@
         watch:{
             search(neew,old){
                 return this.search = this.Search(neew);
-            }
+            },
         },
 
 
         methods: {
+
+            validT(rule, value, callback){
+                console.log('value', value)
+                if (value.length === 0){
+                    return callback(new Error('Este campo es requerido'));
+                }else {
+                    return callback();
+                }
+            },
 
             Search(search){
                 let re = new RegExp(/((&lt;\/script|\<|\>|script&gt;|&lt;script|script|<script|&lt;xml|<xml)|(\?&gt;|\?>|&lt;\?xml|(&lt;\?php|\<php|&lt;php|&lt;\?)|java|xss|htaccess)|(["&/=¨´%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
@@ -538,6 +579,10 @@
             newRegister() {
                 this.startLoading();
 
+                if (this.catalogForm.cat_unit_id.length === 0){
+                    this.changeValid = true;
+                }
+
                 if (this.serie === true){
                     this.catalogForm.cat_subserie_id = null;
                 }
@@ -565,6 +610,7 @@
                                 });
 
                                 this.catalogForm.newRegisterName = '';
+                                this.catalogForm.type_documentary = null;
                                 this.newRegisterDialog = false;
                                 this.getTitles();
                             } else {
@@ -677,9 +723,10 @@
             },
 
             newCatalog(){
+                this.changeValid = false;
                 this.catalogForm.newRegisterName = '';
                 this.catalogForm.type_documentary = null;
-                this.catalogForm.cat_unit_id = null;
+                this.catalogForm.cat_unit_id = [];
                 this.catalogForm.cat_series_id = null;
                 this.catalogForm.cat_subserie_id = null;
                 this.serie = null;
