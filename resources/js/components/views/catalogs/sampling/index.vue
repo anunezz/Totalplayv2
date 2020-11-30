@@ -580,6 +580,11 @@
                                 });
 
                                 this.catalogForm.newRegisterName = '';
+                                this.catalogForm.type_documentary = null;
+                                this.catalogForm.cat_series_id = null;
+                                this.catalogForm.cat_subserie_id = null;
+                                this.serie = null;
+                                this.subserie = null;
                                 this.newRegisterDialog = false;
                                 this.getTitles();
                                 this.getSeries();

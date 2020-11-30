@@ -534,6 +534,8 @@
             getTitles(currentPage =  1) {
                 this.startLoading();
 
+                console.log('this.pagination.perPage', this.pagination.perPage)
+
                 let data = { params: {
                         page: currentPage,
                         perPage: this.pagination.perPage,
