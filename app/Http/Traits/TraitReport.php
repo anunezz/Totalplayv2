@@ -27,10 +27,11 @@ class TraitReport
     }
 
     public static function proceedings($Formalities){
+        //dd($Formalities);
         return [
             //Nivel de descripción documental
             'unidad' => $Formalities->unit()->first()->name, //unidad administrativa
-                                                             // area generadora
+            'generating_area' => $Formalities->generating_area, // area generadora                                                 // area generadora
             'section' => $Formalities->section()->first()->code,  // seccion
             'sectionName' => $Formalities->section()->first()->name,  // seccion nombre
             'serieCode' => $Formalities->serie()->first()->code, //Serie
