@@ -2,16 +2,16 @@
     <div>
         <header-section icon="el-icon-document" title="CDD">
             <template slot="buttons">
-                <el-col :span="5" :offset="7">
+                <el-col :span="5" :offset="5">
                     <el-button type="success" @click="newCatalog" style="width: 100%">
                         Nuevo registro
                     </el-button>
                 </el-col>
-                <el-col :span="10" :offset="1">
+                <el-col :span="13" :offset="1">
                     <el-input
                         clearable
                         suffix-icon="fas fa-search"
-                        placeholder="Buscar por cualidad"
+                        placeholder="Buscar por cualidad y código de clasificación"
                         v-model="search"
                         @change="getTitles(search)">
                     </el-input>
@@ -174,7 +174,7 @@
                                 <el-option
                                     v-for="(serie , index) in results"
                                     :key="index"
-                                    :label="serie.name"
+                                    :label="serie.full_name"
                                     :value="serie.id">
                                 </el-option>
                             </el-select>
@@ -195,7 +195,7 @@
                                 <el-option
                                     v-for="(sub , index) in lresults"
                                     :key="index"
-                                    :label="sub.name"
+                                    :label="sub.full_name"
                                     :value="sub.id">
                                 </el-option>
                             </el-select>
@@ -288,7 +288,7 @@
                                         <el-option
                                             v-for="(serie , index) in series"
                                             :key="index"
-                                            :label="serie.name"
+                                            :label="serie.full_name"
                                             :value="serie.id">
                                         </el-option>
                                     </el-select>
@@ -310,7 +310,7 @@
                                         <el-option
                                             v-for="(sub , index) in subseries"
                                             :key="index"
-                                            :label="sub.name"
+                                            :label="sub.full_name"
                                             :value="sub.id">
                                         </el-option>
                                     </el-select>

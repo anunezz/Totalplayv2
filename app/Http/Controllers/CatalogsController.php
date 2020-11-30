@@ -139,7 +139,7 @@ class CatalogsController extends Controller
 
                 $lresults = CatSubseries::whereDoesntHave('sampli')
                     ->orderBy('name')
-                    ->get();
+                    ->get(['id', 'name', 'code']);
 
                 $units = CatAdministrativeUnit::where('isActive', 1)
                     ->orderBy('name')
@@ -147,7 +147,7 @@ class CatalogsController extends Controller
 
                 $subseries = CatSubseries::where('isActive', 1)
                     ->orderBy('name')
-                    ->get(['id', 'name']);
+                    ->get(['id', 'name', 'code']);
 
                 $types = CatTypeUnit::where('isActive', 1)
                     ->orderBy('name')

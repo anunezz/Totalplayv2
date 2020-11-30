@@ -43,6 +43,14 @@ class CatDescription extends Model
             'cat_subserie_id');
     }
 
+    public function sub()
+    {
+        return $this->belongsToMany(CatSubseries::class,
+            'description_subseries',
+            'cat_description_id',
+            'cat_subserie_id');
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when(! empty ($search), function ($query) use ($search) {
@@ -50,6 +58,18 @@ class CatDescription extends Model
             return $query->where(function($q) use ($search)
             {
                 $q->where('description', 'like', '%' .$search . '%');
+
+                $q->orWhereHas('serie', function($q) use ($search){
+                    $q->where('code', 'like', '%' .$search . '%');
+                });
+
+                $q->orWhereHas('sub', function($q) use ($search){
+                    $q->where('code', 'like', '%' .$search . '%');
+                });
+
+                $q->orWhereHas('administrative', function($q) use ($search){
+                    $q->where('name', 'like', '%' .$search . '%');
+                });
             });
         });
     }

@@ -35,6 +35,14 @@ class CatSampling extends Model
             'cat_subserie_id');
     }
 
+    public function sub()
+    {
+        return $this->belongsToMany(CatSubseries::class,
+            'sampling_subseries',
+            'cat_sampling_id',
+            'cat_subserie_id');
+    }
+
     public function scopeSearch($query, $search)
     {
         return $query->when(! empty ($search), function ($query) use ($search) {
@@ -42,6 +50,15 @@ class CatSampling extends Model
             return $query->where(function($q) use ($search)
             {
                 $q->where('quality', 'like', '%' .$search . '%');
+
+                $q->orWhereHas('serie', function($q) use ($search){
+                    $q->where('code', 'like', '%' .$search . '%');
+                });
+
+                $q->orWhereHas('sub', function($q) use ($search){
+                    $q->where('code', 'like', '%' .$search . '%');
+                });
+
             });
         });
     }

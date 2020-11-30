@@ -275,7 +275,7 @@
                 this.startLoading();
 
                 if (this.userForm.cat_profile_id === 1){
-                    this.userForm.cat_unit_id = 179;
+                    this.userForm.cat_unit_id = 9;
                 }
 
                 this.$refs['userForm'].validate((valid) => {
