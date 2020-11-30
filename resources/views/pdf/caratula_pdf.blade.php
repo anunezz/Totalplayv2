@@ -162,7 +162,7 @@ function question_one($action,$value){
             </tr>
             <tr>
                 <td WIDTH="100" align="center">Área generadora</td>
-                <td align="center"></td>
+                <td align="center"> {{$results['generating_area'] }} </td>
             </tr>
         </table>
 
@@ -232,7 +232,9 @@ function question_one($action,$value){
                 style="background-color: #DDDDDD; align-content: center;">
                     <strong><b> Título <b></strong>
                 </td>
-                <td style="font-size: 22px; font-weight: 1000;" align="center"> {{ $results['title'] }} </td>
+                <?php $fontTitulo = $results['title'] > 99 ? "font-size: 22px;":"font-size: 13px;"."font-weight: 1000;";  ?>
+                <td style="<?php echo $fontTitulo ?>" align="center"> {{ $results['title'] }}
+                </td>
             </tr>
         </table>
 
