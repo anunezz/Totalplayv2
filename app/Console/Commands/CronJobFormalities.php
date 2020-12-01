@@ -59,27 +59,27 @@ class CronJobFormalities extends Command
             if( strtotime( date("Y-m-d") ) > strtotime( $total )  ){
 
                 if($item->type_selection === 3 && $item->unit_id !== 4 ){ //Validar baja documental
-                    //echo "baja documental muestreo sin dgpop: \n";
+                    echo "baja documental muestreo sin dgpop: \n";
                     $item->type_report = 1;
                 }
 
                 if($item->type_selection === 3 && $item->unit_id === 4 ){ //Validar baja contable
-                    //echo "baja contable muestreo dgpop: \n";
+                    echo "baja contable muestreo dgpop: \n";
                     $item->type_report = 2;
                 }
 
                 if($item->type_selection === 1 && $item->unit_id !== 4 ){ //Validar baja documental
-                   // echo "baja documental eliminacion: \n";
+                    echo "baja documental eliminacion: \n";
                     $item->type_report = 1;
                 }
 
                 if($item->type_selection === 1 && $item->unit_id === 4 ){ //Validar baja contable
-                   // echo "baja contable eliminacion: \n";
+                    echo "baja contable eliminacion: \n";
                     $item->type_report = 2;
                 }
 
                 if($item->type_selection === 4 ){ //Validar transferencia secundaria
-                    //echo "cualidad de la muestra tras secundaria: \n";
+                    echo "cualidad de la muestra tras secundaria: \n";
                     $item->type_report = 4;
                 }
 
@@ -94,7 +94,7 @@ class CronJobFormalities extends Command
                         ->where('id','=',$cat_responsible_id )
                         ->first();
                         if( !is_null( $responsible_name ) ){
-                            //echo "Responsable:   ".$responsible_name->username."\n";
+                            echo "Responsable:   ".$responsible_name->username."\n";
                             Mail::to($responsible_name->username.'@sre.gob.mx')->send(new MailFormalities($data));
                         }
                     }
@@ -106,7 +106,7 @@ class CronJobFormalities extends Command
                         ->where('id','=', $cat_user_id )
                         ->first();
                         if( !is_null( $user ) ){
-                            //echo "USUARIO:   ".$user->username."\n";
+                            echo "USUARIO:   ".$user->username."\n";
                             Mail::to($user->username.'@sre.gob.mx')->send(new MailFormalities($data));
                         }
                     }
@@ -114,7 +114,7 @@ class CronJobFormalities extends Command
                     //Administradores
                     $admin = User::where('cat_profile_id','=',1)->get();
                     foreach ($admin as $itm) {
-                        //echo "aDMINISTRADOR:   ".$itm->username."\n";
+                        echo "aDMINISTRADOR:   ".$itm->username."\n";
                         Mail::to($itm->username.'@sre.gob.mx')->send(new MailFormalities($data));
                     }
 

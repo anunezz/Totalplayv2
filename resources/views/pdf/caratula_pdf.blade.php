@@ -151,14 +151,14 @@ function question_one($action,$value){
 
         <div style="height: 20px;"></div>
 
-        <table style="width:100%; border-collapse:collapse;" border='1'> <!-- Lo cambiaremos por CSS -->
+        <table style="width:100%; border-collapse:collapse; font-weight: 600;" border='1'> <!-- Lo cambiaremos por CSS -->
             <tr>
                 <td rowspan="2" align="center" WIDTH="80"
                 style="background-color: #DDDDDD; align-content: center;">
                     <strong><b> Productor/a <b></strong>
                 </td>
                 <td WIDTH="100" align="center">Unidad administrativa</td>
-                <td align="center" style="font-weight: 600;"> {{ $results['unidad'] }} </td>
+                <td align="center"> {{ $results['unidad'] }} </td>
             </tr>
             <tr>
                 <td WIDTH="100" align="center">Área generadora</td>
@@ -168,7 +168,7 @@ function question_one($action,$value){
 
         <div style="height: 8px;"></div>
 
-        <table style="width:100%; border-collapse:collapse;" border='1'>
+        <table style="width:100%; border-collapse:collapse; font-weight: 600;" border='1'>
             <tr>
                 <td rowspan="5" align="center" WIDTH="80"
                 style="background-color: #DDDDDD; align-content: center;">
@@ -181,22 +181,22 @@ function question_one($action,$value){
             <tr>
                 <td WIDTH="47.5" align="center" style="background-color: #F6F6F6;">Sección</td>
                 <td WIDTH="49.5" align="center"> {{ $results['section'] }} </td>
-                <td align="center" style="font-weight: 600;"> {{ $results['sectionName'] }} </td>
+                <td align="center"> {{ $results['sectionName'] }} </td>
             </tr>
             <tr>
                 <td WIDTH="47.5" align="center" style="background-color: #F6F6F6;">Serie</td>
-                <td WIDTH="49.5" align="center" style="font-weight: 600;"> {{ $results['serieCode'] }} </td>
-                <td align="center" style="font-weight: 600;"> {{ $results['serieName'] }} </td>
+                <td WIDTH="49.5" align="center"> {{ $results['serieCode'] }} </td>
+                <td align="center"> {{ $results['serieName'] }} </td>
             </tr>
             <tr>
                 <td WIDTH="47.5" align="center" style="background-color: #F6F6F6;">Subserie</td>
-                <td WIDTH="49.5" align="center" style="font-weight: 600;"> {{ $results['subserieCode'] }} </td>
-                <td align="center" style="font-weight: 600;"> {{ $results['subserieName'] }} </td>
+                <td WIDTH="49.5" align="center"> {{ $results['subserieCode'] }} </td>
+                <td align="center"> {{ $results['subserieName'] }} </td>
             </tr>
             <tr>
                 <td WIDTH="47.5" align="center" style="background-color: #F6F6F6;">Expediente</td>
                 <td WIDTH="49.5" align="center">1</td>
-                <td align="center">COMISIÓN EDITORIAL</td>
+                <td align="center"></td>
             </tr>
         </table>
 
@@ -355,11 +355,11 @@ function question_one($action,$value){
                 <td align="center" colspan="9">Formato en que se captura</td>1
             </tr>
             <tr>
-                <td align="center" style="font-weight: 600;">1</td>
+                <td align="center" style="font-weight: 600;">{{ $results['AC'] }}</td>
                 <td align="center">años</td>
-                <td align="center" style="font-weight: 600;">1</td>
+                <td align="center" style="font-weight: 600;">{{ $results['AT'] }}</td>
                 <td align="center">años</td>
-                <td align="center"> {{ $results['AC'] }} </td>
+                <td align="center"> {{ $results['total'] }} </td>
                 <td align="center" style="font-weight: 600;">2</td>
                 <td align="center">AH</td>
                 <td align="center" colspan="2" style="font-weight: 600;">0</td>
