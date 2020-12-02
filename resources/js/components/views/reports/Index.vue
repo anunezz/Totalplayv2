@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="animated fadeIn fast">
         <header-section icon="el-icon-s-management" title="Inventarios">
             <template slot="buttons">
                 <el-button
