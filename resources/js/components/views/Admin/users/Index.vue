@@ -50,7 +50,7 @@
                     </el-table-column>
                     <el-table-column
                         prop="determinant.determinant"
-                        label="Determiante">
+                        label="Determinante">
                     </el-table-column>
 <!--                    <el-table-column-->
 <!--                        prop="consulate.name"-->
