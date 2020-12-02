@@ -28,16 +28,11 @@ class Labels implements
     WithTitle,
     WithEvents,
     WithStrictNullComparison
-    //Coordinate,
-    //DataValidation
 {
-
-    //private $lastRow;
     private static $ALIGNMENT = '\\PhpOffice\\PhpSpreadsheet\\Style\\Alignment';
     private static $FILL = '\\PhpOffice\\PhpSpreadsheet\\Style\\Fill';
     private static $BORDER = '\\PhpOffice\\PhpSpreadsheet\\Style\\Border';
 
-    //public function __construct($headers, $fields)
     public function __construct($headers, $fields)
     {
         $this->headers = $headers;
@@ -99,7 +94,7 @@ class Labels implements
                 $event->sheet->getColumnDimension('H')->setWidth(11.00);
                 $event->sheet->getColumnDimension('I')->setWidth(11.00);
                 $event->sheet->getColumnDimension('J')->setWidth(7.00);
-                $event->sheet->getColumnDimension('K')->setWidth(11.00);
+                $event->sheet->getColumnDimension('K')->setWidth(7.00);
                 $event->sheet->getColumnDimension('L')->setWidth(4.00);
                 $event->sheet->getColumnDimension('M')->setWidth(2.00);
 
@@ -113,26 +108,18 @@ class Labels implements
                 $event->sheet->getColumnDimension('T')->setWidth(11.00);
                 $event->sheet->getColumnDimension('U')->setWidth(11.00);
                 $event->sheet->getColumnDimension('V')->setWidth(7.00);
-                $event->sheet->getColumnDimension('W')->setWidth(11.00);
+                $event->sheet->getColumnDimension('W')->setWidth(7.00);
                 $event->sheet->getColumnDimension('X')->setWidth(4.00);
                 $event->sheet->getColumnDimension('Y')->setWidth(2.00);
 
-
                 $data = $this->fields;
-
-                // $data = collect([
-                //     ['08C.16.01','20166-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
-                //     ['08C.16.02','2018-','/01','/DAN','/ET001-01','1/2','Título del expediente'],
-                // ])->chunk(2);
-
-                //dd($data);
 
                 $row = 3;
                 foreach ($data as $item) {
                     $i = 0;
                     foreach ($item as $data) {
                         $x = ($i === 0)? 'C':'O';
-                        $y = ($i === 0)? 'M':'Y';
+                        $y = ($i === 0)? 'K':'W';
                         $sum = $row + 2;
 
                         $Cella = ($i === 0)? 'D': 'P';
@@ -143,7 +130,6 @@ class Labels implements
                         $Cellf = ($i === 0)? 'I': 'U';
                         $Cellg = ($i === 0)? 'J': 'V';
                         $Cellh = ($i === 0)? 'K': 'W';
-                        $Celli = ($i === 0)? 'L': 'X';
                         $row1 = $row + 1;
                         $row2 = $row + 2;
 
@@ -163,16 +149,21 @@ class Labels implements
                         $event->sheet->wrapText( $Cellg.$row );
                         $event->sheet->setCellValue( $Cellh.$row, $data[4]);
                         $event->sheet->wrapText( $Cellh.$row );
-                        $event->sheet->setCellValue( $Celli.$row, $data[5]);
-                        $event->sheet->wrapText( $Celli.$row );
 
-                        $strlen = strlen($data[6]) / 6;
+                        $strlen = strlen($data[5]) / 6;
                         $roww = (  $strlen > 35 )? $strlen : 35;
                         $event->sheet->rowHeight($row1, $roww);
 
-                        $event->sheet->mergeCells( $Cella.$row1.':'.$Celli.$row2 );
-                        $event->sheet->setCellValue( $Cella.$row1, $data[6]);
-                        $event->sheet->wrapText( $Cella.$row1.':'.$Celli.$row2 );
+                        $event->sheet->styleCells(
+                            $Cella.$row1.':'.$Cellh.$row2,
+                            ['alignment' => [
+                                    'horizontal' => static::$ALIGNMENT::HORIZONTAL_CENTER,
+                                    'vertical' => static::$ALIGNMENT::VERTICAL_CENTER]]
+                        );
+
+                        $event->sheet->mergeCells( $Cella.$row1.':'.$Cellh.$row2 );
+                        $event->sheet->setCellValue( $Cella.$row1, $data[5]);
+                        $event->sheet->wrapText( $Cella.$row1.':'.$Cellh.$row2 );
 
                         $rowsBorder = [
                         [ 'cell'=> $x.$row.':'.$y.$row, 'border'=> 'top'],
@@ -189,11 +180,6 @@ class Labels implements
                     }
                     $row = $row + 4;
                 }
-
-                //$hola =  Macros::border('ejemplo');
-
-
-
 
             }
         ];

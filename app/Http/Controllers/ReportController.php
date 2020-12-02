@@ -29,6 +29,10 @@ class ReportController extends Controller
     public function Proceedings(Request $request){
         try{
 
+            $request->validate([
+                'id' => 'required|string',
+            ]);
+
             $data = $request->all();
             $Formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section','description')->find( decrypt($data['id']) );
             $results = TraitReport::proceedings( $Formalities );
@@ -46,9 +50,12 @@ class ReportController extends Controller
     public function Label(Request $request){
         try{
 
+            $request->validate([
+                'id' => 'required|string',
+            ]);
+
             $data = $request->all();
             $Formalities = Formalities::with('serie.primarivalues','SubSerie','section')->find( decrypt($data['id']) );
-            //dd($Formalities->unit()->first()->determinant);
             return Excel::download(new Labels([], TraitReport::label( $Formalities )  ), 'Etiqueta.xlsx');
 
         } catch (Exception $e) {
@@ -61,6 +68,11 @@ class ReportController extends Controller
 
     public function LabelBox(Request $request){
         try{
+
+            $request->validate([
+                'cat_unit_id' => 'required|numeric',
+            ]);
+
             $data = $request->all();
             $unidad = CatAdministrativeUnit::find($data['cat_unit_id']);
 
@@ -81,6 +93,7 @@ class ReportController extends Controller
             if ($request->wantsJson()){
 
                 $data = $request->all();
+                //dd($data);
                 $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
                 $data['filters']['documentType'] = TraitReport::documentType( $data['documentType'] );
                 $formalities = Formalities::with('unit','serie.primarivalues','SubSerie','section')->filter($data['filters'])->get();
@@ -105,6 +118,16 @@ class ReportController extends Controller
     public function lowAccounting(Request $request){
         try{
             if ($request->wantsJson()){
+
+                $request->validate([
+                    'documentType' => 'required|string',
+                    'filters' => 'required|array',
+                    'filters.*show' => 'required|boolean',
+                    'filters.*year' => 'nullable|date',
+                    'filters.*user' => 'nullable|numeric',
+                    'filters.*serie_id' => 'nullable|numeric',
+                    'filters.*unidad' => 'required|numeric'
+                ]);
 
                 $data = $request->all();
                 $data['filters']['unidad'] = TraitReport::series( $data['filters']['unidad'] );
@@ -216,23 +239,13 @@ class ReportController extends Controller
         }
     }
 
-    // public static function series_id($data){
-    //     $user = User::with('profile','unit')->find( auth()->user()->id );
-    //     $Profile = $user->profile()->first();
-    //     $series = [];
-
-    //     if( $Profile->id === 1 ){
-    //         $series = CatSeries::get();
-    //     }else{
-    //         $unit = CatAdministrativeUnit::with('series')->find($data);
-    //         $series = $unit->series;
-    //     }
-
-    //     return $series;
-    // }
-
     public function getCats(Request $request){
         try{
+
+            $request->validate([
+                'unidad' => 'required|numeric'
+            ]);
+
             $data = $request->all();
             return response()->json([
                 'success' => true,

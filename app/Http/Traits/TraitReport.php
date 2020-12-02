@@ -8,19 +8,15 @@ use App\User;
 class TraitReport
 {
     public static function label($Formalities){
-        $cels = preg_split("/[-]/", $Formalities->sort_code);
-        $code = str_replace('SRE.',"", $cels[0]);
-        $cels[1] = $cels[1].'-';
+        $code = code($Formalities->sort_code).'-';
         $determinant = optional( $Formalities->unit()->first())->determinant;
-        $opening_date = date_format(date_create($Formalities->opening_date),'d-m-Y').'-';
-        $close_date = date_format(date_create($Formalities->close_date),'d-m-Y').'-';
+        $opening_date = dateFormat('d-m-Y',$Formalities->opening_date).'-';
+        $close_date = dateFormat('d-m-Y',$Formalities->close_date).'-';
 
         $data = [];
-        //dd($Formalities->legajo);
         for ($i= 1; $i < $Formalities->legajo + 1; $i++) {
             $legajo = $i."/".$Formalities->legajo;
-            //dd($cels);
-            array_push($data,[$code,$opening_date,$close_date,$determinant,'/ET001-01',$legajo, $Formalities->title]);
+            array_push($data,[$code,$opening_date,$close_date,$determinant,$legajo, $Formalities->title]);
         }
 
         return collect($data)->chunk(2);
@@ -28,16 +24,21 @@ class TraitReport
 
     public static function proceedings($Formalities){
         //dd($Formalities);
+
+        $serie = $Formalities->serie()->first();
+        $section = $Formalities->section()->first();
+        $SubSerie = $Formalities->SubSerie()->first();
+
         return [
             //Nivel de descripción documental
             'unidad' => $Formalities->unit()->first()->name, //unidad administrativa
             'generating_area' => $Formalities->generating_area, // area generadora                                                 // area generadora
-            'section' => $Formalities->section()->first()->code,  // seccion
-            'sectionName' => $Formalities->section()->first()->name,  // seccion nombre
-            'serieCode' => $Formalities->serie()->first()->code, //Serie
-            'serieName' => $Formalities->serie()->first()->name, // Serie nombre
-            'subserieCode' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->code : 'N/A', //Subserie code
-            'subserieName' => ( $Formalities->SubSerie()->first() !== null )?$Formalities->SubSerie()->first()->name : '', // Subserie nombre
+            'section' => $section->code,  // seccion
+            'sectionName' => $section->name,  // seccion nombre
+            'serieCode' => $serie->code, //Serie
+            'serieName' => $serie->name, // Serie nombre
+            'subserieCode' => ( $SubSerie !== null )? $SubSerie->code : 'N/A', //Subserie code
+            'subserieName' => ( $SubSerie !== null )? $SubSerie->name : '', // Subserie nombre
 
             //Código de referencia
             'codeOfReference' => substr($Formalities->sort_code, 4), // ejemplo SRE. 08C.24-2019-2019/1
@@ -62,7 +63,9 @@ class TraitReport
             //Características físicas y requisitos técnicos
 
             //Valoración, selección y eliminación
-            'AC' => $Formalities->serie()->first()->AC,
+            'AT' => $serie->AT,
+            'AC' => $serie->AC,
+            'total' => $serie->total,
 
             //Condiciones de acceso (Leyenda de clasificación de la información y/o de versión pública)
             'Classification_date'=> $Formalities->classification_date,
@@ -132,12 +135,12 @@ class TraitReport
             //$item->serie()->first()->code, //1
             array_push($data,[
             $sum, //0  No. consecutivo
-            $item->sort_code, //1 Código de clasificación archivística del expediente
+            code($item->sort_code), //1 Código de clasificación archivística del expediente
             null, //2 Número consecutivo de caja
             $item->consecutive, //3 Número consecutivo del expe-diente
             $item->description()->first()->description, //4 Descripción del asunto del expediente
-            $item->opening_date, //5 Año de apertura
-            $item->close_date, //6 Año de cierre
+            dateFormat("Y",$item->opening_date), //5 Año de apertura
+            dateFormat("Y",$item->close_date), //6 Año de cierre
             $original,//7 Original
             $copia,//8 Copia
             $primarivalues['A'],//9 A
@@ -160,13 +163,13 @@ class TraitReport
             $sum++;
             array_push($data,[
                 $sum, //0 No.consecutivo
-                $item->sort_code, //1 Código de clasificación archivística
+                code($item->sort_code), //1 Código de clasificación archivística
                 null, //2 Unidad de Medida y cantidad (Cajas)
                 null, //3 Cantidad de Expedientes
                 $item->title, //4 Título (nombre) del expediente
                 null, //5 Descripción de la documentación anexa
-                $item->opening_date, //6 Año de apertura
-                $item->close_date, //7 Año de cierre
+                dateFormat("Y",$item->opening_date), //6 Año de apertura
+                dateFormat("Y",$item->close_date), //7 Año de cierre
                 null, //8 Corriente
                 null, //9 Inversión
                 null, //10 Ingreso
@@ -193,14 +196,14 @@ class TraitReport
 
             array_push($data,[
                 $sum,//0 No. consecutivo
-                $item->sort_code,//1 Código de clasificación archivística del expediente
+                code($item->sort_code),//1 Código de clasificación archivística del expediente
                 null,//2 Número consecutivo de caja
                 $item->consecutive,//3 Número consecutivo de expediente
                 $item->title,//4 Título del expediente
                 null,//5 Descripción de la documentación anexa
                 $item->end_folio,//6 Número de folios que integra el expediente
-                $item->opening_date,//7 Año de apertura
-                $item->close_date,//8 Año de cierre
+                dateFormat("Y",$item->opening_date),//7 Año de apertura
+                dateFormat("Y",$item->close_date),//8 Año de cierre
                 $original,//9 Original
                 $copia,//10 Copia
                 $primarivalues['A'],//11 A

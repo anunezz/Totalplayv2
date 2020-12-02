@@ -74,7 +74,7 @@ class CatalogsController extends Controller
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 5) {
-                    $elements = CatDescription::with('serie', 'administrative', 'subserie', 'formalities')
+                    $elements = CatDescription::with('serie', 'administrative', 'subserie','sub', 'formalities')
                         ->search($data['search'])
                         ->select(['id', 'description', 'cat_series_id', 'isActive'])
                         ->orderBy('description')

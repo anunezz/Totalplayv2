@@ -57,7 +57,7 @@
                         label="Documental"
                         width="150">
                         <template slot-scope="scope">
-                            {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}
+                            {{ documentaryCode(scope.row)}}
                         </template>
                     </el-table-column>
 <!--                    <el-table-column-->
@@ -807,6 +807,17 @@
                 data.forEach(element => administrative.push(' '+element.name));
                 let aux = administrative.toString();
                 return aux;
+            },
+            documentaryCode(data){
+                if (data.serie !== null) return data.serie.code
+                else {
+                    let subserie = '';
+                    console.log(data.sub.length)
+                    let moreSub = false;
+                    moreSub = data.sub.length > 1;
+                    data.sub.forEach(element => subserie += element.code + (moreSub ? ', ':''));
+                    return subserie;
+                }
             },
             typeDocumentary(type){
 
