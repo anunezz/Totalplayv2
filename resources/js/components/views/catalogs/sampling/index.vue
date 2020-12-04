@@ -46,11 +46,19 @@
                     style="width: 100%">
                     <el-table-column
                         prop="cat_series_id"
-                        label="Documental">
+                        label="Documental"
+                        width="150">
                         <template slot-scope="scope">
-                            {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}
+                            {{ documentaryCode(scope.row)}}
                         </template>
                     </el-table-column>
+<!--                    <el-table-column-->
+<!--                        prop="cat_series_id"-->
+<!--                        label="Documental">-->
+<!--                        <template slot-scope="scope">-->
+<!--                            {{ scope.row.cat_series_id ? 'Serie documental' : 'Subserie documental' }}-->
+<!--                        </template>-->
+<!--                    </el-table-column>-->
                     <el-table-column
                         prop="quality"
                         label="Cualidad">
@@ -801,6 +809,16 @@
                     this.subserie = false;
                     this.catalogEditForm.subserie = null;
                     this.catalogEditForm.type_documentary = type;
+                }
+            },
+            documentaryCode(data){
+                if (data.serie !== null) return data.serie.code
+                else {
+                    let subserie = '';
+                    let moreSub = false;
+                    moreSub = data.sub.length > 1;
+                    data.sub.forEach(element => subserie += element.code + (moreSub ? ', ':''));
+                    return subserie;
                 }
             },
         },

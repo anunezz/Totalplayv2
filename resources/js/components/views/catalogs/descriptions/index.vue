@@ -812,7 +812,6 @@
                 if (data.serie !== null) return data.serie.code
                 else {
                     let subserie = '';
-                    console.log(data.sub.length)
                     let moreSub = false;
                     moreSub = data.sub.length > 1;
                     data.sub.forEach(element => subserie += element.code + (moreSub ? ', ':''));
