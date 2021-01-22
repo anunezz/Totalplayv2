@@ -150,6 +150,7 @@
                     <div slot="header">
                         <span  class="title">Nuevo registro</span>
                     </div>
+<!--                    <pre>{{this.catalogForm.newRegisterName}}</pre>-->
             <el-form ref="catalogForm" :model="catalogForm" label-width="120px" label-position="top">
                 <el-row :gutter="10">
                     <el-col :span="12">
@@ -233,7 +234,7 @@
                         <el-form-item label="Cualidad"
                                       prop="newRegisterName"
                                       :rules="[{ validator: description, trigger: ['blur','change'] }]">
-                            <tinymce id="d1" v-model="catalogForm.newRegisterName" :other_options="tinyOptions"></tinymce>
+                            <tinymce id="d1" v-model="newRegisterName" :other_options="tinyOptions"></tinymce>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -263,6 +264,7 @@
                     <div slot="header">
                         <span  class="title">Editar registro</span>
                     </div>
+<!--                    <pre>{{this.catalogEditForm.quality}}</pre>-->
                     <el-form ref="catalogEditForm" :model="catalogEditForm" label-width="120px" label-position="top">
                         <el-row :gutter="10">
                             <el-col :span="12">
@@ -346,8 +348,8 @@
                             <el-col :span="24" style="padding: 11px">
                                 <el-form-item label="Cualidad"
                                               prop="quality"
-                                              :rules="[{ validator: description, trigger: ['blur','change'] }]">
-                                    <tinymce id="d2" v-model="catalogEditForm.quality" :other_options="tinyOptions"></tinymce>
+                                              :rules="[{ validator: editDescription, trigger: ['blur','change'] }]">
+                                    <tinymce id="d2" v-model="quality" :other_options="tinyOptions"></tinymce>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -405,6 +407,8 @@
                 elements: [],
 
                 search: '',
+                newRegisterName: '',
+                quality: '',
 
                 pagination: {
                     currentPage: 1,
@@ -485,28 +489,69 @@
         watch:{
             search(neew,old){
                 return this.search = this.Search(neew);
+            },
+            newRegisterName(text){
+                this.catalogForm.newRegisterName = text;
+                return this.description()
+            },
+            quality(text){
+                this.catalogEditForm.quality = text;
+                return this.editDescription()
             }
         },
 
 
         methods: {
             description(rule, value, callback){
-                value = value.trim();
-                console.log('value', value)
-                let exp = new RegExp(/((<script|<xml|\?>|<\?xml|(<\?php|<\?)|java|xss|htaccess|&lt;)|([%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
-                if(!value) {
-                    this.validMessage = false;
-                    return callback(new Error('Este campo es requerido'));
-                }else{
-                    if( exp.test(value) ){
-                        this.validMessage = false;
-                        return callback(new Error('Este campo no puede contener caracteres especiales'));
-                    } else {
-                        this.validMessage = true;
-                        return callback();
 
+                if(rule === undefined){
+                    this.$refs['catalogForm'].validate(() => {});
+                }
+                else {
+                    value = value.trim();
+                    let exp = new RegExp(/((<script|<xml|\?>|<\?xml|(<\?php|<\?)|java|xss|htaccess|&lt;)|([%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
+
+                    if(!value) {
+                        this.validMessage = false;
+                        return callback(new Error('Este campo es requerido'));
+                    }else{
+                        if( exp.test(value) ){
+                            this.validMessage = false;
+                            return callback(new Error('Este campo no puede contener caracteres especiales'));
+                        } else {
+                            this.validMessage = true;
+                            return callback();
+
+                        }
                     }
                 }
+
+            },
+
+            editDescription(rule, value, callback){
+
+                if(rule === undefined){
+                    this.$refs['catalogEditForm'].validate(() => {});
+                }
+                else {
+                    value = value.trim();
+                    let exp = new RegExp(/((<script|<xml|\?>|<\?xml|(<\?php|<\?)|java|xss|htaccess|&lt;)|([%$¿?|#!¡+_{}^*'`\[\]]))/,'igm');
+
+                    if(!value) {
+                        this.validMessage = false;
+                        return callback(new Error('Este campo es requerido'));
+                    }else{
+                        if( exp.test(value) ){
+                            this.validMessage = false;
+                            return callback(new Error('Este campo no puede contener caracteres especiales'));
+                        } else {
+                            this.validMessage = true;
+                            return callback();
+
+                        }
+                    }
+                }
+
             },
 
             Search(search){
@@ -634,10 +679,11 @@
                 }
                 let subserie = []
                 row.subserie.forEach(element => subserie.push(element.id));
+                this.quality = row.quality
                 this.catalogEditForm = {
                     id:row.hash,
-                    quality:row.quality,
                     cat_series_id:row.cat_series_id,
+                    quality:this.quality,
                     subserie: subserie,
                     type_documentary: 1
                 };
