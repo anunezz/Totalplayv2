@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -26,7 +27,8 @@ class FormalitiesSicarExport implements
     WithTitle,
     WithEvents,
     WithCustomStartCell,
-    ShouldAutoSize
+    ShouldAutoSize,
+    WithProperties
 {
     private $data;
     private $totalRecords;
@@ -37,6 +39,14 @@ class FormalitiesSicarExport implements
     public function __construct($data)
     {
         $this->data = $data;
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator'        => 'UNKNOWN',
+            'company'        => 'UNKNOWN'
+        ];
     }
 
     public function headings(): array
