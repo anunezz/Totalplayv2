@@ -179,19 +179,34 @@
             <el-header style="background-color: rgb(157, 36, 56);">
                 <el-row type="flex" justify="space-between">
 
-                    <el-col :xl="2" :lg="2" :md="3" :sm="3">
-                        <img
-                            src="/img/sre_header_logo2.png"
-                            class="logo-sre2"
-                            alt="header"
-                            style="margin-top: 10px; margin-left: 5px;">
+                    <el-col :xl="6" :lg="6" :md="8" :sm="8">
+                        <div style="width: 100%; display: flex; justify-content: center;">
+                            <div style="width: 80%;">
+                                <router-link to="/">
+                                    <img
+                                    src="img/relaciones_header.jpeg"
+                                    class="logo-sre2"
+                                    alt="header">
+                                </router-link>
+                            </div>
+                            <div style="width: 285px; height: 20%;">
+
+<div class="header-title-home" style="text-align:center; cursor: pointer">
+                            <router-link style="text-decoration:none; color: #fff;" to="/">
+                                <span style="font-size: 15px">SIRGE v {{$version}}</span>
+                            </router-link>
+                        </div>
+
+                            </div>
+                        </div>
 
                     </el-col>
-                    <el-col :xl="11" :lg="11" :md="10" :sm="5">
+
+                    <!-- <el-col :xl="11" :lg="11" :md="10" :sm="5">
                         <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
                             <span style="font-size: 15px">SIRGE v {{$version}}</span>
                         </div>
-                    </el-col>
+                    </el-col> -->
 
 
                     <el-col :xl="11" :lg="11" :md="11" :sm="16">
@@ -448,7 +463,8 @@
     }
 
     .logo-sre2 {
-        width: 80px;
+        margin-top: 7px;
+        width: 275px;
         height: 50px;
         display: block;
     }

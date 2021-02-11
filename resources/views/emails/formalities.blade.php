@@ -40,8 +40,8 @@
         background-image: url({{ $message->embed(public_path('img/sre_white.png'))}});">
 
     <div class="header">
-        <div style="text-align: left; padding:5px;">
-                <img  width="10%" height="10%" src="{{ $message->embed(public_path().'/img/logo.png') }}" alt="">
+        <div style="text-align: left; padding:0px;">
+                <img  width="35%" src="{{ $message->embed(public_path().'/img/relaciones_header.jpeg') }}" alt="relaciones_header">
         </div>
     </div>
 
@@ -56,7 +56,7 @@
     </div>
     <br>
     <div style="text-align:center; margin: 2%;">
-        <img src="{{ $message->embed( public_path('img/logo_sre_red.png')) }}" width="20%">
+        <img src="{{ $message->embed( public_path('img/relaciones_footer.jpeg')) }}" width="27%">
     </div>
 </section>
 </body>
