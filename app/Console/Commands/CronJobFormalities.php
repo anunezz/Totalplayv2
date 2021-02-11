@@ -44,7 +44,8 @@ class CronJobFormalities extends Command
         // $data = [];
         // $data['sort_code'] = "sort_code_test";
         // $data['title'] = "title_test";
-        // Mail::to('cgaray@sre.gob.mx')->send(new MailFormalities($data));
+        // Mail::to('pdominguez@sre.gob.mx')->send(new MailFormalities($data));
+        // Mail::to('adriann@sre.gob.mx')->send(new MailFormalities($data));
         // return;
         $Formalities = Formalities::get();
         foreach ($Formalities as $item) {
