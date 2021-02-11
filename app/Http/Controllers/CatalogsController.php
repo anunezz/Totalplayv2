@@ -81,7 +81,7 @@ class CatalogsController extends Controller
                         ->paginate($data['perPage']);
                 }
                 if ($data['cat'] == 6) {
-                    $elements = CatSampling::with('serie', 'subserie', 'formalities')
+                    $elements = CatSampling::with('serie', 'subserie', 'formalities', 'sub')
                         ->search($data['search'])
                         ->select(['id', 'quality', 'cat_series_id', 'isActive'])
                         ->orderBy('quality')
