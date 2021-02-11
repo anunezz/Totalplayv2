@@ -8,6 +8,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithProperties;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -21,7 +22,8 @@ class FormalitiesExport implements
     WithHeadings,
     WithTitle,
     WithEvents,
-    WithCustomStartCell
+    WithCustomStartCell,
+    WithProperties
 //    ShouldAutoSize
 {
 
@@ -35,6 +37,14 @@ class FormalitiesExport implements
     public function __construct($data)
     {
         $this->data = $data;
+    }
+
+    public function properties(): array
+    {
+        return [
+            'creator'        => 'UNKNOWN',
+            'company'        => 'UNKNOWN'
+        ];
     }
 
     public function headings(): array
