@@ -49,7 +49,7 @@
 <section>
     <div style="margin: 5%;">
 
-        <p style="color: #777777;">
+        <p style="color: #160a02;">
         "A trav&eacute;s de este medio, se le notifica que el expediente <strong><b> {{ $data['sort_code'] }} y {{ $data['title'] }} </b></strong> registrado en el SIRGE,  ha cumplido su periodo de vigencia, por lo que deber&aacute; ser transferido o dado de baja conforme a lo establecido en el Cat&aacute;logo de Disposici&oacute;n Documental vigente".
         </p>
 
