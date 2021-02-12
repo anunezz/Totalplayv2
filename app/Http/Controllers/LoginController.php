@@ -3,6 +3,8 @@
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
+use Legierski\AES\AES;
+//Legierski\AES
 
 class LoginController extends Controller
 {
@@ -56,9 +58,43 @@ class LoginController extends Controller
 
     }
 
+    public function decrypt($data, $password)
+    {
+        $data = base64_decode($data);
+        $salt = substr($data, 8, 8);
+        $ciphertext = substr($data, 16);
+
+        $rounds = 3;
+        $data00 = $password.$salt;
+        $md5Hash = array();
+        $md5Hash[0] = md5($data00, true);
+        $result = $md5Hash[0];
+
+        for ($i = 1; $i < $rounds; $i++) {
+
+            $md5Hash[$i] = md5($md5Hash[$i - 1].$data00, true);
+            $result .= $md5Hash[$i];
+        }
+
+        $key = substr($result, 0, 32);
+        $iv  = substr($result, 32, 16);
+
+        return openssl_decrypt($ciphertext, 'aes-256-cbc', $key, true, $iv);
+    }
+
     public function login(Request $request)
     {
         try {
+
+            //dd($request);
+            // $data = $request->all();
+            // dd($data);
+            //$data = json_encode($data);
+            // $var = app_path('lib\aes\aes\Legierski\AES\AES.php');
+            // dd($var);
+            // $decrypted = $this->decrypt($data['encrypt'], 'encrypt');
+            // dd($decrypted);
+
 //            if (trim($request->key) != '' && trim($request->token) != '') {
             if ( true ) {
 
@@ -68,7 +104,11 @@ class LoginController extends Controller
 
 //                if (isset($response) && isset($response['authenticated']) && $response['authenticated'] === true) {
                 if ( true ) {
-                    auth()->loginUsingId( User::where( 'username', $request->user )->first()->id );
+
+                    $data = $request->all();
+                    $userName = $data['data']['user'];
+                    //dd($data);
+                    auth()->loginUsingId( User::where( 'username', $userName )->first()->id );
 
                     $user = auth()->user();
                     \DB::table('oauth_access_tokens')->where('user_id', $user->id)

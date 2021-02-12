@@ -14,6 +14,10 @@
         <div id="app"></div>
 
         <!-- JS -->
+        <script>
+            window.acceptC = false;
+        </script>
+
         <script src="{{ asset(mix('js/app.js')) }}"></script>
     </body>
 </html>

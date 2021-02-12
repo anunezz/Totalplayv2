@@ -5,6 +5,11 @@
                 <div class="notfound-404">
                     <h2>Por favor ingrese a inTgra para poder acceder a esta aplicación</h2>
                 </div>
+                <div>
+                    <el-button @click="loginn">
+                        login
+                    </el-button>
+                </div>
             </div>
         </div>
     </div>
@@ -17,8 +22,17 @@
             // let data = {key: this.$route.query.key, token: this.$route.query.token};
             let data = {user: this.$route.query.user};
 
+            //let dataAxios = { data:  };
+
             if (sessionStorage.getItem('SICAR_token') === null) {
-                axios.post('/api/login', data).then(response => {
+                axios.post('/api/login',{data}, {
+                                    headers:
+                                        {
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                            'Accept': 'application/json',
+                                            'Accept-C': window.acceptC
+                                        }
+                                }).then(response => {
                     this.startLoading();
 
                     if (response.data.authenticated === true) {
@@ -28,6 +42,7 @@
                         sessionStorage.setItem('SICAR_hash', response.data.SICAR_hash);
 
                         axios.defaults.headers.common = {
+                            'Accept-C': window.acceptC,
                             'Accept': 'application/json',
                             'X-Requested-With': 'XMLHttpRequest',
                             'Authorization': 'Bearer ' + sessionStorage.getItem('SICAR_token')
@@ -49,6 +64,49 @@
         },
 
         methods: {
+            loginn(){
+
+            let data = {user: this.$route.query.user};
+
+            if (sessionStorage.getItem('SICAR_token') === null) {
+                axios.post('/api/login',{data}, {
+                                    headers:
+                                        {
+                                            'X-Requested-With': 'XMLHttpRequest',
+                                            'Accept': 'application/json',
+                                            'Accept-C': window.acceptC
+                                        }
+                                }).then(response => {
+                    this.startLoading();
+
+                    if (response.data.authenticated === true) {
+
+                        sessionStorage.setItem('SICAR_token', response.data.SICAR_session);
+                        sessionStorage.setItem('SICAR_token_expiration', response.data.SICAR_session_expiration);
+                        sessionStorage.setItem('SICAR_hash', response.data.SICAR_hash);
+
+                        axios.defaults.headers.common = {
+                            'Accept-C': window.acceptC,
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Authorization': 'Bearer ' + sessionStorage.getItem('SICAR_token')
+                        };
+
+                        this.$store.commit('setUser', response.data.user);
+                        this.stopLoading();
+                        this.$router.push('/');
+                    } else{
+                        this.stopLoading();
+                        this.$router.push('/ingresar');
+                    }
+                }).catch(error => {
+                    this.stopLoading();
+
+                    this.$router.push('/ingresar');
+                });
+            }
+
+            },
             startLoading() {
                 this.$store.dispatch(
                     'loading/spinner', {msg: 'Cargando Datos...', status: true}, {root: true});

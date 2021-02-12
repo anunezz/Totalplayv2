@@ -21,6 +21,10 @@ require('../css/app.css');
 require('./utils/filters.js');
 require('@fortawesome/fontawesome-free/css/all.min.css');
 
+window.CryptoJS = require("crypto-js");
+const hash = CryptoJS.MD5("9TMmz72hQM4ZFWKW").toString();
+
+
 const eventsHub = new Vue();
 
 moment.suppressDeprecationWarnings = false;
@@ -50,6 +54,9 @@ window.Vue = Vue;
 window.axios = axios;
 window._ = require('lodash');
 
+// For common config
+axios.defaults.headers.post["Content-Type"] = "application/json";
+
 window.axios.defaults.headers.common = {
     'X-Requested-With': 'XMLHttpRequest',
     'Accept': 'application/json',
@@ -57,6 +64,7 @@ window.axios.defaults.headers.common = {
     'cache-control': 'no-cache="Set-Cookie", no-store, must-revalidate',
     'pragma': 'no-cache',
     'no-cache': 'Set-Cookie, Set-Directiva Cookie2',
+    'Accept-C': window.acceptC
 };
 
 // if (window.sessionStorage.getItem('SICAR_token')) {
@@ -64,6 +72,28 @@ window.axios.defaults.headers.common = {
 // }
 
 axios.interceptors.request.use(function (config) {
+
+
+
+    if(config && config.data && window.acceptC == true){
+        let dataApp = JSON.stringify(config.data);
+        dataApp = CryptoJS.AES.encrypt(dataApp, hash).toString();
+        config.data = {
+            'encrypt' : dataApp
+        };
+    }
+
+    if(config && config.params &&  window.acceptC == true){
+
+        console.log(config.params);
+        let paramsApp = JSON.stringify(config.params);
+
+        paramsApp = CryptoJS.AES.encrypt(paramsApp, hash).toString();
+        config.params = {
+            'encryptParams' : paramsApp
+        };
+    }
+
     let token = window.sessionStorage.getItem('SICAR_token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
@@ -77,7 +107,22 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(response => {
+
+   // console.log(response);
+
+    if(response && response.data &&  window.acceptC == true){
+        if(response.config &&
+            response.config.responseType &&
+            response.config.responseType =='blob'){
+        }else{
+            let bytes  = CryptoJS.AES.decrypt(response.data.toString(), hash);
+            let plaintext = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
+            response.data = plaintext;
+        }
+    }
+
     return response;
+
 }, function (error) {
     if (error.response.status === 401){
         setTimeout(function(){
