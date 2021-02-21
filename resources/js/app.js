@@ -30,7 +30,7 @@ function setNotice() {
             }
         },
         onIdle() {
-            if (window.sessionStorage.getItem("SICAR_token") && this.idleActive === false) {
+            if (window.sessionStorage.getItem("access_token") && this.idleActive === false) {
                 this.idleActive = true;
                 this.removeSession();
             }
@@ -62,7 +62,7 @@ function setNotice() {
                                 message: "No fue posible cerrar su sesión."
                             });
                         });
-                }, 30000); // Will close on 30 seconds
+                }, 3000); // Will close on 30 seconds
 
                 this.$confirm(
                     'La aplicación se cerrará en los próximos 30 segundos, ningún cambio será guardado.',
@@ -80,6 +80,7 @@ function setNotice() {
                         this.idleActive = false;
                         clearTimeout(closeIn60Seconds);
                         done();
+                        window.location.href = 'http://127.0.0.1:8000';
                     })
                     .catch(_ => {
 

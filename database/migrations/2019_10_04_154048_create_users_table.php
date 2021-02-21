@@ -17,11 +17,13 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('username');
             $table->unsignedBigInteger('cat_profile_id');
-            $table->unsignedBigInteger('cat_determinant_id')->nullable();
-            $table->unsignedBigInteger('cat_unit_id')->nullable();
+            // $table->unsignedBigInteger('cat_determinant_id')->nullable();
+            // $table->unsignedBigInteger('cat_unit_id')->nullable();
             $table->string('name');
             $table->string('firstName');
             $table->string('secondName')->nullable();
+            $table->string('email')->nullable();
+            $table->string('password')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
 

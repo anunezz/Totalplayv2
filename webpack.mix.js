@@ -4,8 +4,6 @@ let JavaScriptObfuscator = require('webpack-obfuscator');
 mix.copy('resources/img', 'public/img');
 mix.copy('resources/fonts', 'public/fonts');
 
-
-
 let aux = [];
 if (mix.inProduction()) {
     aux = [
@@ -21,9 +19,9 @@ mix.webpackConfig({
     plugins: aux,
 });
 
-mix.styles([
-    'resources/css/plantilla.css',
-], 'public/css/plantilla.css');
+// mix.styles([
+//     'resources/css/plantilla.css',
+// ], 'public/css/plantilla.css');
 
 mix.js('resources/js/app.js', 'public/js')
     .sourceMaps()

@@ -3,8 +3,7 @@
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Legierski\AES\AES;
-//Legierski\AES
+use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -58,43 +57,9 @@ class LoginController extends Controller
 
     }
 
-    public function decrypt($data, $password)
-    {
-        $data = base64_decode($data);
-        $salt = substr($data, 8, 8);
-        $ciphertext = substr($data, 16);
-
-        $rounds = 3;
-        $data00 = $password.$salt;
-        $md5Hash = array();
-        $md5Hash[0] = md5($data00, true);
-        $result = $md5Hash[0];
-
-        for ($i = 1; $i < $rounds; $i++) {
-
-            $md5Hash[$i] = md5($md5Hash[$i - 1].$data00, true);
-            $result .= $md5Hash[$i];
-        }
-
-        $key = substr($result, 0, 32);
-        $iv  = substr($result, 32, 16);
-
-        return openssl_decrypt($ciphertext, 'aes-256-cbc', $key, true, $iv);
-    }
-
     public function login(Request $request)
     {
         try {
-
-            //dd($request);
-            // $data = $request->all();
-            // dd($data);
-            //$data = json_encode($data);
-            // $var = app_path('lib\aes\aes\Legierski\AES\AES.php');
-            // dd($var);
-            // $decrypted = $this->decrypt($data['encrypt'], 'encrypt');
-            // dd($decrypted);
-
 //            if (trim($request->key) != '' && trim($request->token) != '') {
             if ( true ) {
 
@@ -105,15 +70,40 @@ class LoginController extends Controller
 //                if (isset($response) && isset($response['authenticated']) && $response['authenticated'] === true) {
                 if ( true ) {
 
+                    $request->validate([
+                        'email'=>'required|string|email',
+                        'password' => 'required|string'
+                    ]);
+
                     $data = $request->all();
-                    $userName = $data['data']['user'];
-                    //dd($data);
-                    auth()->loginUsingId( User::where( 'username', $userName )->first()->id );
+
+                    //verificar credenciales
+                    $credentials = request(['email','password']);
+
+                   // dd(Auth::attempt($credentials));
+
+
+                    $active =User::where( 'email', $data['email'] )
+                        ->where('isActive',1)
+                        ->count();
+
+                   // dd($active);
+
+
+                    if(!Auth::attempt($credentials) || $active === 0){
+                        return response()->json( [
+                            'authenticated' => false,
+                        ], 200 );
+                    }
+
+                    //auth()->loginUsingId( User::where( 'email', $data['email'] )->where('password',$data['password'])->first()->id );
 
                     $user = auth()->user();
+                    $firstSesion = $user->firstSesion()->first()->isActive === 1? true:false;
+
                     \DB::table('oauth_access_tokens')->where('user_id', $user->id)
                         ->update(['revoked' => true]);
-                    $token = $user->createToken( 'SICAR_session' )->accessToken;
+                    $token = $user->createToken( 'access_session' )->accessToken;
 
                     if ( $token ) {
                         //GeneralController::saveTransactionLog(1,
@@ -121,10 +111,11 @@ class LoginController extends Controller
 
                         return response()->json( [
                             'authenticated'             => true,
-                            'SICAR_session'            => $token,
-                            'SICAR_hash'               => $user->hash,
+                            'access_session'            => $token,
+                            'access_hash'               => $user->hash,
                             'user'                      => static::getSessionInfo( $user->id ),
-                            'SICAR_session_expiration' => date( 'D M d Y H:i:s', strtotime( "+8 hours" ) ),
+                            'access_session_expiration' => date( 'D M d Y H:i:s', strtotime( "+8 hours" ) ),
+                            'first_sesion' => $firstSesion
                         ], 200 );
                     }
                     else {
@@ -175,6 +166,8 @@ class LoginController extends Controller
         $authenticated = true;
         auth()->logout();
 
+        //dd(auth());
+
         if ( !auth()->check() ) {
             $authenticated = false;
         }
@@ -187,10 +180,7 @@ class LoginController extends Controller
     public static function getSessionInfo($id)
     {
         $user = User::find( $id );
-        $nameUnit = null;
-        if (!is_null($user->admin)) {
-            $nameUnit = $user->admin->name;
-        }
+
         return (object)[
             'hash_id'    => $user->hash,
             'fullname'   => $user->full_name,
@@ -198,8 +188,7 @@ class LoginController extends Controller
             'firstName'  => $user->firstName,
             'secondName' => $user->secondName,
             'profile'    => $user->cat_profile_id,
-            'cat_unit_id' => $user->cat_unit_id,
-            'name_unit' => $nameUnit
+            'username'   => $user->username
         ];
     }
 }

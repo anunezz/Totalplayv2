@@ -13,6 +13,13 @@ import tinymce from 'vue-tinymce-editor'
 import {getIPs, getIPv4, getIPv6} from 'webrtc-ips';
 import Loading from './mixins/Loading';
 import VJsoneditor from 'v-jsoneditor';
+import VueScreen from 'vue-screen';
+//import 'animate.css';
+import 'bootstrap';
+import "bootstrap/dist/css/bootstrap.css";
+const $ = require('jquery')
+window.$ = $;
+import '../css/plantilla.css';
 
 require('moment/locale/es');
 require('../../node_modules/animate.css/animate.css');
@@ -36,6 +43,7 @@ Vue.use( require('vue-moment'), { moment, momentTz });
 Vue.component('tinymce', tinymce);
 Vue.mixin(Loading);
 Vue.use(VJsoneditor);
+Vue.use(VueScreen);
 
 Vue.prototype.$version= '1.3';
 
@@ -67,13 +75,11 @@ window.axios.defaults.headers.common = {
     'Accept-C': window.acceptC
 };
 
-// if (window.sessionStorage.getItem('SICAR_token')) {
-//     window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.sessionStorage.getItem('SICAR_token');
+// if (window.sessionStorage.getItem('access_token')) {
+//     window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + window.sessionStorage.getItem('access_token');
 // }
 
 axios.interceptors.request.use(function (config) {
-
-
 
     if(config && config.data && window.acceptC == true){
         let dataApp = JSON.stringify(config.data);
@@ -84,8 +90,6 @@ axios.interceptors.request.use(function (config) {
     }
 
     if(config && config.params &&  window.acceptC == true){
-
-        console.log(config.params);
         let paramsApp = JSON.stringify(config.params);
 
         paramsApp = CryptoJS.AES.encrypt(paramsApp, hash).toString();
@@ -94,12 +98,12 @@ axios.interceptors.request.use(function (config) {
         };
     }
 
-    let token = window.sessionStorage.getItem('SICAR_token');
+    let token = window.sessionStorage.getItem('access_token');
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     } else {
         config.headers.Authorization = "";
-        window.sessionStorage.removeItem('SICAR_token');
+        window.sessionStorage.removeItem('access_token');
     }
     return config;
 }, function (error) {
@@ -107,8 +111,6 @@ axios.interceptors.request.use(function (config) {
 });
 
 axios.interceptors.response.use(response => {
-
-   // console.log(response);
 
     if(response && response.data &&  window.acceptC == true){
         if(response.config &&

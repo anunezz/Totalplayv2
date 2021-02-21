@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\Http\Models\Cats\CatAdministrativeUnit;
 use App\Http\Models\Cats\CatDeterminant;
 use App\Http\Models\Cats\CatProfile;
-use App\Http\Models\Cats\CatConsulate;
+use App\Http\Models\FirstSesion;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -49,8 +48,6 @@ use phpDocumentor\Reflection\Types\Static_;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereUsername($value)
  * @mixin \Eloquent
 
-
- * @property-read \App\Http\Models\Cats\CatAdministrativeUnit $admin
  * @property-read \App\Http\Models\Cats\CatProfile $profile
  * @method static \Illuminate\Database\Eloquent\Builder|User search($search)
 
@@ -62,8 +59,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    protected $fillable = ['username','cat_profile_id', 'cat_determinant_id', 'cat_unit_id', 'name', 'firstName', 'secondName'];
+    protected $fillable = ['username','cat_profile_id','email','name','password','firstName', 'secondName'];
     protected $appends = ['full_name', 'hash'];
+    protected $with = ['profile','firstSesion'];
 
 
     public function getFullNameAttribute()
@@ -84,59 +82,23 @@ class User extends Authenticatable
         )->where( 'isActive', 1 );
     }
 
-    public function determinant()
+    public function firstSesion()
     {
         return $this->belongsTo(
-            CatAdministrativeUnit::class,
-            'cat_unit_id'
-        )->where( 'isActive', 1 );
-    }
-
-    public function admin()
-    {
-        return $this->belongsTo(
-            CatAdministrativeUnit::class,
-            'cat_unit_id'
-        )->where( 'isActive', 1 );
-    }
-
-    public function unit()
-    {
-        return $this->belongsToMany(
-            CatAdministrativeUnit::class,
-            'user_units',
-            'user_id',
-            'cat_administrative_unit_id'
+            FirstSesion::class,
+            'id','user_id'
         );
     }
-
-//    public function topics()
-//    {
-//        return $this->belongsToMany(
-//            CatTopic::class,
-//            'admin_unit_topics',
-//            'admin_unit_id',
-//            'topic_id'
-//        );
-//    }
 
     public function scopeSearch($query, $search)
     {
         return $query->when( !empty ( $search ), function ($query) use ($search) {
-
             return $query->where( function ($q) use ($search) {
-                $q->where( 'username', 'like', '%' . $search . '%' );
-                $q->orWhere( 'name', 'like', '%' . $search . '%' );
-                $q->orWhere( 'firstName', 'like', '%' . $search . '%' );
-                $q->orWhere( 'secondName', 'like', '%' . $search . '%' );
-
-                $q->orWhereHas('determinant', function($q) use ($search) {
-                    $q->where('determinant', 'like', '%' .$search . '%');
-                });
-
-                $q->orWhereHas('profile', function($q) use ($search) {
-                    $q->where('name', 'like', '%' .$search . '%');
-                });
+                $q->orwhere( 'username', $search['username'] );
+                $q->orWhere( 'email', $search['email']);
+    //             $q->orWhereHas('profile', function($q) use ($search) {
+    //                 $q->where('name', 'like', '%' .$search . '%');
+    //             });
 
             });
         } );

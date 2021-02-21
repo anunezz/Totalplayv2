@@ -1,168 +1,5 @@
 <template>
     <div>
-        <div id="filtersArea">
-            <transition appear name="filters">
-                <el-container class="form-filters" v-if="show">
-                    <el-header style="background-color: rgb(157, 36, 56);">
-                        <el-row :gutter="20">
-                            <el-col :span="12">
-                                <el-button
-                                    class="close-button"
-                                    type="text"
-                                    @click="show = false">
-                                    <i class="el-icon-arrow-right"></i>
-                                    Minimizar
-                                </el-button>
-                            </el-col>
-                        </el-row>
-                    </el-header>
-                    <el-main style="border-left: 16px solid #E9EEF3 ">
-                        <el-card shadow="never">
-                            <div slot="header">
-                                <span class="title"> <i class="fas fa-user"></i> Perfil</span>
-                            </div> <br>
-<!--                            <pre>{{user}}</pre>-->
-                            <el-row>
-                                <el-col :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
-                                        <el-card shadow="always">
-                                            <strong><b>Nombre: </b></strong> {{$store.state.user.fullname}}
-                                        </el-card>
-                                    </div>
-                                </el-col>
-<!--                                <el-col v-if="user.profile_id !== 1" :span="24">-->
-<!--                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >-->
-<!--                                        <el-card shadow="always">-->
-<!--                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>-->
-<!--                                            <span v-for="(item, index) in user.unit" :key="index"> {{ item.name }}<br>  </span>-->
-<!--                                        </el-card>-->
-<!--                                    </div>-->
-<!--                                </el-col>-->
-                                <el-col v-if="user.profile_id === 3" :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-form :model="userForm" ref="userForm" label-width="120px" label-position="top">
-                                            <el-card shadow="always">
-                                                <strong><b>Unidad Administrativa: </b></strong><br><p></p>
-                                                <el-form-item prop="cat_unit_id"
-                                                              :rules="[{ required: true, message: 'Este campo es requerido', trigger:['blur','change'] }]">
-<!--                                                    v-if="units.length >= 1"
-                                                                disabled-->
-                                                    <el-select style="width: 100%;" size="medium"
-                                                               v-model="userForm.cat_unit_id"
-                                                               @change="submitForm"
-                                                               filterable
-                                                               placeholder="Seleccionar">
-                                                        <el-option
-                                                            v-for="(unit , index) in units"
-                                                            :key="index"
-                                                            :label="unit.name"
-                                                            :value="unit.id">
-                                                        </el-option>
-                                                    </el-select>
-                                                </el-form-item>
-                                            </el-card>
-                                        </el-form>
-                                    </div>
-                                </el-col>
-                                <el-col v-if="user.profile_id === 1" :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-form :model="userForm" ref="userForm" label-width="120px" label-position="top">
-                                            <el-card shadow="always">
-                                                <strong><b>Unidad Administrativa: </b></strong><span>Todas <br>  </span>
-                                                <br><p></p>
-                                                <el-form-item prop="cat_unit_id"
-                                                              :rules="[{ required: true, message: 'Este campo es requerido', trigger:['blur','change'] }]">
-                                                    <!--                                                    v-if="units.length >= 1"
-                                                                                                                    disabled-->
-                                                    <el-select style="width: 100%;" size="medium"
-                                                               v-model="userForm.cat_unit_id"
-                                                               @change="submitForm"
-                                                               filterable
-                                                               placeholder="Seleccionar">
-                                                        <el-option
-                                                            v-for="(unit , index) in allunits"
-                                                            :key="index"
-                                                            :label="unit.name"
-                                                            :value="unit.id">
-                                                        </el-option>
-                                                    </el-select>
-                                                </el-form-item>
-                                            </el-card>
-                                        </el-form>
-                                    </div>
-                                </el-col>
-                                <el-col v-if="user.profile_id === 2" :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-card shadow="always">
-                                            <strong><b>Unidad Administrativa: </b></strong><br><p></p>
-                                            <span>{{user.admin}} <br>  </span>
-                                        </el-card>
-                                    </div>
-                                </el-col>
-                                <el-col :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
-                                        <el-card shadow="always">
-                                            <strong><b>Rol o perfil: </b></strong> {{user.profile}}
-                                        </el-card>
-                                    </div>
-                                </el-col>
-                                <el-col :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
-                                        <el-card shadow="always">
-                                            <strong><b>Determinante: </b></strong> {{user.determinant}}
-                                        </el-card>
-                                    </div>
-                                </el-col>
-                                <el-col :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" class="grid-content bg-purple-dark">
-                                        <el-card shadow="always">
-                                            <strong><b>Email: </b></strong> {{user.email}}@sre.gob.mx
-                                        </el-card>
-                                    </div>
-                                </el-col>
-                                <el-col v-if="user.profile_id !== 1" :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-card shadow="always">
-                                            <strong><b>Privilegio de modulos: </b></strong><br><p></p>
-                                            <span>Registro <br> </span>
-                                            <span>Búsqueda <br> </span>
-                                            <span>Formatos <br> </span>
-                                            <span>Histórico <br> </span>
-                                        </el-card>
-                                    </div>
-                                </el-col>
-                                <el-col v-if="user.profile_id === 1" :span="24">
-                                    <div style="width: 100%; padding-bottom: 18px; font-size: 15px;" >
-                                        <el-card shadow="always">
-                                            <strong><b>Privilegio de modulos: </b></strong><br><p></p>
-                                            <span>Perfiles <br> </span>
-                                            <span>Registro <br> </span>
-                                            <span>Búsqueda <br> </span>
-                                            <span>Formatos <br> </span>
-                                            <span>Histórico <br> </span>
-                                            <span>CGCA X SERIE <br> </span>
-                                            <span>CGCA X AREA <br> </span>
-                                        </el-card>
-                                    </div>
-                                </el-col>
-                            </el-row>
-                            <br> <p></p>
-                            <el-row>
-                                <div align="right">
-<!--                                    <el-button v-if="user.profile_id === 3" type="success" size="medium" plain @click="submitForm">-->
-<!--                                        Actualizar-->
-<!--                                    </el-button>-->
-                                    <el-button type="danger" size="medium" plain @click="show = false">
-                                        Salir
-                                    </el-button>
-                                </div>
-                            </el-row>
-                        </el-card>
-                    </el-main>
-                </el-container>
-            </transition>
-        </div>
-
         <div class="custom-splash" v-show="animate === true">
             <div id="splash_cont" class="animate">
                 <svg height="400" width="400" xmlns="http://www.w3.org/2000/svg">
@@ -193,21 +30,13 @@
 
 <div class="header-title-home" style="text-align:center; cursor: pointer">
                             <router-link style="text-decoration:none; color: #fff;" to="/">
-                                <span style="font-size: 15px">SIRGE v {{$version}}</span>
+                                <span style="font-size: 15px">SIRGo v {{$version}}</span>
                             </router-link>
                         </div>
 
                             </div>
                         </div>
-
                     </el-col>
-
-                    <!-- <el-col :xl="11" :lg="11" :md="10" :sm="5">
-                        <div class="header-title-home" @click="$router.push('/')" style="cursor: pointer">
-                            <span style="font-size: 15px">SIRGE v {{$version}}</span>
-                        </div>
-                    </el-col> -->
-
 
                     <el-col :xl="11" :lg="11" :md="11" :sm="16">
                         <el-menu
@@ -222,7 +51,6 @@
                                 trigger="hover"
                                 content="Cerrar sesión">
                                 <el-menu-item
-                                    index="#"
                                     class="border-menu-item"
                                     @click="logout"
                                     slot="reference"
@@ -236,10 +64,8 @@
                                 trigger="hover"
                                 :content="$store.state.user.fullname">
                                 <el-menu-item
-                                    index="#"
                                     slot="reference"
                                     class="border-menu-item"
-                                    @click="show=!show"
                                     style="cursor:pointer;float: right">
                                     <i class="fas fa-user" style="color: whitesmoke;"></i>
                                 </el-menu-item>
@@ -259,6 +85,41 @@
             </el-header>
             <el-main>
                 <el-card shadow="never">
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="alert alert-primary" role="alert">
+  A simple primary alert—check it out!
+</div>
+<div class="alert alert-secondary" role="alert">
+  A simple secondary alert—check it out!
+</div>
+<div class="alert alert-success" role="alert">
+  A simple success alert—check it out!
+</div>
+                        </div>
+                        <div class="col-md-6">
+
+
+<p>
+  <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Link with href
+  </a>
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    Button with data-target
+  </button>
+</p>
+<div class="collapse" id="collapseExample">
+  <div class="card card-body">
+    Some placeholder content for the collapse component. This panel is hidden by default but revealed when the user activates the relevant trigger.
+  </div>
+</div>
+
+
+<div class="animate__animated animate__bounce animate__faster">Example</div>
+                        </div>
+                    </div>
+
                     <router-view></router-view>
                 </el-card>
             </el-main>
@@ -270,12 +131,10 @@
 <script>
 
     import { mapState, mapGetters, mapActions, mapMutations } from "vuex";
-    import HeaderSection from "../layouts/partials/HeaderSection";
+
 
     export default {
-        components: {
-            HeaderSection
-        },
+
         data() {
             return {
                 date: new Date(),
@@ -298,33 +157,9 @@
         },
 
         created() {
-            this.details();
+            // this.details();
             this.init();
-            this.startLoading();
             let _this = this;
-
-            axios.get('/api/cats/allunits').then(response => {
-                this.allunits = response.data.allunits;
-
-                this.stopLoading();
-            }).catch(error => {
-                this.stopLoading();
-
-                this.$message({
-                    type: "warning",
-                    message: "No fue posible completar la acción, intente nuevamente."
-                });
-            })
-
-            /*axios.get('/api/count-notifications').then(response => {
-                this.notifications = response.data.notifications;
-            }).catch(error => {
-                this.$message({
-                    type: "warning",
-                    message: "No fue posible completar la acción, intente nuevamente."
-                });
-            });*/
-
             setInterval(function(){
                 _this.date = new Date();
             },60000);
@@ -335,12 +170,16 @@
         methods: {
 
             logout() {
+                console.log("click");
 
                 axios.post("/api/logout").then(response => {
+                    console.log("+++++",response);
                     if (response.data.authenticated === false) {
-                        sessionStorage.removeItem("SICAR_token");
-                        sessionStorage.removeItem("SICAR_token_expiration");
-                        sessionStorage.removeItem("SICAR_hash");
+                        sessionStorage.removeItem("access_token");
+                        sessionStorage.removeItem("access_token_expiration");
+                        sessionStorage.removeItem("access_hash");
+
+                        console.log("Estas aqui",sessionStorage.getItem('access_token'));
 
                         axios.defaults.headers.common = {
                             Authorization: "Bearer"
@@ -367,74 +206,25 @@
                     }, 2100);
                 }
             },
-            details(){
-                axios.get('/api/cats/getDetailsUser').then(response => {
-                    if(response.data.success){
-                        this.units = response.data.lResults.user.unit;
-                        this.user.id = response.data.lResults.user.id;
-                        this.user.full_name = response.data.lResults.user.full_name;
-                        this.user.profile = response.data.lResults.user.profile.name;
-                        this.user.profile_id = response.data.lResults.user.cat_profile_id;
-                        this.userForm.cat_unit_id = response.data.lResults.user.cat_unit_id;
-                        //this.unit = response.data.lResults.user.cat_unit_id;
-                        // this.user.determinant = response.data.lResults.user.determinant.name;
-                        // this.user.determinant_id = response.data.lResults.user.cat_determinant_id;
-                        this.user.office = response.data.lResults.user.office;
-                        this.user.email = response.data.lResults.user.username;
-                        this.user.admin = response.data.lResults.user.admin.name;
-                        this.user.determinant = response.data.lResults.user.admin.determinant;
+            // details(){
+            //     axios.get('/api/cats/getDetailsUser').then(response => {
+            //         console.log(response);
+            //         if(response.data.success){
+            //             this.units = response.data.lResults.user.unit;
+            //             this.user.id = response.data.lResults.user.id;
+            //             this.user.full_name = response.data.lResults.user.full_name;
+            //             this.user.profile = response.data.lResults.user.profile.name;
+            //             this.user.profile_id = response.data.lResults.user.cat_profile_id;
+            //             this.userForm.cat_unit_id = response.data.lResults.user.cat_unit_id;
+            //             this.user.office = response.data.lResults.user.office;
+            //             this.user.email = response.data.lResults.user.username;
+            //             this.user.admin = response.data.lResults.user.admin.name;
+            //             this.user.determinant = response.data.lResults.user.admin.determinant;
+            //         }
+            //     }).catch(error => {
 
-
-
-                 //       this.units = response.data.lResults.units;
-
-                    }
-                }).catch(error => {
-
-                });
-            },
-
-            submitForm() {
-                this.startLoading();
-           //console.log( "Loger: ",this.$store.state.user.profile );
-
-
-                let data ={id: this.user.id, cat_unit_id: this.userForm.cat_unit_id };
-
-                this.$refs['userForm'].validate((valid) => {
-                    if (valid) {
-
-                        axios.post(`/api/users/unit`, data).then(response => {
-
-                            this.$store.commit('setUser', response.data.user);
-                            setTimeout(()=>{
-                                location.reload();
-                            },100)
-
-                            this.stopLoading();
-                            this.$message({
-                                type: "success",
-                                title: 'Éxito',
-                                message: "Se actualizo la información correctamente"
-                            });
-
-                            this.show = false;
-
-                        }).catch(error => {
-                            this.stopLoading();
-                            location.reload();
-                            this.$message({
-                                type: "warning",
-                                message: "No fue posible completar la acción, intente nuevamente."
-                            });
-                        })
-                    }
-                    else {
-                        this.stopLoading();
-                        location.reload();
-                    }
-                });
-            }
+            //     });
+            // },
         }
     }
 </script>

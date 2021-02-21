@@ -1,44 +1,54 @@
 import Home from "./components/views/layouts/Home";
-import AccessDenied from "./components/views/layouts/AccessDenied";
-import Menu from "./components/views/layouts/Menu";
-import Admin from "./routes/Admin";
-import Formalities from "./routes/Formalities";
-import Strategy from "./routes/Historical";
-import Reports from "./routes/Reports";
-import Catalogs from "./routes/Catalogs";
+import Index from "./components/views/Index";
+import Login from "./routes/Login";
+import Totalplay from "./routes/Totalplay";
+import LoginComponent from './components/views/login/Index';
 
 export const routes = [
     {
-        path: '/ingresar',
-        component: AccessDenied,
-        beforeEnter: (to, from, next) => {
-
-            if (sessionStorage.getItem('SICAR_token')) {
-                next('/');
-            } else {
-                next();
-            }
-        }
-    },
-
-    {
         path: '/',
-        component: Home,
+        component: Index,
         children: [
-            { path: '', component: Menu },
-            { ...Admin },
-            { ...Strategy },
-            { ...Formalities },
-            { ...Reports },
-            { ...Catalogs }
+            //{ path: '', component: Menu },
+            { ...Totalplay },
+            {
+                path: '/login',
+                name: 'TotalplayLogin',
+                component: LoginComponent,
+                beforeEnter: (to, from, next) => {
+                    if (sessionStorage.getItem('access_token')) {
+                        next();
+                    } else {
+                        next('/');
+                    }
+                },
+                children: [
+                    { ...Login }
+                ]
+            },
         ],
-        beforeEnter: (to, from, next) => {
-            if (sessionStorage.getItem("SICAR_token")) {
-                next();
-            } else {
-                next("/ingresar");
-            }
-        }
+        // beforeEnter: (to, from, next) => {
+        //     if (sessionStorage.getItem('access_token')) {
+        //         next('/');
+        //     } else {
+        //         next();
+        //     }
+        // }
     },
+    // {
+    //     path: '/',
+    //     component: Home,
+    //     children: [
+    //         { path: '', component: Menu },
+    //         { ...Admin }
+    //     ],
+    //     beforeEnter: (to, from, next) => {
+    //         if (sessionStorage.getItem("access_token")) {
+    //             next();
+    //         } else {
+    //             next("/ingresar");
+    //         }
+    //     }
+    // },
     { path: '*', redirect: '/' }
 ];

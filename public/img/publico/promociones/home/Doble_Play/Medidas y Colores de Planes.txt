@@ -1,0 +1,49 @@
+
+Colores de Planes Residenciales:
+
+Diviertete       d2a545
+
+Diviertete +     ce922f
+
+Emocionate       789ab0
+
+Emocionate +     427b96
+
+Sorprendete +    6d5c96
+
+
+Degradados al 70%
+
+
+Medidas de Planes Residenciales Triple Play
+
+Ancho: 18cm             Ancho: 510.24 pixeles
+Alto: 35cm       ó      Alto: 992.13 pixeles
+
+
+Medidas de Planes Residenciales Doble Play 40, 80 y 150
+
+Ancho: 18cm             Ancho: 510.24 pixeles
+Alto: 27cm       ó      Alto: 765.35 pixeles
+
+
+Medidas de Planes Residenciales Doble Play 250 y 500
+
+Ancho: 18cm             Ancho: 510.24 pixeles
+Alto: 31cm       ó      Alto: 878.74 pixeles
+
+
+
+
+
+COLORES TOTALPLAY
+
+Amarillo	e3b328
+Morado		72609f
+Rosa		bb5a91
+Azul		8bbada
+Verde		bdcc46
+Rojo		b44742
+Gris		575957
+Negro		000000	
+Blanco		ffffff

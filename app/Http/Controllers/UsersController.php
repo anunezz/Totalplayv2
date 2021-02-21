@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\GeneralController;
 use App\Http\Models\Cats\CatAdministrativeUnit;
@@ -55,17 +54,12 @@ class UsersController extends Controller
 
                 $user = User::find(decrypt($id));
                 $profiles = CatProfile::where('isActive', 1)->get(['id', 'name']);
-                $determinants = CatAdministrativeUnit::where('isActive', 1)->whereDeterminant(false)->get(['id', 'determinant']);
-                $units = CatAdministrativeUnit::where('isActive', 1)->get(['id', 'name']);
-                $userConsulates = DB::table('user_units')
-                    ->where('user_id', $user->id)
-                    ->pluck('cat_administrative_unit_id');
 
                 $userform = [
                     'cat_profile_id' => $user->cat_profile_id,
-                    'cat_determinant_id' => $user->cat_determinant_id,
-                    'cat_unit_id'  => $user->cat_unit_id,
-                    'cat_administrative_unit_id' => $userConsulates,
+                    //'cat_determinant_id' => $user->cat_determinant_id,
+                    //'cat_unit_id'  => $user->cat_unit_id,
+                    //'cat_administrative_unit_id' => $userConsulates,
                     'name' => $user->name,
                     'firstName' => $user->firstName,
                     'secondName' => $user->secondName
@@ -73,8 +67,6 @@ class UsersController extends Controller
 
                 return response()->json([
                     'profiles' => $profiles,
-                    'determinants' => $determinants,
-                    'units' => $units,
                     'userForm' => $userform,
                     'success' => true
                 ]);

@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import totalplay from './modules/totalplay'
 import loading from './modules/loading'
 import user from './modules/user'
 import bulkLoading from './modules/bulkLoadingErrors'
@@ -8,7 +9,6 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     plugins:[
-
         createPersistedState({
             key: 'bulkLoading',
             paths:['bulkLoading']
@@ -16,8 +16,9 @@ export default new Vuex.Store({
 
     ],
     modules: {
-        loading,
+        totalplay,
         user,
         bulkLoading,
+        loading
     }
 });

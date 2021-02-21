@@ -22,10 +22,16 @@ class CacheControl
             if ($key == 'REQUEST_URI' ){
                 if ($value !== "/"){
 
+                    //dd($value);
+
+                    if (strpos($value,"/api/exportContacts") !==false){
+                        $valid = false;
+                    }
+
                     if (strpos($value,"/api/download/excel") !==false){
                         $valid = false;
                     }
-                    
+
                     if (strpos($value,"/api/report") !==false){
                         $valid = false;
                     }

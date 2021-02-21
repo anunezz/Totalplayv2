@@ -1,12 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Models\Cats\CatConsulate;
-use App\Http\Models\Cats\CatOrganism;
-use App\Http\Models\Cats\CatSubtopic;
-use App\Http\Models\Cats\CatTopic;
-use App\Http\Models\Formalities;
-use App\Http\Models\Notice;
-use App\Http\Models\Recommendation;
 use App\Http\Models\Transaction;
 use App\User;
 use Carbon\Carbon;

@@ -22,5 +22,5 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CatProfile extends Model
 {
-    //
+    //protected $table = 'cat_profiles';
 }
