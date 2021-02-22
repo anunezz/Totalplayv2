@@ -12,23 +12,23 @@
         <span v-if="titleModal === 'Deshabilitar usuario' || titleModal ==='Activar usuario'" v-text="messageModal"></span>
 
         <span slot="footer" class="dialog-footer" v-if="titleModal === 'Deshabilitar usuario' || titleModal ==='Activar usuario'">
-            <el-button-group>
-                <el-button size="mini" @click="modalVisible = false">Cancelar</el-button>
-                <el-button v-if="titleModal === 'Deshabilitar usuario'" size="mini" type="danger" @click="activeUser()">Deshabilitar</el-button>
-                <el-button v-if="titleModal === 'Activar usuario'" size="mini" type="success" @click="activeUser()"> Activar</el-button>
-            </el-button-group>
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-primary" size="mini" @click="modalVisible = false">Cancelar</button>
+                <button type="button" class="btn btn-sm btn-danger" v-if="titleModal === 'Deshabilitar usuario'" @click="activeUser()"><i class="el-icon-close"></i> Deshabilitar</button>
+                <button v-if="titleModal === 'Activar usuario'" type="button" class="btn btn-success btn-sm" @click="activeUser()"> <i class="el-icon-check"></i> Activar</button>
+            </div>
         </span>
-        <new-user-component
-        v-if="titleModal === 'Nuevo usuario' || titleModal === 'Actualizar usuario'"
+        <new-pack-component
+        v-if="titleModal === 'Nuevo paquete' || titleModal === 'Actualizar paquete'"
         :items="user"
-        @responseUser="responseUser" />
+        @responsePack="responsePack" />
     </el-dialog>
 
 
     <div class="col-md-12 py-2">
         <div class="row justify-content-md-between flex-wrap">
             <div class="col-md-6">
-                <h4>Bandeja de entrada usuarios Totalplay.</h4>
+                <h4>Configuración de paquetes Totalplay.</h4>
             </div>
             <div class="col-md-6">
                 <router-link to="/login/configuracion">
@@ -40,7 +40,7 @@
     <div class="col-md-12 py-2">
         <div class="btn-group float-right">
             <button class="btn btn-secondary btn-sm"> <i class="el-icon-search"></i> Búsqueda avanzada</button>
-            <button class="btn btn-primary btn-sm" @click="modal(['new',[]])"> <i class="el-icon-plus"></i> Nuevo usuario</button>
+            <button class="btn btn-primary btn-sm" @click="modal(['new',[]])"> <i class="el-icon-plus"></i> Nuevo paquete</button>
         </div>
     </div>
     <div class="col-md-12">
@@ -48,21 +48,23 @@
         <thead class="thead-dark">
             <tr>
                 <th scope="col">#</th>
+                <th scope="col">Paquete</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Email</th>
-                <th scope="col">Perfil</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Residencia</th>
+                <th scope="col">Tipo</th>
                 <th scope="col">Estatus</th>
                 <th scope="col">Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="(item,index) in users" :key="index">
+            <tr v-for="(item,index) in packs" :key="index">
                 <th scope="row">1</th>
-                <td v-text="item.full_name"></td>
-                <td v-text="item.username"></td>
-                <td v-text="item.email"></td>
-                <td v-text="item.profile.name"></td>
+                <td v-text="item.namepack.name"></td>
+                <td v-text="item.name"></td>
+                <td v-text="item.description"></td>
+                <td v-text="item.frontier ===0?'Residencial':'Fronterizo'"></td>
+                <td v-text="item.triple_double === 0?'Doble play':'Triple play'"></td>
                 <td v-text="(item.isActive === 1?'Activo':'Desactivado')"></td>
                 <td>
                     <div class="btn-group float-center">
@@ -79,14 +81,14 @@
 </template>
 
 <script>
-import newUsercomponent from '../../../fragments/FormNewUser';
+import newPackscomponent from '../../../../fragments/FormNewPack';
 export default {
     components:{
-        'new-user-component': newUsercomponent,
+        'new-pack-component': newPackscomponent,
     },
     data(){
         return {
-            users:[],
+            packs:[],
             modalVisible:false,
             titleModal: null,
             messageModal: null,
@@ -97,7 +99,7 @@ export default {
         }
     },
     created(){
-        this.getUsers();
+        this.getCatsPacks();
     },
     methods: {
         modal(data){
@@ -106,7 +108,7 @@ export default {
             switch (data[0]) {
                 case 'new':{
                     this.modalVisible = true;
-                    this.titleModal = 'Nuevo usuario';
+                    this.titleModal = 'Nuevo paquete';
                     this.user = {
                         type:false,
                         data:[]
@@ -115,7 +117,7 @@ export default {
                 }
                 case 'edit':{
                     this.modalVisible = true;
-                    this.titleModal = 'Actualizar usuario';
+                    this.titleModal = 'Actualizar paquete';
                     this.user = {
                         type: true,
                         data: data[1]
@@ -125,7 +127,7 @@ export default {
                 case 'active':{
                     this.modalVisible = true;
                     this.titleModal = ( data[1][1] )? 'Activar usuario':'Deshabilitar usuario';
-                    this.messageModal =( data[1][1] )? '¿Estas completamente seguro de activar este usuario?':'¿Estas completamente seguro de eliminar este usuario?';
+                    this.messageModal =( data[1][1] )? '¿Estas completamente seguro de activar este usuario?':'¿Estas completamente seguro de deshabilitar este usuario?';
                     this.user = {
                         type: true,
                         data: data[1]
@@ -143,12 +145,12 @@ export default {
                 }
             }
         },
-        responseUser(res){
+        responsePack(res){
                 if(res){
                     this.modalVisible = false;
                     this.titleModal = '';
                     this.messageModal = null;
-                    this.getUsers();
+                    this.getCatsPacks();
                 }
                 this.$store._modules.root.state.totalplay.loading = false;
         },
@@ -160,13 +162,15 @@ export default {
                 active: this.user.data[1]
             }).then(response => {
                 if(response.data.success){
-                    this.getUsers();
+                    this.getCatsPacks();
                     this.modalVisible = false;
                     this.titleModal = '';
                     this.messageModal = null;
                     this.$store._modules.root.state.totalplay.loading = false;
+                    let text = (this.user.data[1])? 'El usuario fue activado correctamente.':
+                    'El usuario fue deshabilitado correctamente.';
                     this.$message({
-                        message: 'El usuario fue desactivado correctamente.',
+                        message: text,
                         type: 'success'
                     });
                 }
@@ -178,13 +182,11 @@ export default {
                 });
             });
         },
-        getUsers(){
-            this.$store._modules.root.state.totalplay.loading = true;
-            axios.post('/api/getUsers',{
-                data: null
-            }).then(response => {
+        getCatsPacks(){
+            //this.$store._modules.root.state.totalplay.loading = true;
+            axios.get('/api/getCatsPacks').then(response => {
                 if(response.data.success){
-                    this.users = response.data.lResults;
+                    this.packs = response.data.lResults.packs;
                     this.$store._modules.root.state.totalplay.loading = false;
                 }
             }).catch(error => {

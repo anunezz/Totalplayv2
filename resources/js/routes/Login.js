@@ -1,13 +1,19 @@
 import {RouterView} from './RouterView.js';
+import store from "../store/modules/user";
 import LoginMenu from '../components/views/login/menu/index';
 //Modulo configuracion
 import LoginConfig from '../components/views/login/menu/config/index';
 import LoginUsers from '../components/views/login/menu/config/user';
 import LoginFirstSesion from '../components/views/login/menu/fistsesion/Firstsesion';
-import LoginContacts from '../components/views/login/menu/contscats/Contacts';
+import LoginCats from '../components/views/login/menu/config/cats/Index';
+import LoginPacks from '../components/views/login/menu/config/cats/Packs';
 //Modulo de bandeja de entrada de contactos Totalplay
+import LoginContacts from '../components/views/login/menu/contscats/Contacts';
 
 //Modulo de reportes Totalplay
+
+//console.log("routers: ",$store.state.user.fullname);
+
 
 export default {
     path: '/login',
@@ -18,7 +24,7 @@ export default {
             component: LoginMenu,
             name: 'LoginMenu',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token')) {
+                if (sessionStorage.getItem('access_token') ) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')
@@ -31,7 +37,7 @@ export default {
             component: LoginConfig,
             name: 'LoginConfig',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token')) {
+                if (sessionStorage.getItem('access_token') && store.state.profile === 1 ) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')
@@ -44,7 +50,33 @@ export default {
             component: LoginUsers,
             name: 'LoginUsers',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token')) {
+                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                    next();
+                } else {
+                    sessionStorage.getItem('access_token')
+                    next('/');
+                }
+            },
+        },
+        {
+            path: '/login/configuracion/catalogos',
+            component: LoginCats,
+            name: 'LoginCats',
+            beforeEnter: (to, from, next) => {
+                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                    next();
+                } else {
+                    sessionStorage.getItem('access_token')
+                    next('/');
+                }
+            },
+        },
+        {
+            path: '/login/configuracion/catalogos/paquetes',
+            component: LoginPacks,
+            name: 'LoginPacks',
+            beforeEnter: (to, from, next) => {
+                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')

@@ -19,7 +19,8 @@
         "laravel/ui": "2.0",
         "lcobucci/jwt": "3.3.3",
         "maatwebsite/excel": "^3.1",
-        "phpoffice/phpword": "^0.17.0"
+        "phpoffice/phpword": "^0.17.0",
+        "softcreatr/php-mime-detector": "^3.2"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",

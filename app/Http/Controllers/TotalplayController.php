@@ -4,15 +4,20 @@ use DB;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use App\Http\Models\Contact;
+use App\Http\Models\ImgPromotion;
+use App\Http\Models\FilePromotionModal;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Models\Cats\CatState;
+use App\Http\Models\Cats\CatPromotion;
+use App\Http\Models\Cats\CatNamePaks;
 use App\Http\Models\Cats\CatCity;
 use App\Http\Models\Cats\CatProfile;
-use App\Http\Models\Cats\CatPromotion;
 use App\Http\Models\FirstSesion;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\exportContacts;
+use App\Http\Traits\validFile;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Controllers\Controller;
 
@@ -338,6 +343,172 @@ class TotalplayController extends Controller
         }
     }
 
+    public function getCatsPacks(){
+        try{
+                $packs = CatPromotion::get();
+
+                return response()->json([
+                    'success' => true,
+                    'lResults' => ['packs' => $packs]
+                ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+        }
+    }
+
+    public function getCatsPacksForm(){
+        try{
+                $packNames = CatNamePaks::where('isActive',1)->get();
+                $frontiers = collect([
+                    ['id'=> 0, 'name' => 'Residencial'],
+                    ['id'=> 1, 'name' => 'Fronterizo']
+                ]);
+
+                $actives = collect([
+                    ['id'=> 0, 'name' => 'Desactivado'],
+                    ['id'=> 1, 'name' => 'Activado']
+                ]);
+
+                $triple_double = collect([
+                    ['id'=> 0, 'name' => 'Double play'],
+                    ['id'=> 1, 'name' => 'Triple play']
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'lResults' => ['packNames' => $packNames,
+                                    'frontiers'=> $frontiers,
+                                    'actives' => $actives,
+                                    'triple_double' => $triple_double]
+                ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+        }
+    }
+
+    public function filePromotion(Request $request){
+        try {
+            DB::beginTransaction();
+            if (validFile::valid($request->document)) {
+                $file = new ImgPromotion();
+                $document = $request->document;
+                $file->fileNameHash = Storage::url($document->store('public/imgPack'));
+                $file->fileName = $document->getClientOriginalName();
+                $file->save();
+
+                $imgPack = [
+                    'id' => $file->id,
+                    'name' => $file->fileName,
+                    'url' => $file->fileNameHash
+                ];
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'documentId' => $imgPack
+                ]);
+
+            } else {
+                return response()->json([
+                    'success' => false,
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+    public function filePromotionModal(Request $request){
+        try {
+            DB::beginTransaction();
+            if (validFile::valid($request->document)) {
+                $file = new FilePromotionModal();
+                $document = $request->document;
+                $file->fileNameHash = Storage::url($document->store('public/imgPackModal'));
+                $file->fileName = $document->getClientOriginalName();
+                $file->save();
+
+                $imgPack = [
+                    'id' => $file->id,
+                    'name' => $file->fileName,
+                    'url' => $file->fileNameHash
+                ];
+
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'documentId' => $imgPack
+                ]);
+
+            } else {
+                return response()->json([
+                    'success' => false,
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
+        public function createPromotion(Request $request){
+            try{
+                if ($request->wantsJson()){
+
+                    $data = $request->all();
+
+                    $promotion = CatPromotion::create([
+                        'type' => $data['pack_id'],
+                        'frontier' => $data['frontier'],
+                        'triple_double' => $data['triple_double'],
+                        'name' => $data['name'],
+                        'color' => $data['color'],
+                        'description' => $data['description'],
+                        'isActive' => $data['isActive']
+                    ]);
+
+                    $ImgPromotion = ImgPromotion::find( $data['file'][0]['id'] );
+                    $ImgPromotion->promotion_id = $promotion->id;
+                    $ImgPromotion->isActive = 1;
+                    $ImgPromotion->save();
+
+
+                    $FilePromotionModal = FilePromotionModal::find( $data['filesModal'][0]['id'] );
+                    $FilePromotionModal->promotion_id = $promotion->id;
+                    $FilePromotionModal->isActive = 1;
+                    $FilePromotionModal->save();
+
+                    return response()->json([
+                        'success' => true,
+                    ], 200);
+                }else{
+                    return response()->view('errors.404', [], 404);
+                }
+            } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+            }
+        }
 
 
 }

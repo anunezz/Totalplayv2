@@ -17,7 +17,8 @@ class DatabaseSeeder extends Seeder
             FirstSesionSeeder::class,
             CatStateSeeder::class,
             CatCitySeeder::class,
-            CatPromotionSeeder::class,
+            CatNamePacks::class,
+            //CatPromotionSeeder::class,
         ]);
     }
 }

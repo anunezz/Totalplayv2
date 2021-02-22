@@ -80,7 +80,10 @@
         <div class="d-flex justify-content-center flex-wrap" v-if="items.page !== 'home'">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 py-3 px-4" v-for="(item,index) in catTriple" :key="index">
                 <div class="card card-shadow" style="width: 100%;">
-                    <img class="card-img-top" :src="item.url" :alt="item.name">
+                    <pre>
+                        {{ items }}
+                    </pre>
+                    <img class="card-img-top" :src="items.imgpromotion.fileNameHash" :alt="item.name">
                     <div class="card-body card-click text-center"
                     @click="clickPromotion(item.id)"
                     :style="'cursor:pointer; background:'+item.color+';'">
@@ -99,7 +102,10 @@
         <div class="d-flex justify-content-center flex-wrap" v-if="items.page !== 'home'">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 py-3 px-4" v-for="(item,index) in catDouble" :key="index">
                 <div class="card card-shadow" style="width: 100%;">
-                    <img class="card-img-top" :src="item.url" :alt="item.name">
+                    <pre>
+                        {{ imgPromotion(items.catPromotion[0].imgpromotion.fileNameHash) }}
+                    </pre>
+                    <img class="card-img-top" :src="items.catPromotion[0].imgpromotion.fileNameHash" :alt="items.catPromotion[0].imgpromotion.fileNameHash">
                     <div class="card-body card-click text-center"
                     @click="clickPromotion(item.id)"
                     :style="'cursor:pointer; background:'+item.color+';'">
@@ -163,6 +169,10 @@ export default {
         }
     },
     methods:{
+        imgPromotion(data){
+            console.log("computed img",data);
+            return null;
+        },
         clickPromotion(id){
             this.modal = true;
             this.$store._modules.root.state.totalplay.modalForm = this.modal;

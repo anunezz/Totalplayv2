@@ -226,7 +226,6 @@ computed: {
     }
 },
 created() {
-        console.log(this.$store._modules.root.state.totalplay,this.$store.getters);
         this.getCats();
         let dialog = localStorage.getItem("dialog");
         //localStorage.clear();
@@ -330,14 +329,20 @@ methods: {
                             //this.$router.push('/');
                         }
                     }).catch(error => {
-                        console.error(error);
+                        this.$message({
+                            message: 'No se pudo completar la acción.',
+                            type: 'warning'
+                        });
                         this.modal = false;
                         this.$store._modules.root.state.totalplay.loading = false;
                         this.$router.push('/');
                     });
 
                 } else {
-                    console.log('error submit!!');
+                    this.$message({
+                        message: 'No se pudo completar la acción.',
+                        type: 'warning'
+                    });
                     return false;
                 }
             });

@@ -49,7 +49,6 @@ const actions = {
 
     },
     logout(){
-        console.log("store");
         sessionStorage.removeItem("access_token");
         sessionStorage.removeItem("access_token_expiration");
         sessionStorage.removeItem("access_hash");
@@ -66,7 +65,6 @@ const actions = {
                 .then(ip => {
                     dispatch('sessionInfo', ip)
                         .then(()  => {
-                            //console.log("ip usuario: ",ip);
                             resolve();
                         })
                         .catch(() => { reject() });
@@ -81,7 +79,6 @@ const actions = {
 // Mutations
 const mutations = {
     setUser: (state, user) => {
-        console.log("usuario: ",user);
         state.hash_id			= user.hash_id;
         state.fullname			= user.fullname;
         state.name				= user.name;

@@ -24,6 +24,17 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-4">
+                <div class="card text-white bg-dark text-center" style="width: 100%; height: 180px;">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="el-icon-notebook-2"></i> Catalogos</h5>
+                        <p class="card-text">Configuración de catalogos Totalplay.</p>
+                        <router-link to="/login/configuracion/catalogos" class="nolink">
+                            <a class="btn btn-primary btn-sm"> Configurar</a>
+                        </router-link>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
