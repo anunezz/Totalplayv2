@@ -13,7 +13,7 @@
 
     <div class="col-12">
         <div class="row text-center d-flex flex-wrap justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-4" v-if="$store.state.user.profile === 1 || $store.state.user.profile === 2">
                 <div class="card text-white bg-dark text-center" style="width: 100%; height: 180px;">
                     <div class="card-body">
                         <h5 class="card-title"><i class="el-icon-user"></i> Usuarios</h5>
@@ -24,7 +24,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4" v-if="$store.state.user.profile === 1 || $store.state.user.profile === 2">
                 <div class="card text-white bg-dark text-center" style="width: 100%; height: 180px;">
                     <div class="card-body">
                         <h5 class="card-title"><i class="el-icon-notebook-2"></i> Catalogos</h5>

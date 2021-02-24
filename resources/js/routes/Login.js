@@ -37,7 +37,8 @@ export default {
             component: LoginConfig,
             name: 'LoginConfig',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token') && store.state.profile === 1 ) {
+                if (    sessionStorage.getItem('access_token')
+                && (store.state.profile === 1 || store.state.profile === 2 )) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')
@@ -50,7 +51,8 @@ export default {
             component: LoginUsers,
             name: 'LoginUsers',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                if (sessionStorage.getItem('access_token')
+                && (store.state.profile === 1 || store.state.profile === 2 ) ) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')
@@ -63,7 +65,8 @@ export default {
             component: LoginCats,
             name: 'LoginCats',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                if (sessionStorage.getItem('access_token')
+                && (store.state.profile === 1 || store.state.profile === 2 ) ) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')

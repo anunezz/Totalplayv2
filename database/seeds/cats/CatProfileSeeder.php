@@ -16,18 +16,24 @@ class CatProfileSeeder extends Seeder
         DB::table('cat_profiles')->insert([
             [
                 'id' => 1,
-                'name' => 'Administrador',
+                'name' => 'Super administrador',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 2,
-                'name' => 'Empleado',
+                'name' => 'Administrador',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 'id' => 3,
+                'name' => 'Empleado',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            [
+                'id' => 4,
                 'name' => 'Proveedor',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),

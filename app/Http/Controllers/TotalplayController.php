@@ -181,8 +181,8 @@ class TotalplayController extends Controller
     public function getCatsUser()
     {
         try {
-
-            $CatProfile = CatProfile::where('isActive',1)->get();
+            $fields = ['id','name'];
+            $CatProfile = CatProfile::where('id','!=',1)->where('isActive',1)->get($fields);
 
             return response()->json([
                 'success' => true,

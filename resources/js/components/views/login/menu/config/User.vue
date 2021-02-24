@@ -66,9 +66,9 @@
                 <td v-text="(item.isActive === 1?'Activo':'Desactivado')"></td>
                 <td>
                     <div class="btn-group float-center">
-                        <button v-if="item.isActive === 1" class="btn btn-danger btn-sm" @click="modal(['active',[item,false]])"> <i class="el-icon-close"></i></button>
-                        <button v-else class="btn btn-warning btn-sm" @click="modal(['active',[item,true]])"> <i class="el-icon-check"></i></button>
-                        <button class="btn btn-success btn-sm" @click="modal(['edit',item])" > <i class="el-icon-edit"></i></button>
+                        <button :disabled="$store.state.user.profile === 1?false:true" v-if="item.isActive === 1" class="btn btn-danger btn-sm" @click="modal(['active',[item,false]])"> <i class="el-icon-close"></i></button>
+                        <button :disabled="$store.state.user.profile === 1?false:true" v-else class="btn btn-warning btn-sm" @click="modal(['active',[item,true]])"> <i class="el-icon-check"></i></button>
+                        <button :disabled="$store.state.user.profile === 1?false:true" class="btn btn-success btn-sm" @click="modal(['edit',item])" > <i class="el-icon-edit"></i></button>
                     </div>
                 </td>
             </tr>

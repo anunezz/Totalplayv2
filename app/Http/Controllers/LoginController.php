@@ -101,6 +101,8 @@ class LoginController extends Controller
                     $user = auth()->user();
                     $firstSesion = $user->firstSesion()->first()->isActive === 1? true:false;
 
+                    //dd($firstSesion);
+
                     \DB::table('oauth_access_tokens')->where('user_id', $user->id)
                         ->update(['revoked' => true]);
                     $token = $user->createToken( 'access_session' )->accessToken;

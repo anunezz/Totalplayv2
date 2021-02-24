@@ -3,7 +3,7 @@
 
 <div class="row text-center d-flex flex-wrap justify-content-center">
 
-    <div class="col-md-4" v-if="$store.state.user.profile === 1">
+    <div class="col-md-4" v-if="$store.state.user.profile === 1 || $store.state.user.profile === 2">
         <div class="card text-center" style="width: 100%; height: 180px;">
             <div class="card-body text-white bg-dark">
                 <h5 class="card-title"><i class="el-icon-setting"></i> Configuración</h5>
