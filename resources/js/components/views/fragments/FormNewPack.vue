@@ -131,7 +131,7 @@
                             <button type="button" @click="closeModal" class="btn btn-danger btn-sm"> <i class="el-icon-close"></i> Cerrar</button>
                             <button v-if="!items.type" type="button" @click="clearForm" class="btn btn-primary btn-sm"> <i class="el-icon-delete"></i> Limpiar</button>
                             <button v-if="!items.type" type="button" @click="newPromotion" class="btn btn-success btn-sm"> <i class="el-icon-check"></i> Guardar</button>
-                            <button v-if="items.type" type="button" @click="editUser" class="btn btn-success btn-sm"> <i class="el-icon-check"></i> Actualizar</button>
+                            <button v-if="items.type" type="button" @click="updatePromotion" class="btn btn-success btn-sm"> <i class="el-icon-check"></i> Actualizar</button>
                         </div>
                     </div>
                 </div>
@@ -191,21 +191,25 @@ export default {
                 return callback(new Error("Este campo es requerido."));
             }
         },
-        editUser(){
+        updatePromotion(){
             //this.$store._modules.root.state.totalplay.loading = true;
             this.$refs['ruleForm'].validate((valid) => {
             if (valid) {
-                let data = {
-                    data: this.ruleForm,
-                    userid: this.paquete_id
-                };
-                axios.post('/api/updateUser', data ).then(response => {
+
+                let ruleForm = this.ruleForm;
+                    ruleForm.file = this.files[0];
+                    ruleForm.filesModal = this.filesModal[0];
+                    ruleForm.paquete_id = this.paquete_id;
+
+                axios.post('/api/updatePromotion',{
+                    ruleForm
+                }).then(response => {
                     if(response.data.success){
                         this.$message({
-                            message: 'El usuario fue actualizado exitosamente.',
+                            message: 'El paquete fue actualizado exitosamente.',
                             type: 'success'
                         });
-                        this.$emit('responseUser',true);
+                        this.$emit('responsePack',true);
                     }
                 }).catch(error => {
                     this.$store._modules.root.state.totalplay.loading = false;
@@ -225,9 +229,8 @@ export default {
             });
         },
         getEdit(pack){
-            console.log("paquete actualizar: ",pack);
             setTimeout(() => {
-                this.paquete_id = null;
+                this.paquete_id = pack.id;
                 this.ruleForm={
                     pack_id: pack.type,
                     name: pack.name,

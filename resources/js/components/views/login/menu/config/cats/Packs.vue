@@ -20,7 +20,7 @@
         </span>
         <new-pack-component
         v-if="titleModal === 'Nuevo paquete' || titleModal === 'Actualizar paquete'"
-        :items="user"
+        :items="pack"
         @responsePack="responsePack" />
     </el-dialog>
 
@@ -38,6 +38,9 @@
         </div>
     </div>
     <div class="col-md-12 py-2">
+        <div class="text-left float-left">
+            <strong>Total:</strong> {{ pagination.total }}
+        </div>
         <div class="btn-group float-right">
             <button class="btn btn-secondary btn-sm"> <i class="el-icon-search"></i> Búsqueda avanzada</button>
             <button class="btn btn-primary btn-sm" @click="modal(['new',[]])"> <i class="el-icon-plus"></i> Nuevo paquete</button>
@@ -59,7 +62,7 @@
         </thead>
         <tbody>
             <tr v-for="(item,index) in packs" :key="index">
-                <th scope="row">1</th>
+                <th scope="row" v-text="item.idx"></th>
                 <td v-text="item.namepack.name"></td>
                 <td v-text="item.name"></td>
                 <td v-text="item.description"></td>
@@ -77,6 +80,19 @@
         </tbody>
         </table>
     </div>
+    <div class="col-md-12">
+        <div class="" style="width:100%; padding: 5px 0px;">
+            <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="pagination.currentPage"
+                :page-sizes="[10, 20, 30, 40]"
+                :page-size="parseInt(pagination.perPage)"
+                layout="sizes, ->, prev, pager, next"
+                :total="pagination.total">
+            </el-pagination>
+        </div>
+    </div>
 </div>
 </template>
 
@@ -92,16 +108,31 @@ export default {
             modalVisible:false,
             titleModal: null,
             messageModal: null,
-            user:{
+            pack:{
                 type: false,
                 data: {}
             },
+            pagination: {
+                currentPage: 1,
+                total: 0,
+                perPage: 10
+            },
+            from:0,
+            to:0
         }
     },
     created(){
         this.getCatsPacks();
     },
     methods: {
+        handleSizeChange(sizePerPage) {
+            this.pagination.perPage = sizePerPage;
+            this.getCatsPacks(this.pagination.currentPage);
+        },
+        handleCurrentChange(currentPage) {
+            this.pagination.currentPage = currentPage;
+            this.getCatsPacks(currentPage);
+        },
         modal(data){
             $(".el-dialog__title").css({"color":"black"});
             this.messageModa = null;
@@ -109,7 +140,7 @@ export default {
                 case 'new':{
                     this.modalVisible = true;
                     this.titleModal = 'Nuevo paquete';
-                    this.user = {
+                    this.pack = {
                         type:false,
                         data:[]
                     };
@@ -118,7 +149,7 @@ export default {
                 case 'edit':{
                     this.modalVisible = true;
                     this.titleModal = 'Actualizar paquete';
-                    this.user = {
+                    this.pack = {
                         type: true,
                         data: data[1]
                     };
@@ -128,7 +159,7 @@ export default {
                     this.modalVisible = true;
                     this.titleModal = ( data[1][1] )? 'Activar usuario':'Deshabilitar usuario';
                     this.messageModal =( data[1][1] )? '¿Estas completamente seguro de activar este usuario?':'¿Estas completamente seguro de deshabilitar este usuario?';
-                    this.user = {
+                    this.pack = {
                         type: true,
                         data: data[1]
                     };
@@ -137,7 +168,7 @@ export default {
                 default:{
                     this.modalVisible = false;
                     this.titleModal = null;
-                    this.user = {
+                    this.pack = {
                         type: false,
                         data: {}
                     };
@@ -154,12 +185,11 @@ export default {
                 }
                 this.$store._modules.root.state.totalplay.loading = false;
         },
-        activeUser(){
+        activePack(){
             this.$store._modules.root.state.totalplay.loading = true;
-            console.log(this.user);
-            axios.post('/api/activeUser',{
-                userid: this.user.data[0].hash,
-                active: this.user.data[1]
+            axios.post('/api/activePack',{
+                packid: this.pack.data[0].hash,
+                active: this.pack.data[1]
             }).then(response => {
                 if(response.data.success){
                     this.getCatsPacks();
@@ -167,8 +197,8 @@ export default {
                     this.titleModal = '';
                     this.messageModal = null;
                     this.$store._modules.root.state.totalplay.loading = false;
-                    let text = (this.user.data[1])? 'El usuario fue activado correctamente.':
-                    'El usuario fue deshabilitado correctamente.';
+                    let text = (this.pack.data[1])? 'El paquete fue activado correctamente.':
+                    'El paquete fue deshabilitado correctamente.';
                     this.$message({
                         message: text,
                         type: 'success'
@@ -182,14 +212,33 @@ export default {
                 });
             });
         },
-        getCatsPacks(){
-            //this.$store._modules.root.state.totalplay.loading = true;
-            axios.get('/api/getCatsPacks').then(response => {
+        getCatsPacks(currentPage = 1){
+            this.$store._modules.root.state.totalplay.loading = true;
+            axios.post('/api/getCatsPacks',{
+                filters: [],
+                page: currentPage,
+                perPage: this.pagination.perPage
+            }).then(response => {
                 if(response.data.success){
-                    this.packs = response.data.lResults.packs;
+                    this.packs = [];
+                    let packs = response.data.lResults.packs.data;
+                    let sum = response.data.lResults.packs.from;
+                    let data = [];
+                    for (let i = 0; i < packs.length; i++) {
+                        sum = i === 0 ? sum : (sum + 1);
+                        packs[i].idx = sum;
+                        data.push(packs[i]);
+                    }
+                    this.packs = data;
+                    this.pagination.currentPage = response.data.lResults.packs.current_page;
+                    this.pagination.perPage = response.data.lResults.packs.per_page;
+                    this.pagination.total = response.data.lResults.packs.total;
+                    this.from = response.data.lResults.packs.from;
+                    this.to = response.data.lResults.packs.to;
                     this.$store._modules.root.state.totalplay.loading = false;
                 }
             }).catch(error => {
+                console.error(error);
                 this.$message({
                     message: 'No se pudo completar la acción.',
                     type: 'warning'

@@ -343,15 +343,20 @@ class TotalplayController extends Controller
         }
     }
 
-    public function getCatsPacks(){
+    public function getCatsPacks(Request $request){
         try{
-                $packs = CatPromotion::get();
+            if ($request->wantsJson()){
+                $data = $request->all();
+                $packs = CatPromotion::orderBy('updated_at', 'DESC')->paginate($data['perPage']);
 
                 return response()->json([
                     'success' => true,
                     'lResults' => ['packs' => $packs]
                 ], 200);
 
+            }else{
+                return response()->view('errors.404', [], 404);
+            }
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -495,6 +500,49 @@ class TotalplayController extends Controller
                     $FilePromotionModal->promotion_id = $promotion->id;
                     $FilePromotionModal->isActive = 1;
                     $FilePromotionModal->save();
+
+                    return response()->json([
+                        'success' => true,
+                    ], 200);
+                }else{
+                    return response()->view('errors.404', [], 404);
+                }
+            } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+            }
+        }
+
+        public function updatePromotion(Request $request){
+            try{
+                if ($request->wantsJson()){
+
+                    $data = $request->all();
+                    $d = $data['ruleForm'];
+
+                    $promotion = CatPromotion::find($d['paquete_id']);
+                    $promotion->type = $d['pack_id'];
+                    $promotion->frontier = $d['frontier'];
+                    $promotion->triple_double = $d['triple_double'];
+                    $promotion->name = $d['name'];
+                    $promotion->color = $d['color'];
+                    $promotion->description = $d['description'];
+                    $promotion->isActive = $d['isActive'];
+                    $promotion->save();
+
+                    $imgpromotion = $promotion->imgpromotion()->first();
+                    $imgpromotion->fileName = $d['file']['name'];
+                    $imgpromotion->fileNameHash = $d['file']['url'];
+                    $imgpromotion->isActive = 1;
+                    $imgpromotion->save();
+
+                    $filesModal = $promotion->imgpromotionmodal()->first();
+                    $filesModal->fileName = $d['filesModal']['name'];
+                    $filesModal->fileNameHash = $d['filesModal']['url'];
+                    $filesModal->isActive = 1;
+                    $filesModal->save();
 
                     return response()->json([
                         'success' => true,
