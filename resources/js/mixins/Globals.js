@@ -53,6 +53,10 @@ export const Globals = {
                     this.$store._modules.root.state.totalplay.catCities = response.data.lResults;
                 }
             }).catch(error => {
+                this.$message({
+                    message: 'No se pudo completarr la acción.',
+                    type: 'warning'
+                });
                 console.error(error);
             });
         },
@@ -76,7 +80,21 @@ export const Globals = {
                     this.$store._modules.root.state.totalplay.loading = false;
                 }, 1000);
                 console.error(error);
+                this.$message({
+                    message: 'No se pudo completarr la acción.',
+                    type: 'warning'
+                });
             });
         },
+        idx(array,from){
+            let sum = from;
+            let data = [];
+            for (let i = 0; i < array.length; i++) {
+                sum = i === 0 ? sum : (sum + 1);
+                array[i].idx = sum;
+                data.push(array[i]);
+            }
+            return data;
+        }
     }
 };

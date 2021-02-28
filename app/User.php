@@ -5,6 +5,7 @@ namespace App;
 use App\Http\Models\Cats\CatDeterminant;
 use App\Http\Models\Cats\CatProfile;
 use App\Http\Models\FirstSesion;
+use App\Http\Models\Cats\CatCodePromotion;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -59,10 +60,9 @@ class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
 
-    protected $fillable = ['username','cat_profile_id','email','name','password','firstName', 'secondName'];
+    protected $fillable = ['username','cat_profile_id','code_id','email','name','password','firstName', 'secondName'];
     protected $appends = ['full_name', 'hash'];
-    protected $with = ['profile','firstSesion'];
-
+    protected $with = ['profile','firstSesion','code'];
 
     public function getFullNameAttribute()
     {
@@ -87,6 +87,14 @@ class User extends Authenticatable
         return $this->belongsTo(
             FirstSesion::class,
             'id','user_id'
+        );
+    }
+
+    public function code()
+    {
+        return $this->belongsTo(
+            CatCodePromotion::class,
+            'code_id',
         );
     }
 

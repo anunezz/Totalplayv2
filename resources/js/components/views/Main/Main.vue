@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="animatedd fadeInn fastt">
     <div style="width: 100%; margin: 0px auto;">
         <div class="row no-gutters">
             <div class="col-xs-12 col-sm-12 col-md-8">
@@ -93,6 +93,7 @@ export default {
 
 
 <style>
+
 img[src*=".svg"].tp-popup-log, img.tp-popup-log {
     max-width: 170px;
     width: 60%;
@@ -120,4 +121,5 @@ img[src*=".svg"].tp-popup-log, img.tp-popup-log {
         width: 30%;
     }
 }
+
 </style>

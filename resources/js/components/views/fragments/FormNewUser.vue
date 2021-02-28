@@ -49,6 +49,26 @@
                     <el-input :disabled="items.type" v-model="ruleForm.email" placeholder="Email" size="mini" style="width: 100%;"></el-input>
                 </el-form-item>
             </el-col>
+            <el-col :span='12'>
+                Asignar codigo de promoción:
+                <br><br>
+                <el-switch
+                    style="display: block width:100%;"
+                    v-model="switchCode"
+                    @change="generateUUID(items.type,( items.type? items.data.code:null))"
+                    active-color="#13ce66"
+                    inactive-color="#ff4949"
+                    active-text="Activar"
+                    inactive-text="Desactivar">
+                </el-switch>
+            </el-col>
+            <el-col :span='12'>
+                <el-form-item label="Codigo de promoción" prop="code" :rules="[{ required: switchCode, message: message.ruleForm.required },
+                                    { pattern: alphanumeric, message: message.ruleForm.special_characters, trigger: ['blur','change']},
+                                    { max: 100, message: message.ruleForm.max_characters+' 100.', trigger: ['blur','change'] }]">
+                    <el-input :disabled="true" v-model="ruleForm.code" placeholder="Codigo de promoción" size="mini" style="width: 100%;"></el-input>
+                </el-form-item>
+            </el-col>
             <el-col :span='24' v-if="items.type">
                 Actualizar Password:
                 <br><br>
@@ -102,6 +122,7 @@ export default {
                 firstName:null,
                 secondName:null,
                 email:null,
+                code:null,
                 profile:null,
                 username:null,
                 password:null,
@@ -109,7 +130,8 @@ export default {
             },
             user_id:null,
             profiles:[],
-            showPassword:false
+            showPassword:false,
+            switchCode:false
         }
     },
     created(){
@@ -137,6 +159,30 @@ export default {
         }
     },
     methods:{
+        generateUUID(active,code){ // Public Domain/MIT
+        console.log(this.items.type,code);
+        var d = new Date().getTime();
+        if (typeof performance !== 'undefined' && typeof performance.now === 'function'){
+            d += performance.now(); //use high-precision timer if available
+        }
+        var newGuid = 'x4-xyxx-xyxx'.replace(/[xy]/g, function (c) {
+            var r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+
+        if( active ){
+            if (code.name) {
+                this.ruleForm.code =  code.name;
+            }else{
+                this.ruleForm.code = this.switchCode? newGuid: null;
+            }
+            this.ruleForm.code = ( code.name === null?newGuid: code.name );
+        }else{
+            this.ruleForm.code = this.switchCode? newGuid: null;
+        }
+
+        },
         ValidatorPassword(rule, value, callback){
             if(this.ruleForm.password === value){
                 callback();
@@ -148,6 +194,7 @@ export default {
             //this.$store._modules.root.state.totalplay.loading = true;
             this.$refs['ruleForm'].validate((valid) => {
             if (valid) {
+                this.ruleForm.switchCode = this.switchCode;
                 let data = {
                     updatePassword: this.showPassword,
                     data: this.ruleForm,
@@ -180,6 +227,8 @@ export default {
         },
         getEdit(user){
             setTimeout(() => {
+                this.switchCode = (user.code.isActive === 1? true: false);
+                this.ruleForm.code = user.code.name;
                 this.user_id = user.hash;
                 this.ruleForm.name = user.name;
                 this.ruleForm.firstName = user.firstName;
@@ -196,10 +245,12 @@ export default {
             this.$emit('responseUser',true);
         },
         newUser(){
-            this.$store._modules.root.state.totalplay.loading = true;
+            //this.$store._modules.root.state.totalplay.loading = true;
             this.$refs['ruleForm'].validate((valid) => {
             if (valid) {
-                axios.post('/api/createUser',this.ruleForm).then(response => {
+                let data = this.ruleForm;
+                    data.switchCode = this.switchCode;
+                axios.post('/api/createUser',data).then(response => {
                     if(response.data.success){
                         if( response.data.lResults ){
                             this.$message({
@@ -234,11 +285,13 @@ export default {
         },
         clearForm(){
             this.user_id = null;
+            this.switchCode = false;
             this.ruleForm={
                 name:null,
                 firstName:null,
                 secondName:null,
                 email:null,
+                code:null,
                 profile:null,
                 username:null,
                 password:null,

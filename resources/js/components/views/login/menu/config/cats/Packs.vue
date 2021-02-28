@@ -9,13 +9,13 @@
     class="modalUser"
     :visible.sync="modalVisible"
     width="70%">
-        <span v-if="titleModal === 'Deshabilitar usuario' || titleModal ==='Activar usuario'" v-text="messageModal"></span>
+        <span v-if="titleModal === 'Deshabilitar paquete' || titleModal ==='Activar paquete'" v-text="messageModal"></span>
 
-        <span slot="footer" class="dialog-footer" v-if="titleModal === 'Deshabilitar usuario' || titleModal ==='Activar usuario'">
+        <span slot="footer" class="dialog-footer" v-if="titleModal === 'Deshabilitar paquete' || titleModal ==='Activar paquete'">
             <div class="btn-group">
                 <button type="button" class="btn btn-sm btn-primary" size="mini" @click="modalVisible = false">Cancelar</button>
-                <button type="button" class="btn btn-sm btn-danger" v-if="titleModal === 'Deshabilitar usuario'" @click="activeUser()"><i class="el-icon-close"></i> Deshabilitar</button>
-                <button v-if="titleModal === 'Activar usuario'" type="button" class="btn btn-success btn-sm" @click="activeUser()"> <i class="el-icon-check"></i> Activar</button>
+                <button type="button" class="btn btn-sm btn-danger" v-if="titleModal === 'Deshabilitar paquete'" @click="activePack()"><i class="el-icon-close"></i> Deshabilitar</button>
+                <button v-if="titleModal === 'Activar paquete'" type="button" class="btn btn-success btn-sm" @click="activePack()"> <i class="el-icon-check"></i> Activar</button>
             </div>
         </span>
         <new-pack-component
@@ -157,8 +157,8 @@ export default {
                 }
                 case 'active':{
                     this.modalVisible = true;
-                    this.titleModal = ( data[1][1] )? 'Activar usuario':'Deshabilitar usuario';
-                    this.messageModal =( data[1][1] )? '¿Estas completamente seguro de activar este usuario?':'¿Estas completamente seguro de deshabilitar este usuario?';
+                    this.titleModal = ( data[1][1] )? 'Activar paquete':'Deshabilitar paquete';
+                    this.messageModal =( data[1][1] )? '¿Estas completamente seguro de activar este paquete?':'¿Estas completamente seguro de deshabilitar este paquete?';
                     this.pack = {
                         type: true,
                         data: data[1]
@@ -188,7 +188,7 @@ export default {
         activePack(){
             this.$store._modules.root.state.totalplay.loading = true;
             axios.post('/api/activePack',{
-                packid: this.pack.data[0].hash,
+                packid: this.pack.data[0].id,
                 active: this.pack.data[1]
             }).then(response => {
                 if(response.data.success){

@@ -1,5 +1,5 @@
 <template>
-<div class="row">
+<div class="row animatedd fadeInn fastt">
 
     <div class="col-md-12 py-2">
         <div class="row d-flex justify-content-end">

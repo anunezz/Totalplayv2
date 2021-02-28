@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CatProfileSeeder::class,
+            CatCodePromotionSeeder::class,
             UsersTableSeeder::class,
             FirstSesionSeeder::class,
             CatStateSeeder::class,

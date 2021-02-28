@@ -17,7 +17,7 @@ class CreateUsersTable extends Migration
             $table->bigIncrements('id');
             $table->string('username');
             $table->unsignedBigInteger('cat_profile_id');
-            // $table->unsignedBigInteger('cat_determinant_id')->nullable();
+            $table->unsignedBigInteger('code_id');
             // $table->unsignedBigInteger('cat_unit_id')->nullable();
             $table->string('name');
             $table->string('firstName');
@@ -26,6 +26,10 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->boolean('isActive')->default(1);
             $table->timestamps();
+
+            $table->foreign('code_id')
+                ->references('id')
+                ->on('cat_code_promotions');
 
             $table->foreign('cat_profile_id')
                 ->references('id')

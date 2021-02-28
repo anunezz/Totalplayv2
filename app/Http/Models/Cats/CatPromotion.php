@@ -14,6 +14,7 @@ class CatPromotion extends Model
         return $this->belongsTo(
             CatNamePaks::class,
             'type','id'
+            //'type','id'
         );
     }
 

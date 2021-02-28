@@ -7,8 +7,10 @@ import LoginUsers from '../components/views/login/menu/config/user';
 import LoginFirstSesion from '../components/views/login/menu/fistsesion/Firstsesion';
 import LoginCats from '../components/views/login/menu/config/cats/Index';
 import LoginPacks from '../components/views/login/menu/config/cats/Packs';
+import LoginCode from '../components/views/login/menu/config/cats/Code';
 //Modulo de bandeja de entrada de contactos Totalplay
 import LoginContacts from '../components/views/login/menu/contscats/Contacts';
+
 
 //Modulo de reportes Totalplay
 
@@ -78,6 +80,19 @@ export default {
             path: '/login/configuracion/catalogos/paquetes',
             component: LoginPacks,
             name: 'LoginPacks',
+            beforeEnter: (to, from, next) => {
+                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                    next();
+                } else {
+                    sessionStorage.getItem('access_token')
+                    next('/');
+                }
+            },
+        },
+        {
+            path: '/login/configuracion/catalogos/codigos',
+            component: LoginCode,
+            name: 'LoginCode',
             beforeEnter: (to, from, next) => {
                 if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
                     next();

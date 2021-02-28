@@ -6,11 +6,13 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Models\Contact;
+use App\Http\Models\CodePromotion;
 use App\Http\Models\ImgPromotion;
 use App\Http\Models\FilePromotionModal;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Models\Cats\CatState;
-use App\Http\Models\Cats\CatPromotion;
+use App\Http\Models\Cats\CatPromotion; //quitar
+use App\Http\Models\Cats\CatCodePromotion;
 use App\Http\Models\Cats\CatNamePaks;
 use App\Http\Models\Cats\CatCity;
 use App\Http\Models\Cats\CatProfile;
@@ -128,6 +130,11 @@ class TotalplayController extends Controller
     public function getContacts(){
         try{
 
+        $user = auth()->user()->id;
+        //->with(['codepromotion']);
+
+        dd(CodePromotion::where('user_id',$user)->get());
+
         $results = Contact::with('city')->where('isActive',1)->orderBy('id','desc')->get();
 
         return response()->json([
@@ -162,12 +169,12 @@ class TotalplayController extends Controller
     public function getUsers(Request $request)
     {
         try {
-
-            $users = User::orderBy('created_at','desc')->get();
+            $data = $request->all();
+            $users = User::orderBy('updated_at', 'DESC')->paginate($data['perPage']);
 
             return response()->json([
                 'success' => true,
-                'lResults' =>  $users,
+                'lResults' =>  ['Users' => $users],
             ], 200);
 
         } catch (Exception $e) {
@@ -211,10 +218,17 @@ class TotalplayController extends Controller
                 //     'typePack' => 'required|boolean'
                 // ]);
 
-                if( $searchUser === 0 ){
+                if( $searchUser === 0 || true == true){
+
+                    $CatCodePromotion = CatCodePromotion::create([
+                        'name' => $data['code'],
+                        'isActive' => ($data['switchCode']? 1 : 0)
+                    ]);
+
                     $user = User::create([
                         'username'=>$data['username'],
                         'cat_profile_id' => $data['profile'],
+                        'code_id' => $CatCodePromotion->id,
                         'email' => $data['email'],
                         'name' => $data['name'],
                         'firstName' => $data['firstName'],
@@ -225,6 +239,7 @@ class TotalplayController extends Controller
                     $FirstSesion = FirstSesion::create([
                         'user_id' => $user->id
                     ]);
+
 
                 }else{
                     $aux =  false;
@@ -255,6 +270,7 @@ class TotalplayController extends Controller
                 // ]);
 
                 $data = $request->all();
+                //dd($data);
                 $user = User::find( decrypt($data['userid']) );
 
                 if( $user ){
@@ -272,6 +288,10 @@ class TotalplayController extends Controller
                     $FirstSesion->isActive = 0;
                     $FirstSesion->save();
 
+                    $code = $user->code()->first();
+                    $code->name = $data['data']['code'];
+                    $code->isActive = ($data['data']['switchCode'] === true? 1:0 );
+                    $code->save();
                 }
 
                 return response()->json([
@@ -557,6 +577,124 @@ class TotalplayController extends Controller
             ], 300);
             }
         }
+
+    public function activePack(Request $request){
+        try{
+            if ($request->wantsJson()){
+
+                $data = $request->all();
+                $promotion = CatPromotion::find($data['packid']);
+                $promotion->isActive = $data['active'] === true? 1 : 0;
+                $promotion->save();
+
+                return response()->json([
+                    'success' => true,
+                ], 200);
+            }else{
+                return response()->view('errors.404', [], 404);
+            }
+        } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al mostrar información ' . $e->getMessage()
+        ], 300);
+        }
+    }
+
+    public function getCatsPromotion(){
+        try{
+                $users = User::where('isActive',1)->get(['id','name']);
+                $packs = CatPromotion::where('isActive',1)->get();
+                return response()->json([
+                    'success' => true,
+                    'lResults' => ['users' => $users,
+                                    'packs'=> $packs]
+                ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+        }
+    }
+
+    public function createCodePromotion(Request $request){
+        try{
+            if ($request->wantsJson()){
+                $data = $request->all();
+                $exist = CodePromotion::where('promotion_code',$data['code'])->count();
+                $aux = false;
+                if( $exist === 0 ){
+                    $CodePromotion = CodePromotion::create([
+                        "user_id" => $data["user_id"],
+                        "promotion_code" => $data["code"],
+                        "promotion_id" => $data["pack_id"]
+                    ]);
+                }else{
+                    $aux = true;
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'lResults' => [
+                        'exist' => $aux
+                    ]
+                ], 200);
+            }else{
+                return response()->view('errors.404', [], 404);
+            }
+        } catch (Exception $e) {
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al mostrar información ' . $e->getMessage()
+        ], 300);
+        }
+    }
+
+    public function getCodePromotion(Request $request){
+        try{
+            if ($request->wantsJson()){
+                $data = $request->all();
+                $CodePromotion = CodePromotion::orderBy('updated_at', 'DESC')->paginate($data['perPage']);
+
+                return response()->json([
+                    'success' => true,
+                    'lResults' => [ 'CodePromotion' => $CodePromotion ]
+                ], 200);
+            }else{
+                return response()->view('errors.404', [], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+        }
+    }
+
+    public function activePromotion(Request $request){
+        try{
+            if ($request->wantsJson()){
+                $data = $request->all();
+                //$CodePromotion = CodePromotion::find( decrypt($data['promotionid']) );
+                $CodePromotion = CodePromotion::find( $data['promotionid'] );
+                $CodePromotion->isActive = $data['active'] === true ? 1:0;
+                $CodePromotion->save();
+
+                return response()->json([
+                    'success' => true
+                ], 200);
+            }else{
+                return response()->view('errors.404', [], 404);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al mostrar información ' . $e->getMessage()
+            ], 300);
+        }
+    }
 
 
 }

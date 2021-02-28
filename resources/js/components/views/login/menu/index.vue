@@ -1,7 +1,5 @@
 <template>
-
-
-<div class="row text-center d-flex flex-wrap justify-content-center">
+<div class="row text-center d-flex flex-wrap justify-content-center animatedd fadeInn fastt">
 
     <div class="col-md-4" v-if="$store.state.user.profile === 1 || $store.state.user.profile === 2">
         <div class="card text-center" style="width: 100%; height: 180px;">
