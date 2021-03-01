@@ -34,11 +34,10 @@ class exportContacts implements
         return [
             'Nombre',
             'Ciudad',
-            'Código postal',
-            'Correo eléctronico',
             'Teléfono',
             'Paquete',
             'Categoria paquete',
+            'Tipo de paquete',
             'Código de promoción'
         ];
     }
@@ -51,11 +50,10 @@ class exportContacts implements
             return [
                 "name" => $item->name,
                 "city" => $item->city->name,
-                "zip_code" => $item->zip_code,
-                "email" => $item->email,
                 "phone" => $item->phone,
                 "promotion" => $this->promotion( optional($item->pack)->type ),
                 "category_pack" => optional( $item->pack )->name,
+                "type" => ( $item->triple_doble === 1?'Triple play': 'Doble play' ),
                 "code" => $item->promotion_code
             ];
         });

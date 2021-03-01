@@ -6,9 +6,9 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Models\Contact;
-use App\Http\Models\CodePromotion;
 use App\Http\Models\ImgPromotion;
 use App\Http\Models\FilePromotionModal;
+use App\Http\Models\LevelsOfAttention;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Models\Cats\CatState;
 use App\Http\Models\Cats\CatPromotion; //quitar
@@ -34,22 +34,25 @@ class TotalplayController extends Controller
             if ($request->wantsJson()){
                 $request->validate([
                     'name' => 'required|string|max:100|'.$this->alphanumeric,
-                    //'zip_code' => 'required|max:5|'.$this->zip_code,
                     'city_id' => 'required|numeric',
                     'promotion_id' => 'nullable|numeric',
-                    //'email' => 'nullable|string|max:100|sometimes|email',
                     'phone' => 'required|max:10|'.$this->phone,
                     'promotion_code' => 'nullable|string|max:100'.$this->alphanumeric,
                 ]);
 
                 $data = $request->all();
 
+                    $LevelsOfAttention = LevelsOfAttention::create([
+                        'attention_id' => 1
+                    ]);
+
+                    $LevelsOfAttention->save();
+
                     Contact::create([
                         'name' => $data['name'],
                         'city_id' => $data['city_id'],
                         'promotion_id' => $data['promotion_id'],
-                        //'zip_code' => $data['zip_code'],
-                        //'email' => $data['email'],
+                        'attention_id' => $LevelsOfAttention->id,
                         'phone' => $data['phone'],
                         'promotion_code' => $data['promotion_code']
                     ]);
@@ -133,9 +136,9 @@ class TotalplayController extends Controller
         $user = auth()->user()->id;
         //->with(['codepromotion']);
 
-        dd(CodePromotion::where('user_id',$user)->get());
+        //dd(CodePromotion::where('user_id',$user)->get());
 
-        $results = Contact::with('city')->where('isActive',1)->orderBy('id','desc')->get();
+        $results = Contact::with('city','attention')->where('isActive',1)->orderBy('id','desc')->get();
 
         return response()->json([
             'success' => true,

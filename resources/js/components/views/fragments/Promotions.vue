@@ -10,8 +10,8 @@
             :close-on-press-escape="false">
             <div class="text-light">
                 <el-row :gutter='20'>
-                    <el-col :span='24'>
-                        <div style="width: 100%; display:flex; justify-content: center;">
+                    <!-- <el-col :span='24' style="background: red;">
+                        <div style="width: 70%; display:flex; justify-content: center;">
                             <div>
                             <strong style="font-family: Arial, sans-serif;
                                             font-size: 15pt; font-style: negrita;
@@ -20,10 +20,18 @@
                             </div>
                         </div>
 
-                    </el-col>
+                    </el-col> -->
                     <el-col :span='24'>
                         <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-start;'>
-                            <div style="width:70%">
+                            <div style="width:50%">
+                        <div style="width: 100%; display:flex; justify-content: center;">
+                            <div>
+                            <strong style="font-family: Arial, sans-serif;
+                                            font-size: 15pt; font-style: negrita;
+                                            color: #A7D8F8;">Vive la experiencia!</strong> &nbsp; &nbsp;
+                            <img src="img/publico/logo-totalplay-n.svg" alt="" class="tp-popup-logoo">
+                            </div>
+                        </div>
                                 <div style="padding-bottom: 13px;">
                                     <h3 class="text-center" style="color:rgb(109, 92, 150);">¡No te quedes sin internet veloz!</h3>
                                     <h4 class="text-center" style="color: #d2a545;">Deja tus datos
