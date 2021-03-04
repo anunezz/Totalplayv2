@@ -7,8 +7,7 @@
 .history/
 .vscode
 /public/mix-manifest.json
+.env
 # storage/app/recommendations/
-
 # storage/app/Recomendaciones.xlsm
-
 # public/mix-manifest.json

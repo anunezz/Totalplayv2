@@ -19,24 +19,24 @@ class CatCodePromotionSeeder extends Seeder
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
-            [
-                'id' => 2,
-                'name' => 'f2-5b63-b9e1',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id' => 3,
-                'name' => 'f3-5b63-b9e1',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'id' => 4,
-                'name' => 'f4-5b63-b9e1',
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ]
+            // [
+            //     'id' => 2,
+            //     'name' => 'f2-5b63-b9e1',
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ],
+            // [
+            //     'id' => 3,
+            //     'name' => 'f3-5b63-b9e1',
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ],
+            // [
+            //     'id' => 4,
+            //     'name' => 'f4-5b63-b9e1',
+            //     'created_at' => Carbon::now(),
+            //     'updated_at' => Carbon::now(),
+            // ]
         ]);
     }
 }

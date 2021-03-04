@@ -10,17 +10,6 @@
             :close-on-press-escape="false">
             <div class="text-light">
                 <el-row :gutter='20'>
-                    <!-- <el-col :span='24' style="background: red;">
-                        <div style="width: 70%; display:flex; justify-content: center;">
-                            <div>
-                            <strong style="font-family: Arial, sans-serif;
-                                            font-size: 15pt; font-style: negrita;
-                                            color: #A7D8F8;">Vive la experiencia!</strong> &nbsp; &nbsp;
-                            <img src="img/publico/logo-totalplay-n.svg" alt="" class="tp-popup-logoo">
-                            </div>
-                        </div>
-
-                    </el-col> -->
                     <el-col :span='24'>
                         <div style='width:100%; padding: 5px 0px; display:flex; justify-content: flex-start;'>
                             <div style="width:50%">
@@ -49,12 +38,28 @@
         <div class="col-md-12" v-if="items.page === 'home'">
             <div class="col-md-12">
                 <div class="row d-flex justify-content-center">
+                    <!-- <div  style="100%;">
+                        <el-button-group>
+                            <div style="width: 50%;">
+                                <el-button style="width: 100%;" plain circle type="primary">Triple Play</el-button>
+                            </div>
+                            <div style="width: 50%;">
+                                <el-button style="width: 100%;" plain circle type="primary">Triple Play</el-button>
+                            </div>
+                        </el-button-group>
+                    </div> -->
                     <div class="col-xs-12 col-sm-12 col-md-4 button-spacing">
+                        <el-button style="width: 100%;" type="primary" plain round  @click="btn_double_triple = true,setPacks(true)"> Triple Play </el-button>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-4">
+                        <el-button style="width: 100%;" type="primary" plain round @click="btn_double_triple = false,setPacks(false)">Doble Play</el-button>
+                    </div>
+                    <!-- <div class="col-xs-12 col-sm-12 col-md-4 button-spacing">
                         <button class="btn button-primary" @click="btn_double_triple = true,setPacks(true)"> Triple Play </button>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-4">
                         <button class="btn button-primary" @click="btn_double_triple = false,setPacks(false)">Doble Play</button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -72,30 +77,23 @@
                 <div class="card card-shadow" style="width: 100%;">
                     <img class="card-img-top" :src="item.imgpromotion.fileNameHash" :alt="item.name" />
                     <div class="card-body card-click text-center"
-                        @click="clickPromotion(item)"
                         :style="'cursor:pointer; background:'+item.color+';'">
                         <div class="card-clickk">
-                            Contrata ya
+                            <el-button plain @click="clickPromotion(item)" type="primary" style="width: 100%;" round >Contrata ya</el-button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- <div>
-            <pre>
-                {{ items.catPromotion }}
-            </pre>
-        </div> -->
         <div class="d-flex justify-content-center flex-wrap" v-if="items.page !== 'home'">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 py-3 px-4" v-for="(item,index) in items.catPromotion" :key="index">
                 <div class="card card-shadow" style="width: 100%;">
 
                     <img class="card-img-top" :src="item.imgpromotion.fileNameHash" alt="--------">
                     <div class="card-body card-click text-center"
-                    @click="clickPromotion(item.id)"
                     :style="'cursor:pointer; background:'+item.color+';'">
                         <div class="card-clickk">
-                            Contrata ya
+                            <el-button plain @click="clickPromotion(item)" type="primary" style="width: 100%;" round >Contrata ya</el-button>
                         </div>
                     </div>
                 </div>
@@ -114,10 +112,9 @@
                     </pre>
                     <img class="card-img-top" :src="items.catPromotion[(index-1)].imgpromotion.fileNameHash" :alt="items.catPromotion[0].imgpromotion.fileNameHash">
                     <div class="card-body card-click text-center"
-                    @click="clickPromotion(item.id)"
                     :style="'cursor:pointer; background:'+item.color+';'">
                         <div class="card-clickk">
-                            Contrata ya
+                            <el-button plain @click="clickPromotion(item)" type="primary" style="width: 100%;" round >Contrata ya</el-button>
                         </div>
                     </div>
                 </div>

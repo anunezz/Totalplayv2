@@ -81,7 +81,7 @@ export default {
             component: LoginPacks,
             name: 'LoginPacks',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                if (sessionStorage.getItem('access_token') && (store.state.profile === 1 || store.state.profile === 2 )) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')
@@ -94,7 +94,7 @@ export default {
             component: LoginCode,
             name: 'LoginCode',
             beforeEnter: (to, from, next) => {
-                if (sessionStorage.getItem('access_token') && store.state.profile === 1) {
+                if (sessionStorage.getItem('access_token') && (store.state.profile === 1 || store.state.profile === 2 )) {
                     next();
                 } else {
                     sessionStorage.getItem('access_token')

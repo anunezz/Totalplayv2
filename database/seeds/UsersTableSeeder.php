@@ -15,9 +15,9 @@ class UsersTableSeeder extends Seeder
     {
         DB::table('users')->insert([
             ['id' => 1, 'username' =>'adriann', 'code_id' => 1 , 'cat_profile_id' => 1, 'name' => 'Adrian1', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann@gmail.com',  'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
-            ['id' => 2, 'username' =>'adriann2','code_id' => 2 , 'cat_profile_id' => 2, 'name' => 'Adrian2', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann2@gmail.com', 'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
-            ['id' => 3, 'username' =>'adriann3','code_id' => 3 , 'cat_profile_id' => 3, 'name' => 'Adrian3', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann3@gmail.com', 'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
-            ['id' => 4, 'username' =>'adriann4','code_id' => 4 , 'cat_profile_id' => 4, 'name' => 'Adrian4', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann4@gmail.com', 'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
+            // ['id' => 2, 'username' =>'adriann2','code_id' => 2 , 'cat_profile_id' => 2, 'name' => 'Adrian2', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann2@gmail.com', 'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
+            // ['id' => 3, 'username' =>'adriann3','code_id' => 3 , 'cat_profile_id' => 3, 'name' => 'Adrian3', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann3@gmail.com', 'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
+            // ['id' => 4, 'username' =>'adriann4','code_id' => 4 , 'cat_profile_id' => 4, 'name' => 'Adrian4', 'firstName' => 'Nuñez', 'secondName' => 'Alanis','email' => 'adriann4@gmail.com', 'password' => bcrypt('adrian90'), 'created_at' => Carbon::now(),'updated_at' => Carbon::now()],
         ]);
 
     }

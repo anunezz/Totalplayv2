@@ -51,14 +51,14 @@
                         <el-col v-if="modal" :span='24'>
                             <div style='width:100%; display:flex; justify-content: center;'>
                                 <div style="width: 55%;">
-                                    <el-button style="width: 100%;" type="default" @click="SubmitForm" icon="el-icon-phone-outline" size="small">Solicitar llamada</el-button>
+                                    <el-button style="width: 100%;" type="primary" round @click="SubmitForm" icon="el-icon-phone-outline" size="small">Solicitar llamada</el-button>
                                 </div>
                             </div>
                         </el-col>
                         <el-col v-else :span='24'>
                             <el-form-item>
                                 <!-- <el-button class="chicle" type="info" @click="SubmitForm" icon="el-icon-phone-outline" style="width: 100%;" size="mini">Solicitar llamada</el-button> -->
-                                <el-button type="default" @click="SubmitForm" icon="el-icon-phone-outline" style="width: 100%;" size="small">Solicitar llamada</el-button>
+                                <el-button type="primary" round @click="SubmitForm" icon="el-icon-phone-outline" style="width: 100%;" size="small">Solicitar llamada</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
