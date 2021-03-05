@@ -428,7 +428,7 @@ class TotalplayController extends Controller
             if (validFile::valid($request->document)) {
                 $file = new ImgPromotion();
                 $document = $request->document;
-                $file->fileNameHash = Storage::url($document->store('public/imgPack'));
+                $file->fileNameHash = Storage::url( $document->store('public/imgPack') );
                 $file->fileName = $document->getClientOriginalName();
                 $file->save();
 
