@@ -249,8 +249,10 @@ methods: {
         this.modal = true;
         this.section = false;
         this.form = {
-            email: 'adriann@gmail.com',
-            password: 'adrian90'
+            email: null,
+            password: null
+            //email: 'adriann@gmail.com',
+            //password: 'adrian90'
         };
         setTimeout(() => {
             this.$refs['formLogin'].clearValidate();

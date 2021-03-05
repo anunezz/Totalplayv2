@@ -15,7 +15,8 @@ class CreateImgPromotionsTable extends Migration
     {
         Schema::create('img_promotions', function (Blueprint $table) {
 
-            $table->bigIncrements('id');
+            //$table->bigIncrements('id');
+            $table->id();
             $table->unsignedBigInteger('promotion_id')->nullable();
             $table->text('fileName');
             $table->text('fileNameHash');

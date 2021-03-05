@@ -94,7 +94,7 @@ class User extends Authenticatable
     {
         return $this->belongsTo(
             CatCodePromotion::class,
-            'code_id',
+            'code_id'
         );
     }
 
