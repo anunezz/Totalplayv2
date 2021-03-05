@@ -14,7 +14,8 @@ class CreateCatTransactionTypesTable extends Migration
     public function up()
     {
         Schema::create('cat_transaction_types', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            //$table->bigIncrements('id');
+            $table->id();
             $table->string('name');
             $table->boolean('isActive')->default(1);
             $table->timestamps();
