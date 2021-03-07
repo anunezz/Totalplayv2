@@ -119,12 +119,12 @@
                         <li @click="linkss" class="nav-item">
                             <router-link to="/" class="nav-link" aria-current="page"> <span id="inicio"> Paquetes hogar </span> </router-link>
                         </li>
-                        <!-- <li @click="linkss" class="nav-item">
+                        <li @click="linkss" class="nav-item">
                             <router-link to="/netflix" exact class="nav-link" aria-current="page"> <span id="netflix"> Paquetes Netflix </span> </router-link>
                         </li>
                         <li @click="linkss" class="nav-item">
                             <router-link to="/amazon" exact class="nav-link" aria-current="page"> <span id="amazon"> Paquetes Amazon </span> </router-link>
-                        </li> -->
+                        </li>
                         <li class="nav-item" v-if="$store.state.user.fullname">
                             <router-link @click="linkss" to="/login" exact class="nav-link" aria-current="page"> <span id="dashboard"> Acceso </span> </router-link>
                         </li>
@@ -367,39 +367,39 @@ methods: {
     linkss(){
         let aux = this.$router.history.current.path;
         switch (aux) {
-            // case '/netflix':
-            // {
-            //     document.getElementById("netflix").style.color = "#b12222";
-            //     document.getElementById("inicio").style.color = "#fff";
-            //     document.getElementById("amazon").style.color = "#fff";
-            //     break;
-            // }
-            // case '/amazon':
-            // {
-            //     document.getElementById("amazon").style.color = "#427b96";
-            //     document.getElementById("inicio").style.color = "#fff";
-            //     document.getElementById("netflix").style.color = "#fff";
-            //     break;
-            // }
+            case '/netflix':
+            {
+                document.getElementById("netflix").style.color = "#b12222";
+                document.getElementById("inicio").style.color = "#fff";
+                document.getElementById("amazon").style.color = "#fff";
+                break;
+            }
+            case '/amazon':
+            {
+                document.getElementById("amazon").style.color = "#427b96";
+                document.getElementById("inicio").style.color = "#fff";
+                document.getElementById("netflix").style.color = "#fff";
+                break;
+            }
             case '/':
             {
-               // document.getElementById("amazon").style.color = "#fff";
+                document.getElementById("amazon").style.color = "#fff";
                 document.getElementById("inicio").style.color = "rgb(210, 165, 69)";
-              //  document.getElementById("netflix").style.color = "#fff";
+                document.getElementById("netflix").style.color = "#fff";
                 break;
             }
             case '/terminos-y-condiciones':
             {
-              //  document.getElementById("amazon").style.color = "#fff";
+                document.getElementById("amazon").style.color = "#fff";
                 document.getElementById("inicio").style.color = "#fff";
-              //  document.getElementById("netflix").style.color = "#fff";
+                document.getElementById("netflix").style.color = "#fff";
                 break;
             }
             default:
             {
-               // document.getElementById("amazon").style.color = "#fff";
+                document.getElementById("amazon").style.color = "#fff";
                 document.getElementById("inicio").style.color = "rgb(210, 165, 69)";
-               // document.getElementById("netflix").style.color = "#fff";
+                document.getElementById("netflix").style.color = "#fff";
                 break;
             }
         }
