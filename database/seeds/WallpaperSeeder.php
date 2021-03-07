@@ -14,7 +14,7 @@ class WallpaperSeeder extends Seeder
     public function run()
     {
         DB::table('wallpapers')->insert([
-            ['isColor' => 1, 'isActive' => 1 ,"color" => "#25B69A", 'created_at' => Carbon::now(),'updated_at' => Carbon::now()]
+            ['isColor' => 1,'isActive' => 1 ,"color" => "#25B69A", 'created_at' => Carbon::now(),'updated_at' => Carbon::now()]
         ]);
     }
 }

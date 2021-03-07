@@ -5,8 +5,9 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Models\Contact;
 use App\Http\Models\ImgPromotion;
+use App\Http\Models\Contact;
+use App\Http\Models\Wallpaper;
 use App\Http\Models\FilePromotionModal;
 use App\Http\Models\LevelsOfAttention;
 use Illuminate\Support\Facades\Auth;
@@ -74,13 +75,16 @@ class TotalplayController extends Controller
 
     public function getCats(){
         try{
-            //dd('holllaaa');
-            $results = CatCity::with('state')->where('isActive',1)->orderBy('name','asc')->get();
 
-            $user = User::get();
+            $CatCity = CatCity::with('state')->where('isActive',1)->orderBy('name','asc')->get();
+            $Wallpaper = Wallpaper::first();
+
             return response()->json([
                 'success' => true,
-                'lResults' =>  $results,
+                'lResults' =>  [
+                    "CatCity" => $CatCity,
+                    "Wallpaper" => $Wallpaper
+                ],
             ], 200);
 
         } catch (Exception $e) {

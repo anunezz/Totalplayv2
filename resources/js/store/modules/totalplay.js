@@ -7,7 +7,8 @@ const state = {
     catNetflix:[],
     creenWidth: 0,
     creenHeight: 0,
-    modalForm: false
+    modalForm: false,
+    Wallpaper:null
 };
 
 const mutations = {
