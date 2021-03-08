@@ -436,6 +436,7 @@ class TotalplayController extends Controller
                 $file->fileName = $document->getClientOriginalName();
                 $file->save();
 
+
                 $imgPack = [
                     'id' => $file->id,
                     'name' => $file->fileName,
@@ -463,6 +464,28 @@ class TotalplayController extends Controller
             ]);
         }
     }
+
+    public function createImg($id)
+    {
+        try {
+            $ImgPromotion   = ImgPromotion::find($id);
+            $pattern = "/[\/]/";
+            $components = preg_split($pattern, $ImgPromotion->fileNameHash);
+            $img = str_replace ( "/", '', "app\public\imgPack\/$components[3]");
+            $routeSelfie = file_get_contents(storage_path($img));
+            $responseSelfie = response()->make($routeSelfie, 200);
+            $responseSelfie->header('Content-Type', Storage::disk('public')->mimeType('imgPack/'.$components[3]));
+            $responseSelfie->header('charset', 'utf-8');
+            return $responseSelfie;
+        }
+        catch (Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function filePromotionModal(Request $request){
         try {
             DB::beginTransaction();
