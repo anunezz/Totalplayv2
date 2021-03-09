@@ -26,4 +26,5 @@ use Illuminate\Support\Facades\Route;
         Route::post('createCodePromotion', 'TotalplayController@createCodePromotion');
         Route::post('getCodePromotion', 'TotalplayController@getCodePromotion');
         Route::post('activePromotion', 'TotalplayController@activePromotion');
+        Route::get('createImg/{id}', 'TotalplayController@createImg');
     });

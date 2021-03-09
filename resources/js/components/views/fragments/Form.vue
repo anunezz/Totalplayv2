@@ -13,24 +13,6 @@
                                 v-model="ruleForm.name"></el-input>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span='24'>
-                            <el-form-item prop="zip_code"
-                                :rules="[{ required: true, message: message.ruleForm.required },
-                                    { min: 5, max: 5, message: message.ruleForm.max_characters+' 5.', trigger: ['blur','change'] },
-                                    { pattern: zip_code, message: message.ruleForm.special_characters, trigger: ['blur','change']}]">
-                                <el-input size="mini" style="width: 100%;" placeholder="Codigo postal"
-                                v-model="ruleForm.zip_code"></el-input>
-                            </el-form-item>
-                        </el-col> -->
-                        <!-- <el-col :span='24'>
-                            <el-form-item prop="email" :autocomplete="false"
-                                :rules="[{ required: false, message: message.ruleForm.required },
-                                    { pattern: email, message: message.ruleForm.special_characters, trigger: ['blur','change']},
-                                    { max: 100, message: message.ruleForm.max_characters+' 100.', trigger: ['blur','change'] }]">
-                                <el-input size="mini" style="width: 100%;" placeholder="Correo electronico"
-                                v-model="ruleForm.email"></el-input>
-                            </el-form-item>
-                        </el-col> -->
                         <el-col :span='24'>
                             <el-form-item prop="phone" :rules="[
                                     { validator: validatorPhone, trigger: ['blur','change'] },
@@ -51,14 +33,14 @@
                         <el-col v-if="modal" :span='24'>
                             <div style='width:100%; display:flex; justify-content: center;'>
                                 <div style="width: 55%;">
-                                    <el-button style="width: 100%;" type="primary" round @click="SubmitForm" icon="el-icon-phone-outline" size="small">Solicitar llamada</el-button>
+                                    <el-button style="width: 100%;" type="primary" plain @click="SubmitForm" icon="el-icon-phone-outline" size="small">Solicitar llamada</el-button>
                                 </div>
                             </div>
                         </el-col>
                         <el-col v-else :span='24'>
                             <el-form-item>
                                 <!-- <el-button class="chicle" type="info" @click="SubmitForm" icon="el-icon-phone-outline" style="width: 100%;" size="mini">Solicitar llamada</el-button> -->
-                                <el-button type="primary" round @click="SubmitForm" icon="el-icon-phone-outline" style="width: 100%;" size="small">Solicitar llamada</el-button>
+                                <el-button type="primary" plain @click="SubmitForm" icon="el-icon-phone-outline" style="width: 100%;" size="small">Solicitar llamada</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>

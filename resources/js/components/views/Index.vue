@@ -1,5 +1,5 @@
 <template>
-<div>
+<div :style="$store._modules.root.state.totalplay.Wallpaper">
 
     <loading-component v-if="$store._modules.root.state.totalplay.loading" />
 
@@ -249,10 +249,10 @@ methods: {
         this.modal = true;
         this.section = false;
         this.form = {
-            email: null,
-            password: null
-            //email: 'adriann@gmail.com',
-            //password: 'adrian90'
+            //email: null,
+            //password: null
+            email: 'adriann@gmail.com',
+            password: 'adrian90'
         };
         setTimeout(() => {
             this.$refs['formLogin'].clearValidate();

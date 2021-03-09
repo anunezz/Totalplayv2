@@ -49,6 +49,13 @@
                 </el-form-item>
             </el-col>
 
+            <el-col :span='24' class='animated fadeIn fast'>
+                <pre>
+                    {{ imagen }}
+                </pre>
+                <img :src="imagen" alt="imgejemplo"/>
+            </el-col>
+
             <el-col :span="12">
                 <el-form-item prop="files"
                 :rules="[{ type:'file', value:files, validator: ValidatorImg, trigger: ['blur','change']}]">
@@ -167,6 +174,8 @@ export default {
             deleteFiles:[],
             filesModal:[],
             deleteFilesModal:[],
+            imgId:1,
+            imagen: 33,
         }
     },
     created(){
@@ -313,6 +322,19 @@ export default {
                 console.error(error);
             });
         },
+        createImg(){
+            console.log('create imagen');
+            axios.get('/api/createImg/'+this.imgId,{params: {}, responseType: 'blob'}).then(response => {
+
+                    console.log('axios.post -> ',response);
+                    this.files[0].url = window.URL.createObjectURL(new Blob([response.data]));
+                    //console.log("file: ", );
+                    //this.imagen = window.URL.createObjectURL(new Blob([response.data]));
+
+            }).catch(error => {
+                console.log(error);
+            });
+        },
         beforeUploadFile(file) {
             if (file.size / 1024 / 1024 > 6) {
                 this.$message.error(
@@ -333,8 +355,11 @@ export default {
             return true;
         },
         uploadedFile(data) {
-            if (data.success) this.files.push(data.documentId);
-            else this.$message.error("Archivo no permitido");
+            console.log("datahh: ",data);
+            if (data.success){ this.files.push(data.documentId);
+            this.imgId = data.documentId.id;
+            this.createImg();
+            }else this.$message.error("Archivo no permitido");
         },
         uploadedFileModal(data) {
             if (data.success) this.filesModal.push(data.documentId);

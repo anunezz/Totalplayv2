@@ -5,8 +5,9 @@ use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Http\Models\Contact;
 use App\Http\Models\ImgPromotion;
+use App\Http\Models\Contact;
+use App\Http\Models\Wallpaper;
 use App\Http\Models\FilePromotionModal;
 use App\Http\Models\LevelsOfAttention;
 use Illuminate\Support\Facades\Auth;
@@ -74,13 +75,16 @@ class TotalplayController extends Controller
 
     public function getCats(){
         try{
-            //dd('holllaaa');
-            $results = CatCity::with('state')->where('isActive',1)->orderBy('name','asc')->get();
 
-            $user = User::get();
+            $CatCity = CatCity::with('state')->where('isActive',1)->orderBy('name','asc')->get();
+            $Wallpaper = Wallpaper::first();
+
             return response()->json([
                 'success' => true,
-                'lResults' =>  $results,
+                'lResults' =>  [
+                    "CatCity" => $CatCity,
+                    "Wallpaper" => $Wallpaper
+                ],
             ], 200);
 
         } catch (Exception $e) {
@@ -432,6 +436,7 @@ class TotalplayController extends Controller
                 $file->fileName = $document->getClientOriginalName();
                 $file->save();
 
+
                 $imgPack = [
                     'id' => $file->id,
                     'name' => $file->fileName,
@@ -459,6 +464,28 @@ class TotalplayController extends Controller
             ]);
         }
     }
+
+    public function createImg($id)
+    {
+        try {
+            $ImgPromotion   = ImgPromotion::find($id);
+            $pattern = "/[\/]/";
+            $components = preg_split($pattern, $ImgPromotion->fileNameHash);
+            $img = str_replace ( "/", '', "app\public\imgPack\/$components[3]");
+            $routeSelfie = file_get_contents(storage_path($img));
+            $responseSelfie = response()->make($routeSelfie, 200);
+            $responseSelfie->header('Content-Type', Storage::disk('public')->mimeType('imgPack/'.$components[3]));
+            $responseSelfie->header('charset', 'utf-8');
+            return $responseSelfie;
+        }
+        catch (Exception $e ) {
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
+    }
+
     public function filePromotionModal(Request $request){
         try {
             DB::beginTransaction();

@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
             CatStateSeeder::class,
             CatCitySeeder::class,
             CatNamePacks::class,
+            CatWallpaperSedder::class,
+            //ImgWallpaperSeeeder::class,
+            WallpaperSeeder::class
             //CatPromotionSeeder::class,
         ]);
     }

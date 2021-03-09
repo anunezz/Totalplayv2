@@ -186,7 +186,6 @@ export default {
             $(".el-dialog__title").css({"color":"white"});
             $(".formDialog > .el-dialog__header").remove();
             $(".formDialog > div").css({"background":"url("+data.imgpromotionmodal.fileNameHash+")","background-size": "100% 100%"});
-
         },
         closeModalForm(modal){
             this.modal = modal;
@@ -209,30 +208,25 @@ export default {
 </script>
 
 <style scope>
-
 .card-clickk{
      transition: all 150ms ease-in-out;
     font-size: 1.8rem;
     font-weight: 500;
     font-family: "PT Sans", Verdana, sans-seri;
 }
-
 .card-clickk:hover{
   animation: heartBeat; /* referring directly to the animation's @keyframe declaration */
   animation-duration: 2s; /* don't forget to set a duration! */
 }
-
 img[src*=".svg"].tp-popup-logo, img.tp-popup-logo {
     max-width: 170px;
     width: 100%;
     vertical-align: middle;
 }
-
 .card-shadow{
 -webkit-box-shadow: 5px 5px 47px 5px rgba(0,0,0,0.91);
 box-shadow: 5px 5px 47px 5px rgba(0,0,0,0.91);
 }
-
 .button-primary {
     box-sizing: border-box;
     -webkit-appearance: none;
@@ -254,13 +248,11 @@ box-shadow: 5px 5px 47px 5px rgba(0,0,0,0.91);
     padding: 0.7em 2.0em;
     width: 100%;
 }
-
 .button-primary:hover {
     color: #fff;
     box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
     background-color:  #085284;
 }
-
 .button-default {
     box-sizing: border-box;
     -webkit-appearance: none;
@@ -283,28 +275,23 @@ box-shadow: 5px 5px 47px 5px rgba(0,0,0,0.91);
     padding: 0.3em 2.0em;
     width: 100%;
 }
-
 .button-default:hover {
     color: #fff;
     box-shadow: 0 0 10px 0 #3498db inset, 0 0 10px 4px #3498db;
     background-color:  #085284;
 }
-
 .click img {
     cursor: pointer;
 }
-
 .el-select .el-input {
     width: 100% !important;
 }
-
 .el-select .el-input {
     width: 180px;
 }
 .input-with-select .el-input-group__prepend {
     background-color: #fff;
 }
-
 @media screen and (min-width: 0px) and (max-width: 640px) {
     .button-primary {
         box-sizing: border-box;
@@ -327,16 +314,12 @@ box-shadow: 5px 5px 47px 5px rgba(0,0,0,0.91);
         padding: 0.7em 2.0em;
         width: 100%;
     }
-
     .button-spacing{
         margin-bottom: 10px;
     }
-
     img[src*=".svg"].tp-popup-logoo, img.tp-popup-logoo {
         max-width: 170px;
         width: 20%;
     }
-
 }
-
 </style>

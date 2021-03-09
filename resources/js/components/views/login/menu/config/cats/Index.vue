@@ -17,7 +17,7 @@
                 <div class="card text-white bg-dark text-center" style="width: 100%; height: 180px;">
                     <div class="card-body">
                         <h5 class="card-title"><i class="el-icon-s-order"></i> Paquetes</h5>
-                        <p class="card-text">Crear editar y borrar paquetes en la ventana principal.</p>
+                        <p class="card-text">Crear y actualizar paquetes de promoción.</p>
                         <router-link to="/login/configuracion/catalogos/paquetes" class="nolink">
                             <a class="btn btn-primary btn-sm"> Configurar</a>
                         </router-link>
@@ -27,9 +27,9 @@
             <div class="col-md-4" v-if="$store.state.user.profile === 1">
                 <div class="card text-white bg-dark text-center" style="width: 100%; height: 180px;">
                     <div class="card-body">
-                        <h5 class="card-title"><i class="el-icon-s-ticket"></i> Codigos de promoción</h5>
-                        <p class="card-text">Creación de codigos de promoción y relacionarlo al usuario.</p>
-                        <router-link to="/login/configuracion/catalogos/codigos" class="nolink">
+                        <h5 class="card-title"><i class="el-icon-picture-outline-round"></i> Vista</h5>
+                        <p class="card-text">Crear y actulizar vista de Totalplay.</p>
+                        <router-link to="/login/configuracion/catalogos/vista" class="nolink">
                             <a class="btn btn-primary btn-sm"> Configurar</a>
                         </router-link>
                     </div>

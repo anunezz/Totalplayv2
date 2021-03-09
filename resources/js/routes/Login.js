@@ -7,7 +7,7 @@ import LoginUsers from '../components/views/login/menu/config/user';
 import LoginFirstSesion from '../components/views/login/menu/fistsesion/Firstsesion';
 import LoginCats from '../components/views/login/menu/config/cats/Index';
 import LoginPacks from '../components/views/login/menu/config/cats/Packs';
-import LoginCode from '../components/views/login/menu/config/cats/Code';
+import LoginView from '../components/views/login/menu/config/cats/View';
 //Modulo de bandeja de entrada de contactos Totalplay
 import LoginContacts from '../components/views/login/menu/contscats/Contacts';
 
@@ -90,9 +90,9 @@ export default {
             },
         },
         {
-            path: '/login/configuracion/catalogos/codigos',
-            component: LoginCode,
-            name: 'LoginCode',
+            path: '/login/configuracion/catalogos/vista',
+            component: LoginView,
+            name: 'LoginView',
             beforeEnter: (to, from, next) => {
                 if (sessionStorage.getItem('access_token') && (store.state.profile === 1 || store.state.profile === 2 )) {
                     next();

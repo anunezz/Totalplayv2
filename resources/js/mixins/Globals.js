@@ -50,7 +50,13 @@ export const Globals = {
         getCats(){
             axios.get('/api/getCats', this.headers ).then(response => {
                 if(response.data.success){
-                    this.$store._modules.root.state.totalplay.catCities = response.data.lResults;
+                    this.$store._modules.root.state.totalplay.catCities = response.data.lResults.CatCity;
+                    let Wallpaper = response.data.lResults.Wallpaper;
+                    if( Wallpaper.isColor === 1 ){
+                        this.$store._modules.root.state.totalplay.Wallpaper = "background: "+Wallpaper.color+";";
+                    }else{
+                        this.$store._modules.root.state.totalplay.Wallpaper = "background: url('img/publico/fondo.jpg'); background-size: 100% 100%; background-attachment: fixed;";
+                    }
                 }
             }).catch(error => {
                 this.$message({
