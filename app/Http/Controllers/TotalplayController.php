@@ -432,15 +432,16 @@ class TotalplayController extends Controller
             if (validFile::valid($request->document)) {
                 $file = new ImgPromotion();
                 $document = $request->document;
-                $file->fileNameHash = Storage::url( $document->store('public/imgPack') );
                 $file->fileName = $document->getClientOriginalName();
+                $components = preg_split("/[\/]/", Storage::url($document->store('public/imgPack')));
+                $file->fileNameHash = "app/public/imgPack/$components[3]";
                 $file->save();
-
 
                 $imgPack = [
                     'id' => $file->id,
                     'name' => $file->fileName,
-                    'url' => $file->fileNameHash
+                    'url' => $file->fileNameHash,
+                    'path' => $file->fileNameHash
                 ];
 
                 DB::commit();
@@ -469,10 +470,8 @@ class TotalplayController extends Controller
     {
         try {
             $ImgPromotion   = ImgPromotion::find($id);
-            $pattern = "/[\/]/";
-            $components = preg_split($pattern, $ImgPromotion->fileNameHash);
-            $img = str_replace ( "/", '', "app\public\imgPack\/$components[3]");
-            $routeSelfie = file_get_contents(storage_path($img));
+            $components = preg_split("/[\/]/", $ImgPromotion->fileNameHash);
+            $routeSelfie = file_get_contents(storage_path($ImgPromotion->fileNameHash));
             $responseSelfie = response()->make($routeSelfie, 200);
             $responseSelfie->header('Content-Type', Storage::disk('public')->mimeType('imgPack/'.$components[3]));
             $responseSelfie->header('charset', 'utf-8');
@@ -541,6 +540,7 @@ class TotalplayController extends Controller
                     ]);
 
                     $ImgPromotion = ImgPromotion::find( $data['file'][0]['id'] );
+                    $ImgPromotion->fileNameHash = $data['file'][0]['path'];
                     $ImgPromotion->promotion_id = $promotion->id;
                     $ImgPromotion->isActive = 1;
                     $ImgPromotion->save();

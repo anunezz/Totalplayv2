@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
     Route::post('setContact', 'TotalplayController@setContact');
     Route::post('setPacks', 'TotalplayController@setPacks');
     Route::get('getCats', 'TotalplayController@getCats');
+    Route::get('createImg/{id}', 'TotalplayController@createImg');
 
     Route::group(['middleware' => ['auth:api']], function () {
         Route::post('getUsers', 'TotalplayController@getUsers');
@@ -26,5 +27,4 @@ use Illuminate\Support\Facades\Route;
         Route::post('createCodePromotion', 'TotalplayController@createCodePromotion');
         Route::post('getCodePromotion', 'TotalplayController@getCodePromotion');
         Route::post('activePromotion', 'TotalplayController@activePromotion');
-        Route::get('createImg/{id}', 'TotalplayController@createImg');
     });

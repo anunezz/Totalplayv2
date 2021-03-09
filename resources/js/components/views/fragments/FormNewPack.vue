@@ -51,9 +51,8 @@
 
             <el-col :span='24' class='animated fadeIn fast'>
                 <pre>
-                    {{ imagen }}
+                    {{ files }}
                 </pre>
-                <img :src="imagen" alt="imgejemplo"/>
             </el-col>
 
             <el-col :span="12">
@@ -249,10 +248,13 @@ export default {
                     isActive: pack.isActive,
                     color: pack.color
                 };
-                this.files = [{ id: pack.imgpromotion.id, name: pack.imgpromotion.fileName ,url: pack.imgpromotion.fileNameHash }];
+                this.imgId = pack.imgpromotion.id;
+                this.files = [{ id: pack.imgpromotion.id, name: pack.imgpromotion.fileName ,url: pack.imgpromotion.fileNameHash, path: pack.imgpromotion.fileNameHash }];
                 this.deleteFiles = [];
                 this.filesModal = [{ id: pack.imgpromotionmodal.id, name: pack.imgpromotionmodal.fileName ,url: pack.imgpromotionmodal.fileNameHash }];
                 this.deleteFilesModal = [];
+
+                this.createImg();
             }, 1000);
         },
         closeModal(){
@@ -294,6 +296,7 @@ export default {
             });
         },
         clearForm(){
+            this.imgId = null;
             this.paquete_id = null;
             this.ruleForm={
                 pack_id:null,
@@ -323,14 +326,9 @@ export default {
             });
         },
         createImg(){
-            console.log('create imagen');
             axios.get('/api/createImg/'+this.imgId,{params: {}, responseType: 'blob'}).then(response => {
-
-                    console.log('axios.post -> ',response);
-                    this.files[0].url = window.URL.createObjectURL(new Blob([response.data]));
-                    //console.log("file: ", );
-                    //this.imagen = window.URL.createObjectURL(new Blob([response.data]));
-
+                this.files[0].url = window.URL.createObjectURL(new Blob([response.data]));
+                this.files.path = null;
             }).catch(error => {
                 console.log(error);
             });
@@ -356,7 +354,9 @@ export default {
         },
         uploadedFile(data) {
             console.log("datahh: ",data);
-            if (data.success){ this.files.push(data.documentId);
+            if (data.success){
+            this.files.push(data.documentId);
+
             this.imgId = data.documentId.id;
             this.createImg();
             }else this.$message.error("Archivo no permitido");
