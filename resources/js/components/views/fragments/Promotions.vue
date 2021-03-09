@@ -75,7 +75,7 @@
         <div class="d-flex justify-content-center flex-wrap" v-if="items.page === 'home'">
             <div class="animatedd fast fadeInn col-xs-12 col-sm-12 col-md-6 col-lg-4 py-3 px-4" v-for="(item,index) in items.catPromotion" :key="index">
                 <div class="card card-shadow" style="width: 100%;">
-                    <img class="card-img-top" :src="item.imgpromotion.fileNameHash" :alt="item.name" />
+                    <img class="card-img-top" :class="'imgPack'+item.imgpromotion.id" :src="createImg(item.imgpromotion.id)" :alt="item.name" />
                     <div class="card-body card-click text-center"
                         :style="'cursor:pointer; background:'+item.color+';'">
                         <div class="card-clickk">
@@ -89,7 +89,7 @@
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 py-3 px-4" v-for="(item,index) in items.catPromotion" :key="index">
                 <div class="card card-shadow" style="width: 100%;">
 
-                    <img class="card-img-top" :src="item.imgpromotion.fileNameHash" alt="--------">
+                    <img class="card-img-top" :src="createImg(item.imgpromotion.id)" alt="--------">
                     <div class="card-body card-click text-center"
                     :style="'cursor:pointer; background:'+item.color+';'">
                         <div class="card-clickk">
@@ -175,6 +175,15 @@ export default {
         }
     },
     methods:{
+        createImg(id){
+            axios.get('/api/createImg/'+id,
+            {params: {}, responseType: 'blob'}
+            ).then(response => {
+                $(".imgPack"+id).attr("src", window.URL.createObjectURL(new Blob([response.data])))
+            }).catch(error => {
+                console.log(error);
+            });
+        },
         imgPromotion(data){
             console.log("computed img",data);
             return null;
